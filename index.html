@@ -70,7 +70,10 @@ section{padding-block:88px}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:.02em;white-space:nowrap}
 .brand .mark{width:22px;height:22px;background:var(--red);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);flex:none;box-shadow:0 0 14px var(--red-glow)}
 .brand .x{color:var(--text-muted);font-weight:500;font-size:14px}
-.navlinks{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none}
+.brand .nav-logo{height:20px;width:auto;flex:none;display:block}
+.brand .nav-logo.esagjr{height:28px;background:#fff;border-radius:5px;padding:4px 7px;object-fit:contain}
+.navlinks{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;justify-content:flex-end}
+@media (max-width:640px){.brand .nav-logo.esagjr{display:none}.navlinks{justify-content:flex-start}}
 .navlinks::-webkit-scrollbar{display:none}
 .navlinks a{
   font-size:13px;color:var(--text-secondary);text-decoration:none;white-space:nowrap;
@@ -123,8 +126,20 @@ section{padding-block:88px}
 .hero-meta .v{font-family:var(--font-display);font-size:22px;font-weight:700}
 .hero-meta .k{font-size:11px;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase}
 
+.brand-strip{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo-chip{
+  display:flex;align-items:center;gap:11px;border:1px solid var(--border-strong);border-radius:10px;
+  padding:7px 16px 7px 7px;background:rgba(255,255,255,.03);
+}
+.logo-chip .badge-img{height:36px;width:auto;max-width:90px;border-radius:5px;object-fit:contain;flex:none;background:#0a0a0a;padding:3px 5px}
+.logo-chip.light .badge-img{background:#fff;padding:5px 7px}
+.logo-chip .badge-img.cover{width:58px;max-width:58px;object-fit:cover;padding:0}
+.logo-chip span{font-family:var(--font-mono);font-size:11.5px;color:var(--text-secondary);letter-spacing:.02em;white-space:nowrap}
+.brand-x{color:var(--text-muted);font-size:13px;font-weight:600}
+
 /* ============ CARDS / GRID ============ */
 .grid{display:grid;gap:16px}
+.grid > *{min-width:0}
 .g2{grid-template-columns:repeat(2,1fr)}
 .g3{grid-template-columns:repeat(3,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)}
@@ -266,7 +281,7 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
 
 <nav class="nav">
   <div class="nav-inner">
-    <div class="brand"><span class="mark"></span>PROJETO LUME <span class="x">× Redragon</span></div>
+    <div class="brand"><span class="mark"></span>PROJETO LUME <span class="x">×</span><img class="nav-logo esagjr" src="assets/esagjr-logo.png" alt="ESAG Jr — Consultoria em Administração"></div>
     <div class="navlinks">
       <a href="#contexto">Contexto</a>
       <a href="#simulador">Simulador</a>
@@ -282,7 +297,12 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
 <header class="hero">
   <div class="hero-slash"></div>
   <div class="wrap hero-inner">
-    <span class="hero-tag">Case Redragon <b>·</b> Consultoria ESAG Jr <b>·</b> Pipeline 4 / Grupo 2</span>
+    <div class="brand-strip">
+      <span class="logo-chip"><img class="badge-img cover" src="assets/redragon-logo.jpg" alt="Redragon"><span>CLIENTE · REDRAGON</span></span>
+      <span class="brand-x">×</span>
+      <span class="logo-chip light"><img class="badge-img" src="assets/esagjr-logo.png" alt="ESAG Jr"><span>CONSULTORIA · ESAG JR</span></span>
+      <span class="hero-tag" style="margin:0">Pipeline 4 <b>·</b> Grupo 2</span>
+    </div>
     <h1>Loja parceira<br><em>Redragon</em> em Florianópolis</h1>
     <p class="sub">Plano financeiro completo para a decisão de Pedro: projeção de custos, precificação do mix, três cenários em três localizações, DRE, DFC e um simulador de viabilidade — com um teste de estresse usando dados reais de mercado.</p>
     <div class="hero-cta">
@@ -308,6 +328,15 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
       <h2>De uma loja na Trindade a um destino Redragon em shopping</h2>
       <p class="lede">Pedro já vende produtos Redragon em sua loja atual e conhece o giro e a margem da marca. A proposta: uma loja parceira dentro de um shopping, com a Redragon custeando projeto arquitetônico e mobiliário, sem cobrar taxa de franquia — apenas 2% do faturamento, reinvestidos em marketing da própria unidade.</p>
     </div>
+
+    <div class="callout" style="margin-bottom:32px">
+      <span class="qm">&ldquo;</span>
+      <div>
+        <p>Pedro precisa saber se vale investir na loja Redragon e em qual shopping, com base em números confiáveis o bastante para ele e os investidores decidirem.</p>
+        <footer>O problema que este plano financeiro responde — na definição do próprio cliente.</footer>
+      </div>
+    </div>
+
     <div class="grid g4">
       <div class="card">
         <div class="icon">◆</div>
@@ -396,6 +425,23 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
       <div class="legend" id="loc-legend"></div>
     </div>
 
+    <div class="card" style="margin-top:16px">
+      <h3>Como o faturamento é calculado</h3>
+      <p style="font-family:var(--font-mono);font-size:13px;color:var(--text-primary);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin:12px 0 16px;line-height:1.7">
+        Faturamento = Fluxo do shopping × (Conversão base × Mult. conversão) × (Ticket médio × Mult. ticket)
+      </p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Cenário</th><th class="num">Mult. conversão</th><th class="num">Mult. ticket médio</th><th class="num">Efeito no faturamento</th></tr></thead>
+          <tbody>
+            <tr><td class="hl">Pessimista</td><td class="num">0,70</td><td class="num">0,90</td><td class="num">63,0% do realista</td></tr>
+            <tr><td class="hl">Realista</td><td class="num">1,00</td><td class="num">1,00</td><td class="num">100,0% (base)</td></tr>
+            <tr><td class="hl">Otimista</td><td class="num">1,30</td><td class="num">1,15</td><td class="num">149,5% do realista</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="grid g3" style="margin-top:20px" id="loc-cards"></div>
   </div>
 </section>
@@ -430,6 +476,29 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
           </table>
         </div>
         <p style="font-size:13px;color:var(--text-secondary);line-height:1.6">A <b style="color:var(--text-primary)">margem de contribuição líquida (31,2%)</b> é o que sobra do faturamento após CMV e todos os custos variáveis — é ela que cobre os custos fixos e define o ponto de equilíbrio.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="flex-between">
+        <h3 style="margin-bottom:0">Preços reais de mercado — loja oficial vs. concorrência</h3>
+        <span class="pill-sm">levantamento de mercado, produtos Redragon</span>
+      </div>
+      <p style="margin-top:8px">A loja oficial Redragon pratica, na maioria das categorias, um prêmio de preço sobre a concorrência online — referência para o ticket médio que a loja física em shopping pode buscar.</p>
+      <div class="tbl-wrap" style="margin-top:14px">
+        <table>
+          <thead><tr><th>Produto</th><th class="num">Loja oficial Redragon</th><th class="num">Preço concorrente</th><th class="num">Diferença</th></tr></thead>
+          <tbody>
+            <tr><td>Teclado Kumara K552 RGB</td><td class="num">R$ 220,00</td><td class="num">R$ 139,99</td><td class="num"><span class="badge good">+57%</span></td></tr>
+            <tr><td>Mouse Cobra M711 V3</td><td class="num">R$ 119,99</td><td class="num">R$ 89,00</td><td class="num"><span class="badge good">+35%</span></td></tr>
+            <tr><td>Mouse K1ng 1K M724</td><td class="num">R$ 129,99</td><td class="num">R$ 89,99</td><td class="num"><span class="badge good">+44%</span></td></tr>
+            <tr><td>Mouse Prism Pro M997-PRO-1K</td><td class="num">R$ 436,99</td><td class="num">R$ 349,99</td><td class="num"><span class="badge good">+25%</span></td></tr>
+            <tr><td>Headset Luna H540</td><td class="num">R$ 339,99</td><td class="num">R$ 239,99</td><td class="num"><span class="badge good">+42%</span></td></tr>
+            <tr><td>Headset Nomen Pro H838-PRO</td><td class="num">R$ 384,99</td><td class="num">R$ 329,99</td><td class="num"><span class="badge good">+17%</span></td></tr>
+            <tr><td>Headset Skuld Pro H878BG</td><td class="num">R$ 330,00</td><td class="num">R$ 284,99</td><td class="num"><span class="badge good">+16%</span></td></tr>
+            <tr><td>Headset Ire H848</td><td class="num">R$ 215,00</td><td class="num">R$ 229,99</td><td class="num"><span class="badge bad">−7%</span></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -542,6 +611,43 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
         <footer>Pipeline 4 (Grupo 2) — seção "Ponto de Equilíbrio", com TIR anual equivalente de <b style="color:var(--status-bad)">‑43,7%</b> nesse cenário conservador.</footer>
       </div>
     </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <div class="flex-between"><h3 style="margin-bottom:0">Exemplo real — Mês 1 de operação</h3><span class="badge bad">Prejuízo</span></div>
+        <p style="margin-top:8px">Com o faturamento inicial (antes da maturação), o próprio DRE de dados reais já mostra o tamanho do desafio.</p>
+        <div class="tbl-wrap" style="margin-top:12px">
+          <table>
+            <tbody>
+              <tr><td>Receita bruta de vendas</td><td class="num">R$ 31.621,21</td></tr>
+              <tr><td>(–) Impostos, cartão, comissões, perdas, embalagens</td><td class="num">−R$ 6.213,06</td></tr>
+              <tr><td>(=) Receita líquida</td><td class="num">R$ 24.885,89</td></tr>
+              <tr><td>(–) CMV (blended, 62%)</td><td class="num">−R$ 19.605,15</td></tr>
+              <tr><td>(=) Margem de contribuição</td><td class="num">R$ 5.280,74</td></tr>
+              <tr><td>(–) Custos fixos totais</td><td class="num">−R$ 38.689,08</td></tr>
+              <tr><td class="hl">(=) EBITDA / Lucro líquido do mês</td><td class="num hl" style="color:var(--status-bad)">−R$ 33.408,34</td></tr>
+              <tr><td>Caixa acumulado (Mês 0 → Mês 1)</td><td class="num">−R$ 333.408,34</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex-between"><h3 style="margin-bottom:0">Simulador Payback &amp; ROI</h3><span class="pill-sm">cenário hipotético</span></div>
+        <p style="margin-top:8px">Assumindo uma venda mensal de R$ 520 mil — já acima do próprio ponto de equilíbrio real — só para ilustrar o mecanismo:</p>
+        <div class="tbl-wrap" style="margin-top:12px">
+          <table>
+            <tbody>
+              <tr><td>Venda mensal assumida</td><td class="num">R$ 520.000,00</td></tr>
+              <tr><td>Lucro mensal</td><td class="num">R$ 17.177,91</td></tr>
+              <tr><td class="hl">Payback</td><td class="num hl">17,5 meses</td></tr>
+              <tr><td>Ganho líquido do investimento (2 anos)</td><td class="num">R$ 412.269,85</td></tr>
+              <tr><td class="hl">ROI em 2 anos</td><td class="num hl" style="color:var(--status-good)">137,4%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:10px;font-size:12.5px">Mesmo nesse patamar de vendas fora da realidade projetada, os indicadores só ficam positivos porque a Redragon já cobre fit‑out e não cobra franquia.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -561,7 +667,8 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
         <div>
           <span class="badge good">Recomendação do grupo</span>
           <h3 style="font-size:clamp(28px,5vw,44px);margin-top:14px">Vila Romana</h3>
-          <p style="color:var(--text-secondary);max-width:520px;margin-top:8px;font-size:14.5px;line-height:1.6">A única localização cuja viabilidade se apoia em um ativo já existente — a operação da Trindade, bairro limítrofe ao Santa Mônica.</p>
+          <p style="color:var(--text-primary);max-width:560px;margin-top:10px;font-size:16px;line-height:1.6;font-family:var(--font-display);font-weight:600">"Vila Romana seria a melhor opção para o cliente."</p>
+          <p style="color:var(--text-secondary);max-width:520px;margin-top:8px;font-size:14.5px;line-height:1.6">Conclusão da Pipeline 4 (Grupo 2) — a única localização cuja viabilidade se apoia em um ativo já existente: a operação da Trindade, bairro limítrofe ao Santa Mônica.</p>
         </div>
       </div>
     </div>
@@ -607,6 +714,10 @@ details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color
   <div class="wrap">
     <div class="foot-grid">
       <div>
+        <div class="brand-strip" style="margin-bottom:16px">
+          <span class="logo-chip"><img class="badge-img cover" src="assets/redragon-logo.jpg" alt="Redragon"><span>CLIENTE · REDRAGON</span></span>
+          <span class="logo-chip light"><img class="badge-img" src="assets/esagjr-logo.png" alt="ESAG Jr"><span>CONSULTORIA · ESAG JR</span></span>
+        </div>
         <h5>Projeto Lume</h5>
         <p>Case Redragon — Processo Seletivo ESAG Jr. Todos os valores marcados como premissa são estimativas hipotéticas construídas para fins do exercício acadêmico e devem ser substituídas por dados reais antes de qualquer decisão de investimento.</p>
         <p style="margin-top:10px">Pipeline 4 (Grupo 2) — Arthur Blatt Pontin, João Pinheiro, Maria Eduarda Alves Vieira, Laura Righetto.</p>
