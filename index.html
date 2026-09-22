@@ -1,0 +1,1205 @@
+<!doctype html>
+<title>Projeto Lume</title>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#0A0B0D;
+  --bg-elevated:#111318;
+  --surface:#16181D;
+  --surface-2:#1C1F26;
+  --border:#282B33;
+  --border-strong:#3A3E47;
+  --text-primary:#F4F5F7;
+  --text-secondary:#A9ADB8;
+  --text-muted:#6E7280;
+  --red:#FF3D57;
+  --red-soft:#7A1826;
+  --red-glow:rgba(255,61,87,.35);
+  --teal:#2AAFCF;
+  --teal-deep:#1D93B0;
+  --gold:#D9971F;
+  --gold-deep:#B8760F;
+  --status-bad:#D9532B;
+  --status-neutral:#5A78C2;
+  --status-good:#2FA968;
+  --font-display:'Rajdhani',Arial Narrow,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;margin:0;text-wrap:balance;letter-spacing:.01em}
+p{margin:0}
+a{color:inherit}
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+::selection{background:var(--red);color:#fff}
+
+/* ============ LAYOUT PRIMITIVES ============ */
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px}
+@media (max-width:640px){.wrap{padding-inline:16px}}
+section{padding-block:88px}
+@media (max-width:640px){section{padding-block:56px}}
+.eyebrow{
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--red);font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--red);display:inline-block}
+.section-head{max-width:680px;margin-bottom:44px}
+.section-head h2{font-size:clamp(28px,4vw,40px);line-height:1.05}
+.section-head .lede{margin-top:14px;color:var(--text-secondary);font-size:16px;line-height:1.6}
+
+/* ============ NAV ============ */
+.nav{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+  background:rgba(10,11,13,.82);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:.02em;white-space:nowrap}
+.brand .mark{width:22px;height:22px;background:var(--red);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);flex:none;box-shadow:0 0 14px var(--red-glow)}
+.brand .x{color:var(--text-muted);font-weight:500;font-size:14px}
+.navlinks{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none}
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks a{
+  font-size:13px;color:var(--text-secondary);text-decoration:none;white-space:nowrap;
+  font-weight:500;padding-block:4px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;
+}
+.navlinks a:hover{color:var(--text-primary);border-color:var(--border-strong)}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;padding-top:76px;padding-bottom:76px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 900px 500px at 82% -10%, rgba(255,61,87,.16), transparent 60%),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg-elevated) 100%);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(180deg,black,transparent 75%);
+}
+.hero-slash{
+  position:absolute;top:-20%;right:-6%;width:46%;height:150%;
+  background:linear-gradient(120deg,var(--red-soft),var(--red) 60%,#ff8a97);
+  clip-path:polygon(60% 0,100% 0,60% 100%,20% 100%);
+  opacity:.16;filter:blur(2px);pointer-events:none;
+}
+.hero-inner{position:relative;display:grid;gap:28px}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;width:fit-content;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;color:var(--text-secondary);
+  border:1px solid var(--border-strong);padding:6px 12px;border-radius:100px;background:rgba(255,255,255,.03);
+}
+.hero-tag b{color:var(--red);font-weight:700}
+.hero h1{font-size:clamp(40px,7.4vw,84px);line-height:.94;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--red);text-shadow:0 0 40px var(--red-glow)}
+.hero .sub{max-width:600px;font-size:clamp(15px,1.8vw,18px);color:var(--text-secondary);line-height:1.65}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px}
+.btn{
+  font-family:var(--font-body);font-weight:700;font-size:14px;padding:14px 26px;border-radius:6px;
+  border:1px solid transparent;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .15s,box-shadow .15s,background .15s;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--red);color:#fff;box-shadow:0 8px 24px -8px var(--red-glow)}
+.btn-primary:hover{background:#ff5468;box-shadow:0 10px 30px -6px var(--red-glow)}
+.btn-ghost{background:transparent;border-color:var(--border-strong);color:var(--text-primary)}
+.btn-ghost:hover{border-color:var(--text-secondary)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:18px;padding-top:22px;border-top:1px solid var(--border)}
+.hero-meta div{display:flex;flex-direction:column;gap:3px}
+.hero-meta .v{font-family:var(--font-display);font-size:22px;font-weight:700}
+.hero-meta .k{font-size:11px;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase}
+
+/* ============ CARDS / GRID ============ */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g6{grid-template-columns:repeat(6,1fr)}
+@media (max-width:900px){.g4,.g6{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.g2,.g3,.g4,.g6{grid-template-columns:1fr}}
+
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;
+}
+.card h3{font-size:16px;color:var(--text-primary);margin-bottom:8px;font-weight:700}
+.card p{color:var(--text-secondary);font-size:14px;line-height:1.6}
+.card .icon{
+  width:38px;height:38px;border-radius:9px;background:var(--surface-2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--red);font-size:17px;
+}
+
+.kpi{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;
+  display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;
+}
+.kpi .k{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);font-weight:600}
+.kpi .v{font-family:var(--font-mono);font-size:clamp(19px,2.4vw,25px);font-weight:700;letter-spacing:-.01em}
+.kpi .d{font-size:12px;color:var(--text-secondary)}
+.kpi.accent{border-color:rgba(255,61,87,.4);box-shadow:inset 0 0 0 1px rgba(255,61,87,.08)}
+.kpi.accent .v{color:var(--red)}
+.kpi.good .v{color:var(--status-good)}
+.kpi.bad .v{color:var(--status-bad)}
+
+/* ============ CONTROL BAR ============ */
+.controlbar{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:18px 20px;display:flex;flex-wrap:wrap;gap:22px;align-items:center;margin-bottom:28px;
+  position:relative;
+}
+.control-group{display:flex;flex-direction:column;gap:8px}
+.control-group .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);font-weight:600}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  font-family:var(--font-body);font-weight:600;font-size:13px;padding:8px 14px;border-radius:8px;
+  border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-secondary);cursor:pointer;
+  display:flex;align-items:center;gap:8px;transition:all .15s;
+}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--text-muted);flex:none}
+.chip:hover{border-color:var(--text-secondary);color:var(--text-primary)}
+.chip.active{background:var(--surface);color:var(--text-primary);box-shadow:inset 0 0 0 1.5px var(--chip-color,var(--red))}
+.chip.active .dot{background:var(--chip-color,var(--red));box-shadow:0 0 8px var(--chip-color,var(--red))}
+.controlbar .note{margin-left:auto;font-size:12px;color:var(--text-muted);max-width:220px;line-height:1.5}
+@media (max-width:700px){.controlbar .note{margin-left:0}}
+
+/* ============ CHARTS ============ */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px}
+.chart-card .chead{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.chart-card h4{font-size:15px;font-weight:700}
+.chart-card .chsub{font-size:12.5px;color:var(--text-muted)}
+.chart-scroll{overflow-x:auto}
+.chart-scroll svg{display:block;min-width:520px;width:100%;height:auto}
+svg text{font-family:var(--font-mono);fill:var(--text-muted)}
+svg .axis-line{stroke:var(--border);stroke-width:1}
+svg .grid-line{stroke:var(--border);stroke-width:1;opacity:.6}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12.5px;color:var(--text-secondary)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+.tooltip{
+  position:fixed;pointer-events:none;background:#1D2026;border:1px solid var(--border-strong);
+  border-radius:8px;padding:9px 12px;font-size:12.5px;line-height:1.5;color:var(--text-primary);
+  box-shadow:0 12px 30px -8px rgba(0,0,0,.6);z-index:200;opacity:0;transition:opacity .1s;max-width:220px;
+}
+.tooltip b{color:var(--red);font-family:var(--font-mono)}
+.tooltip .row{display:flex;justify-content:space-between;gap:14px;white-space:nowrap}
+
+/* ============ TABLES ============ */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:480px;font-size:13.5px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--border)}
+th{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);background:var(--surface-2)}
+td{color:var(--text-secondary)}
+td.num,th.num{text-align:right;font-family:var(--font-mono)}
+tr:last-child td{border-bottom:none}
+td.hl{color:var(--text-primary);font-weight:600}
+
+/* ============ MISC BLOCKS ============ */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent);margin-block:0}
+.callout{
+  border:1px solid rgba(255,61,87,.35);background:linear-gradient(180deg,rgba(255,61,87,.08),transparent);
+  border-radius:12px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start;
+}
+.callout .qm{font-family:var(--font-display);font-size:34px;color:var(--red);line-height:1;flex:none}
+.callout p{color:var(--text-primary);font-size:15px;line-height:1.65;font-style:italic}
+.callout footer{margin-top:10px;font-size:12.5px;color:var(--text-muted);font-style:normal}
+
+.badge{
+  display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:600;
+  padding:4px 10px;border-radius:100px;letter-spacing:.04em;text-transform:uppercase;
+}
+.badge.good{background:rgba(47,169,104,.14);color:var(--status-good);border:1px solid rgba(47,169,104,.3)}
+.badge.bad{background:rgba(217,83,43,.14);color:var(--status-bad);border:1px solid rgba(217,83,43,.3)}
+.badge.neutral{background:rgba(90,120,194,.14);color:var(--status-neutral);border:1px solid rgba(90,120,194,.3)}
+
+.reasons{list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:r}
+.reasons li{
+  counter-increment:r;display:grid;grid-template-columns:44px 1fr;gap:16px;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;
+}
+.reasons li::before{
+  content:counter(r);font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--red);
+  width:44px;height:44px;border:1px solid rgba(255,61,87,.35);border-radius:9px;display:flex;align-items:center;justify-content:center;
+}
+.reasons h4{font-size:15px;margin-bottom:5px}
+.reasons p{font-size:13.5px;color:var(--text-secondary);line-height:1.6}
+
+.rec-banner{
+  border-radius:18px;padding:40px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#1a0d10 0%,var(--bg-elevated) 55%);
+  border:1px solid rgba(255,61,87,.3);
+}
+.rec-banner::after{
+  content:"";position:absolute;top:-40%;right:-10%;width:60%;height:180%;
+  background:var(--red);opacity:.12;clip-path:polygon(55% 0,100% 0,45% 100%,0 100%);
+}
+.rec-banner .rel{position:relative}
+
+footer.site{border-top:1px solid var(--border);padding-block:48px;margin-top:20px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+@media (max-width:700px){.foot-grid{grid-template-columns:1fr}}
+.foot-grid h5{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:12px;font-weight:700}
+.foot-grid p,.foot-grid li{font-size:13px;color:var(--text-secondary);line-height:1.8}
+.foot-grid ul{list-style:none;margin:0;padding:0}
+details summary{cursor:pointer;color:var(--text-secondary);font-size:13px;padding-block:4px}
+details[open] summary{color:var(--text-primary)}
+details .src-list{columns:2;column-gap:24px;margin-top:10px;font-size:12px;color:var(--text-muted);line-height:1.9}
+@media (max-width:640px){details .src-list{columns:1}}
+
+.mono-small{font-family:var(--font-mono);font-size:11px;color:var(--text-muted)}
+.flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.pill-sm{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);border:1px solid var(--border);padding:3px 9px;border-radius:100px}
+</style>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="mark"></span>PROJETO LUME <span class="x">× Redragon</span></div>
+    <div class="navlinks">
+      <a href="#contexto">Contexto</a>
+      <a href="#simulador">Simulador</a>
+      <a href="#localizacoes">Localizações</a>
+      <a href="#custos">Custos &amp; Preço</a>
+      <a href="#viabilidade">Viabilidade</a>
+      <a href="#dados-reais">Dados Reais</a>
+      <a href="#conclusao">Conclusão</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-slash"></div>
+  <div class="wrap hero-inner">
+    <span class="hero-tag">Case Redragon <b>·</b> Consultoria ESAG Jr <b>·</b> Pipeline 4 / Grupo 2</span>
+    <h1>Loja parceira<br><em>Redragon</em> em Florianópolis</h1>
+    <p class="sub">Plano financeiro completo para a decisão de Pedro: projeção de custos, precificação do mix, três cenários em três localizações, DRE, DFC e um simulador de viabilidade — com um teste de estresse usando dados reais de mercado.</p>
+    <div class="hero-cta">
+      <a href="#simulador" class="btn btn-primary">Ver simulador financeiro ↓</a>
+      <a href="#conclusao" class="btn btn-ghost">Ir direto à recomendação</a>
+    </div>
+    <div class="hero-meta">
+      <div><span class="v">3</span><span class="k">Localizações avaliadas</span></div>
+      <div><span class="v">3</span><span class="k">Cenários por localização</span></div>
+      <div><span class="v">60/40</span><span class="k">Mix Redragon / outras marcas</span></div>
+      <div><span class="v">2%</span><span class="k">Repasse de marketing, sem franquia</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ CONTEXTO ============ -->
+<section id="contexto">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">O projeto</div>
+      <h2>De uma loja na Trindade a um destino Redragon em shopping</h2>
+      <p class="lede">Pedro já vende produtos Redragon em sua loja atual e conhece o giro e a margem da marca. A proposta: uma loja parceira dentro de um shopping, com a Redragon custeando projeto arquitetônico e mobiliário, sem cobrar taxa de franquia — apenas 2% do faturamento, reinvestidos em marketing da própria unidade.</p>
+    </div>
+    <div class="grid g4">
+      <div class="card">
+        <div class="icon">◆</div>
+        <h3>Mix 60/40</h3>
+        <p>60% da loja dedicada ao universo Redragon; 40% para outras marcas da mesma distribuidora (Deepcool, XP‑Pen), com ativações interativas e mesas gamer.</p>
+      </div>
+      <div class="card">
+        <div class="icon">$</div>
+        <h3>Sem taxa de franquia</h3>
+        <p>A Redragon não cobra franquia — retém apenas 2% do faturamento bruto, integralmente reinvestidos em marketing da unidade.</p>
+      </div>
+      <div class="card">
+        <div class="icon">▣</div>
+        <h3>Fit‑out por conta da marca</h3>
+        <p>Projeto arquitetônico e mobiliário custeados pela Redragon, reduzindo o aporte inicial de Pedro a estoque, capital de giro e adequações complementares.</p>
+      </div>
+      <div class="card">
+        <div class="icon">⌖</div>
+        <h3>3 shoppings em disputa</h3>
+        <p>Vila Romana, Continente e Beira Mar — fluxo de público, custo de ocupação e perfil de consumidor bem diferentes entre si.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============ SIMULADOR ============ -->
+<section id="simulador">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Painel interativo</div>
+      <h2>Simulador financeiro ao vivo</h2>
+      <p class="lede">Escolha a localização e o cenário — todos os indicadores, o DRE mensal e o fluxo de caixa abaixo recalculam na hora, replicando exatamente o modelo da planilha "Projeto Lume".</p>
+    </div>
+
+    <div class="controlbar">
+      <div class="control-group">
+        <span class="lbl">Localização</span>
+        <div class="chip-row" id="loc-chips"></div>
+      </div>
+      <div class="control-group">
+        <span class="lbl">Cenário</span>
+        <div class="chip-row" id="scn-chips"></div>
+      </div>
+      <p class="note">Prêmissas estimadas para fins do exercício acadêmico — a substituir por dados reais negociados com cada shopping.</p>
+    </div>
+
+    <div class="grid g6" id="kpi-row" style="margin-bottom:20px"></div>
+
+    <div class="grid g2">
+      <div class="chart-card">
+        <div class="chead"><h4>DRE mensal — Ano 1</h4><span class="chsub" id="dre-sub"></span></div>
+        <div class="chart-scroll"><svg id="chart-dre" viewBox="0 0 560 300" role="img" aria-label="Receita bruta, receita líquida e lucro líquido por mês"></svg></div>
+        <div class="legend">
+          <span><i style="background:var(--text-secondary)"></i>Faturamento bruto</span>
+          <span><i style="background:var(--red)"></i>Receita líquida</span>
+          <span><i style="background:var(--status-good)"></i>Lucro líquido</span>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chead"><h4>Fluxo de caixa acumulado</h4><span class="chsub" id="dfc-sub"></span></div>
+        <div class="chart-scroll"><svg id="chart-dfc" viewBox="0 0 560 300" role="img" aria-label="Fluxo de caixa acumulado mês a mês, com ponto de payback"></svg></div>
+        <div class="legend">
+          <span><i style="background:var(--red)"></i>Caixa acumulado</span>
+          <span><i style="background:var(--status-good)"></i>Ponto de payback</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============ LOCALIZAÇÕES ============ -->
+<section id="localizacoes">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Comparativo</div>
+      <h2>As três localizações, lado a lado</h2>
+      <p class="lede">Faturamento bruto mensal em regime de maturação plena, para cada localização nos três cenários — a base para a decisão de Pedro.</p>
+    </div>
+    <div class="chart-card">
+      <div class="chead"><h4>Faturamento mensal em regime, por localização e cenário</h4><span class="chsub">R$ / mês</span></div>
+      <div class="chart-scroll"><svg id="chart-loc" viewBox="0 0 900 340" role="img" aria-label="Faturamento mensal por localização e cenário"></svg></div>
+      <div class="legend" id="loc-legend"></div>
+    </div>
+
+    <div class="grid g3" style="margin-top:20px" id="loc-cards"></div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============ CUSTOS & PRECIFICAÇÃO ============ -->
+<section id="custos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Estrutura financeira</div>
+      <h2>Para onde vai cada real de faturamento</h2>
+      <p class="lede">Custos variáveis incidem sobre o faturamento bruto; custos fixos (aluguel, condomínio, fundo de promoção, folha e utilidades) variam por localização, mas não com o volume de vendas.</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="chart-card">
+        <div class="chead"><h4>Composição do faturamento</h4><span class="chsub">% sobre a receita bruta</span></div>
+        <div class="chart-scroll"><svg id="chart-stack" viewBox="0 0 560 130" role="img" aria-label="Composição percentual do faturamento entre custos e margem de contribuição"></svg></div>
+        <div class="legend" id="stack-legend"></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:14px">
+        <h3 style="margin-bottom:0">Precificação do mix</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Categoria</th><th class="num">% do mix</th><th class="num">Ticket médio</th><th class="num">CMV</th><th class="num">Margem bruta</th></tr></thead>
+            <tbody>
+              <tr><td class="hl">Redragon</td><td class="num">60%</td><td class="num">R$ 190</td><td class="num">55%</td><td class="num">45%</td></tr>
+              <tr><td class="hl">Outras marcas <span class="mono-small">(Deepcool, XP‑Pen)</span></td><td class="num">40%</td><td class="num">R$ 170</td><td class="num">50%</td><td class="num">50%</td></tr>
+              <tr><td class="hl">Blended (mix ponderado)</td><td class="num">100%</td><td class="num hl">R$ 182</td><td class="num">53%</td><td class="num hl">47%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.6">A <b style="color:var(--text-primary)">margem de contribuição líquida (31,2%)</b> é o que sobra do faturamento após CMV e todos os custos variáveis — é ela que cobre os custos fixos e define o ponto de equilíbrio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============ VIABILIDADE ============ -->
+<section id="viabilidade">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Simulador de investimento</div>
+      <h2>Payback, VPL, TIR e ROI</h2>
+      <p class="lede">Indicadores para a combinação de localização e cenário selecionada acima — investimento inicial de R$ 300.000, TMA de 15% a.a.</p>
+    </div>
+
+    <div class="grid g4" id="viab-kpis" style="margin-bottom:24px"></div>
+
+    <div class="grid g2">
+      <div class="chart-card">
+        <div class="chead"><h4>Fluxo de caixa livre — Ano 0 a Ano 5</h4><span class="chsub">R$ / ano</span></div>
+        <div class="chart-scroll"><svg id="chart-fcf5" viewBox="0 0 560 260" role="img" aria-label="Fluxo de caixa livre anual de Ano 0 a Ano 5"></svg></div>
+      </div>
+      <div class="card">
+        <h3>VPL por combinação (R$)</h3>
+        <p style="margin-bottom:14px">Localização × cenário — verde indica VPL mais alto, vermelho mais baixo.</p>
+        <div class="tbl-wrap">
+          <table id="vpl-matrix"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============ DADOS REAIS ============ -->
+<section id="dados-reais">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Teste de estresse</div>
+      <h2>O que os dados reais de mercado mostram</h2>
+      <p class="lede">O modelo acima usa premissas hipotéticas razoáveis. Para validar, o grupo levantou dados reais: o DRE de ocupação de um franqueado no Vila Romana, a tabela vigente do Simples Nacional e as taxas de cartão praticadas pelo mercado — e recalculou o ponto de equilíbrio com esses números.</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Despesas reais de ocupação — franqueado Vila Romana</h3>
+        <div class="tbl-wrap" style="margin-top:12px">
+          <table>
+            <tbody>
+              <tr><td>Aluguel</td><td class="num">R$ 7.521,89</td></tr>
+              <tr><td>Condomínio</td><td class="num">R$ 6.889,83</td></tr>
+              <tr><td>Fundo de promoção</td><td class="num">R$ 1.128,28</td></tr>
+              <tr><td>IPTU</td><td class="num">R$ 403,98</td></tr>
+              <tr><td>Energia elétrica</td><td class="num">R$ 704,88</td></tr>
+              <tr><td>Ar condicionado (shopping)</td><td class="num">R$ 600,77</td></tr>
+              <tr><td class="hl">Total despesas de ocupação</td><td class="num hl">R$ 17.249,63</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px">Reajuste contratual de 5% a.a. previsto (Almeida Júnior). Estimativa aplicada de 88% para Continente e 120% para Beira Mar sobre esse patamar.</p>
+      </div>
+
+      <div class="card">
+        <h3>Simples Nacional — Anexo I (Comércio), tabela 2026</h3>
+        <div class="tbl-wrap" style="margin-top:12px">
+          <table>
+            <thead><tr><th>Receita bruta (12m)</th><th class="num">Alíquota</th><th class="num">Deduzir</th></tr></thead>
+            <tbody>
+              <tr><td>Até R$ 180 mil</td><td class="num">4,00%</td><td class="num">—</td></tr>
+              <tr><td>R$ 180–360 mil</td><td class="num">7,30%</td><td class="num">R$ 5.940</td></tr>
+              <tr><td>R$ 360–720 mil</td><td class="num">9,50%</td><td class="num">R$ 13.860</td></tr>
+              <tr><td>R$ 720 mil–1,8 mi</td><td class="num">10,70%</td><td class="num">R$ 22.500</td></tr>
+              <tr><td>R$ 1,8–3,6 mi</td><td class="num">14,30%</td><td class="num">R$ 87.300</td></tr>
+              <tr><td>R$ 3,6–4,8 mi</td><td class="num">19,00%</td><td class="num">R$ 378.000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px">Fonte: Anexo I 2026 (Agilize Contabilidade). Taxas de cartão reais usadas: InfinitePay a partir de 2,69% no crédito à vista, Stone a partir de 2,99%.</p>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="chart-card">
+        <div class="chead"><h4>Ponto de equilíbrio mensal</h4><span class="chsub">modelo acadêmico vs. dados reais</span></div>
+        <div class="chart-scroll"><svg id="chart-real" viewBox="0 0 560 200" role="img" aria-label="Comparação do ponto de equilíbrio entre o modelo acadêmico e o modelo com dados reais"></svg></div>
+      </div>
+      <div class="card">
+        <h3>Estrutura de custo — cenário com dados reais</h3>
+        <div class="tbl-wrap" style="margin-top:12px">
+          <table>
+            <tbody>
+              <tr><td>CMV (blended real)</td><td class="num">62,0%</td></tr>
+              <tr><td>Impostos (Simples, faixa real)</td><td class="num">14,3%</td></tr>
+              <tr><td>Complementar ao aluguel mínimo</td><td class="num">10,0%</td></tr>
+              <tr><td>Marketing + cartão + comissões + perdas + embalagens</td><td class="num">7,0%</td></tr>
+              <tr><td class="hl">Total custos variáveis</td><td class="num hl">93,3%</td></tr>
+              <tr><td class="hl">Margem de contribuição real</td><td class="num hl" style="color:var(--status-bad)">6,7%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:16px">
+      <span class="qm">&ldquo;</span>
+      <div>
+        <p>O faturamento mensal necessário para o equilíbrio seria de <b style="color:#fff;font-style:normal">R$ 502.822</b> — patamar que tiraria a loja do Simples Nacional e é improvável para uma operação de shopping de pequeno porte, segundo profissionais do ramo consultados pelo grupo.</p>
+        <footer>Pipeline 4 (Grupo 2) — seção "Ponto de Equilíbrio", com TIR anual equivalente de <b style="color:var(--status-bad)">‑43,7%</b> nesse cenário conservador.</footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============ CONCLUSÃO ============ -->
+<section id="conclusao">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Recomendação final</div>
+      <h2>Números e estratégia apontam para o mesmo lugar</h2>
+      <p class="lede">Isoladamente, o modelo financeiro básico posiciona o Vila Romana em situação intermediária. Ao incorporar a sinergia com a loja que Pedro já opera na Trindade, o cenário muda.</p>
+    </div>
+
+    <div class="rec-banner" style="margin-bottom:32px">
+      <div class="rel flex-between">
+        <div>
+          <span class="badge good">Recomendação do grupo</span>
+          <h3 style="font-size:clamp(28px,5vw,44px);margin-top:14px">Vila Romana</h3>
+          <p style="color:var(--text-secondary);max-width:520px;margin-top:8px;font-size:14.5px;line-height:1.6">A única localização cuja viabilidade se apoia em um ativo já existente — a operação da Trindade, bairro limítrofe ao Santa Mônica.</p>
+        </div>
+      </div>
+    </div>
+
+    <ol class="reasons">
+      <li>
+        <div>
+          <h4>Sinergia operacional com a unidade da Trindade</h4>
+          <p>Estoque compartilhado entre as unidades, rateio da retaguarda administrativa e gestão presencial do próprio Pedro dispensam parte do custo de gerência.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Composição do público no entorno</h4>
+          <p>O Santa Mônica faz divisa com a Trindade, onde fica o campus da UFSC — estudantes e jovens adultos circulam na região diariamente, não só aos fins de semana, o que favorece um formato dependente de recorrência de visita.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Base de clientes previamente constituída</h4>
+          <p>Pedro já vende Redragon e conhece o giro dos itens. A unidade do shopping herda a carteira da operação atual, com custo de aquisição de cliente próximo de zero nos primeiros meses — justamente o período de maturação mais lenta.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Menor exposição patrimonial</h4>
+          <p>No Vila Romana, o estoque não é custo afundado: em caso de descontinuidade, a mercadoria migra para a Trindade e é escoada pelo canal já estabelecido.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="grid g3" style="margin-top:28px">
+      <div class="card"><span class="badge neutral">Leitura do modelo acadêmico</span><p style="margin-top:12px">Com premissas estimadas, o Vila Romana Realista mostra VPL positivo e payback inferior a um ano — um cenário atrativo, a confirmar com dados reais do shopping.</p></div>
+      <div class="card"><span class="badge bad">Leitura com dados reais</span><p style="margin-top:12px">Custos reais de ocupação, tributação e cartão elevam o ponto de equilíbrio para um patamar de difícil alcance — sinal de alerta que não deve ser ignorado na negociação com Pedro.</p></div>
+      <div class="card"><span class="badge good">Fator decisivo</span><p style="margin-top:12px">A sinergia com a loja da Trindade reduz custos e risco de forma que nenhuma das outras duas localizações consegue replicar.</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h5>Projeto Lume</h5>
+        <p>Case Redragon — Processo Seletivo ESAG Jr. Todos os valores marcados como premissa são estimativas hipotéticas construídas para fins do exercício acadêmico e devem ser substituídas por dados reais antes de qualquer decisão de investimento.</p>
+        <p style="margin-top:10px">Pipeline 4 (Grupo 2) — Arthur Blatt Pontin, João Pinheiro, Maria Eduarda Alves Vieira, Laura Righetto.</p>
+      </div>
+      <div>
+        <h5>Seções</h5>
+        <ul>
+          <li><a href="#simulador">Simulador financeiro</a></li>
+          <li><a href="#localizacoes">Comparativo de localizações</a></li>
+          <li><a href="#viabilidade">Indicadores de viabilidade</a></li>
+          <li><a href="#dados-reais">Validação com dados reais</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Fontes</h5>
+        <details>
+          <summary>Ver todas as fontes citadas</summary>
+          <div class="src-list">
+            <div>NSC Total — Vila Romana</div>
+            <div>Acontecendo Aqui — Vila Romana</div>
+            <div>Acontecendo Aqui — Continente</div>
+            <div>fnet.bmfbovespa.com.br — Continente</div>
+            <div>ABC da Comunicação — Beiramar</div>
+            <div>Acontecendo Aqui — Beiramar</div>
+            <div>QuintoAndar — Floripa Shopping</div>
+            <div>Abrasce, via BNB</div>
+            <div>FipeZap comercial, set/2026</div>
+            <div>Dissertação PUC‑Rio — aluguel shopping</div>
+            <div>Agilize Contabilidade — Simples 2026</div>
+            <div>InfinitePay — taxas 2026</div>
+            <div>Banco Central — Selic</div>
+            <div>KaBuM/Canaltech — preços Redragon</div>
+            <div>Buscapé — preços Redragon</div>
+            <div>Redragon Store</div>
+            <div>Magazine Luiza — Redragon</div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ===================== DATA MODEL ===================== */
+const LOCATIONS = {
+  vila_romana: {key:'vila_romana', label:'Vila Romana', aluguel:20000, condominio:6500, fundo:2200, fluxo:110000, conversao:0.02, color:'var(--red)', hex:'#FF3D57', rec:true},
+  continente:  {key:'continente',  label:'Continente',  aluguel:17000, condominio:5500, fundo:2000, fluxo:140000, conversao:0.015, color:'var(--teal-deep)', hex:'#1D93B0'},
+  beira_mar:   {key:'beira_mar',   label:'Beira Mar',   aluguel:26000, condominio:8500, fundo:2800, fluxo:120000, conversao:0.024, color:'var(--gold-deep)', hex:'#B8760F'},
+};
+const SCENARIOS = {
+  pessimista: {key:'pessimista', label:'Pessimista', conv_mult:0.7, ticket_mult:0.9, color:'var(--status-bad)', hex:'#D9532B'},
+  realista:   {key:'realista',   label:'Realista',   conv_mult:1,   ticket_mult:1,    color:'var(--status-neutral)', hex:'#5A78C2'},
+  otimista:   {key:'otimista',   label:'Otimista',   conv_mult:1.3, ticket_mult:1.15, color:'var(--status-good)', hex:'#2FA968'},
+};
+const TICKET_BLENDED = 182;
+const MARGEM_CONTRIB_PCT = 0.312;
+const FIXED_COMMON = 25000*1.68 + 3000; // folha+encargos + energia/internet/sistema = 45000
+const INVESTIMENTO = 300000;
+const TMA = 0.15;
+const RAMP_FACTORS = [0.625,0.75,0.875,1,1,1,1,1,1,1,1,1]; // 12 operating months, year 1
+const GROWTH = 0.08;
+const FIXED_INFL = 0.4*GROWTH; // 3.2% a.a.
+const DEPREC_MONTHLY = 50000/60;
+const DEPREC_ANNUAL = 10000;
+
+function fixedMonthly(loc){ return loc.aluguel+loc.condominio+loc.fundo+FIXED_COMMON; }
+
+function computeMonths(locKey, scnKey){
+  const loc=LOCATIONS[locKey], scn=SCENARIOS[scnKey];
+  const fm = fixedMonthly(loc);
+  const ticket = TICKET_BLENDED*scn.ticket_mult;
+  return RAMP_FACTORS.map(f=>{
+    const convEff = loc.conversao*scn.conv_mult*f;
+    const visitantes = loc.fluxo*convEff;
+    const faturamento = visitantes*ticket;
+    const receitaLiquida = faturamento*(1-0.08-0.02-0.035-0.015-0.005-0.003);
+    const margemContrib = faturamento*MARGEM_CONTRIB_PCT;
+    const ebitda = margemContrib - fm;
+    const lucroLiquido = ebitda - DEPREC_MONTHLY;
+    return {faturamento, receitaLiquida, margemContrib, ebitda, lucroLiquido};
+  });
+}
+
+function computeYears(locKey, scnKey){
+  const months = computeMonths(locKey, scnKey);
+  const loc = LOCATIONS[locKey];
+  const fm = fixedMonthly(loc);
+  const fatAno1 = months.reduce((s,m)=>s+m.faturamento,0);
+  const ebitdaAno1 = months.reduce((s,m)=>s+m.ebitda,0);
+  const lucroAno1 = months.reduce((s,m)=>s+m.lucroLiquido,0);
+  const fat=[fatAno1], fixedc=[fm*12];
+  for(let n=1;n<5;n++){
+    fat.push(fat[n-1]*(1+GROWTH));
+    fixedc.push(fixedc[n-1]*(1+FIXED_INFL));
+  }
+  const margem = fat.map(f=>f*MARGEM_CONTRIB_PCT);
+  const ebitda = margem.map((m,i)=>m-fixedc[i]);
+  const lucro = ebitda.map(e=>e-DEPREC_ANNUAL);
+  ebitda[0]=ebitdaAno1; lucro[0]=lucroAno1; // exact month-level totals for year 1
+  const FCF=[-INVESTIMENTO, ebitda[0], lucro[1], lucro[2], lucro[3], lucro[4]];
+  return {fat, fixedc, margem, ebitda, lucro, FCF, fm};
+}
+
+function npv(FCF, rate){
+  return FCF.reduce((s,cf,t)=>s+cf/Math.pow(1+rate,t),0);
+}
+function irr(FCF){
+  let lo=-0.99, hi=10;
+  for(let i=0;i<200;i++){
+    const mid=(lo+hi)/2;
+    if(npv(FCF,mid)>0) lo=mid; else hi=mid;
+  }
+  return lo;
+}
+
+function fullModel(locKey, scnKey){
+  const loc=LOCATIONS[locKey], scn=SCENARIOS[scnKey];
+  const months = computeMonths(locKey, scnKey);
+  const years = computeYears(locKey, scnKey);
+  const vpl = npv(years.FCF, TMA);
+  const tir = irr(years.FCF);
+  const roi = (years.FCF.slice(1).reduce((a,b)=>a+b,0) - INVESTIMENTO)/INVESTIMENTO;
+  const fm = years.fm;
+  const peMensal = fm/MARGEM_CONTRIB_PCT;
+  // payback: monthly crossing within year 1, else annual crossing thereafter
+  let cum=-INVESTIMENTO, payback=null;
+  for(let i=0;i<months.length;i++){
+    const prev=cum; cum+=months[i].ebitda;
+    if(payback===null && cum>=0){
+      const frac = months[i].ebitda!==0 ? (-prev)/months[i].ebitda : 0;
+      payback = (i+frac)/12;
+    }
+  }
+  if(payback===null){
+    // continue into later years using annual FCF
+    let cumY = cum;
+    for(let y=1;y<years.FCF.length-1;y++){
+      const prevY=cumY; cumY+=years.FCF[y+1];
+      if(payback===null && cumY>=0){
+        const frac = years.FCF[y+1]!==0 ? (-prevY)/years.FCF[y+1] : 0;
+        payback = 1+y-1+frac; // approx
+      }
+    }
+  }
+  const regimeFat = loc.fluxo*loc.conversao*scn.conv_mult*TICKET_BLENDED*scn.ticket_mult;
+  return {loc, scn, months, years, vpl, tir, roi, peMensal, payback, fm, regimeFat};
+}
+
+/* ===================== FORMAT HELPERS ===================== */
+const fmtBRL = n => n.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+const fmtBRL1 = n => n.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:1});
+const fmtPct = n => (n*100).toLocaleString('pt-BR',{maximumFractionDigits:1})+'%';
+const fmtNum = n => n.toLocaleString('pt-BR',{maximumFractionDigits:0});
+
+/* ===================== TOOLTIP ===================== */
+const tooltipEl = document.getElementById('tooltip');
+function showTooltip(x,y,html){
+  tooltipEl.innerHTML = html;
+  tooltipEl.style.opacity = 1;
+  const pad=14;
+  let left = x+pad, top = y+pad;
+  const rect = tooltipEl.getBoundingClientRect();
+  if(left+ (rect.width||180) > window.innerWidth-8) left = x-(rect.width||180)-pad;
+  if(top+(rect.height||60) > window.innerHeight-8) top = y-(rect.height||60)-pad;
+  tooltipEl.style.left = left+'px';
+  tooltipEl.style.top = top+'px';
+}
+function hideTooltip(){ tooltipEl.style.opacity = 0; }
+
+/* ===================== SVG HELPERS ===================== */
+const SVGNS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs){
+  const e = document.createElementNS(SVGNS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+function clear(svg){ while(svg.firstChild) svg.removeChild(svg.firstChild); }
+function niceMax(v){
+  if(v<=0) return 10;
+  const mag = Math.pow(10, Math.floor(Math.log10(v)));
+  const norm = v/mag;
+  let step;
+  if(norm<=1) step=1; else if(norm<=2) step=2; else if(norm<=5) step=5; else step=10;
+  return step*mag;
+}
+
+/* ===================== CHART: DRE line/area ===================== */
+function renderDRE(locKey, scnKey){
+  const svg = document.getElementById('chart-dre');
+  clear(svg);
+  const months = computeMonths(locKey, scnKey);
+  const loc = LOCATIONS[locKey];
+  const W=560,H=300, ml=56, mr=16, mt=18, mb=34;
+  const iw=W-ml-mr, ih=H-mt-mb;
+  const maxV = niceMax(Math.max(...months.map(m=>m.faturamento)));
+  const x = i => ml + iw*(i/(months.length-1));
+  const y = v => mt + ih*(1-v/maxV);
+
+  // gridlines + y labels
+  const steps=4;
+  for(let s=0;s<=steps;s++){
+    const v = maxV*s/steps;
+    const yy = y(v);
+    svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:yy,y2:yy,class:'grid-line'}));
+    const t = el('text',{x:ml-8,y:yy+4,'font-size':10,'text-anchor':'end'}); t.textContent = 'R$ '+Math.round(v/1000)+'k'; svg.appendChild(t);
+  }
+  svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:H-mb,y2:H-mb,class:'axis-line'}));
+
+  function path(getV, close){
+    let d = months.map((m,i)=> (i===0?'M':'L')+x(i).toFixed(1)+','+y(getV(m)).toFixed(1)).join(' ');
+    if(close){ d += ` L${x(months.length-1).toFixed(1)},${H-mb} L${x(0).toFixed(1)},${H-mb} Z`; }
+    return d;
+  }
+
+  // area under faturamento bruto
+  const area = el('path',{d:path(m=>m.faturamento,true), fill:'rgba(169,173,184,.10)', stroke:'none'});
+  svg.appendChild(area);
+
+  const lineFat = el('path',{d:path(m=>m.faturamento), fill:'none', stroke:'var(--text-secondary)','stroke-width':2});
+  const lineRec = el('path',{d:path(m=>m.receitaLiquida), fill:'none', stroke:'var(--red)','stroke-width':2.5});
+  const lineLuc = el('path',{d:path(m=>m.lucroLiquido), fill:'none', stroke:'var(--status-good)','stroke-width':2});
+  svg.appendChild(lineFat); svg.appendChild(lineRec); svg.appendChild(lineLuc);
+
+  // x labels
+  months.forEach((m,i)=>{
+    if(i%2===0 || i===months.length-1){
+      const t = el('text',{x:x(i),y:H-mb+18,'font-size':10,'text-anchor':'middle'}); t.textContent='M'+(i+1); svg.appendChild(t);
+    }
+  });
+
+  // hover overlay
+  const hitW = iw/months.length;
+  months.forEach((m,i)=>{
+    const hit = el('rect',{x:x(i)-hitW/2, y:mt, width:hitW, height:ih, fill:'transparent'});
+    hit.addEventListener('mousemove', (ev)=>{
+      showTooltip(ev.clientX, ev.clientY,
+        `<b>Mês ${i+1}</b><br>
+        <div class="row"><span>Faturamento bruto</span><span>${fmtBRL(m.faturamento)}</span></div>
+        <div class="row"><span>Receita líquida</span><span>${fmtBRL(m.receitaLiquida)}</span></div>
+        <div class="row"><span>Lucro líquido</span><span>${fmtBRL(m.lucroLiquido)}</span></div>`);
+    });
+    hit.addEventListener('mouseleave', hideTooltip);
+    svg.appendChild(hit);
+    ['faturamento','receitaLiquida','lucroLiquido'].forEach((key,ki)=>{
+      const colors=['var(--text-secondary)','var(--red)','var(--status-good)'];
+      const c = el('circle',{cx:x(i), cy:y(m[key]), r:3, fill:colors[ki], stroke:'var(--surface)','stroke-width':1.5,'pointer-events':'none'});
+      svg.appendChild(c);
+    });
+  });
+
+  document.getElementById('dre-sub').textContent = loc.label+' · '+SCENARIOS[scnKey].label;
+}
+
+/* ===================== CHART: DFC cumulative bar ===================== */
+function renderDFC(locKey, scnKey){
+  const svg = document.getElementById('chart-dfc');
+  clear(svg);
+  const months = computeMonths(locKey, scnKey);
+  const W=560,H=300, ml=60, mr=16, mt=18, mb=34;
+  const iw=W-ml-mr, ih=H-mt-mb;
+
+  let cum=-INVESTIMENTO;
+  const cumSeries=[-INVESTIMENTO];
+  months.forEach(m=>{ cum+=m.ebitda; cumSeries.push(cum); });
+
+  const maxV = niceMax(Math.max(...cumSeries));
+  const minV = -niceMax(Math.abs(Math.min(...cumSeries,0)));
+  const range = maxV-minV;
+  const x = i => ml + iw*(i/(cumSeries.length-1));
+  const y = v => mt + ih*(1-(v-minV)/range);
+  const zeroY = y(0);
+
+  const steps=4;
+  for(let s=0;s<=steps;s++){
+    const v = minV + range*s/steps;
+    const yy = y(v);
+    svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:yy,y2:yy,class:'grid-line'}));
+    const t = el('text',{x:ml-8,y:yy+4,'font-size':10,'text-anchor':'end'}); t.textContent='R$ '+Math.round(v/1000)+'k'; svg.appendChild(t);
+  }
+  svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:zeroY,y2:zeroY,stroke:'var(--border-strong)','stroke-width':1.2}));
+
+  const barW = Math.max(8, iw/cumSeries.length*0.55);
+  let paybackIdx=-1;
+  cumSeries.forEach((v,i)=>{ if(paybackIdx===-1 && v>=0) paybackIdx=i; });
+
+  cumSeries.forEach((v,i)=>{
+    const yy=y(v), top=Math.min(yy,zeroY), h=Math.abs(yy-zeroY);
+    const isPB = i===paybackIdx;
+    const bar = el('rect',{x:x(i)-barW/2, y:top, width:barW, height:Math.max(h,1), rx:2,
+      fill: v<0 ? 'rgba(217,83,43,.55)' : (isPB ? 'var(--status-good)' : 'rgba(47,169,104,.55)')});
+    svg.appendChild(bar);
+    const hit = el('rect',{x:x(i)-iw/cumSeries.length/2, y:mt, width:iw/cumSeries.length, height:ih, fill:'transparent'});
+    const label = i===0 ? 'Investimento (Mês 0)' : 'Mês '+i;
+    hit.addEventListener('mousemove',(ev)=>{
+      showTooltip(ev.clientX, ev.clientY, `<b>${label}</b><br><div class="row"><span>Caixa acumulado</span><span>${fmtBRL(v)}</span></div>${isPB?'<div class="row"><span style="color:var(--status-good)">Payback atingido</span></div>':''}`);
+    });
+    hit.addEventListener('mouseleave', hideTooltip);
+    svg.appendChild(hit);
+  });
+
+  months.forEach((m,i)=>{
+    if((i+1)%2===0){
+      const t = el('text',{x:x(i+1),y:H-mb+18,'font-size':10,'text-anchor':'middle'}); t.textContent='M'+(i+1); svg.appendChild(t);
+    }
+  });
+  const t0 = el('text',{x:x(0),y:H-mb+18,'font-size':10,'text-anchor':'middle'}); t0.textContent='M0'; svg.appendChild(t0);
+
+  const paybackYears = fullModel(locKey,scnKey).payback;
+  document.getElementById('dfc-sub').textContent = paybackYears!==null ? 'Payback ≈ '+(paybackYears*12).toFixed(1)+' meses' : 'Payback além do Ano 5';
+}
+
+/* ===================== CHART: location x scenario grouped bars ===================== */
+function renderLocChart(){
+  const svg = document.getElementById('chart-loc');
+  clear(svg);
+  const W=900,H=340, ml=70, mr=16, mt=20, mb=44;
+  const iw=W-ml-mr, ih=H-mt-mb;
+  const locKeys = Object.keys(LOCATIONS), scnKeys = Object.keys(SCENARIOS);
+  const data = locKeys.map(lk=> scnKeys.map(sk=>{
+    const loc=LOCATIONS[lk], scn=SCENARIOS[sk];
+    return loc.fluxo*loc.conversao*scn.conv_mult*TICKET_BLENDED*scn.ticket_mult;
+  }));
+  const maxV = niceMax(Math.max(...data.flat()));
+  const y = v => mt + ih*(1-v/maxV);
+  const steps=5;
+  for(let s=0;s<=steps;s++){
+    const v=maxV*s/steps, yy=y(v);
+    svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:yy,y2:yy,class:'grid-line'}));
+    const t=el('text',{x:ml-8,y:yy+4,'font-size':10,'text-anchor':'end'}); t.textContent='R$ '+Math.round(v/1000)+'k'; svg.appendChild(t);
+  }
+  svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:H-mb,y2:H-mb,class:'axis-line'}));
+
+  const groupW = iw/scnKeys.length;
+  const barW = Math.min(38, groupW/locKeys.length*0.62);
+  const gap = 6;
+
+  scnKeys.forEach((sk,si)=>{
+    const groupX = ml + groupW*si + groupW/2;
+    const t = el('text',{x:groupX, y:H-mb+20, 'font-size':11.5,'text-anchor':'middle','font-family':'Inter,sans-serif',fill:'var(--text-secondary)'});
+    t.textContent = SCENARIOS[sk].label; svg.appendChild(t);
+    locKeys.forEach((lk,li)=>{
+      const v = data[li][si];
+      const totalW = locKeys.length*barW + (locKeys.length-1)*gap;
+      const bx = groupX - totalW/2 + li*(barW+gap);
+      const yy=y(v), h=H-mb-yy;
+      const rect = el('rect',{x:bx, y:yy, width:barW, height:Math.max(h,1), rx:3, fill:LOCATIONS[lk].hex});
+      svg.appendChild(rect);
+      const hit = el('rect',{x:bx-2,y:mt,width:barW+4,height:ih,fill:'transparent'});
+      hit.addEventListener('mousemove',(ev)=>{
+        showTooltip(ev.clientX, ev.clientY, `<b>${LOCATIONS[lk].label}</b> · ${SCENARIOS[sk].label}<br><div class="row"><span>Faturamento/mês</span><span>${fmtBRL(v)}</span></div>`);
+      });
+      hit.addEventListener('mouseleave', hideTooltip);
+      svg.appendChild(hit);
+    });
+  });
+
+  const legend = document.getElementById('loc-legend');
+  legend.innerHTML = locKeys.map(lk=>`<span><i style="background:${LOCATIONS[lk].hex}"></i>${LOCATIONS[lk].label}${LOCATIONS[lk].rec?' (recomendada)':''}</span>`).join('');
+}
+
+/* ===================== CHART: cost stack (100% horizontal) ===================== */
+function renderStack(){
+  const svg = document.getElementById('chart-stack');
+  clear(svg);
+  const W=560,H=130, ml=8, mr=8, mt=30, barH=46;
+  const iw=W-ml-mr;
+  const segs = [
+    {label:'CMV', v:0.53, color:'#B8760F'},
+    {label:'Impostos', v:0.08, color:'#5A78C2'},
+    {label:'Cartão', v:0.035, color:'#1D93B0'},
+    {label:'Comissões', v:0.015, color:'#2AAFCF'},
+    {label:'Marketing', v:0.02, color:'#7A1826'},
+    {label:'Perdas+Emb.', v:0.008, color:'#6E7280'},
+    {label:'Margem de contribuição', v:0.312, color:'#2FA968'},
+  ];
+  let cx = ml;
+  const gap=2;
+  segs.forEach(s=>{
+    const w = iw*s.v - gap;
+    const rect = el('rect',{x:cx, y:mt, width:Math.max(w,1), height:barH, rx:3, fill:s.color});
+    svg.appendChild(rect);
+    if(s.v>0.06){
+      const t = el('text',{x:cx+w/2, y:mt+barH/2+4, 'font-size':11,'text-anchor':'middle', fill:'#0A0B0D','font-weight':700,'font-family':'Inter,sans-serif'});
+      t.textContent = Math.round(s.v*100)+'%'; svg.appendChild(t);
+    }
+    const hit = el('rect',{x:cx,y:mt,width:Math.max(w,1),height:barH,fill:'transparent'});
+    hit.addEventListener('mousemove',(ev)=>{
+      showTooltip(ev.clientX, ev.clientY, `<b>${s.label}</b><br><div class="row"><span>% do faturamento</span><span>${(s.v*100).toFixed(1)}%</span></div>`);
+    });
+    hit.addEventListener('mouseleave', hideTooltip);
+    svg.appendChild(hit);
+    cx += w+gap;
+  });
+  const t0 = el('text',{x:ml,y:mt-10,'font-size':10.5,'text-anchor':'start'}); t0.textContent='0%'; svg.appendChild(t0);
+  const t100 = el('text',{x:W-mr,y:mt-10,'font-size':10.5,'text-anchor':'end'}); t100.textContent='100%'; svg.appendChild(t100);
+
+  document.getElementById('stack-legend').innerHTML = segs.map(s=>`<span><i style="background:${s.color}"></i>${s.label} — ${(s.v*100).toFixed(1)}%</span>`).join('');
+}
+
+/* ===================== CHART: FCF year 0-5 ===================== */
+function renderFCF5(locKey, scnKey){
+  const svg = document.getElementById('chart-fcf5');
+  clear(svg);
+  const years = computeYears(locKey, scnKey);
+  const FCF = years.FCF;
+  const W=560,H=260, ml=64, mr=16, mt=18, mb=34;
+  const iw=W-ml-mr, ih=H-mt-mb;
+  const maxV = niceMax(Math.max(...FCF));
+  const minV = -niceMax(Math.abs(Math.min(...FCF,0)));
+  const range = maxV-minV;
+  const y = v => mt + ih*(1-(v-minV)/range);
+  const zeroY = y(0);
+
+  const steps=4;
+  for(let s=0;s<=steps;s++){
+    const v=minV+range*s/steps, yy=y(v);
+    svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:yy,y2:yy,class:'grid-line'}));
+    const t=el('text',{x:ml-8,y:yy+4,'font-size':10,'text-anchor':'end'}); t.textContent='R$ '+Math.round(v/1000)+'k'; svg.appendChild(t);
+  }
+  svg.appendChild(el('line',{x1:ml,x2:W-mr,y1:zeroY,y2:zeroY,stroke:'var(--border-strong)','stroke-width':1.2}));
+
+  const n=FCF.length;
+  const slotW = iw/n;
+  const barW = slotW*0.5;
+  FCF.forEach((v,i)=>{
+    const cx = ml + slotW*i + slotW/2;
+    const yy=y(v), top=Math.min(yy,zeroY), h=Math.abs(yy-zeroY);
+    const rect = el('rect',{x:cx-barW/2, y:top, width:barW, height:Math.max(h,1), rx:3, fill: i===0?'var(--text-muted)': (v<0?'var(--status-bad)':'var(--red)')});
+    svg.appendChild(rect);
+    const lbl = el('text',{x:cx,y:H-mb+18,'font-size':10.5,'text-anchor':'middle'}); lbl.textContent='Ano '+i; svg.appendChild(lbl);
+    const hit = el('rect',{x:cx-slotW/2,y:mt,width:slotW,height:ih,fill:'transparent'});
+    hit.addEventListener('mousemove',(ev)=>{
+      showTooltip(ev.clientX, ev.clientY, `<b>Ano ${i}</b><br><div class="row"><span>Fluxo de caixa</span><span>${fmtBRL(v)}</span></div>`);
+    });
+    hit.addEventListener('mouseleave', hideTooltip);
+    svg.appendChild(hit);
+  });
+}
+
+/* ===================== CHART: real vs academic breakeven ===================== */
+function renderRealCompare(){
+  const svg = document.getElementById('chart-real');
+  clear(svg);
+  const W=560,H=200, ml=140, mr=70, mt=24, mb=30;
+  const iw=W-ml-mr, ih=H-mt-mb;
+  const rows = [
+    {label:'Modelo acadêmico', v:236218, color:'#2FA968', note:'atingível — cenário Realista, Vila Romana'},
+    {label:'Modelo com dados reais', v:502822, color:'#D9532B', note:'exigiria sair do Simples Nacional'},
+  ];
+  const maxV = niceMax(Math.max(...rows.map(r=>r.v))*1.08);
+  const x = v => ml + iw*v/maxV;
+  const rowH = ih/rows.length;
+  rows.forEach((r,i)=>{
+    const cy = mt + rowH*i + rowH/2;
+    const barH = 30;
+    const lbl = el('text',{x:ml-12,y:cy+4,'font-size':12,'text-anchor':'end',fill:'var(--text-secondary)','font-family':'Inter,sans-serif'});
+    lbl.textContent = r.label; svg.appendChild(lbl);
+    const track = el('rect',{x:ml,y:cy-barH/2,width:iw,height:barH,rx:6,fill:'var(--surface-2)'});
+    svg.appendChild(track);
+    const bar = el('rect',{x:ml,y:cy-barH/2,width:Math.max(x(r.v)-ml,2),height:barH,rx:6,fill:r.color});
+    svg.appendChild(bar);
+    const val = el('text',{x:x(r.v)+8,y:cy+4,'font-size':12,'font-weight':700, fill:'var(--text-primary)','font-family':'JetBrains Mono,monospace'});
+    val.textContent = fmtBRL(r.v); svg.appendChild(val);
+    const hit = el('rect',{x:ml,y:cy-barH/2-4,width:iw+mr,height:barH+8,fill:'transparent'});
+    hit.addEventListener('mousemove',(ev)=>{
+      showTooltip(ev.clientX,ev.clientY,`<b>${r.label}</b><br><div class="row"><span>Faturamento necessário</span><span>${fmtBRL(r.v)}</span></div><div style="color:var(--text-muted);margin-top:4px;max-width:180px">${r.note}</div>`);
+    });
+    hit.addEventListener('mouseleave', hideTooltip);
+    svg.appendChild(hit);
+  });
+}
+
+/* ===================== KPI + CARD RENDER ===================== */
+function renderKPIs(locKey, scnKey){
+  const m = fullModel(locKey, scnKey);
+  const row = document.getElementById('kpi-row');
+  const items = [
+    {k:'Faturamento mensal (regime)', v:fmtBRL(m.regimeFat), cls:''},
+    {k:'Margem de contribuição', v:fmtPct(MARGEM_CONTRIB_PCT), cls:''},
+    {k:'Custo fixo mensal', v:fmtBRL(m.fm), cls:''},
+    {k:'EBITDA mensal (regime)', v:fmtBRL(m.regimeFat*MARGEM_CONTRIB_PCT-m.fm), cls:''},
+    {k:'Ponto de equilíbrio', v:fmtBRL(m.peMensal), cls: m.regimeFat>m.peMensal ? 'good':'bad'},
+    {k:'Margem sobre equilíbrio', v:fmtPct((m.regimeFat-m.peMensal)/m.regimeFat), cls: m.regimeFat>m.peMensal ? 'good':'bad'},
+  ];
+  row.innerHTML = items.map(it=>`<div class="kpi ${it.cls}"><span class="k">${it.k}</span><span class="v">${it.v}</span></div>`).join('');
+}
+
+function renderViabKPIs(locKey, scnKey){
+  const m = fullModel(locKey, scnKey);
+  const el2 = document.getElementById('viab-kpis');
+  const paybackTxt = m.payback!==null ? m.payback.toFixed(2)+' anos' : '> 5 anos';
+  const items = [
+    {k:'VPL (5 anos)', v:fmtBRL(m.vpl), cls: m.vpl>0?'accent':'bad', d:'Valor presente líquido a 15% a.a.'},
+    {k:'TIR', v:fmtPct(m.tir), cls: m.tir>TMA?'good':'bad', d:'vs. TMA de 15% a.a.'},
+    {k:'Payback interpolado', v:paybackTxt, cls:'', d:'tempo até recuperar o investimento'},
+    {k:'ROI em 5 anos', v:m.roi.toLocaleString('pt-BR',{maximumFractionDigits:1})+'×', cls: m.roi>0?'good':'bad', d:'retorno líquido sobre o aporte inicial (múltiplo)'},
+  ];
+  el2.innerHTML = items.map(it=>`<div class="kpi ${it.cls}"><span class="k">${it.k}</span><span class="v">${it.v}</span><span class="d">${it.d}</span></div>`).join('');
+}
+
+function renderLocCards(){
+  const el2 = document.getElementById('loc-cards');
+  el2.innerHTML = Object.values(LOCATIONS).map(loc=>{
+    const fm = fixedMonthly(loc);
+    return `<div class="card" style="border-color:${loc.rec?'rgba(255,61,87,.4)':'var(--border)'}">
+      <div class="flex-between"><h3 style="margin-bottom:0"><span style="color:${loc.hex}">●</span> ${loc.label}</h3>${loc.rec?'<span class="badge good">Recomendada</span>':''}</div>
+      <div class="tbl-wrap" style="margin-top:12px;border:none">
+        <table style="min-width:0">
+          <tbody>
+            <tr><td>Aluguel + condomínio + fundo</td><td class="num">${fmtBRL(loc.aluguel+loc.condominio+loc.fundo)}</td></tr>
+            <tr><td>Custo fixo total/mês</td><td class="num hl">${fmtBRL(fm)}</td></tr>
+            <tr><td>Fluxo estimado/mês</td><td class="num">${fmtNum(loc.fluxo)} pessoas</td></tr>
+            <tr><td>Conversão base</td><td class="num">${fmtPct(loc.conversao)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderVPLMatrix(){
+  const table = document.getElementById('vpl-matrix');
+  const locKeys = Object.keys(LOCATIONS), scnKeys = Object.keys(SCENARIOS);
+  const vals = locKeys.map(lk=> scnKeys.map(sk=> fullModel(lk,sk).vpl));
+  const flat = vals.flat();
+  const min = Math.min(...flat), max = Math.max(...flat);
+  function cellColor(v){
+    const t = (v-min)/(max-min || 1);
+    // interpolate status-bad -> status-good
+    const c1=[217,83,43], c2=[47,169,104];
+    const c = c1.map((c1v,i)=>Math.round(c1v+(c2[i]-c1v)*t));
+    return `rgba(${c[0]},${c[1]},${c[2]},.28)`;
+  }
+  let html = '<thead><tr><th></th>'+scnKeys.map(sk=>`<th class="num">${SCENARIOS[sk].label}</th>`).join('')+'</tr></thead><tbody>';
+  locKeys.forEach((lk,li)=>{
+    html += `<tr><td class="hl">${LOCATIONS[lk].label}</td>` + scnKeys.map((sk,si)=>{
+      const v = vals[li][si];
+      return `<td class="num" style="background:${cellColor(v)};color:#fff">${fmtBRL1(v/1000)}k</td>`;
+    }).join('') + '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+/* ===================== STATE + CONTROLS ===================== */
+let state = { loc:'vila_romana', scn:'realista' };
+
+function renderAll(){
+  renderKPIs(state.loc, state.scn);
+  renderDRE(state.loc, state.scn);
+  renderDFC(state.loc, state.scn);
+  renderViabKPIs(state.loc, state.scn);
+  renderFCF5(state.loc, state.scn);
+  updateChipStates();
+}
+
+function updateChipStates(){
+  document.querySelectorAll('#loc-chips .chip').forEach(c=>c.classList.toggle('active', c.dataset.key===state.loc));
+  document.querySelectorAll('#scn-chips .chip').forEach(c=>c.classList.toggle('active', c.dataset.key===state.scn));
+}
+
+function buildChips(){
+  const locWrap = document.getElementById('loc-chips');
+  locWrap.innerHTML = Object.values(LOCATIONS).map(loc=>
+    `<button type="button" class="chip" data-key="${loc.key}" style="--chip-color:${loc.hex}"><span class="dot"></span>${loc.label}</button>`
+  ).join('');
+  const scnWrap = document.getElementById('scn-chips');
+  scnWrap.innerHTML = Object.values(SCENARIOS).map(scn=>
+    `<button type="button" class="chip" data-key="${scn.key}" style="--chip-color:${scn.hex}"><span class="dot"></span>${scn.label}</button>`
+  ).join('');
+  locWrap.querySelectorAll('.chip').forEach(c=> c.addEventListener('click', ()=>{ state.loc=c.dataset.key; renderAll(); }));
+  scnWrap.querySelectorAll('.chip').forEach(c=> c.addEventListener('click', ()=>{ state.scn=c.dataset.key; renderAll(); }));
+}
+
+/* ===================== INIT ===================== */
+function init(){
+  buildChips();
+  renderAll();
+  renderLocChart();
+  renderLocCards();
+  renderStack();
+  renderVPLMatrix();
+  renderRealCompare();
+}
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+
+window.addEventListener('resize', ()=>{ /* SVG viewBox scales fluidly, no-op */ });
+
+})();
+</script>
