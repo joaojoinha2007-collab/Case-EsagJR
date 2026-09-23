@@ -86,7 +86,7 @@ document.getElementById('whyBars').innerHTML=[['Clientes da base',.25,'100 de 40
 
 /* ================= filters ================= */
 const fEl=$('filters');
-function drawFilters(){fEl.innerHTML=`<span class="flabel">Macrossegmento:</span>`+segs.map(s=>{const n=s==='Todos'?S.length:S.filter(r=>r.seg===s).length;return `<button type="button" aria-pressed="${s===cur}" data-s="${s}">${s}<small>${n}</small></button>`}).join('')}
+function drawFilters(){fEl.innerHTML=`<span class="flabel">Macrossegmento:</span>`+segs.map(s=>{return `<button type="button" aria-pressed="${s===cur}" data-s="${s}">${s}</button>`}).join('')}
 fEl.onclick=e=>{const b=e.target.closest('button');if(b)setSeg(b.dataset.s)};
 listeners.push(drawFilters);
 function drawNavFilter(){const on=cur!=='Todos';$('navfilter').classList.toggle('on',on);$('navfilterTxt').textContent=cur;$('navfilter').setAttribute('aria-label',`Remover filtro de segmento: ${cur}`)}
