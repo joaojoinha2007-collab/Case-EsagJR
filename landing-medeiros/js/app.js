@@ -179,22 +179,24 @@ const FUN=[['1 · Primeiro contato','Sondagem e investigação geotécnica, na f
 $('funnel').innerHTML=FUN.map((f,i)=>`<div class="fstage" style="width:${f[2]}%;background:${i<2?'var(--asphalt)':'var(--blue)'}"><b>${f[0]}</b><small>${f[1]}</small></div>`).join('');
 
 /* ================= TAM/SAM/SOM ================= */
-const V=522.5e9,BASE={fee:'2',reg:'0.055',segSel:'0.384',som:'3'};let lastVals=null;
-function calc(){const fee=+$('fee').value/100,reg=+$('reg').value,sg=+$('segSel').value,som=+$('som').value/100;
+const V=522.5e9,SUL=.189,SC_SUL=.055/.189,FLN_SC=.061,BASE={fee:'2',segSel:'0.384',som:'3'};let lastVals=null;
+function calc(){const fee=+$('fee').value/100,sg=+$('segSel').value,som=+$('som').value/100;
   $('oFee').textContent=pct(fee);$('oSom').textContent=pct(som);
-  const tam=V*fee,sam=tam*reg*sg,so=sam*som;
-  const rows=[['TAM','Brasil, toda a construção',tam,`R$ 522,5 bi de valor de obras × ${pct(fee)}`],['SAM','Recorte de região e segmento',sam,`TAM × ${pct(reg)} × ${pct(sg)}`],['SOM','Meta alcançável em 3 anos',so,`SAM × ${pct(som)} · ≈ ${Math.round(so/180000)} contratos de R$ 180 mil/ano`]];
-  const w=[100,Math.max(34,Math.sqrt(sam/tam)*100),Math.max(22,Math.sqrt(so/tam)*100)];
+  const tam=V*fee,sam=tam*SUL*sg,fln=sam*SC_SUL*FLN_SC,so=fln*som,nc=Math.round(so/180000);
+  const rows=[['TAM','Brasil','Toda a construção no país',tam,`R$ 522,5 bi de valor de obras × ${pct(fee)}`],
+    ['SAM','Região Sul','Construção no Sul, segmento priorizado',sam,`TAM × 18,9% (Sul) × ${pct(sg)} (segmento)`],
+    ['SOM','Florianópolis','Meta alcançável em 3 anos na capital',so,`Mercado da cidade ${brl(fln)} = SAM × 29,1% (SC) × 6,1% (Florianópolis) · × ${pct(som)} ≈ ${nc} contrato${nc===1?'':'s'} de R$ 180 mil/ano`]];
+  const w=[100,84,68];
   const lanes=$('lanes');
-  if(!lanes.children.length)lanes.innerHTML=rows.map(()=>`<div class="lane"><div class="t"><span></span><b></b></div><small></small><small></small></div>`).join('');
-  [...lanes.children].forEach((ln,i)=>{const r=rows[i];ln.style.width=w[i]+'%';ln.querySelector('.t span').textContent=r[0];
-    const b=ln.querySelector('b');b.innerHTML=`${brl(r[2])}<span style="font-size:.9rem;font-weight:500">/ano</span>`;
-    if(lastVals&&lastVals[i]!==r[2]){b.classList.add('flash');requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.remove('flash')))}
-    const sm=ln.querySelectorAll('small');sm[0].textContent=r[1];sm[1].textContent=r[3]});
-  lastVals=rows.map(r=>r[2]);
+  if(!lanes.children.length)lanes.innerHTML=rows.map(()=>`<div class="lane"><div class="t"><span><span class="lk"></span><span class="loc"></span></span><b></b></div><small></small><small></small></div>`).join('');
+  [...lanes.children].forEach((ln,i)=>{const r=rows[i];ln.style.width=w[i]+'%';ln.querySelector('.lk').textContent=r[0];ln.querySelector('.loc').textContent=r[1];
+    const b=ln.querySelector('b');b.innerHTML=`${brl(r[3])}<span style="font-size:.9rem;font-weight:500">/ano</span>`;
+    if(lastVals&&lastVals[i]!==r[3]){b.classList.add('flash');requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.remove('flash')))}
+    const sm=ln.querySelectorAll('small');sm[0].textContent=r[2];sm[1].textContent=r[4]});
+  lastVals=rows.map(r=>r[3]);
   const isBase=Object.entries(BASE).every(([k,v])=>$(k).value===v);
   $('scenBadge').textContent=isBase?'Cenário base':'Cenário personalizado';$('scenBadge').classList.toggle('custom',!isBase);$('resetScen').disabled=isBase}
-['fee','reg','segSel','som'].forEach(id=>$(id).addEventListener('input',calc));
+['fee','segSel','som'].forEach(id=>$(id).addEventListener('input',calc));
 $('resetScen').onclick=()=>{Object.entries(BASE).forEach(([k,v])=>$(k).value=v);calc()};
 calc();
 

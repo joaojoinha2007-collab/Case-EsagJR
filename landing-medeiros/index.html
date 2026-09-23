@@ -110,16 +110,16 @@
 <section id="mercado" data-tab="mercado">
 <span class="eyebrow">Mercado</span>
 <h2>Tamanho do mercado: TAM, SAM e SOM</h2>
-<p class="sub">Lógica de cima para baixo: valor de obras da construção no Brasil × parcela que as empresas gastam com assessoria técnica; depois recorte por região e segmento; por fim, a fatia que a Medeiros consegue capturar. Ajuste as premissas para ver os cenários.</p>
+<p class="sub">Lógica de cima para baixo, do país até a cidade: <b>TAM no Brasil</b> (valor de obras × parcela gasta com assessoria técnica), <b>SAM na Região Sul</b> (recorte regional e de segmento) e <b>SOM em Florianópolis</b> (a fatia que a Medeiros consegue capturar na cidade). Ajuste as premissas para ver os cenários.</p>
 <div class="grid2">
 <div class="lanes" id="lanes" aria-live="polite"></div>
 <div class="panel controls">
 <div class="scen"><span class="badge" id="scenBadge">Cenário base</span><button class="btn ghost" id="resetScen" type="button" disabled>↺ Restaurar cenário base</button></div>
 <label>Honorário de assessoria sobre o valor da obra <span class="out" id="oFee"></span><input type="range" id="fee" min="1" max="6" step="0.5" value="2"></label>
-<label>Região de atuação (SAM)<select id="reg"><option value="0.055" selected>Santa Catarina: 5,5% do PIB da construção</option><option value="0.189">Região Sul: 18,9%</option><option value="1">Brasil: 100%</option></select></label>
+<div class="geo"><span><b>TAM</b>Brasil</span><span><b>SAM</b>Região Sul</span><span><b>SOM</b>Florianópolis</span></div>
 <label>Segmento priorizado (SAM)<select id="segSel"><option value="0.384" selected>Obras de infraestrutura: 38,4%</option><option value="0.381">Construção de edifícios: 38,1%</option><option value="0.235">Serviços especializados: 23,5%</option><option value="1">Todos os segmentos</option></select></label>
-<label>Participação alcançável em 3 anos (SOM) <span class="out" id="oSom"></span><input type="range" id="som" min="1" max="10" step="0.5" value="3"></label>
-<p class="note">Cenário base: 2% de honorário (piso da faixa de 2% a 4% para gerenciadoras; o Senge-SC indica 4% a 8% para fiscalização e consultoria), Santa Catarina, infraestrutura, 3% de participação. O mercado é pulverizado: as 8 maiores construtoras somam só 3,1% do valor de obras do país.</p>
+<label>Participação alcançável em Florianópolis em 3 anos (SOM) <span class="out" id="oSom"></span><input type="range" id="som" min="1" max="30" step="0.5" value="3"></label>
+<p class="note">Cenário base: 2% de honorário (piso da faixa de 2% a 4% para gerenciadoras; o Senge-SC indica 4% a 8% para fiscalização e consultoria), infraestrutura, 3% de participação. Para chegar a Florianópolis: SC responde por 29,1% da construção do Sul (5,5% ÷ 18,9% do PIB nacional da construção) e Florianópolis por 6,1% do PIB de SC — o PIB total da cidade é usado como aproximação, pois o IBGE não publica o valor da construção por município nesse recorte. O mercado é pulverizado: as 8 maiores construtoras somam só 3,1% do valor de obras do país.</p>
 </div></div>
 </section>
 
@@ -132,6 +132,7 @@
 <li>Sebrae SC (dez/2025): 126,1 mil empresas ativas de construção em SC, alta de 83,8% desde 2020. <a href="https://estado.sc.gov.br/noticias/construcao-civil-tem-boom-de-empreendedorismo-e-cresce-83-em-santa-catarina/" target="_blank" rel="noopener">Governo de SC</a></li>
 <li>oHub Base Facilities (jul/2026): honorário de gerenciadoras entre 2% e 4% do valor da obra. <a href="https://base.ohub.com.br/facilities/construcao-reforma-e-obras/gerenciamento-de-obras/artigos/quanto-custa-uma-gerenciadora-de-obras-no-brasil" target="_blank" rel="noopener">oHub</a></li>
 <li>Senge-SC, Tabela de Honorários: fiscalização e consultoria entre 4% e 8% do valor da obra. <a href="https://www.senge-sc.org.br/tabela-honorarios/" target="_blank" rel="noopener">Senge-SC</a></li>
+<li>IBGE, PIB dos Municípios 2023 (divulgado em dez/2025): Florianópolis soma R$ 31,2 bi, 6,1% do PIB de Santa Catarina. <a href="https://rdmonline.com.br/joinville-itajai-e-florianopolis-colocam-santa-catarina-entre-as-maiores-economias-municipais-do-brasil/" target="_blank" rel="noopener">IBGE via RDM</a></li>
 <li>BNDES, classificação de porte por receita operacional bruta anual (usada para validar a coluna de porte).</li>
 </ol>
 </section>
@@ -140,7 +141,7 @@
 <h2>Limites da análise</h2>
 <div class="caveats">
 <p><b>Sem receita da Medeiros por cliente.</b> A base traz o faturamento do cliente, não quanto ele paga à Medeiros. O faturamento foi usado como indicador de potencial de contrato.</p>
-<p><b>Sem região, data ou recorrência.</b> Não dá para medir retenção, sazonalidade nem onde os clientes estão. A região do SAM é uma premissa e pode ser trocada no simulador.</p>
+<p><b>Sem região, data ou recorrência.</b> Não dá para medir retenção, sazonalidade nem onde os clientes estão. A geografia do TAM, SAM e SOM (Brasil, Sul e Florianópolis) é uma premissa de mercado, não a localização medida dos clientes.</p>
 <p><b>Amostras pequenas por serviço.</b> Entre 5 e 25 clientes por serviço, por isso a recomendação se apoia no agrupamento de infraestrutura (100 clientes), não em um único serviço.</p>
 <p><b>Inconsistência cadastral.</b> O sufixo jurídico não bate com o porte (há "ME" com faturamento de grande empresa) e 82 empresas aparecem como EIRELI, figura extinta em 2021. Vale higienizar o CRM.</p>
 </div>

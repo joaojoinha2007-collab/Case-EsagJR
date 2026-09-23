@@ -208,8 +208,14 @@ dl.icpdl dd{margin:0}
 .lane .t{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
 .lane b{font-variation-settings:"wdth" 70;font-size:1.9rem;font-weight:800;border-radius:3px;transition:background-color .6s ease}
 .lane b.flash{background:rgba(242,183,5,.35);transition:none}
+.lane .lk{font-weight:700;letter-spacing:.04em}
+.lane .loc{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;background:rgba(242,183,5,.18);color:var(--mark);font-size:.8rem;font-weight:700;vertical-align:1px}
+.geo{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.geo span{padding:8px 10px;font-size:.88rem;border-right:1px solid var(--line)}
+.geo span:last-child{border-right:0}
+.geo b{display:block;font-size:.72rem;letter-spacing:.06em;color:var(--esag)}
 .lane small{display:block;color:#B9C3C5;font-size:.85rem}
-.controls{display:grid;gap:14px}
+.controls{display:grid;gap:14px;align-content:start}
 .controls label{display:block;font-size:.92rem;font-weight:600}
 .controls select,.controls input[type=range]{width:100%;margin-top:6px}
 .controls input[type=range]{accent-color:var(--esag);cursor:pointer}
