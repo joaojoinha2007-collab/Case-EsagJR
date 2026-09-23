@@ -183,16 +183,35 @@ const V=522.5e9,SUL=.189,SC_SUL=.055/.189,FLN_SC=.061,BASE={fee:'2',segSel:'0.38
 function calc(){const fee=+$('fee').value/100,sg=+$('segSel').value,som=+$('som').value/100;
   $('oFee').textContent=pct(fee);$('oSom').textContent=pct(som);
   const tam=V*fee,sam=tam*SUL*sg,fln=sam*SC_SUL*FLN_SC,so=fln*som,nc=Math.round(so/180000);
-  const rows=[['TAM','Brasil','Toda a construção no país',tam,`R$ 522,5 bi de valor de obras × ${pct(fee)}`],
-    ['SAM','Região Sul','Construção no Sul, segmento priorizado',sam,`TAM × 18,9% (Sul) × ${pct(sg)} (segmento)`],
-    ['SOM','Florianópolis','Meta alcançável em 3 anos na capital',so,`Mercado da cidade ${brl(fln)} = SAM × 29,1% (SC) × 6,1% (Florianópolis) · × ${pct(som)} ≈ ${nc} contrato${nc===1?'':'s'} de R$ 180 mil/ano`]];
+  const segName=$('segSel').selectedOptions[0].textContent.split(':')[0].toLowerCase(),allSeg=sg===1;
+  const rows=[
+    ['TAM','Brasil','Mercado total',tam,
+     'Quanto todas as empresas de construção do país gastariam por ano com assessoria técnica, se todas contratassem o serviço. É o teto teórico: mostra o tamanho da oportunidade, não o que dá para vender.',
+     [`<b>R$ 522,5 bi</b> — valor das obras executadas no Brasil em um ano (IBGE, PAIC 2024)`,
+      `× <b>${pct(fee)}</b> — parcela do valor da obra paga em honorários de assessoria (gerenciadoras cobram de 2% a 4%)`,
+      `= <b>${brl(tam)}/ano</b> de mercado total de assessoria`]],
+    ['SAM','Região Sul','Mercado endereçável',sam,
+     `A fatia do TAM que a Medeiros consegue de fato atender com a oferta e o alcance que tem hoje: obras na Região Sul${allSeg?', em todos os segmentos':', no segmento de '+segName}. O recorte regional é uma premissa de atuação, não a localização medida dos clientes.`,
+     [`<b>${brl(tam)}</b> — TAM (Brasil)`,
+      `× <b>18,9%</b> — peso da Região Sul no PIB da construção do país (CBIC)`,
+      allSeg?`× <b>100%</b> — todos os segmentos`:`× <b>${pct(sg)}</b> — peso de ${segName} no valor de obras do país (IBGE)`,
+      `= <b>${brl(sam)}/ano</b> que a Medeiros consegue atender`]],
+    ['SOM','Florianópolis','Mercado obtível em 3 anos',so,
+     'A receita que a Medeiros pode conquistar de forma realista em 3 anos, começando por Florianópolis. Considera a concorrência: é uma fatia pequena de um mercado pulverizado, e funciona como meta comercial.',
+     [`<b>${brl(sam)}</b> — SAM (Região Sul)`,
+      `× <b>29,1%</b> — peso de Santa Catarina na construção do Sul (5,5% ÷ 18,9% do PIB nacional do setor)`,
+      `× <b>6,1%</b> — peso de Florianópolis no PIB de SC (IBGE, 2023; usado como aproximação)`,
+      `= <b>${brl(fln)}/ano</b> de mercado de assessoria em Florianópolis`,
+      `× <b>${pct(som)}</b> — participação que a Medeiros consegue conquistar em 3 anos`,
+      `= <b>${brl(so)}/ano</b> ≈ <b>${nc} contrato${nc===1?'':'s'}</b> de R$ 180 mil por ano`]]];
   const w=[100,84,68];
   const lanes=$('lanes');
-  if(!lanes.children.length)lanes.innerHTML=rows.map(()=>`<div class="lane"><div class="t"><span><span class="lk"></span><span class="loc"></span></span><b></b></div><small></small><small></small></div>`).join('');
+  if(!lanes.children.length)lanes.innerHTML=rows.map(()=>`<div class="lane"><div class="t"><span><span class="lk"></span><span class="loc"></span></span><b></b></div><small class="kind"></small><p class="def"></p><details class="how"><summary>Como chegamos nesse número</summary><ol></ol></details></div>`).join('');
   [...lanes.children].forEach((ln,i)=>{const r=rows[i];ln.style.width=w[i]+'%';ln.querySelector('.lk').textContent=r[0];ln.querySelector('.loc').textContent=r[1];
     const b=ln.querySelector('b');b.innerHTML=`${brl(r[3])}<span style="font-size:.9rem;font-weight:500">/ano</span>`;
     if(lastVals&&lastVals[i]!==r[3]){b.classList.add('flash');requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.remove('flash')))}
-    const sm=ln.querySelectorAll('small');sm[0].textContent=r[2];sm[1].textContent=r[4]});
+    ln.querySelector('.kind').textContent=r[2];ln.querySelector('.def').textContent=r[4];
+    ln.querySelector('ol').innerHTML=r[5].map(x=>`<li>${x}</li>`).join('')});
   lastVals=rows.map(r=>r[3]);
   const isBase=Object.entries(BASE).every(([k,v])=>$(k).value===v);
   $('scenBadge').textContent=isBase?'Cenário base':'Cenário personalizado';$('scenBadge').classList.toggle('custom',!isBase);$('resetScen').disabled=isBase}
