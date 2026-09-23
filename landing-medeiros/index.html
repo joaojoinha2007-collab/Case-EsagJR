@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Medeiros Construção · ICP e mercado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#visao-geral">Pular para o conteúdo</a>
+<header id="top"><div class="wrap">
+<img class="brandmark" src="assets/esagjr-logo.png" alt="Esag Júnior">
+<h1>Onde a expansão da marca deve começar</h1>
+<p class="answer">Recomendação: priorizar <strong>assessoria para obras de infraestrutura viária</strong>, com pavimentação asfáltica como serviço carro-chefe e sondagem geotécnica como porta de entrada, mirando médias e grandes empresas.</p>
+</div><div class="road"></div></header>
+
+<nav class="tabs" id="tabs" aria-label="Seções do dashboard">
+<div class="bar">
+<div class="navbrand" title="Esag Júnior · Medeiros Construção"><img src="assets/esagjr-logo.png" alt="Esag Júnior"></div>
+<div class="tabscroll" id="tabscroll">
+<ul class="tablist" id="tablist">
+<li><a class="tab" href="#visao-geral" data-t="visao-geral">Visão geral</a></li>
+<li><a class="tab" href="#clientes" data-t="clientes">Clientes</a></li>
+<li><a class="tab" href="#ranking" data-t="ranking">Ranking de serviços</a></li>
+<li><a class="tab" href="#icp" data-t="icp">ICP</a></li>
+<li><a class="tab" href="#mercado" data-t="mercado">Mercado</a></li>
+<li><a class="tab" href="#fontes" data-t="fontes">Fontes e limites</a></li>
+<li aria-hidden="true" class="tabind" id="tabind"></li>
+</ul></div>
+<button class="navfilter" id="navfilter" type="button" title="Remover filtro de segmento"><span><span class="lbl">Filtro: </span><b id="navfilterTxt"></b></span><i aria-hidden="true">×</i></button>
+</div>
+<div class="progress" id="progress"></div>
+</nav>
+
+<div class="wrap">
+<section class="overview seen" id="visao-geral" data-tab="visao-geral" style="border-bottom:0;padding-bottom:0">
+<h2 class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Visão geral</h2>
+<div class="kpis" id="kpis">
+<button class="kpi" type="button" data-k="base" aria-expanded="false" aria-controls="kdetail"><b>400</b><span>clientes na base analisada</span><span class="more">Ver composição</span></button>
+<button class="kpi" type="button" data-k="mpe" aria-expanded="false" aria-controls="kdetail"><b>76%</b><span>são micro ou pequenas empresas</span><span class="more">Ver detalhe</span></button>
+<button class="kpi" type="button" data-k="fat" aria-expanded="false" aria-controls="kdetail"><b>98,4%</b><span>do faturamento da base está em médias e grandes</span><span class="more">Ver detalhe</span></button>
+<button class="kpi" type="button" data-k="gr" aria-expanded="false" aria-controls="kdetail"><b>11 de 23</b><span>grandes contas estão em infraestrutura</span><span class="more">Ver por segmento</span></button>
+</div>
+<div class="kdetail" id="kdetail" role="region" aria-live="polite" aria-label="Detalhe do indicador"><div><div class="in" id="kdetailIn"></div></div></div>
+<p class="hint" id="kpiHint">Clique num indicador para ver o detalhe, ou use as abas acima para percorrer a análise.</p>
+</section>
+
+<section id="clientes" data-tab="clientes">
+<span class="eyebrow">Clientes</span>
+<h2>Quem são os clientes hoje</h2>
+<p class="sub">A base é numerosa na ponta pequena, mas o peso econômico está concentrado em 96 médias e grandes empresas. Alterne entre clientes e faturamento no gráfico abaixo — a proporção se inverte quase por completo.</p>
+<div class="grid2">
+<div class="panel">
+<h3>Distribuição por porte</h3>
+<div class="toggle" id="donutToggle" role="group" aria-label="Métrica do gráfico"><button type="button" data-v="cli" aria-pressed="true">Clientes</button><button type="button" data-v="fat" aria-pressed="false">Faturamento</button></div>
+<div id="porteDonut"></div>
+<p class="note">Classificação de porte conferida contra as faixas de receita do BNDES (até R$ 360 mil, R$ 4,8 mi, R$ 300 mi): 100% consistente.</p></div>
+<div class="panel"><h3>Macrossegmento: onde estão as contas grandes</h3>
+<div class="bars" id="segBars"></div>
+<div class="segstate" id="segState"></div>
+<p class="note">Os 25 serviços foram agrupados pela lógica da CNAE (seção F) usada pelo IBGE, mais um grupo de serviços técnicos e de apoio.</p></div>
+</div>
+</section>
+
+<section id="ranking" data-tab="ranking">
+<span class="eyebrow">Ranking de serviços</span>
+<h2>Ranking de serviços para a expansão</h2>
+<p class="sub">Índice de 0 a 100 que combina número de clientes médios e grandes (35%), proporção de médios e grandes no serviço (25%), volume total de clientes (20%) e faturamento mediano (20%).</p>
+<div class="filters" id="filters" role="group" aria-label="Filtrar por macrossegmento"></div>
+<div class="rankwrap" id="rankwrap">
+<div class="rankhead"><span id="rankCap"></span><span id="rankHint">Selecione um serviço para ver o detalhe</span></div>
+<div id="rankChart"></div>
+<div class="detail" id="rdetail" aria-live="polite"></div>
+</div>
+<div class="legend"><span><i class="sw" style="background:var(--mark)"></i>Serviços recomendados</span><span><i class="sw" style="background:var(--asphalt)"></i>Demais serviços</span></div>
+<p style="margin:14px 0 0"><button class="showall" id="showTbl" type="button" aria-expanded="false" aria-controls="tblWrap"><span id="showTblTxt">Ver tabela completa dos 25 serviços</span><i class="chev" aria-hidden="true"></i></button></p>
+<div class="tbl moreRows" id="tblWrap" style="margin-top:10px">
+<table id="tbl"><thead><tr>
+<th data-k="s"><button type="button">Serviço <span class="dir"></span></button></th><th data-k="score"><button type="button">Índice <span class="dir"></span></button></th><th data-k="n"><button type="button">Clientes <span class="dir"></span></button></th><th data-k="mg"><button type="button">Médias + grandes <span class="dir"></span></button></th><th data-k="gr"><button type="button">Grandes <span class="dir"></span></button></th><th data-k="pmg"><button type="button">% méd.+gr. <span class="dir"></span></button></th><th data-k="med"><button type="button">Fat. mediano <span class="dir"></span></button></th><th class="static">Mix de porte</th></tr></thead><tbody></tbody></table></div>
+<div class="legend" id="mixLegend"><span><i class="sw" style="background:var(--grey)"></i>Micro</span><span><i class="sw" style="background:var(--blue)"></i>Pequena</span><span><i class="sw" style="background:var(--earth)"></i>Média</span><span><i class="sw" style="background:var(--mark)"></i>Grande</span></div>
+</section>
+
+<section id="icp" data-tab="icp">
+<span class="eyebrow">ICP</span>
+<h2>Perfil ideal de cliente (ICP)</h2>
+<p class="sub">Cada ponto abaixo é um serviço da base: quanto mais à direita, maior a proporção de clientes médios/grandes; quanto mais alto, maior o faturamento mediano desses clientes. O tamanho da bolha é o número de clientes.</p>
+<div class="grid2">
+<div class="panel"><h3>Qualidade vs. faturamento por serviço</h3><div id="scatter"></div>
+<div class="readout" id="readout" aria-live="polite">Passe o cursor ou toque numa bolha para ver o serviço; clique para selecioná-lo.</div></div>
+<div class="panel"><dl class="icpdl">
+<dt>Setor</dt><dd>Obras de infraestrutura: pavimentação, rodovias, urbanização e drenagem, terraplenagem, obras de arte especiais</dd>
+<dt>Porte</dt><dd>Médias e grandes (faturamento acima de R$ 4,8 mi/ano); núcleo entre R$ 50 mi e R$ 500 mi</dd>
+<dt>Contexto</dt><dd>Forte exposição a contratos públicos: 48,2% do valor das obras de infraestrutura no país vem do setor público (IBGE, PAIC 2024)</dd>
+<dt>Dores prováveis</dt><dd>Licitações e medições, controle de aditivos, prazos e custos em obras longas, exigências de fiscalização e qualidade</dd>
+<dt>Fora do foco</dt><dd>Micro e pequenas: manter com oferta padronizada e de baixo custo de atendimento, sem esforço comercial dedicado</dd>
+</dl></div>
+</div>
+<div class="grid2b">
+<div class="panel"><h3>Sequência proposta de expansão de conta</h3>
+<div class="funnel" id="funnel"></div>
+<p class="note">Ilustrativo — não são taxas de conversão medidas na base. Sondagem entra no início do projeto e abre caminho para os serviços seguintes.</p></div>
+<div class="panel"><h3>Por que infraestrutura</h3>
+<div class="bars" id="whyBars"></div>
+<p class="note">Base Medeiros à esquerda, mercado nacional (IBGE) à direita. Infraestrutura é o maior segmento em valor de obras no Brasil e o de maior porte médio por empresa (39 pessoas ocupadas).</p></div>
+</div>
+</section>
+
+<section id="mercado" data-tab="mercado">
+<span class="eyebrow">Mercado</span>
+<h2>Tamanho do mercado: TAM, SAM e SOM</h2>
+<p class="sub">Lógica de cima para baixo, do país até a cidade: <b>TAM no Brasil</b> (valor de obras × parcela gasta com assessoria técnica), <b>SAM na Região Sul</b> (recorte regional e de segmento) e <b>SOM em Florianópolis</b> (a fatia que a Medeiros consegue capturar na cidade). Ajuste as premissas para ver os cenários.</p>
+<div class="grid2">
+<div class="lanes" id="lanes" aria-live="polite"></div>
+<div class="panel controls">
+<div class="scen"><span class="badge" id="scenBadge">Cenário base</span><button class="btn ghost" id="resetScen" type="button" disabled>↺ Restaurar cenário base</button></div>
+<label>Honorário de assessoria sobre o valor da obra <span class="out" id="oFee"></span><input type="range" id="fee" min="1" max="6" step="0.5" value="2"></label>
+<div class="geo"><span><b>TAM</b>Brasil</span><span><b>SAM</b>Região Sul</span><span><b>SOM</b>Florianópolis</span></div>
+<label>Segmento priorizado (SAM)<select id="segSel"><option value="0.384" selected>Obras de infraestrutura: 38,4%</option><option value="0.381">Construção de edifícios: 38,1%</option><option value="0.235">Serviços especializados: 23,5%</option><option value="1">Todos os segmentos</option></select></label>
+<label>Participação alcançável em Florianópolis em 3 anos (SOM) <span class="out" id="oSom"></span><input type="range" id="som" min="1" max="30" step="0.5" value="3"></label>
+<p class="note">Cenário base: 2% de honorário (piso da faixa de 2% a 4% para gerenciadoras; o Senge-SC indica 4% a 8% para fiscalização e consultoria), infraestrutura, 3% de participação. Para chegar a Florianópolis: SC responde por 29,1% da construção do Sul (5,5% ÷ 18,9% do PIB nacional da construção) e Florianópolis por 6,1% do PIB de SC — o PIB total da cidade é usado como aproximação, pois o IBGE não publica o valor da construção por município nesse recorte. O mercado é pulverizado: as 8 maiores construtoras somam só 3,1% do valor de obras do país.</p>
+</div></div>
+</section>
+
+<section id="fontes" data-tab="fontes">
+<span class="eyebrow">Fontes e limites</span>
+<h2>Fontes</h2>
+<ol class="src">
+<li>IBGE, Pesquisa Anual da Indústria da Construção (PAIC) 2024, divulgada em 10/06/2026: R$ 522,5 bi em valor de obras, 191 mil empresas, participação por segmento, 48,2% de demanda pública em infraestrutura, R8 de 3,1%. <a href="https://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/47043-em-2024-industria-da-construcao-gera-r-522-5-bilhoes-e-emprega-2-5-milhoes" target="_blank" rel="noopener">Agência IBGE</a></li>
+<li>CBIC, apresentado na Fiesc em 17/07/2025: SC responde por 5,5% do PIB nacional da construção; Sul, 18,9%. <a href="https://fiesc.com.br/pt-br/imprensa/construcao-civil-de-sc-e-responsavel-por-55-do-pib-do-setor" target="_blank" rel="noopener">Fiesc</a></li>
+<li>Sebrae SC (dez/2025): 126,1 mil empresas ativas de construção em SC, alta de 83,8% desde 2020. <a href="https://estado.sc.gov.br/noticias/construcao-civil-tem-boom-de-empreendedorismo-e-cresce-83-em-santa-catarina/" target="_blank" rel="noopener">Governo de SC</a></li>
+<li>oHub Base Facilities (jul/2026): honorário de gerenciadoras entre 2% e 4% do valor da obra. <a href="https://base.ohub.com.br/facilities/construcao-reforma-e-obras/gerenciamento-de-obras/artigos/quanto-custa-uma-gerenciadora-de-obras-no-brasil" target="_blank" rel="noopener">oHub</a></li>
+<li>Senge-SC, Tabela de Honorários: fiscalização e consultoria entre 4% e 8% do valor da obra. <a href="https://www.senge-sc.org.br/tabela-honorarios/" target="_blank" rel="noopener">Senge-SC</a></li>
+<li>IBGE, PIB dos Municípios 2023 (divulgado em dez/2025): Florianópolis soma R$ 31,2 bi, 6,1% do PIB de Santa Catarina. <a href="https://rdmonline.com.br/joinville-itajai-e-florianopolis-colocam-santa-catarina-entre-as-maiores-economias-municipais-do-brasil/" target="_blank" rel="noopener">IBGE via RDM</a></li>
+<li>BNDES, classificação de porte por receita operacional bruta anual (usada para validar a coluna de porte).</li>
+</ol>
+</section>
+
+<section style="border-bottom:0" data-tab="fontes" id="limites">
+<h2>Limites da análise</h2>
+<div class="caveats">
+<p><b>Sem receita da Medeiros por cliente.</b> A base traz o faturamento do cliente, não quanto ele paga à Medeiros. O faturamento foi usado como indicador de potencial de contrato.</p>
+<p><b>Sem região, data ou recorrência.</b> Não dá para medir retenção, sazonalidade nem onde os clientes estão. A geografia do TAM, SAM e SOM (Brasil, Sul e Florianópolis) é uma premissa de mercado, não a localização medida dos clientes.</p>
+<p><b>Amostras pequenas por serviço.</b> Entre 5 e 25 clientes por serviço, por isso a recomendação se apoia no agrupamento de infraestrutura (100 clientes), não em um único serviço.</p>
+<p><b>Inconsistência cadastral.</b> O sufixo jurídico não bate com o porte (há "ME" com faturamento de grande empresa) e 82 empresas aparecem como EIRELI, figura extinta em 2021. Vale higienizar o CRM.</p>
+</div>
+<footer><span>Base: 400 clientes da Medeiros Construção. Análise e dashboard preparados pela Esag Júnior.</span><a class="btn ghost" href="#visao-geral" data-go="visao-geral">↑ Voltar à visão geral</a></footer>
+</section>
+</div>
+<div id="tip" role="tooltip"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
