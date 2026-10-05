@@ -237,7 +237,7 @@ body.present .pill{cursor:default;pointer-events:none}
   <div class="wrap">
     <p class="eyebrow">Matriz CSD · Validação de mercado</p>
     <h1>Kit premium <em>Week Haircare</em></h1>
-    <p class="lead">Matriz CSD que organiza o que já sabemos, o que estamos supondo e o que ainda precisamos descobrir sobre o kit de shampoo e condicionador em sachês biodegradáveis. É o ponto de partida da pesquisa: cada suposição e cada dúvida vira uma hipótese a ser testada com o público certo.</p>
+    <p class="lead">Matriz CSD que organiza o que já sabemos, o que estamos supondo e o que ainda precisamos descobrir sobre o kit de shampoo e condicionador em sachês biodegradáveis. O objetivo do projeto é delinear o modelo de negócio, identificar concorrentes e oportunidades e montar o planejamento operacional e financeiro da empresa.</p>
     <dl class="meta">
       <div><dt>cliente</dt><dd>Bruna e Giovanna</dd></div>
       <div><dt>consultoria</dt><dd>ESAG Jr</dd></div>
@@ -266,7 +266,7 @@ body.present .pill{cursor:default;pointer-events:none}
   <div class="wrap">
     <p class="eyebrow">Sumário executivo</p>
     <h2 class="sec-title">A proposta está clara; a demanda ainda não.</h2>
-    <p class="sec-lead">O conceito, o público-hipótese e a identidade da marca estão definidos. O que falta é evidência: a pesquisa inicial das fundadoras não alcançou quem toma banho fora de casa, então interesse, disposição a pagar e canal de entrada seguem como suposições. A validação da ESAG Jr parte deste mapa.</p>
+    <p class="sec-lead">Produto, formato, embalagem e modelo de produção terceirizada estão definidos, e a fórmula própria está prevista para novembro/dezembro. O que falta é evidência de mercado: quem é o cliente ideal, quanto ele pagaria, por qual canal comprar e quanto custa produzir cada kit. A pesquisa inicial das fundadoras não alcançou esse público; a validação da ESAG Jr parte deste mapa.</p>
     <div class="stats" aria-live="polite">
       <div class="stat" style="--bar:var(--accent)"><div class="n" id="st-total">0</div><div class="l">itens mapeados na matriz</div></div>
       <div class="stat" style="--bar:var(--ok)"><div class="n" id="st-ok">0</div><div class="l">itens validados</div></div>
@@ -393,32 +393,53 @@ const TEAM = [
 const STATUS = { ok: "Validado", pending: "A validar" };
 const SEED = [
   { id: "certezas", letra: "C", tom: 1, titulo: "Certezas", subtitulo: "O que já sabemos e não precisa de pesquisa.", itens: [
-    ["O produto é um kit de shampoo e condicionador premium em sachês biodegradáveis de uso único.", "ok"],
-    ["O público-hipótese é quem toma banho fora de casa: academia, trabalho e viagens.", "ok"],
-    ["O diferencial pretendido é qualidade superior aos produtos oferecidos por hotéis e academias, com praticidade e sustentabilidade.", "ok"],
-    ["A pesquisa feita pelas fundadoras não atingiu o público-alvo; a demanda ainda não está validada.", "ok"],
-    ["A marca já tem identidade visual e conceito definidos (“Less routine, more care”) e um perfil de pré-lançamento no Instagram.", "ok"],
-    ["O escopo da ESAG Jr cobre perfil do consumidor, interesse, disposição a pagar, posicionamento, mercado, operação e plano financeiro.", "ok"]
+    ["Kit premium de shampoo e condicionador em sachês biodegradáveis de uso único.", "ok"],
+    ["Para quem toma banho fora de casa: academia, trabalho, viagens.", "ok"],
+    ["Diferencial: qualidade e praticidade (leve, não vaza).", "ok"],
+    ["Fórmula própria com a Farma Júnior (ref.: Kerasys), prevista para nov./dez.", "ok"],
+    ["Fórmula única para todos os cabelos, segmentação no futuro.", "ok"],
+    ["Sachê de 20 a 30 ml em papel kraft.", "ok"],
+    ["Sachês em caixa sustentável, do tamanho do pedido.", "ok"],
+    ["Experiência premium do site ao pós-venda.", "ok"],
+    ["Fabricação, envase e embalagem terceirizados.", "ok"],
+    ["Só um fornecedor de sachê biodegradável encontrado até agora.", "ok"],
+    ["Custo de produção só sai com a fórmula pronta.", "ok"],
+    ["Investimento com recursos próprios; empréstimo só se necessário.", "ok"],
+    ["Sócias sem experiência em cosméticos ou venda online; divisão 50/50.", "ok"],
+    ["Instagram ativo com conteúdo de autocuidado, sem revelar o produto.", "ok"]
   ]},
   { id: "suposicoes", letra: "S", tom: 2, titulo: "Suposições", subtitulo: "O que acreditamos ser verdade, mas ainda sem evidência.", itens: [
-    ["Quem toma banho fora de casa considera os produtos disponíveis nesses locais inferiores aos que usa em casa.", "pending"],
-    ["Carregar frascos convencionais é percebido como inconveniente (peso, volume, risco de vazamento).", "pending"],
-    ["O público aceita pagar um preço acima das marcas de massa pela praticidade da dose única.", "pending"],
-    ["A embalagem biodegradável pesa na decisão de compra, e não só como atributo desejável.", "pending"],
-    ["Uma dose por sachê é suficiente para cabelos longos ou volumosos.", "pending"],
-    ["Viajantes frequentes valorizam o kit pela restrição de líquidos na bagagem de mão.", "pending"],
-    ["Academias, hotéis boutique e coworkings podem funcionar como canal B2B.", "pending"]
+    ["O público se incomoda com produtos ruins nos locais e frascos que vazam.", "pending"],
+    ["Trocariam o produto atual e pagariam mais pela praticidade e qualidade.", "pending"],
+    ["Ser biodegradável pesa na compra.", "pending"],
+    ["Público principal: frequentadores de academia, sobretudo mulheres.", "pending"],
+    ["Uma fórmula única agrada a todos os cabelos e gêneros.", "pending"],
+    ["Clientes preferem assinatura e caixas com vários kits.", "pending"],
+    ["Unboxing e proximidade geram fidelização.", "pending"],
+    ["Não há concorrente direto no Brasil.", "pending"],
+    ["Influenciadores (inclusive micro) serão o principal canal.", "pending"],
+    ["Eventos wellness (yoga, pilates, spa) são boa porta de entrada.", "pending"],
+    ["Academias, hotéis e empresas podem querer o kit (B2B).", "pending"],
+    ["Lançamento com condições especiais cria base fiel.", "pending"],
+    ["Dá para ter uma base de custos ainda durante o projeto.", "pending"]
   ]},
   { id: "duvidas", letra: "D", tom: 3, titulo: "Dúvidas", subtitulo: "O que precisamos descobrir antes de decidir.", itens: [
-    ["Quantas pessoas tomam banho fora de casa com frequência, e quantas vezes por semana?", "pending"],
-    ["Qual faixa de preço por sachê e por kit o público está disposto a pagar?", "pending"],
-    ["Venda avulsa, kit ou assinatura: qual modelo gera mais recorrência?", "pending"],
-    ["Qual canal priorizar na entrada: B2C (e-commerce, varejo) ou B2B (academias, hotéis, empresas)?", "pending"],
-    ["Existe fornecedor capaz de produzir fórmula premium em sachê biodegradável a custo viável?", "pending"],
-    ["O sachê biodegradável preserva a fórmula e garante prazo de validade adequado?", "pending"],
-    ["Quais exigências da Anvisa se aplicam à regularização e à rotulagem do produto?", "pending"],
-    ["Quem são os concorrentes e substitutos diretos (miniaturas, frascos de viagem, shampoo em barra)?", "pending"],
-    ["Qual o investimento inicial e em quanto tempo o negócio atinge o ponto de equilíbrio?", "pending"]
+    ["Quem é o cliente ideal?", "pending"],
+    ["As pessoas ainda tomam banho fora de casa? Quantas?", "pending"],
+    ["O cliente percebe o valor ou vê como “só mais um sachê”?", "pending"],
+    ["Quanto o cliente pagaria pelo kit?", "pending"],
+    ["Focar em B2C, B2B ou nos dois?", "pending"],
+    ["Site próprio, marketplaces ou afiliados?", "pending"],
+    ["Quanto custa produzir cada kit?", "pending"],
+    ["Há outros fornecedores de sachê biodegradável?", "pending"],
+    ["Qual a validade e a resistência do sachê de kraft?", "pending"],
+    ["Quais as exigências, prazos e custos da Anvisa?", "pending"],
+    ["Qual o investimento inicial e o ponto de equilíbrio?", "pending"],
+    ["Quanto investir em marketing?", "pending"],
+    ["Quais influenciadores e eventos abordar?", "pending"],
+    ["Qual o tamanho e as tendências do mercado capilar?", "pending"],
+    ["Como atuam os concorrentes indiretos (Dove, sachês de marketplace, Kérastase)?", "pending"],
+    ["Qual a frequência de recompra e o melhor formato de plano?", "pending"]
   ]}
 ];
 
