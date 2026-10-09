@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dimensionamento de Mercado · WEEK Haircare</title>
+<meta name="description" content="Plataforma interativa de TAM, SAM, SOM e CAGR da WEEK Haircare, desenvolvida pela ESAG Júnior.">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="assets/week-haircare-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- Ícones (traço no estilo Lucide) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M2 21h20M8 7h3M8 11h3M8 15h3"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5L3 4z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h4"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- ============ NAVEGAÇÃO ============ -->
+<header class="nav" id="topo">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#inicio" aria-label="Início — ESAG Júnior">
+      <img src="assets/esagjr-logo-completo.png" alt="ESAG Júnior — Consultoria em Administração" width="900" height="206">
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="Seções">
+      <a href="#inicio">Início</a>
+      <a href="#conceitos">Conceitos</a>
+      <a href="#painel">Painel</a>
+      <a href="#calculo">Cálculo</a>
+      <a href="#filtros">Filtros</a>
+      <a href="#premissas">Premissas</a>
+      <a href="#simulador">Simulador</a>
+      <a href="#cagr">CAGR</a>
+      <a href="#notas">Notas</a>
+    </nav>
+    <div class="nav-right">
+      <div class="seg-switch" role="group" aria-label="Modelo de negócio">
+        <button type="button" data-model-btn="b2c" aria-pressed="true">B2C</button>
+        <button type="button" data-model-btn="b2b" aria-pressed="false">B2B</button>
+      </div>
+      <button type="button" class="icon-btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menu de seções">
+        <svg class="ic"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="sim-banner" id="sim-banner" hidden>
+    <div class="wrap sim-banner-inner">
+      <span><svg class="ic"><use href="#i-sliders"/></svg> <strong>Cenário simulado</strong> <span id="sim-banner-text"></span></span>
+      <span class="sim-banner-actions">
+        <a href="#simulador">Ver premissas</a>
+        <button type="button" class="btn btn-sm btn-light" data-reset-model>Restaurar valores originais</button>
+      </span>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<!-- ============ 1. VISÃO EXECUTIVA ============ -->
+<section tabindex="-1" class="hero" id="inicio" aria-labelledby="hero-title">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Estudo de dimensionamento de mercado</p>
+      <h1 id="hero-title">Uma visão estratégica das oportunidades de mercado para a WEEK Haircare</h1>
+      <p class="lead">Quanto vale o mercado de kits de shampoo e condicionador de uma lavagem para quem toma banho fora de casa? Este estudo estima o mercado potencial da WEEK em dois modelos de negócio — venda ao consumidor final (B2C) e venda para estabelecimentos (B2B) — e mostra, passo a passo, como cada número foi calculado.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#painel">Explorar análise de mercado <svg class="ic"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#conceitos">O que são TAM, SAM e SOM?</a>
+      </div>
+      <p class="credit">Desenvolvido pela <strong>ESAG Júnior</strong> · Consultoria em Administração</p>
+    </div>
+    <figure class="hero-client">
+      <img class="week-logo" src="assets/week-haircare-logo-teal.png" alt="WEEK haircare" width="554" height="227">
+      <figcaption>Empresa atendida no projeto de consultoria</figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap">
+    <div class="explainer">
+      <div>
+        <h2 class="h3">O que é dimensionar um mercado?</h2>
+        <p>É estimar, com premissas explícitas, quanto dinheiro circula por ano na categoria em que a empresa quer atuar. Partimos do mercado total (<abbr title="Total Addressable Market">TAM</abbr>), aplicamos os filtros de região, público e canal que a WEEK consegue atender (<abbr title="Serviceable Available Market">SAM</abbr>) e chegamos ao recorte de entrada (<abbr title="Serviceable Obtainable Market">SOM</abbr>).</p>
+      </div>
+      <ol class="explainer-steps" aria-label="Etapas">
+        <li><span>1</span>Contar quem toma banho fora de casa</li>
+        <li><span>2</span>Multiplicar pela frequência anual e pelo preço do kit</li>
+        <li><span>3</span>Aplicar filtros de região, público e canal</li>
+      </ol>
+    </div>
+
+    <h2 class="h3 section-sub">Principais indicadores do estudo <span class="tag">valores publicados no documento</span></h2>
+    <div class="exec-grid" id="exec-grid"><!-- preenchido por app.js --></div>
+
+    <div class="callout callout-warn" role="note">
+      <svg class="ic"><use href="#i-alert"/></svg>
+      <div><strong>Leitura correta dos números.</strong> TAM, SAM e SOM são o dimensionamento teórico do mercado segundo as premissas do documento — não são faturamento garantido, vendas realizadas nem previsão de receita da WEEK. O SOM apresentado ainda <strong>não incorpora uma taxa efetiva de captura de mercado</strong>: ele é o recorte geográfico de entrada (SP no B2C, Campinas no B2B).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. EXPLORADOR (conceitos, funil e círculos) ============ -->
+<section id="conceitos" class="sec" aria-labelledby="conceitos-title" tabindex="-1">
+  <div class="wrap">
+    <p class="eyebrow">Explorador de mercado</p>
+    <h2 class="sec-title" id="conceitos-title">De todo o mercado, quanto faz sentido para a WEEK?</h2>
+    <p class="sec-lead">O funil e os círculos mostram o mesmo cálculo de dois jeitos. Clique em uma etapa ou em um círculo para ver o que o número significa, de onde ele vem e quais premissas o sustentam. Os filtros mudam tudo ao mesmo tempo.</p>
+
+    <ol class="guide" aria-label="Roteiro de leitura">
+      <li><button type="button" data-guide="tam"><span>1</span>Comece pelo mercado total</button></li>
+      <li><button type="button" data-guide="sam"><span>2</span>Veja a parcela que pode ser atendida</button></li>
+      <li><button type="button" data-guide="som"><span>3</span>Explore o mercado de entrada</button></li>
+      <li><button type="button" data-guide="sim"><span>4</span>Altere premissas e veja o efeito</button></li>
+      <li><button type="button" data-guide="cmp"><span>5</span>Compare B2C e B2B</button></li>
+    </ol>
+
+    <div class="xbar card" role="group" aria-label="Filtros do explorador">
+      <div class="xbar-group">
+        <span class="xbar-label">Modelo</span>
+        <div class="seg-switch" role="group" aria-label="Modelo de negócio">
+          <button type="button" data-model-btn="b2c" aria-pressed="true">B2C · consumidor</button>
+          <button type="button" data-model-btn="b2b" aria-pressed="false">B2B · estabelecimentos</button>
+        </div>
+      </div>
+      <div class="xbar-group">
+        <span class="xbar-label" id="seg-chips-label">Segmentos</span>
+        <div class="chips" id="seg-chips" role="group" aria-labelledby="seg-chips-label"></div>
+      </div>
+      <div class="xbar-group">
+        <span class="xbar-label" id="x-metric-label">Medida</span>
+        <div class="mini-toggle" id="x-metric" role="group" aria-labelledby="x-metric-label"></div>
+      </div>
+      <div class="xbar-group xbar-actions">
+        <button type="button" class="btn btn-sm btn-ghost" data-compare-toggle aria-pressed="false" aria-controls="x-compare">Comparar B2C × B2B</button>
+      </div>
+      <div class="xbar-status">
+        <span id="x-active" aria-live="polite"></span>
+        <button type="button" class="link-btn" id="x-clear">Limpar filtros</button>
+      </div>
+    </div>
+
+    <div class="xcompare card" id="x-compare" hidden></div>
+
+    <div class="xgrid">
+      <div class="xvis">
+        <article class="card xcard" aria-labelledby="x-funnel-title">
+          <header class="chart-head">
+            <h3 id="x-funnel-title">Funil do mercado — <span data-model-name>B2C</span></h3>
+            <button type="button" class="info-btn" data-tip="Como ler o funil&#10;Cada faixa é o mercado que sobra depois de um filtro. A largura é proporcional ao valor; faixas muito estreitas ganham largura mínima para continuar visíveis."><svg class="ic"><use href="#i-info"/></svg><span class="sr-only">Como ler o funil</span></button>
+          </header>
+          <div id="x-funnel" class="xf"></div>
+        </article>
+        <article class="card xcard" aria-labelledby="x-circles-title">
+          <header class="chart-head">
+            <h3 id="x-circles-title">Círculos proporcionais</h3>
+            <div class="mini-toggle" role="group" aria-label="O que os círculos mostram">
+              <button type="button" data-circ-mode="levels" aria-pressed="true">TAM ⊃ SAM ⊃ SOM</button>
+              <button type="button" data-circ-mode="segments" aria-pressed="false">Por segmento</button>
+            </div>
+          </header>
+          <div class="mini-toggle mini-toggle-sub" id="x-circ-level" role="group" aria-label="Nível dos segmentos" hidden>
+            <button type="button" data-circ-level="tam" aria-pressed="true">TAM</button>
+            <button type="button" data-circ-level="sam" aria-pressed="false">SAM</button>
+            <button type="button" data-circ-level="som" aria-pressed="false">SOM</button>
+          </div>
+          <div id="x-circles" class="xc"></div>
+          <p class="fine" id="x-circles-note"></p>
+        </article>
+      </div>
+      <aside class="xdetail card" id="x-detail" aria-live="polite" aria-label="Detalhes da seleção"></aside>
+    </div>
+
+    <div class="def-cards">
+      <button type="button" class="def-card" data-level="tam">
+        <span class="def-abbr">TAM</span>
+        <span class="def-name">Total Addressable Market · mercado total</span>
+        <span class="def-text">Mercado total potencial considerando todo o universo definido para o produto.</span>
+      </button>
+      <button type="button" class="def-card" data-level="sam">
+        <span class="def-abbr">SAM</span>
+        <span class="def-name">Serviceable Available Market · mercado atendível</span>
+        <span class="def-text">Parcela do TAM que pode ser atendida, considerando recorte geográfico, perfil do público e canal de comercialização.</span>
+      </button>
+      <button type="button" class="def-card" data-level="som">
+        <span class="def-abbr">SOM</span>
+        <span class="def-name">Serviceable Obtainable Market · mercado de entrada</span>
+        <span class="def-text">Recorte geográfico e operacional de entrada. Neste estudo, ainda sem taxa efetiva de captura comercial.</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3/4. PAINEL ============ -->
+<section tabindex="-1" id="painel" class="sec sec-tint" aria-labelledby="painel-title">
+  <div class="wrap">
+    <p class="eyebrow">Painel de mercado</p>
+    <h2 class="sec-title" id="painel-title">Painel executivo — <span data-model-name>B2C</span></h2>
+    <p class="sec-lead">Os números abaixo são calculados ao vivo pelo motor de cálculo da plataforma a partir das premissas do documento. Clique em um card para descobrir de onde vem o valor.</p>
+
+    <div class="model-tabs" role="tablist" aria-label="Modelo de negócio">
+      <button type="button" role="tab" id="tab-b2c" data-model-btn="b2c" aria-selected="true" aria-controls="painel-body">
+        <strong>B2C</strong><span>Venda ao consumidor final</span>
+      </button>
+      <button type="button" role="tab" id="tab-b2b" data-model-btn="b2b" aria-selected="false" aria-controls="painel-body" tabindex="-1">
+        <strong>B2B</strong><span>Venda para estabelecimentos</span>
+      </button>
+    </div>
+
+    <div id="painel-body" role="tabpanel" aria-labelledby="tab-b2c">
+      <div class="model-strip" id="model-strip"><!-- app.js --></div>
+      <div class="kpi-grid" id="kpi-grid"><!-- app.js --></div>
+      <div class="context-notes" id="kpi-notes"><!-- app.js --></div>
+
+      <div class="chart-grid">
+        <article class="card chart-card">
+          <header class="chart-head">
+            <h3>TAM, SAM e SOM <span class="unit">R$/ano</span></h3>
+            <button type="button" class="info-btn" data-tip="Comparação direta dos três níveis de mercado do modelo selecionado. Passe o mouse ou foque cada barra para ver valor, volume e participação sobre o TAM."><svg class="ic"><use href="#i-info"/></svg><span class="sr-only">Sobre este gráfico</span></button>
+          </header>
+          <div id="chart-levels" class="chart"></div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="chart-head">
+            <h3>Funil de refinamento do mercado</h3>
+            <button type="button" class="info-btn" data-tip="Cada degrau mostra quanto do mercado sobra depois de aplicar os filtros geográficos e comerciais. O percentual à direita é a parcela do TAM."><svg class="ic"><use href="#i-info"/></svg><span class="sr-only">Sobre este gráfico</span></button>
+          </header>
+          <div id="chart-funnel" class="chart"></div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="chart-head">
+            <h3>Mercado por segmento</h3>
+            <div class="mini-toggle" role="group" aria-label="Nível exibido">
+              <button type="button" data-seg-level="tam" aria-pressed="true">TAM</button>
+              <button type="button" data-seg-level="sam" aria-pressed="false">SAM</button>
+              <button type="button" data-seg-level="som" aria-pressed="false">SOM</button>
+            </div>
+          </header>
+          <div class="mini-toggle mini-toggle-sub" role="group" aria-label="Medida exibida">
+            <button type="button" data-seg-metric="valor" aria-pressed="true">R$/ano</button>
+            <button type="button" data-seg-metric="volume" aria-pressed="false" data-unit-label>Volume/ano</button>
+            <button type="button" data-seg-metric="pessoas" aria-pressed="false">Público</button>
+            <button type="button" data-seg-metric="estabelecimentos" aria-pressed="false" hidden>Estabelecimentos</button>
+          </div>
+          <div id="chart-segments" class="chart"></div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="chart-head">
+            <h3>Composição por segmento <span class="unit">% do R$ em cada nível</span></h3>
+            <button type="button" class="info-btn" data-tip="Participação de cada segmento no valor de cada nível. Mostra como os filtros mudam o peso dos segmentos (no B2B, os filtros de academias e hotéis são diferentes)."><svg class="ic"><use href="#i-info"/></svg><span class="sr-only">Sobre este gráfico</span></button>
+          </header>
+          <div id="chart-composition" class="chart"></div>
+        </article>
+      </div>
+
+      <div class="volume-grid" id="volume-grid"><!-- app.js --></div>
+
+      <article class="card chart-card compare-card">
+        <header class="chart-head">
+          <h3>Comparação B2C × B2B <span class="unit">R$/ano</span></h3>
+          <button type="button" class="info-btn" data-tip="Os dois modelos têm recortes geográficos e preços diferentes (TAM B2C = Brasil; TAM B2B = Sudeste). Compare as ordens de grandeza, mas não some os valores."><svg class="ic"><use href="#i-info"/></svg><span class="sr-only">Sobre este gráfico</span></button>
+        </header>
+        <div id="chart-compare" class="chart"></div>
+        <p class="fine"><svg class="ic ic-sm"><use href="#i-alert"/></svg> Recortes diferentes: B2C (Brasil → Sudeste → SP) e B2B (Sudeste → SP → Campinas). Os modelos são cenários alternativos de entrada e não devem ser somados.</p>
+      </article>
+
+      <details class="card audit" id="audit">
+        <summary><svg class="ic"><use href="#i-check"/></svg> Verificação de consistência dos cálculos <span class="audit-summary" id="audit-summary"></span><svg class="ic chev"><use href="#i-down"/></svg></summary>
+        <div class="audit-body" id="audit-body"><!-- app.js --></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5/7. CÁLCULO ============ -->
+<section tabindex="-1" id="calculo" class="sec" aria-labelledby="calculo-title">
+  <div class="wrap">
+    <p class="eyebrow">Metodologia</p>
+    <h2 class="sec-title" id="calculo-title">Como o mercado <span data-model-name>B2C</span> foi calculado</h2>
+    <div id="calc-body"><!-- app.js --></div>
+  </div>
+</section>
+
+<!-- ============ 6/8. FILTROS ============ -->
+<section tabindex="-1" id="filtros" class="sec sec-tint" aria-labelledby="filtros-title">
+  <div class="wrap">
+    <p class="eyebrow">Do TAM ao SOM</p>
+    <h2 class="sec-title" id="filtros-title">Como o mercado <span data-model-name>B2C</span> é filtrado</h2>
+    <div id="filter-body"><!-- app.js --></div>
+  </div>
+</section>
+
+<!-- ============ PREMISSAS ============ -->
+<section tabindex="-1" id="premissas" class="sec" aria-labelledby="premissas-title">
+  <div class="wrap">
+    <p class="eyebrow">Transparência</p>
+    <h2 class="sec-title" id="premissas-title">Premissas e confiabilidade dos dados</h2>
+    <p class="sec-lead">Cada número do estudo depende de premissas com níveis diferentes de certeza. Aqui estão todas elas, com a fonte indicada no documento, o nível de confiança e a forma de validação prevista. A coluna “Impacto” mostra quanto o SOM muda se a premissa variar +10% — quanto maior, mais importante validá-la.</p>
+
+    <div class="priority card" id="priority"><!-- app.js --></div>
+
+    <form class="filters" id="assump-filters" aria-label="Filtrar premissas" onsubmit="return false">
+      <label>Modelo
+        <select name="model"><option value="">Todos</option><option value="b2c">B2C</option><option value="b2b">B2B</option></select>
+      </label>
+      <label>Segmento
+        <select name="segment"><option value="">Todos</option></select>
+      </label>
+      <label>Confiança
+        <select name="confidence"><option value="">Todas</option></select>
+      </label>
+      <label>Status
+        <select name="status"><option value="">Todos</option></select>
+      </label>
+      <label class="grow">Buscar
+        <span class="search"><svg class="ic"><use href="#i-search"/></svg><input type="search" name="q" placeholder="Ex.: preço, ocupação, IBGE" autocomplete="off"></span>
+      </label>
+      <button type="button" class="btn btn-sm btn-ghost" id="assump-clear">Limpar filtros</button>
+    </form>
+
+    <div class="legend-conf" id="legend-conf" aria-label="Legenda de confiança"><!-- app.js --></div>
+    <p class="result-count" id="assump-count" aria-live="polite"></p>
+    <div class="table-wrap">
+      <table class="atable" id="assump-table">
+        <caption class="sr-only">Premissas do estudo</caption>
+        <thead>
+          <tr><th scope="col">Premissa</th><th scope="col">Valor</th><th scope="col">Lógica do cálculo</th><th scope="col">Fonte</th><th scope="col">Confiança</th><th scope="col">Como validar</th><th scope="col">Impacto <span class="th-sub">SOM, +10%</span></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SIMULADOR ============ -->
+<section tabindex="-1" id="simulador" class="sec sec-tint" aria-labelledby="sim-title">
+  <div class="wrap">
+    <p class="eyebrow">Simulador de mercado</p>
+    <h2 class="sec-title" id="sim-title">E se as premissas fossem outras? — <span data-model-name>B2C</span></h2>
+    <p class="sec-lead">Altere as premissas e veja o impacto imediato no TAM, no SAM e no SOM. Os valores iniciais são os do documento. O painel, os gráficos e a metodologia acima passam a refletir o cenário simulado até você restaurar os valores originais.</p>
+
+    <div class="model-tabs model-tabs-sm" role="group" aria-label="Modelo simulado">
+      <button type="button" data-model-btn="b2c" aria-pressed="true"><strong>B2C</strong></button>
+      <button type="button" data-model-btn="b2b" aria-pressed="false"><strong>B2B</strong></button>
+    </div>
+
+    <div class="sim-grid">
+      <div class="sim-mini" id="sim-mini" aria-hidden="true"></div>
+      <form class="sim-controls card" id="sim-controls" aria-label="Premissas do simulador" onsubmit="return false"><!-- app.js --></form>
+      <aside class="sim-results" id="sim-results"><!-- app.js --></aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAGR ============ -->
+<section tabindex="-1" id="cagr" class="sec" aria-labelledby="cagr-title">
+  <div class="wrap">
+    <p class="eyebrow">Crescimento</p>
+    <h2 class="sec-title" id="cagr-title">CAGR — taxa de crescimento anual composta</h2>
+    <div class="cagr-grid">
+      <div>
+        <p class="sec-lead">O CAGR (<em>Compound Annual Growth Rate</em>) é a taxa constante de crescimento por ano que leva um valor inicial a um valor final em um certo número de anos. Ele “suaviza” oscilações e permite comparar mercados e períodos diferentes.</p>
+        <div class="formula-box" aria-label="Fórmula do CAGR">
+          <span>CAGR</span> = <span class="frac"><span>Valor final</span><span>Valor inicial</span></span><sup>1 / nº de anos</sup> − 1
+        </div>
+        <div class="callout callout-info" role="note">
+          <svg class="ic"><use href="#i-info"/></svg>
+          <div><strong>Taxas do estudo.</strong> O documento traz o crescimento do setor de cabelos (4% a 9% a.a.: Euromonitor 9,1% em reais; Mordor 5,0% e IMARC 4,1% em dólar), do público (academias 9,1% a.a., alunos 4,5% a.a.), do canal (lares que compram online, 38% a.a.) e do B2B (amenities de hotel, ≈ 11% a.a.). Não são projeções de vendas da WEEK. Use a calculadora ao lado para testar outros valores.</div>
+        </div>
+      </div>
+      <form class="card cagr-calc" id="cagr-form" aria-label="Calculadora de CAGR" onsubmit="return false">
+        <h3 class="h4"><svg class="ic"><use href="#i-calc"/></svg> Calculadora de CAGR <span class="tag tag-warn">entradas hipotéticas</span></h3>
+        <div class="cagr-fields">
+          <label>Valor inicial (R$)<input type="text" inputmode="decimal" name="vi" placeholder="Ex.: 100.000" autocomplete="off"></label>
+          <label>Valor final (R$)<input type="text" inputmode="decimal" name="vf" placeholder="Ex.: 150.000" autocomplete="off"></label>
+          <label>Período (anos)<input type="text" inputmode="decimal" name="n" placeholder="Ex.: 5" autocomplete="off"></label>
+        </div>
+        <div class="cagr-actions">
+          <button type="button" class="btn btn-sm btn-ghost" id="cagr-example">Preencher exemplo hipotético</button>
+          <button type="button" class="btn btn-sm btn-ghost" id="cagr-clear">Limpar</button>
+        </div>
+        <div id="cagr-out" class="cagr-out" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NOTAS ============ -->
+<section tabindex="-1" id="notas" class="sec sec-tint" aria-labelledby="notas-title">
+  <div class="wrap">
+    <p class="eyebrow">Observações metodológicas</p>
+    <h2 class="sec-title" id="notas-title">Limitações, dupla contagem e pontos de atenção</h2>
+    <p class="sec-lead">A credibilidade de um dimensionamento depende de deixar claro o que ele mede — e o que ainda não mede.</p>
+    <div class="notes-grid" id="notes-grid"><!-- app.js --></div>
+    <div class="card conf-criteria" id="conf-criteria"><!-- app.js --></div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brands">
+      <img src="assets/esagjr-logo-branco.png" alt="ESAG Júnior" width="700" height="437" class="f-esag">
+      <span class="f-sep" aria-hidden="true"></span>
+      <img src="assets/week-haircare-logo-branco.png" alt="WEEK haircare" width="554" height="227" class="f-week">
+    </div>
+    <div class="footer-text">
+      <p><strong>Estudo de dimensionamento de mercado — WEEK Haircare</strong></p>
+      <p>Análise desenvolvida pela ESAG Júnior. Documento-base: “Guia TAM, SAM, SOM, market share e CAGR — WEEK Haircare”. Valores teóricos de mercado, sujeitos às premissas e validações descritas nesta plataforma.</p>
+    </div>
+    <a class="btn btn-sm btn-light" href="#inicio"><svg class="ic"><use href="#i-up"/></svg> Voltar ao início</a>
+  </div>
+</footer>
+
+<!-- Detalhamento de um indicador -->
+<div class="drill-backdrop" id="drill-backdrop" hidden></div>
+<dialog class="drill" id="drill" aria-labelledby="drill-title">
+  <div class="drill-head">
+    <h2 id="drill-title">Detalhes</h2>
+    <button type="button" class="icon-btn" id="drill-close" aria-label="Fechar"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="drill-body" id="drill-body"></div>
+</dialog>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<noscript><div class="noscript">Esta plataforma precisa de JavaScript para calcular e exibir os indicadores. Ative o JavaScript no navegador.</div></noscript>
+
+<script src="js/data.js"></script>
+<script src="js/format.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
