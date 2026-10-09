@@ -4,7 +4,9 @@ Plataforma web interativa que transforma o documento **“Guia TAM, SAM, SOM, ma
 
 ## Como executar
 
-Não há build nem dependências. A página funciona abrindo o arquivo diretamente:
+**Jeito mais fácil:** baixe `week-haircare-mercado.html` (na raiz do repositório) e dê duplo clique. É um arquivo único com tudo embutido — pode ser enviado por e-mail ou WhatsApp. Para regenerá-lo após editar o código: `python3 week-mercado/build.py`.
+
+Versão modular (para desenvolvimento), sem build nem dependências:
 
 ```
 week-mercado/index.html   → abrir no navegador (duplo clique)
