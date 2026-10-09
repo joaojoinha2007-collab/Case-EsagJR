@@ -81,7 +81,7 @@
 <main id="conteudo">
 
 <!-- ============ 1. VISÃO EXECUTIVA ============ -->
-<section class="hero" id="inicio" aria-labelledby="hero-title">
+<section tabindex="-1" class="hero" id="inicio" aria-labelledby="hero-title">
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">Estudo de dimensionamento de mercado</p>
@@ -94,9 +94,7 @@
       <p class="credit">Desenvolvido pela <strong>ESAG Júnior</strong> · Consultoria em Administração</p>
     </div>
     <figure class="hero-client">
-      <div class="client-halo">
-        <img src="assets/week-haircare-logo.png" alt="WEEK haircare" width="480" height="480">
-      </div>
+      <img class="week-logo" src="assets/week-haircare-logo-teal.png" alt="WEEK haircare" width="554" height="227">
       <figcaption>Empresa atendida no projeto de consultoria</figcaption>
     </figure>
   </div>
@@ -124,46 +122,91 @@
   </div>
 </section>
 
-<!-- ============ 2. CONCEITOS ============ -->
-<section id="conceitos" class="sec" aria-labelledby="conceitos-title">
+<!-- ============ 2. EXPLORADOR (conceitos, funil e círculos) ============ -->
+<section id="conceitos" class="sec" aria-labelledby="conceitos-title" tabindex="-1">
   <div class="wrap">
-    <p class="eyebrow">Entenda os conceitos</p>
-    <h2 class="sec-title" id="conceitos-title">TAM, SAM e SOM: do mercado total ao mercado de entrada</h2>
-    <p class="sec-lead">Os três níveis são círculos concêntricos: cada um é uma parte do anterior. Clique em um nível para ver a definição e como ele se aplica à WEEK. Use o seletor para comparar a lógica do B2C com a do B2B.</p>
+    <p class="eyebrow">Explorador de mercado</p>
+    <h2 class="sec-title" id="conceitos-title">De todo o mercado, quanto faz sentido para a WEEK?</h2>
+    <p class="sec-lead">O funil e os círculos mostram o mesmo cálculo de dois jeitos. Clique em uma etapa ou em um círculo para ver o que o número significa, de onde ele vem e quais premissas o sustentam. Os filtros mudam tudo ao mesmo tempo.</p>
 
-    <div class="concept-toolbar">
-      <div class="seg-switch seg-switch-lg" role="group" aria-label="Modelo exibido nos conceitos">
-        <button type="button" data-model-btn="b2c" aria-pressed="true">B2C · consumidor final</button>
-        <button type="button" data-model-btn="b2b" aria-pressed="false">B2B · estabelecimentos</button>
+    <ol class="guide" aria-label="Roteiro de leitura">
+      <li><button type="button" data-guide="tam"><span>1</span>Comece pelo mercado total</button></li>
+      <li><button type="button" data-guide="sam"><span>2</span>Veja a parcela que pode ser atendida</button></li>
+      <li><button type="button" data-guide="som"><span>3</span>Explore o mercado de entrada</button></li>
+      <li><button type="button" data-guide="sim"><span>4</span>Altere premissas e veja o efeito</button></li>
+      <li><button type="button" data-guide="cmp"><span>5</span>Compare B2C e B2B</button></li>
+    </ol>
+
+    <div class="xbar card" role="group" aria-label="Filtros do explorador">
+      <div class="xbar-group">
+        <span class="xbar-label">Modelo</span>
+        <div class="seg-switch" role="group" aria-label="Modelo de negócio">
+          <button type="button" data-model-btn="b2c" aria-pressed="true">B2C · consumidor</button>
+          <button type="button" data-model-btn="b2b" aria-pressed="false">B2B · estabelecimentos</button>
+        </div>
+      </div>
+      <div class="xbar-group">
+        <span class="xbar-label" id="seg-chips-label">Segmentos</span>
+        <div class="chips" id="seg-chips" role="group" aria-labelledby="seg-chips-label"></div>
+      </div>
+      <div class="xbar-group">
+        <span class="xbar-label" id="x-metric-label">Medida</span>
+        <div class="mini-toggle" id="x-metric" role="group" aria-labelledby="x-metric-label"></div>
+      </div>
+      <div class="xbar-group xbar-actions">
+        <button type="button" class="btn btn-sm btn-ghost" data-compare-toggle aria-pressed="false" aria-controls="x-compare">Comparar B2C × B2B</button>
+      </div>
+      <div class="xbar-status">
+        <span id="x-active" aria-live="polite"></span>
+        <button type="button" class="link-btn" id="x-clear">Limpar filtros</button>
       </div>
     </div>
 
-    <div class="concept-grid">
-      <div class="concept-visual">
-        <div class="rings" id="rings" role="group" aria-label="Níveis de mercado">
-          <button type="button" class="ring ring-tam" data-level="tam" aria-pressed="true"><span class="ring-label">TAM<small id="ring-geo-tam"></small></span></button>
-          <button type="button" class="ring ring-sam" data-level="sam" aria-pressed="false"><span class="ring-label">SAM<small id="ring-geo-sam"></small></span></button>
-          <button type="button" class="ring ring-som" data-level="som" aria-pressed="false"><span class="ring-label">SOM<small id="ring-geo-som"></small></span></button>
-        </div>
-        <p class="fine">Diagrama esquemático — os tamanhos não estão em escala. As proporções reais aparecem no quadro de detalhes.</p>
+    <div class="xcompare card" id="x-compare" hidden></div>
+
+    <div class="xgrid">
+      <div class="xvis">
+        <article class="card xcard" aria-labelledby="x-funnel-title">
+          <header class="chart-head">
+            <h3 id="x-funnel-title">Funil do mercado — <span data-model-name>B2C</span></h3>
+            <button type="button" class="info-btn" data-tip="Como ler o funil&#10;Cada faixa é o mercado que sobra depois de um filtro. A largura é proporcional ao valor; faixas muito estreitas ganham largura mínima para continuar visíveis."><svg class="ic"><use href="#i-info"/></svg><span class="sr-only">Como ler o funil</span></button>
+          </header>
+          <div id="x-funnel" class="xf"></div>
+        </article>
+        <article class="card xcard" aria-labelledby="x-circles-title">
+          <header class="chart-head">
+            <h3 id="x-circles-title">Círculos proporcionais</h3>
+            <div class="mini-toggle" role="group" aria-label="O que os círculos mostram">
+              <button type="button" data-circ-mode="levels" aria-pressed="true">TAM ⊃ SAM ⊃ SOM</button>
+              <button type="button" data-circ-mode="segments" aria-pressed="false">Por segmento</button>
+            </div>
+          </header>
+          <div class="mini-toggle mini-toggle-sub" id="x-circ-level" role="group" aria-label="Nível dos segmentos" hidden>
+            <button type="button" data-circ-level="tam" aria-pressed="true">TAM</button>
+            <button type="button" data-circ-level="sam" aria-pressed="false">SAM</button>
+            <button type="button" data-circ-level="som" aria-pressed="false">SOM</button>
+          </div>
+          <div id="x-circles" class="xc"></div>
+          <p class="fine" id="x-circles-note"></p>
+        </article>
       </div>
-      <div class="concept-detail card" id="concept-detail" aria-live="polite"><!-- app.js --></div>
+      <aside class="xdetail card" id="x-detail" aria-live="polite" aria-label="Detalhes da seleção"></aside>
     </div>
 
     <div class="def-cards">
       <button type="button" class="def-card" data-level="tam">
         <span class="def-abbr">TAM</span>
-        <span class="def-name">Total Addressable Market</span>
+        <span class="def-name">Total Addressable Market · mercado total</span>
         <span class="def-text">Mercado total potencial considerando todo o universo definido para o produto.</span>
       </button>
       <button type="button" class="def-card" data-level="sam">
         <span class="def-abbr">SAM</span>
-        <span class="def-name">Serviceable Available Market</span>
+        <span class="def-name">Serviceable Available Market · mercado atendível</span>
         <span class="def-text">Parcela do TAM que pode ser atendida, considerando recorte geográfico, perfil do público e canal de comercialização.</span>
       </button>
       <button type="button" class="def-card" data-level="som">
         <span class="def-abbr">SOM</span>
-        <span class="def-name">Serviceable Obtainable Market</span>
+        <span class="def-name">Serviceable Obtainable Market · mercado de entrada</span>
         <span class="def-text">Recorte geográfico e operacional de entrada. Neste estudo, ainda sem taxa efetiva de captura comercial.</span>
       </button>
     </div>
@@ -171,7 +214,7 @@
 </section>
 
 <!-- ============ 3/4. PAINEL ============ -->
-<section id="painel" class="sec sec-tint" aria-labelledby="painel-title">
+<section tabindex="-1" id="painel" class="sec sec-tint" aria-labelledby="painel-title">
   <div class="wrap">
     <p class="eyebrow">Painel de mercado</p>
     <h2 class="sec-title" id="painel-title">Painel executivo — <span data-model-name>B2C</span></h2>
@@ -255,7 +298,7 @@
 </section>
 
 <!-- ============ 5/7. CÁLCULO ============ -->
-<section id="calculo" class="sec" aria-labelledby="calculo-title">
+<section tabindex="-1" id="calculo" class="sec" aria-labelledby="calculo-title">
   <div class="wrap">
     <p class="eyebrow">Metodologia</p>
     <h2 class="sec-title" id="calculo-title">Como o mercado <span data-model-name>B2C</span> foi calculado</h2>
@@ -264,7 +307,7 @@
 </section>
 
 <!-- ============ 6/8. FILTROS ============ -->
-<section id="filtros" class="sec sec-tint" aria-labelledby="filtros-title">
+<section tabindex="-1" id="filtros" class="sec sec-tint" aria-labelledby="filtros-title">
   <div class="wrap">
     <p class="eyebrow">Do TAM ao SOM</p>
     <h2 class="sec-title" id="filtros-title">Como o mercado <span data-model-name>B2C</span> é filtrado</h2>
@@ -273,7 +316,7 @@
 </section>
 
 <!-- ============ PREMISSAS ============ -->
-<section id="premissas" class="sec" aria-labelledby="premissas-title">
+<section tabindex="-1" id="premissas" class="sec" aria-labelledby="premissas-title">
   <div class="wrap">
     <p class="eyebrow">Transparência</p>
     <h2 class="sec-title" id="premissas-title">Premissas e confiabilidade dos dados</h2>
@@ -315,7 +358,7 @@
 </section>
 
 <!-- ============ SIMULADOR ============ -->
-<section id="simulador" class="sec sec-tint" aria-labelledby="sim-title">
+<section tabindex="-1" id="simulador" class="sec sec-tint" aria-labelledby="sim-title">
   <div class="wrap">
     <p class="eyebrow">Simulador de mercado</p>
     <h2 class="sec-title" id="sim-title">E se as premissas fossem outras? — <span data-model-name>B2C</span></h2>
@@ -335,7 +378,7 @@
 </section>
 
 <!-- ============ CAGR ============ -->
-<section id="cagr" class="sec" aria-labelledby="cagr-title">
+<section tabindex="-1" id="cagr" class="sec" aria-labelledby="cagr-title">
   <div class="wrap">
     <p class="eyebrow">Crescimento</p>
     <h2 class="sec-title" id="cagr-title">CAGR — taxa de crescimento anual composta</h2>
@@ -368,7 +411,7 @@
 </section>
 
 <!-- ============ NOTAS ============ -->
-<section id="notas" class="sec sec-tint" aria-labelledby="notas-title">
+<section tabindex="-1" id="notas" class="sec sec-tint" aria-labelledby="notas-title">
   <div class="wrap">
     <p class="eyebrow">Observações metodológicas</p>
     <h2 class="sec-title" id="notas-title">Limitações, dupla contagem e pontos de atenção</h2>
@@ -384,7 +427,7 @@
     <div class="footer-brands">
       <img src="assets/esagjr-logo-branco.png" alt="ESAG Júnior" width="700" height="437" class="f-esag">
       <span class="f-sep" aria-hidden="true"></span>
-      <img src="assets/week-haircare-logo.png" alt="WEEK haircare" width="480" height="480" class="f-week">
+      <img src="assets/week-haircare-logo-branco.png" alt="WEEK haircare" width="554" height="227" class="f-week">
     </div>
     <div class="footer-text">
       <p><strong>Estudo de dimensionamento de mercado — WEEK Haircare</strong></p>
@@ -395,6 +438,7 @@
 </footer>
 
 <!-- Detalhamento de um indicador -->
+<div class="drill-backdrop" id="drill-backdrop" hidden></div>
 <dialog class="drill" id="drill" aria-labelledby="drill-title">
   <div class="drill-head">
     <h2 id="drill-title">Detalhes</h2>

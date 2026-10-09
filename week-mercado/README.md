@@ -40,7 +40,8 @@ node --test tests/calc.test.js   # ou: npm test
 | `js/charts.js` | Gráficos em HTML/SVG sem bibliotecas (barras, 100% empilhado, funil, linha) + tooltips acessíveis |
 | `js/app.js` | Interface: estado, renderização e interações |
 | `tests/calc.test.js` | 23 testes das fórmulas, cenários simulados, entradas inválidas, CAGR e formatação |
-| `assets/` | Logos (ESAG Júnior colorida e branca; WEEK Haircare recortada da imagem fornecida) |
+| `assets/` | Logos: ESAG Júnior (colorida e branca); WEEK Haircare sem o círculo (letras extraídas da imagem original, em verde-água e em branco) e a versão circular original (ícone da aba) |
+| `build.py` | Gera o arquivo único `week-haircare-mercado.html` |
 
 Os módulos `data.js`, `calc.js` e `format.js` funcionam tanto no navegador quanto no Node, então o que é testado é exatamente o código que a página executa.
 
@@ -53,3 +54,12 @@ Os módulos `data.js`, `calc.js` e `format.js` funcionam tanto no navegador quan
 - **CAGR:** o documento não traz série histórica nem taxa calculada. A seção explica o conceito e oferece uma calculadora com entradas hipotéticas; nenhuma taxa foi inventada.
 - **Contagens de hotéis** (1.893 no SAM, 41 em Campinas) são contagens do Cadastur e não variam no simulador; as academias do SAM/SOM são estimadas pelos fatores (13.767 × 31% ≈ 4.268; × 3,6% ≈ 154), como no PDF.
 - **Pontos de atenção registrados** (sem alterar os valores): sobreposição de pessoas no B2C; 1 kit por quarto ocupado como estimativa própria; ocupação de Campinas (56,87%) abaixo da média do Sudeste usada no SOM; uso de proxies (peso populacional, classes A/B como perfil premium); B2C e B2B não são somáveis.
+
+## Robustez e desempenho (auditoria de outubro/2026)
+
+- **Links internos** são tratados por JavaScript (rolagem com compensação do cabeçalho fixo). Antes, em pré-visualizações e iframes, um clique no menu trocava a página por uma tela em branco.
+- **Detalhamento** (“Como chegamos a esse número?”) funciona também em navegadores sem `<dialog>` (iPads antigos), com fundo escurecido e fechamento por Esc, botão ou toque fora.
+- **Estado único + renderização agendada**: as premissas, os filtros e a seleção vivem em um só objeto; cada mudança redesenha só as partes afetadas, uma vez por quadro, e as seções fora da tela são atualizadas quando se aproximam. Ao arrastar um controle do simulador, só o quadro de resultados é atualizado (estrutura fixa, apenas números); o restante da página é atualizado ao soltar.
+- **Explorador de mercado** (seção “Conceitos”): funil e círculos proporcionais clicáveis, filtros de segmento e medida ligados ao painel, à metodologia e ao simulador, comparação B2C × B2B lado a lado e roteiro guiado.
+
+Testes de interface executados com Playwright/Chromium (desktop, iPad, iPhone, iframe com sandbox e navegador sem `<dialog>`); os scripts ficam fora do repositório.
