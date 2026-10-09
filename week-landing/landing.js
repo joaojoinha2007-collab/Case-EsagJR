@@ -37,7 +37,11 @@
   /* ---------- formatação ---------- */
   var nfc = {};
   function nf(max, min) { var k = (min || 0) + ':' + max; return nfc[k] || (nfc[k] = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: min || 0, maximumFractionDigits: max })); }
-  function mi(v) { var a = Math.abs(v) / 1e6, d = a >= 10 ? 1 : 2; return 'R$ ' + nf(d, d).format(a) + ' mi'; }
+  /* Valores a partir de R$ 1 bilhão sempre em bilhões (R$ 1,85 bi); abaixo disso, em milhões */
+  function mi(v) {
+    if (Math.abs(v) >= 1e9) return 'R$ ' + nf(2, 2).format(v / 1e9) + ' bi';
+    var a = Math.abs(v) / 1e6, d = a >= 10 ? 1 : 2; return 'R$ ' + nf(d, d).format(a) + ' mi';
+  }
   function qty(v) { var a = Math.abs(v); if (a >= 1e6) return nf(a >= 1e8 ? 1 : 2).format(v / 1e6) + ' mi'; if (a >= 1e4) return nf(a >= 1e5 ? 1 : 2).format(v / 1e3) + ' mil'; if (a >= 100) return nf(0).format(v); return nf(2).format(v); }
   function pct(v) { return nf(2).format(v * 100) + '%'; }
   function share(v) { return v >= 0.1 ? nf(1).format(v * 100) + '%' : nf(2).format(v * 100) + '%'; }
