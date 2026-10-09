@@ -1,5 +1,5 @@
 <title>Mercado WEEK Haircare</title>
-<meta name="description" content="Estudo de dimensionamento de mercado (TAM, SAM e SOM) da WEEK Haircare, desenvolvido pela ESAG Júnior.">
+<meta name="description" content="Estudo de dimensionamento de mercado (TAM, SAM, SOM, market share e CAGR) da WEEK Haircare, desenvolvido pela ESAG Júnior.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap">
@@ -18,6 +18,8 @@
       <a href="#funil">Funil</a>
       <a href="#simule">Simule</a>
       <a href="#comparar">B2C × B2B</a>
+      <a href="#mercado">Concorrência</a>
+      <a href="#crescimento">Crescimento</a>
       <a href="#validar">Premissas</a>
     </nav>
     <div class="switch" role="group" aria-label="Modelo de negócio">
@@ -33,7 +35,7 @@
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <p class="kicker">Estudo de dimensionamento de mercado · ESAG Júnior para WEEK Haircare</p>
-        <h1 id="hero-title">Um mercado potencial de <em>R$ 1,9 bilhão</em> por ano em banhos fora de casa.</h1>
+        <h1 id="hero-title">Um mercado potencial de <em>R$ 1,85 bilhão</em> por ano em banhos fora de casa.</h1>
         <p class="lead" id="hero-lead"></p>
         <div class="hero-cta">
           <a class="btn btn-main" href="#funil">Ver como o mercado se afunila</a>
@@ -109,10 +111,66 @@
     </div>
   </section>
 
+  <!-- MARKET SHARE -->
+  <section class="sec" id="mercado">
+    <div class="wrap">
+      <p class="eyebrow">5 · Market share do setor</p>
+      <h2>Quem divide o mercado de cabelos e onde a WEEK entra</h2>
+      <p class="sub">Como a WEEK ainda não vende, o market share é lido de duas formas: quem domina o mercado de cabelos hoje e quanto o banho fora de casa representa dentro dele.</p>
+      <div class="ms-grid">
+        <div class="panel">
+          <h3>Participação em shampoo no Brasil</h3>
+          <p class="fine">Euromonitor, publicado em 2014: o dado público mais recente com a divisão por empresa.</p>
+          <div id="ms-share"></div>
+        </div>
+        <div class="panel">
+          <h3>Peso do nicho da WEEK no setor</h3>
+          <p class="fine">TAM B2C (banho fora de casa) comparado às vendas do mercado de cabelos no Brasil em 2023.</p>
+          <div id="ms-niche"></div>
+        </div>
+      </div>
+      <div class="facts" id="ms-facts"></div>
+      <p class="reading" id="ms-reading"></p>
+      <details class="all-assump">
+        <summary>Premissas e fontes do market share</summary>
+        <div id="ms-assump"></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- CAGR -->
+  <section class="sec sec-alt" id="crescimento">
+    <div class="wrap">
+      <p class="eyebrow">6 · CAGR do setor</p>
+      <h2>O mercado está crescendo?</h2>
+      <p class="sub">CAGR é o crescimento médio por ano entre dois valores: (valor final ÷ valor inicial)<sup>1/anos</sup> − 1. O estudo olha três camadas: o setor de cabelos, o público e o canal da WEEK e o nicho B2B.</p>
+      <ol class="cagr-tiles" id="cagr-tiles"></ol>
+      <div class="panel">
+        <div class="cagr-head"><h3>Crescimento médio por ano, por série</h3><div class="legend" id="cagr-legend"></div></div>
+        <div id="cagr-bars"></div>
+        <p class="fine">Taxas recalculadas a partir dos valores inicial e final de cada fonte; todas conferem com o documento. Viagens e RevPAR comparam só dois anos seguidos (crescimento em 1 ano).</p>
+      </div>
+      <p class="reading" id="cagr-reading"></p>
+      <details class="all-assump">
+        <summary>Valores, fontes e confiança de cada série</summary>
+        <div id="cagr-assump"></div>
+      </details>
+      <details class="cagr">
+        <summary>Faça sua própria conta de CAGR</summary>
+        <form class="cagr-form" id="cagr-form">
+          <label for="cagr-vi">Valor inicial<input id="cagr-vi" name="vi" inputmode="decimal" autocomplete="off" value="28,2"></label>
+          <label for="cagr-vf">Valor final<input id="cagr-vf" name="vf" inputmode="decimal" autocomplete="off" value="43,6"></label>
+          <label for="cagr-n">Anos<input id="cagr-n" name="n" inputmode="decimal" autocomplete="off" value="5"></label>
+        </form>
+        <p class="cagr-out" id="cagr-out" aria-live="polite"></p>
+      </details>
+    </div>
+  </section>
+
   <!-- VALIDAR -->
   <section class="sec" id="validar">
     <div class="wrap">
-      <p class="eyebrow">5 · Próximo passo</p>
+      <p class="eyebrow">7 · Próximo passo</p>
       <h2>O que ainda precisa ser confirmado</h2>
       <p class="sub">Estas estimativas têm confiança baixa ou média e mexem direto no tamanho do mercado. A pesquisa quantitativa e a qualitativa vão confirmá-las.</p>
       <div class="checks" id="checks"></div>
@@ -126,20 +184,9 @@
   <!-- NOTAS -->
   <section class="sec sec-alt" id="notas">
     <div class="wrap">
-      <p class="eyebrow">6 · Como ler estes números</p>
+      <p class="eyebrow">8 · Como ler estes números</p>
       <h2>Antes de usar o estudo</h2>
       <div class="notes" id="notes"></div>
-      <details class="cagr">
-        <summary>Calculadora de crescimento (CAGR)</summary>
-        <p>O documento não traz série histórica, então não estimamos crescimento. Use a calculadora com números hipotéticos ou com dados que vierem a ser levantados.</p>
-        <p class="formula">CAGR = (valor final ÷ valor inicial)<sup>1/anos</sup> − 1</p>
-        <form class="cagr-form" id="cagr-form">
-          <label for="cagr-vi">Valor inicial (R$)<input id="cagr-vi" name="vi" inputmode="decimal" autocomplete="off" value="100.000"></label>
-          <label for="cagr-vf">Valor final (R$)<input id="cagr-vf" name="vf" inputmode="decimal" autocomplete="off" value="150.000"></label>
-          <label for="cagr-n">Anos<input id="cagr-n" name="n" inputmode="decimal" autocomplete="off" value="5"></label>
-        </form>
-        <p class="cagr-out" id="cagr-out" aria-live="polite"></p>
-      </details>
     </div>
   </section>
 </main>
@@ -150,7 +197,7 @@
       <img src="{{IMG:esag-white}}" alt="ESAG Júnior" width="700" height="437">
       <img src="{{IMG:week-white}}" alt="WEEK haircare" width="554" height="227">
     </div>
-    <p>Estudo desenvolvido pela ESAG Júnior para a WEEK Haircare. Fonte dos números: “Guia TAM, SAM, SOM, market share e CAGR — WEEK Haircare”. Valores teóricos de mercado: não são previsão de vendas.</p>
+    <p>Estudo desenvolvido pela ESAG Júnior para a WEEK Haircare. Fonte dos números: “Guia TAM, SAM, SOM, market share e CAGR — WEEK Haircare” (versão atualizada). Valores teóricos de mercado: não são previsão de vendas.</p>
     <a class="btn btn-foot" href="#inicio">Voltar ao início</a>
   </div>
 </footer>

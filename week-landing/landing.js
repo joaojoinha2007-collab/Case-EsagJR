@@ -56,7 +56,7 @@
   function renderHero() {
     var m = state.model, r = res(m), mm = M();
     var tam = r.levels.tam.total.valor;
-    var big = tam >= 1e9 ? 'R$ ' + nf(1, 1).format(tam / 1e9) + ' bilhão' : 'R$ ' + nf(0).format(tam / 1e6) + ' milhões';
+    var big = tam >= 1e9 ? 'R$ ' + nf(2, 2).format(tam / 1e9) + ' bilhão' : 'R$ ' + nf(0).format(tam / 1e6) + ' milhões';
     document.getElementById('hero-title').innerHTML = m === 'b2c'
       ? 'Um mercado potencial de <em>' + big + '</em> por ano em banhos fora de casa.'
       : 'Um mercado potencial de <em>' + big + '</em> por ano em kits para academias e hotéis.';
@@ -88,7 +88,7 @@
   var SEG_WHY = {
     academia: 'Estudos com praticantes indicam 2 a 4 treinos por semana; nem todo treino termina com banho, então o estudo usa 2 banhos por semana em 48 semanas. O percentual de 20% ainda não tem dado brasileiro e será validado na pesquisa quantitativa.',
     trabalho: 'A NR-24 exige chuveiro em atividades com sujeira ou material tóxico. Somando construção, parte da indústria e do agro, cerca de 10% a 15% dos CLT têm chuveiro; supondo que metade usa, ≈ 5%.',
-    viagem: '75,5% das viagens têm até 5 pernoites e a mediana fica em 2 a 3 noites; 1 banho por noite dá cerca de 3 banhos por viagem. Usamos 1 viajante por viagem para ser conservador, porque o IBGE conta viagens.',
+    viagem: 'Em 2024 os brasileiros fizeram 20,6 mi viagens, mas 4,7 mi foram bate-volta, sem banho fora de casa; ficam as 15,8 mi com pernoite. 75,5% delas têm até 5 pernoites e a mediana fica em 2 a 3 noites; 1 banho por noite dá cerca de 3 banhos por viagem. Usamos 1 viajante por viagem para ser conservador, porque o IBGE conta viagens.',
     academias: 'As academias do Sudeste são 45% das 55.068 do Brasil (Panorama Setorial 2026). Alunos por academia = 13 mi ÷ 55.068. O comprador é a academia; quem usa o kit é o aluno.',
     hoteis: 'Quartos do Cadastur (2º tri 2026) e ocupação média de 2025 do FOHB. A premissa de 1 kit por quarto ocupado por noite é estimativa própria e será validada com os hotéis.'
   };
@@ -276,7 +276,7 @@
 
   /* ---------- notas e CAGR ---------- */
   function renderNotes() {
-    var ids = ['captura', 'sobreposicao', 'comprador', 'escopos', 'arredondamento', 'proxies'];
+    var ids = ['captura', 'sobreposicao', 'comprador', 'escopos', 'cagr', 'nicho', 'share-antigo', 'arredondamento', 'proxies'];
     document.getElementById('notes').innerHTML = ids.map(function (id) {
       var n = D.NOTES.filter(function (x) { return x.id === id; })[0];
       return '<article><h3>' + esc(n.title) + '</h3><p>' + esc(n.text) + '</p></article>';
@@ -293,13 +293,86 @@
     if ([vi, vf, n].some(isNaN)) { out.textContent = 'Preencha os três campos com números (ex.: 150.000).'; return; }
     var r = C.cagr(vi, vf, n);
     if (!r.ok) { out.textContent = r.error; return; }
-    out.innerHTML = 'Crescimento médio de <b>' + (r.rate < 0 ? '−' : '') + nf(2, 2).format(Math.abs(r.rate) * 100) + '% ao ano</b> (valores hipotéticos, não são dados da WEEK).';
+    out.innerHTML = 'Crescimento médio de <b>' + (r.rate < 0 ? '−' : '') + nf(2, 2).format(Math.abs(r.rate) * 100) + '% ao ano</b>. Os valores iniciais são os do mercado de cabelos (Euromonitor, R$ bi de 2023 a 2028); troque pelos que quiser testar.';
+  }
+
+  /* ---------- market share ---------- */
+  var MS_COLOR = { unilever: 'var(--l-tam)', loreal: 'var(--teal)', pg: 'var(--amber)', demais: 'var(--neutral)' };
+  function srcList(keys) { return keys.map(function (k) { var x = D.SOURCES[k]; return x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener noreferrer">' + esc(x.label) + ' ↗</a>' : esc(x.label); }).join(' · '); }
+  function confM(id) {
+    var c = D.CONFIDENCE.filter(function (x) { return x.id === id; })[0];
+    return conf(id).replace('</span>Confiança', '</span><span title="' + esc(D.CONFIDENCE_MARKET[id]) + '">Confiança') + '</span>';
+  }
+  var marketStatic = false;
+  function renderMarket() {
+    var ms = D.MARKET_SHARE, calc = C.marketShare(res('b2c').levels.tam.total.valor), base = C.marketShare();
+    if (!marketStatic) {
+      marketStatic = true;
+      document.getElementById('ms-share').innerHTML = '<div class="ms-bar" role="img" aria-label="' + esc(ms.companies.map(function (c) { return c.name + ' ' + pct(c.share); }).join(', ')) + '">' +
+        ms.companies.map(function (c) { return '<i style="flex-basis:' + (c.share * 100) + '%;background:' + MS_COLOR[c.id] + '">' + (c.share > 0.08 ? pct(c.share) : '') + '</i>'; }).join('') + '</div>' +
+        '<ul class="ms-list">' + ms.companies.map(function (c) {
+          return '<li><span class="sw" style="background:' + MS_COLOR[c.id] + '"></span><span><b>' + esc(c.name) + '</b><small>' + esc(c.brands) + '</small></span><span class="ms-pct">' + pct(c.share) + '</span></li>';
+        }).join('') + '</ul>' +
+        '<p class="ms-sum"><b>' + pct(base.top3) + '</b> nas mãos das 3 maiores · concentração <b>' + esc(ms.reference.concentration.toLowerCase()) + '</b> (Mordor, 2026)</p>' +
+        '<p class="warn-inline">Referência histórica: desde 2014 o Elseve, da L’Oréal, passou de 3ª para 1ª marca de cabelos do Brasil (2025). Os percentuais atuais por empresa são pagos (Euromonitor, NielsenIQ).</p>';
+      var facts = [
+        ['Marca líder em cabelos (2025)', 'Elseve (L’Oréal)', 'Passou de 3ª para 1ª marca e dobrou a participação em cinco anos, segundo a própria L’Oréal.'],
+        ['Shampoo em 2025', '+3,6% em valor', '−2,3% em volume (NielsenIQ via ABAD): o consumidor paga mais por produto.'],
+        ['Condicionador em 2025', '+6% em valor', '−1% em volume (NielsenIQ via ABAD): a mesma tendência de trocar volume por valor.'],
+        ['Concorrentes diretos', 'Sem dado público', 'We Green e Naturys Eco vendem sachês para hotéis e não divulgam faturamento.']
+      ];
+      document.getElementById('ms-facts').innerHTML = facts.map(function (f) { return '<article class="fact"><span>' + esc(f[0]) + '</span><b>' + esc(f[1]) + '</b><p>' + esc(f[2]) + '</p></article>'; }).join('');
+      document.getElementById('ms-reading').innerHTML = '<b>Leitura para a WEEK:</b> o mercado de cabelos é grande e dominado por três empresas de massa, que vendem para o banho em casa. O banho fora de casa equivale a cerca de 1/15 do setor e hoje é atendido por produtos comuns, amenities de hotel e sachês genéricos. A WEEK não disputa preço nem distribuição com as líderes: ela entra num nicho que nenhuma delas atende com produto premium.';
+      var lastG = '';
+      document.getElementById('ms-assump').innerHTML = ms.assumptions.map(function (a) {
+        var head = a.group !== lastG ? '<p class="a-group">' + esc(a.group) + '</p>' : ''; lastG = a.group;
+        return head + '<div class="a-row"><h4>' + esc(a.name) + '</h4><span class="a-val">' + esc(a.value) + '</span><p>' + esc(a.logic) + '</p><div class="a-meta">' + confM(a.confidence) + '<span>Fonte: ' + srcList(a.sources) + '</span><span>' + esc(a.validation) + '</span></div></div>';
+      }).join('');
+    }
+    var sim = Math.abs(calc.tamB2C - base.tamB2C) > 1;
+    var w = Math.max(0.8, Math.min(100, calc.nicheShare * 100));
+    document.getElementById('ms-niche').innerHTML =
+      '<div class="niche"><div class="niche-row"><span>Mercado de cabelos · Brasil, 2023</span><b>R$ ' + nf(1, 1).format(ms.hairMarket.value / 1e9) + ' bi</b></div><div class="niche-track"><i style="width:100%"></i></div>' +
+      '<div class="niche-row"><span>TAM B2C da WEEK · banho fora de casa' + (sim ? ' (cenário simulado)' : '') + '</span><b>R$ ' + nf(2, 2).format(calc.tamB2C / 1e9) + ' bi</b></div><div class="niche-track"><i class="tam" style="width:' + w.toFixed(2) + '%"></i></div></div>' +
+      '<p class="niche-big"><b>' + nf(1, 1).format(calc.nicheShare * 100) + '%</b><span>do mercado de cabelos, cerca de 1/' + nf(0).format(Math.round(calc.oneIn)) + ' do setor' + (sim ? '' : ' (o PDF arredonda para 6,6%: 1,85 ÷ 28,2)') + '</span></p>' +
+      '<p class="fine">Ordem de grandeza: o TAM é um potencial teórico a R$ 3,50 por lavagem e só inclui shampoo e condicionador; o mercado de cabelos são vendas efetivas e inclui tintura, tratamento e finalizadores.</p>';
+  }
+
+  /* ---------- CAGR ---------- */
+  var LAYER_COLOR = { 'Setor': 'var(--neutral)', 'Público': 'var(--l-tam)', 'Canal': 'var(--teal)', 'B2B': 'var(--amber)' };
+  function fmtV(row, v) {
+    if (row.unit === '%') return nf(1, 1).format(v * 100) + '%';
+    if (row.unit === 'R$' && v < 1e4) return F.brl(v);
+    if (row.unit === 'R$' || row.unit === 'US$') return row.unit + ' ' + nf(2).format(v / 1e9) + ' bi';
+    return v >= 1e6 ? nf(2).format(v / 1e6) + ' mi' : nf(0).format(v);
+  }
+  function renderCagrSection() {
+    var rows = C.cagrRows();
+    document.getElementById('cagr-tiles').innerHTML = D.CAGR.summary.map(function (t, k) {
+      var layer = ['Setor', 'Público', 'Canal', 'B2B'][k];
+      return '<li style="--c:' + LAYER_COLOR[layer] + '"><span>' + esc(t.label) + '</span><b>' + esc(t.value) + '</b></li>';
+    }).join('');
+    document.getElementById('cagr-legend').innerHTML = Object.keys(LAYER_COLOR).map(function (k) { return '<span><i style="background:' + LAYER_COLOR[k] + '"></i>' + k + '</span>'; }).join('');
+    var max = Math.max.apply(null, rows.map(function (x) { return x.rate; }));
+    var sorted = rows.slice().sort(function (a, b) { return b.rate - a.rate; });
+    document.getElementById('cagr-bars').innerHTML = '<ul class="cbars">' + sorted.map(function (x) {
+      var row = x.row, layer = row.layer || 'Setor', one = x.years === 1;
+      return '<li><span class="cb-name"><b>' + esc(row.name) + '</b><small>' + row.yi + '–' + row.yf + ' · ' + esc(row.layer ? row.layer : 'Setor') + (row.unit === 'US$' ? ' · em dólar' : row.unit === 'R$' && row.vi > 1e4 ? ' · em reais' : '') + '</small></span>' +
+        '<span class="cb-track"><i style="width:' + (x.rate / max * 100).toFixed(1) + '%;background:' + LAYER_COLOR[layer] + '"></i></span>' +
+        '<span class="cb-val"><b>' + nf(1, 1).format(x.rate * 100) + '%</b><small>' + (one ? 'em 1 ano' : 'ao ano') + '</small></span></li>';
+    }).join('') + '</ul>';
+    document.getElementById('cagr-reading').innerHTML = '<b>Leitura para a WEEK:</b> ' + esc(D.CAGR.reading);
+    document.getElementById('cagr-assump').innerHTML = rows.map(function (x) {
+      var row = x.row;
+      return '<div class="a-row"><h4>' + esc(row.name) + (row.layer ? '' : ' (setor)') + '</h4><span class="a-val">' + fmtV(row, row.vi) + ' → ' + fmtV(row, row.vf) + '</span><p>' + esc(row.note) + ' CAGR = (' + fmtV(row, row.vf) + ' ÷ ' + fmtV(row, row.vi) + ')<sup>1/' + x.years + '</sup> − 1 = <b>' + nf(1, 1).format(x.rate * 100) + '%</b>.</p>' +
+        '<div class="a-meta">' + confM(row.confidence) + '<span>Fonte: ' + srcList(row.sources) + '</span><span>' + esc(row.validation) + '</span></div></div>';
+    }).join('');
   }
 
   /* ---------- orquestração ---------- */
   var raf = 0, parts = {};
   function render(list) {
-    (list || ['hero', 'segs', 'funnel', 'sim', 'compare', 'assump']).forEach(function (p) { parts[p] = true; });
+    (list || ['hero', 'segs', 'funnel', 'sim', 'compare', 'assump', 'market']).forEach(function (p) { parts[p] = true; });
     if (!raf) raf = requestAnimationFrame(function () {
       raf = 0; var p = parts; parts = {};
       try {
@@ -309,6 +382,7 @@
         if (p.sim) { if (simModel !== state.model) buildSim(); else syncSim(); renderSimOut(); }
         if (p.compare) renderCompare();
         if (p.assump) renderAssump();
+        if (p.market) renderMarket();
       } catch (e) { if (window.console) console.error(e); }
     });
   }
@@ -347,7 +421,7 @@
     if (C.validateInputs(m, next).length) return;
     state.inputs[m] = next; state.last[m] = { key: k };
     render(['sim']);
-    clearTimeout(simForm._t); simForm._t = setTimeout(function () { render(['hero', 'segs', 'funnel', 'compare']); }, 180);
+    clearTimeout(simForm._t); simForm._t = setTimeout(function () { render(['hero', 'segs', 'funnel', 'compare', 'market']); }, 180);
   });
   var cf = document.getElementById('cagr-form');
   cf.addEventListener('input', renderCagr); cf.addEventListener('submit', function (e) { e.preventDefault(); });
@@ -362,6 +436,6 @@
   });
   window.addEventListener('scroll', function () { tip.hidden = true; }, { passive: true });
 
-  renderNotes(); renderCagr();
+  renderNotes(); renderCagr(); renderCagrSection();
   render();
 })();

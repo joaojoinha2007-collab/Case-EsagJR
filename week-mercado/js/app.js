@@ -822,7 +822,7 @@
       '<div><span>Faturamento anual potencial</span><strong>' + brlMi(t.valor) + '</strong><small>' + segs.map(function (x) { return brlMi(x.valor); }).join(' + ') + '</small></div>' +
       '<div><span>' + (m === 'b2c' ? 'Pessoas atingidas (máximo)' : 'Pessoas atingidas (noite média)') + '</span><strong>≈ ' + qty(t.pessoas) + '</strong><small>' + (m === 'b2c' ? 'Pode haver sobreposição entre segmentos' : 'Usuários + hóspedes por noite') + '</small></div>' +
       (m === 'b2b' ? '<div><span>Estabelecimentos atingidos</span><strong>' + nf(0).format(t.estabelecimentos) + '</strong><small>' + nf(0).format(r.inputs.academiasSudeste) + ' academias + ' + nf(0).format(r.inputs.meiosHospedagemSudeste) + ' meios de hospedagem</small></div>' : '') +
-      '</div><p class="fine">Valores do PDF (cenário-base): ' + (m === 'b2c' ? '541,8 mi lavagens · R$ 1.896,3 mi · ≈ 25,6 mi pessoas.' : '183,8 mi kits · ≈ R$ 551,5 mi · 32.341 estabelecimentos · ≈ 1,37 mi pessoas.') + ' Somamos ' + unitOf(m) + ', e não pessoas, porque a mesma pessoa pode aparecer em mais de um segmento.</p></div>';
+      '</div><p class="fine">Valores do PDF (cenário-base): ' + (m === 'b2c' ? '527,4 mi lavagens · R$ 1,85 bi · ≈ 20,8 mi pessoas.' : '183,8 mi kits · ≈ R$ 551,5 mi · 32.341 estabelecimentos · ≈ 1,37 mi pessoas.') + ' Somamos ' + unitOf(m) + ', e não pessoas, porque a mesma pessoa pode aparecer em mais de um segmento.</p></div>';
     document.getElementById('calc-body').innerHTML = html;
   }
 
@@ -871,7 +871,7 @@
       }).join('') + '</tr>';
     }).join('');
     html += '<div class="card"><h3 class="h4">Resultado por segmento</h3><div class="table-scroll"><table class="seg-table"><caption class="sr-only">TAM, SAM e SOM por segmento</caption><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
-    if (m === 'b2c') html += '<p class="fine">Conferência do PDF: TAM total × fator do SAM = ' + brlMi(r.levels.tam.total.valor) + ' × ' + pctS(fr.factorSummary.sam) + ' = ' + brlMi(r.levels.sam.total.valor) + '; SAM × ' + pctS(i.pesoSP) + ' = ' + brlMi(r.levels.som.total.valor) + '. Resultados de referência do PDF (todos os segmentos): SAM ≈ R$ 185,5 mi e SOM ≈ R$ 97,2 mi.</p>';
+    if (m === 'b2c') html += '<p class="fine">Conferência do PDF: TAM total × fator do SAM = ' + brlMi(r.levels.tam.total.valor) + ' × ' + pctS(fr.factorSummary.sam) + ' = ' + brlMi(r.levels.sam.total.valor) + '; SAM × ' + pctS(i.pesoSP) + ' = ' + brlMi(r.levels.som.total.valor) + '. Resultados de referência do PDF (todos os segmentos): SAM ≈ R$ 180,7 mi e SOM ≈ R$ 94,6 mi.</p>';
     else html += '<p class="fine">Academias do SAM: academias de SP (13.767) × 31% premium ≈ 4.268; do SOM: × 3,6% ≈ 154. Hotéis do SAM (1.893) e de Campinas (41) são contagens do Cadastur e não variam no simulador. Resultados de referência do PDF (todos os segmentos): SAM ≈ R$ 155,8 mi (6.161 estabelecimentos) e SOM ≈ R$ 5,61 mi (195 estabelecimentos).</p>';
     html += '</div><div class="callout callout-warn" role="note">' + icon('alert') + '<div><strong>O SOM é um recorte, não uma previsão de vendas.</strong> Ele representa todo o mercado do SAM no recorte “' + esc(M.levels.som.geo) + '” antes da aplicação da taxa de captura comercial da WEEK.</div></div>';
     document.getElementById('filter-body').innerHTML = html;
@@ -1199,7 +1199,7 @@
     var diffs = [];
     ['b2c', 'b2b'].forEach(function (m) { C.reconcile(BASE[m]).filter(function (x) { return x.status !== 'confere'; }).forEach(function (x) { diffs.push({ m: m, x: x }); }); });
     html += '<article class="card note note-wide" id="nota-auditoria"><span class="model-pill">Auditoria</span><h3 class="h5">Diferenças encontradas ao recalcular o PDF</h3>' +
-      '<p>O recálculo independente reproduziu todos os totais do documento. As diferenças abaixo vêm do arredondamento de valores intermediários no PDF (por exemplo, 2,01 mi viagens e 6,0 mi lavagens no SAM de Viagem) e não alteram as conclusões. Os valores originais do PDF foram mantidos como referência.</p>' +
+      '<p>O recálculo independente reproduziu todos os totais do documento. As diferenças abaixo vêm do arredondamento de valores intermediários no PDF (por exemplo, 254 mil pessoas e 1,55 mi viagens no SAM) e não alteram as conclusões. Os valores originais do PDF foram mantidos como referência.</p>' +
       (diffs.length ? '<ul class="diff-list">' + diffs.map(function (d) {
         return '<li><span class="model-pill model-pill-' + d.m + '">' + d.m.toUpperCase() + '</span> ' + LEVEL_NAMES[d.x.level] + ' · ' + esc(d.x.segment === 'total' ? 'Total' : segName(d.m, d.x.segment)) + ' · ' + METRIC_NAMES[d.x.metric] +
           ': PDF ' + refMetricText(d.x.metric, d.x.ref) + ' · recálculo ' + refMetricText(d.x.metric, d.x.calc) + ' (' + F.signedPct(d.x.diffRel, 2) + ')</li>';

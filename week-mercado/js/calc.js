@@ -379,7 +379,39 @@
     return out;
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Market share (seção 3 do PDF)                                       */
+  /* tamB2C: TAM B2C do cenário atual (padrão: cenário-base)             */
+  /* ------------------------------------------------------------------ */
+  function marketShare(tamB2C) {
+    var ms = DATA.MARKET_SHARE;
+    var tam = tamB2C == null ? computeB2C().levels.tam.total.valor : tamB2C;
+    var top3 = ms.companies.filter(function (c) { return c.id !== 'demais'; }).reduce(function (a, c) { return a + c.share; }, 0);
+    return {
+      top3: top3,
+      others: 1 - top3,
+      hairMarket: ms.hairMarket.value,
+      tamB2C: tam,
+      nicheShare: ms.hairMarket.value > 0 ? tam / ms.hairMarket.value : null,
+      oneIn: tam > 0 ? ms.hairMarket.value / tam : null       // "cerca de 1/15 do setor"
+    };
+  }
+
+  /* CAGR de cada série do PDF, recalculado e conferido com a taxa publicada */
+  function cagrRows() {
+    var c = DATA.CAGR;
+    return c.sector.concat(c.drivers).map(function (row) {
+      var n = row.yf - row.yi;
+      var r = cagr(row.vi, row.vf, n);
+      var rate = r.ok ? r.rate : null;
+      var diff = rate == null ? null : rate - row.cagrPDF;
+      return { row: row, years: n, rate: rate, multiple: r.ok ? r.multiple : null, diff: diff, matches: diff != null && Math.abs(diff) < 0.0006 };
+    });
+  }
+
   return {
+    marketShare: marketShare,
+    cagrRows: cagrRows,
     LEVELS: LEVELS,
     INPUT_SPECS: INPUT_SPECS,
     TOLERANCE: { ok: TOL_OK, rounding: TOL_ROUND },

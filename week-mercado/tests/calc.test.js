@@ -18,8 +18,9 @@ test('B2C — TAM por segmento reproduz o PDF exatamente', () => {
   const s = r.levels.tam.segments;
   close(s.academia.pessoas, 2.6e6); close(s.academia.volume, 249.6e6); close(s.academia.valor, 873.6e6);
   close(s.trabalho.pessoas, 2.4e6); close(s.trabalho.volume, 230.4e6); close(s.trabalho.valor, 806.4e6);
-  close(s.viagem.pessoas, 20.6e6); close(s.viagem.volume, 61.8e6); close(s.viagem.valor, 216.3e6);
-  close(r.levels.tam.total.volume, 541.8e6); close(r.levels.tam.total.valor, 1896.3e6); close(r.levels.tam.total.pessoas, 25.6e6);
+  close(s.viagem.pessoas, 15.8e6); close(s.viagem.volume, 47.4e6); close(s.viagem.valor, 165.9e6);
+  close(r.levels.tam.total.volume, 527.4e6); close(r.levels.tam.total.valor, 1845.9e6); close(r.levels.tam.total.pessoas, 20.8e6);
+  within(r.levels.tam.total.valor, 1.85e9, 0.003); // o PDF publica o total arredondado: R$ 1,85 bi
 });
 
 test('B2C — fator do SAM = 41,8% × 31% × 75,5% ≈ 9,78%', () => {
@@ -28,12 +29,14 @@ test('B2C — fator do SAM = 41,8% × 31% × 75,5% ≈ 9,78%', () => {
   assert.equal(Math.round(r.factorSummary.sam * 10000) / 100, 9.78);
 });
 
-test('B2C — SAM e SOM totais conferem com o PDF (≈ R$ 185,5 mi e ≈ R$ 97,2 mi)', () => {
+test('B2C — SAM e SOM totais conferem com o PDF (≈ R$ 180,7 mi e ≈ R$ 94,6 mi)', () => {
   const r = C.computeB2C();
-  within(r.levels.sam.total.valor, 185.5e6, 0.001);
-  within(r.levels.som.total.valor, 97.2e6, 0.001);
-  within(r.levels.sam.total.volume, 53.0e6, 0.005);
-  within(r.levels.som.total.volume, 27.8e6, 0.005);
+  within(r.levels.sam.total.valor, 180.7e6, 0.001);
+  within(r.levels.som.total.valor, 94.6e6, 0.001);
+  within(r.levels.sam.total.volume, 51.6e6, 0.005);
+  within(r.levels.som.total.volume, 27.0e6, 0.005);
+  within(r.levels.sam.segments.viagem.valor, 16.2e6, 0.005);
+  within(r.levels.som.segments.viagem.valor, 8.5e6, 0.005);
   close(r.levels.som.total.valor, r.levels.sam.total.valor * 0.524);
 });
 
@@ -227,4 +230,28 @@ test('Formatação brasileira', () => {
   assert.equal(F.compact(2.6e6), '2,6 mi');
   assert.equal(F.signedPct(0.1), '+10,0%');
   assert.equal(F.brl(3.5).replace(/\s/g, ' '), 'R$ 3,50');
+});
+
+/* ------------------------- Market share e CAGR (seções 3 e 4) ------------------------- */
+test('Market share: 3 maiores = 65,9%, demais = 34,1%, peso do nicho ≈ 6,6%', () => {
+  const ms = C.marketShare();
+  close(ms.top3, 0.659, 1e-9);
+  close(ms.others, 0.341, 1e-9);
+  assert.equal((ms.nicheShare * 100).toFixed(1), '6.5'); // 1.845,9 ÷ 28.200 = 6,55% (o PDF usa 1,85 ÷ 28,2 = 6,6%)
+  within(ms.nicheShare, 0.066, 0.01);
+  assert.ok(ms.oneIn > 14 && ms.oneIn < 16, 'cerca de 1/15 do setor');
+});
+
+test('Market share acompanha o TAM simulado', () => {
+  const i = C.baseInputs('b2c'); i.preco = 7;
+  const tam = C.computeB2C(i).levels.tam.total.valor;
+  close(C.marketShare(tam).nicheShare, C.marketShare().nicheShare * 2);
+});
+
+test('CAGR: todas as taxas do PDF são reproduzidas', () => {
+  const rows = C.cagrRows();
+  assert.equal(rows.length, 9);
+  rows.forEach((x) => assert.ok(x.matches, `${x.row.id}: ${x.rate} vs ${x.row.cagrPDF}`));
+  close(rows.find((x) => x.row.id === 'euromonitor').rate, Math.pow(43.6 / 28.2, 1 / 5) - 1);
+  assert.equal(rows.find((x) => x.row.id === 'viagens').years, 1);
 });

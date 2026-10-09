@@ -37,7 +37,18 @@
     cetic: { label: 'Cetic.br — TIC Domicílios 2024', url: 'https://cetic.br/pt/tics/domicilios/2024/individuos/H2/' },
     cadastur: { label: 'Ministério do Turismo, Cadastur (2º tri 2026)', url: 'https://dados.turismo.gov.br/dataset/meios-de-hospedagem' },
     fohb: { label: 'FOHB, InFOHB nº 221 (dez/2025)', url: 'https://fohb.com.br/wp-content/uploads/2026/01/InFOHB-221-Dezembro.pdf' },
-    propria: { label: 'Estimativa própria', url: null }
+    propria: { label: 'Estimativa própria', url: null },
+    happi: { label: 'Happi (Euromonitor)', url: 'https://www.happi.com/brazil-dominates-hair-care-in-latin-america/' },
+    brazilJournal: { label: 'Brazil Journal', url: 'https://braziljournal.com/a-estrategia-da-loreal-para-lutar-pela-lideranca-no-brasil/' },
+    opovo: { label: 'O POVO', url: 'https://www.opovo.com.br/noticias/brasil/2026/03/24/do-rosto-aos-fios-l-oreal-aposta-em-pesquisa-e-inovacoes.html' },
+    abad: { label: 'ABAD (NielsenIQ)', url: 'https://distribuicao.abad.com.br/revista-digital/materias/pesquisa-categorias-em-destaque/' },
+    mordor: { label: 'Mordor Intelligence (2026)', url: 'https://www.mordorintelligence.com/industry-reports/brazil-hair-care-market-industry' },
+    abre: { label: 'ABRE (Euromonitor)', url: 'https://www.abre.org.br/inovacao/modelos-de-negocio/brasil-fatura-r-282-bi-em-2023-e-sobe-para-o-terceiro-lugar-em-hair-care/' },
+    imarc: { label: 'IMARC', url: 'https://www.imarcgroup.com/brazil-hair-care-market' },
+    estadoMinas: { label: 'Panorama 2024 (Estado de Minas)', url: 'https://www.em.com.br/mundo-corporativo/2025/03/7086218-numero-de-academias-no-brasil-quase-triplica-em-10-anos.html' },
+    worldpanel: { label: 'Worldpanel, Brand Footprint 2026 (Giro News)', url: 'https://gironews.com/varejo-digital/e-commerce-ja-alcanca-454-dos-lares-brasileiros-aponta-estudo/' },
+    allied: { label: 'Allied Market Research', url: 'https://www.alliedmarketresearch.com/hotel-toiletries-market' },
+    secao1: { label: 'Seção 1 deste documento (TAM B2C)', url: null }
   };
 
   /* ------------------------------------------------------------------ */
@@ -68,7 +79,7 @@
       trabalhadoresCLT: 48e6,     // trabalhadores com carteira assinada
       pctBanhoTrabalho: 0.05,     // % que toma banho no trabalho
       banhosAno: 96,              // banhos/ano fora de casa (academia e trabalho usam a mesma frequência)
-      viagens: 20.6e6,            // viagens com pernoite no ano
+      viagens: 15.8e6,            // viagens com pernoite no ano (2024; exclui 4,7 mi viagens sem pernoite)
       viajantesPorViagem: 1,      // premissa conservadora: IBGE conta viagens, não pessoas
       banhosPorViagem: 3,
       preco: 3.50,                // R$ por kit de uma lavagem (varejo)
@@ -110,20 +121,20 @@
       tam: {
         academia: { pessoas: 2.6e6, volume: 249.6e6, valor: 873.6e6 },
         trabalho: { pessoas: 2.4e6, volume: 230.4e6, valor: 806.4e6 },
-        viagem: { pessoas: 20.6e6, volume: 61.8e6, valor: 216.3e6 },
-        total: { pessoas: 25.6e6, volume: 541.8e6, valor: 1896.3e6 }
+        viagem: { pessoas: 15.8e6, volume: 47.4e6, valor: 165.9e6 },
+        total: { pessoas: 20.8e6, volume: 527.4e6, valor: 1.85e9 }
       },
       sam: {
         academia: { pessoas: 254e3, volume: 24.4e6, valor: 85.4e6 },
         trabalho: { pessoas: 235e3, volume: 22.6e6, valor: 79.1e6 },
-        viagem: { pessoas: 2.01e6, volume: 6.0e6, valor: 21.0e6 },
-        total: { pessoas: 2.50e6, volume: 53.0e6, valor: 185.5e6 }
+        viagem: { pessoas: 1.55e6, volume: 4.64e6, valor: 16.2e6 },
+        total: { pessoas: 2.04e6, volume: 51.6e6, valor: 180.7e6 }
       },
       som: {
         academia: { pessoas: 133.1e3, volume: 12.8e6, valor: 44.7e6 },
         trabalho: { pessoas: 123.1e3, volume: 11.8e6, valor: 41.4e6 },
-        viagem: { pessoas: 1.05e6, volume: 3.2e6, valor: 11.1e6 },
-        total: { pessoas: 1.31e6, volume: 27.8e6, valor: 97.2e6 }
+        viagem: { pessoas: 812e3, volume: 2.44e6, valor: 8.5e6 },
+        total: { pessoas: 1.07e6, volume: 27.0e6, valor: 94.6e6 }
       }
     },
     b2b: {
@@ -218,8 +229,8 @@
       logic: 'A NR-24 exige chuveiro em atividades com sujidade ou material tóxico. Construção ≈ 2,8 mi (5,8% dos CLT); somando parte da indústria e do agro, ~10–15% têm chuveiro disponível; supondo que metade usa, ≈ 5%.',
       sources: ['nr24', 'caged'], sourceNote: 'Estimativa a partir de MTE – NR-24 (2022) e Novo CAGED (2025)', confidence: 'baixa-media', status: 'validar',
       validation: '“Você toma banho no trabalho? Quantas vezes por semana?”' },
-    { id: 'b2c-viagens', model: 'b2c', level: 'TAM', segment: 'Viagem', key: 'viagens', name: 'Viagens com pernoite (no ano)', value: '20,6 mi',
-      logic: 'Total de viagens com pernoite realizadas pelos moradores do Brasil no ano.',
+    { id: 'b2c-viagens', model: 'b2c', level: 'TAM', segment: 'Viagem', key: 'viagens', name: 'Viagens com pernoite (no ano)', value: '15,8 mi',
+      logic: 'Viagens com pernoite realizadas pelos moradores do Brasil em 2024. O total de viagens foi 20,6 mi, mas 4,7 mi foram sem pernoite (ida e volta no mesmo dia) e ficam de fora, porque nelas não há banho fora de casa.',
       sources: ['ibgeTurismo2024'], confidence: 'alta', status: 'oficial',
       validation: 'Dado oficial, não precisa validar.' },
     { id: 'b2c-banho-viagem', model: 'b2c', level: 'TAM', segment: 'Viagem', key: 'banhosPorViagem', name: 'Banho por viagem', value: '3',
@@ -311,7 +322,7 @@
   /* ------------------------------------------------------------------ */
   var NOTES = [
     { id: 'sobreposicao', model: 'b2c', title: 'Dupla contagem de pessoas no B2C',
-      text: 'Uma mesma pessoa pode treinar, tomar banho no trabalho e viajar. Por isso o PDF soma lavagens (e não pessoas) e trata o total de “pessoas atingidas” (≈ 25,6 mi no TAM) como número máximo, não como consumidores únicos. No segmento Viagem a unidade é a viagem, não a pessoa.' },
+      text: 'Uma mesma pessoa pode treinar, tomar banho no trabalho e viajar. Por isso o PDF soma lavagens (e não pessoas) e trata o total de “pessoas atingidas” (≈ 20,8 mi no TAM) como número máximo, não como consumidores únicos. No segmento Viagem a unidade é a viagem, não a pessoa.' },
     { id: 'captura', model: 'ambos', title: 'O SOM ainda não tem taxa de captura',
       text: 'O SOM apresentado é o recorte geográfico definido no estudo (SP no B2C, Campinas no B2B) antes da aplicação de uma taxa de captura comercial. Não é previsão de vendas nem faturamento da WEEK. Quando a taxa for definida, basta multiplicar: Fator do SOM × taxa de captura.' },
     { id: 'estimativas', model: 'ambos', title: 'Frequência de uso e preço ainda são estimativas',
@@ -325,14 +336,96 @@
     { id: 'proxies', model: 'ambos', title: 'Indicadores indiretos (proxies)',
       text: 'Alguns filtros usam aproximações: o peso populacional do Sudeste é aplicado também a trabalhadores e viagens; o perfil “premium” das academias usa como referência o peso das classes A e B (31%); alunos por academia usam a média nacional (13 mi ÷ 55.068).' },
     { id: 'arredondamento', model: 'ambos', title: 'Arredondamentos',
-      text: 'O PDF arredonda valores intermediários (por exemplo, 254 mil, 6,0 mi) antes de seguir a conta. Esta plataforma recalcula tudo com precisão total e só arredonda na exibição. Por isso alguns valores podem diferir em décimos do PDF; as diferenças estão listadas no painel “Verificação de consistência”.' },
+      text: 'O PDF arredonda valores intermediários (por exemplo, 254 mil pessoas, 1,55 mi viagens) antes de seguir a conta. O próprio documento registra que a soma dos segmentos do SAM B2C (R$ 180,7 mi) e a conferência TAM × fator do SAM (R$ 180,5 mi) diferem R$ 0,2 mi por arredondamento. Esta plataforma recalcula tudo com precisão total e só arredonda na exibição. Por isso alguns valores podem diferir em décimos do PDF; as diferenças estão listadas no painel “Verificação de consistência”.' },
     { id: 'escopos', model: 'ambos', title: 'B2C e B2B não são somáveis',
       text: 'Os recortes geográficos são diferentes (TAM B2C = Brasil; TAM B2B = Sudeste), os preços são diferentes e parte do público pode se sobrepor (o aluno da academia premium aparece nos dois modelos). Os números de B2C e B2B devem ser lidos como cenários alternativos de entrada no mercado, não somados.' },
-    { id: 'cagr', model: 'ambos', title: 'CAGR sem série histórica',
-      text: 'O título do documento menciona CAGR, mas os dados não trazem série temporal nem taxa de crescimento calculada. A plataforma explica o conceito e oferece uma calculadora com valores hipotéticos informados pelo usuário — nenhuma taxa de crescimento foi inventada.' }
+    { id: 'cagr', model: 'ambos', title: 'CAGR do setor não é CAGR da WEEK',
+      text: 'As taxas de crescimento do documento medem o setor de cabelos, o público (academias e alunos), o canal (compras online), as viagens, a hotelaria e as amenities. Não são projeção de vendas nem de TAM da WEEK. Projeções em reais incluem a inflação; em dólar, mostram um crescimento mais próximo do real.' },
+    { id: 'nicho', model: 'ambos', title: 'Peso do nicho compara grandezas diferentes',
+      text: 'O peso do nicho (6,6%) divide o TAM B2C, que é um mercado potencial teórico calculado a R$ 3,50 por lavagem, pelas vendas efetivas do mercado de cabelos em 2023 (R$ 28,2 bi). Serve como ordem de grandeza, não como participação de mercado da WEEK.' },
+    { id: 'share-antigo', model: 'ambos', title: 'Participação por empresa é de 2014',
+      text: 'A divisão de shampoo entre Unilever, L’Oréal e P&G (65,9% juntas) vem da Euromonitor publicada em 2014, o dado público mais recente por empresa. Os dados atuais são pagos (Euromonitor, NielsenIQ); desde então o Elseve, da L’Oréal, passou a 1ª marca de cabelos do Brasil (2025).' }
   ];
 
+  /* ------------------------------------------------------------------ */
+  /* Seção 3 do PDF — Market share do setor                              */
+  /* ------------------------------------------------------------------ */
+  var MARKET_SHARE = {
+    year: 2014,
+    companies: [
+      { id: 'unilever', name: 'Unilever', brands: 'Seda, Dove, TRESemmé', rank: '1ª', share: 0.407 },
+      { id: 'loreal', name: "L'Oréal", brands: 'Elseve, Garnier Fructis', rank: '2ª', share: 0.159 },
+      { id: 'pg', name: 'P&G', brands: 'Pantene, Head & Shoulders', rank: '3ª', share: 0.093 },
+      { id: 'demais', name: 'Demais empresas', brands: 'Natura &Co, Grupo Boticário, Colgate-Palmolive, Salon Line e marcas regionais', rank: '–', share: 0.341 }
+    ],
+    reference: { top3: 0.659, others: 0.341, concentration: 'Média' },
+    hairMarket: { value: 28.2e9, year: 2023 },            // mercado de cabelos no Brasil (R$)
+    reference_niche: { tam: 1.85e9, share: 0.066 },        // valores publicados no PDF
+    assumptions: [
+      { id: 'ms-top3', group: 'Estrutura competitiva', name: 'Participação das 3 maiores em shampoo', value: '65,9%',
+        logic: 'Unilever 40,7% + L’Oréal 15,9% + P&G 9,3%, segundo a Euromonitor (publicado em 2014).', sources: ['happi'], confidence: 'baixa-media',
+        validation: 'Dado antigo: buscar a versão atual no Euromonitor Passport ou na NielsenIQ (pagos), que bibliotecas universitárias costumam assinar.' },
+      { id: 'ms-lider', group: 'Estrutura competitiva', name: 'Marca líder em cabelos (2025)', value: 'Elseve (L’Oréal)',
+        logic: 'Segundo a L’Oréal, o Elseve passou de 3ª para 1ª marca de cabelos do Brasil em 2025 e dobrou a participação em cinco anos. A empresa não divulga o percentual.', sources: ['brazilJournal', 'opovo'], confidence: 'media',
+        validation: 'Confirmar com NielsenIQ ou Euromonitor quando houver acesso; é informação da própria empresa.' },
+      { id: 'ms-vendas', group: 'Estrutura competitiva', name: 'Vendas de shampoo e condicionador (2025)', value: '+3,6% e +6% em valor',
+        logic: 'Shampoo: +3,6% em valor e −2,3% em volume. Condicionador e outros pós-shampoo: +6% em valor e −1% em volume. O consumidor está pagando mais por produto.', sources: ['abad'], confidence: 'media-alta',
+        validation: 'Acompanhar na próxima edição da pesquisa ABAD/NielsenIQ.' },
+      { id: 'ms-concentracao', group: 'Estrutura competitiva', name: 'Concentração do mercado de cabelos', value: 'Média',
+        logic: 'P&G, L’Oréal, Johnson & Johnson, Natura &Co e Unilever são as maiores empresas do setor (sem percentuais públicos).', sources: ['mordor'], confidence: 'media',
+        validation: 'Comparar com a Euromonitor quando houver acesso.' },
+      { id: 'ms-diretos', group: 'Estrutura competitiva', name: 'Concorrentes diretos (sachê biodegradável)', value: 'Sem dado',
+        logic: 'We Green e Naturys Eco vendem kits em sachê para hotéis. São empresas pequenas e não divulgam faturamento.', sources: ['weGreen', 'naturys'], confidence: 'baixa',
+        validation: 'Pesquisa B2B (quali): de quem as academias e os hotéis compram amenities e quanto gastam por mês.' },
+      { id: 'ms-mercado', group: 'Peso do nicho', name: 'Mercado de cabelos no Brasil', value: 'R$ 28,2 bi (2023)',
+        logic: 'Vendas de produtos para cabelo em 2023, 11,9% acima de 2022. O Brasil é o 3º maior mercado de cabelos do mundo, atrás de EUA e China.', sources: ['abre'], confidence: 'media-alta',
+        validation: 'Atualizar quando sair o valor de 2025 da Euromonitor.' },
+      { id: 'ms-tam', group: 'Peso do nicho', name: 'TAM B2C da WEEK', value: 'R$ 1,85 bi',
+        logic: 'Total da seção 1 (academia + trabalho + viagem) a R$ 3,50 por lavagem.', sources: ['secao1'], confidence: 'baixa-media',
+        validation: 'Herda as premissas da seção 1; atualizar quando a pesquisa quanti voltar.' }
+    ]
+  };
+
+  /* ------------------------------------------------------------------ */
+  /* Seção 4 do PDF — CAGR do setor, do público, do canal e do B2B       */
+  /* cagrPDF = taxa publicada; o motor recalcula e confere               */
+  /* ------------------------------------------------------------------ */
+  var CAGR = {
+    sector: [
+      { id: 'euromonitor', name: 'Mercado de cabelos (Euromonitor)', unit: 'R$', vi: 28.2e9, vf: 43.6e9, yi: 2023, yf: 2028, cagrPDF: 0.091, note: 'Vendas de 2023 e projeção para 2028, em reais e com inflação.', sources: ['abre'], confidence: 'media-alta', validation: 'Conferir a projeção atualizada no Euromonitor Passport.' },
+      { id: 'mordor', name: 'Mercado de cabelos (Mordor)', unit: 'US$', vi: 7.04e9, vf: 8.97e9, yi: 2026, yf: 2031, cagrPDF: 0.050, note: 'Estimativa de 2026 e projeção para 2031, em dólar.', sources: ['mordor'], confidence: 'media', validation: 'Comparar com a Euromonitor: as consultorias divergem no valor absoluto, mas não na taxa.' },
+      { id: 'imarc', name: 'Mercado de cabelos (IMARC)', unit: 'US$', vi: 1.6e9, vf: 2.3e9, yi: 2025, yf: 2034, cagrPDF: 0.041, note: 'Estimativa de 2025 e projeção para 2034, em dólar, com um recorte de produtos mais estreito.', sources: ['imarc'], confidence: 'media', validation: 'Comparar com a Euromonitor: as consultorias divergem no valor absoluto, mas não na taxa.' }
+    ],
+    drivers: [
+      { id: 'alunos', layer: 'Público', name: 'Alunos de academia', unit: 'alunos', vi: 10e6, vf: 13e6, yi: 2019, yf: 2025, cagrPDF: 0.045, note: 'Alunos em 2019 e em 2025. É o mesmo número (13 mi) e a mesma fonte usados no TAM B2C. O mesmo artigo cita ~15 mi em 2024, mas o estudo manteve 13 mi para não ter dois números para o mesmo dado.', sources: ['fitnessEY'], confidence: 'media-alta', validation: 'O Panorama 2026 não traz o total de alunos; atualizar quando houver um número novo.' },
+      { id: 'academias', layer: 'Público', name: 'Academias no Brasil', unit: 'academias', vi: 19266, vf: 55068, yi: 2014, yf: 2026, cagrPDF: 0.091, note: 'Academias em 2014 (série do Panorama 2024) e em 2026 (55.068 ativas, Panorama 2026). No Panorama 2026, os CNPJs do CONFEF cresceram 4,3% de 2025 para 2026.', sources: ['estadoMinas', 'panorama'], confidence: 'media-alta', validation: 'Comparar anos sempre com a mesma base de contagem.' },
+      { id: 'online', layer: 'Canal', name: 'Lares que compram online', unit: '%', vi: 0.238, vf: 0.454, yi: 2023, yf: 2025, cagrPDF: 0.381, note: 'Lares que compraram bens de consumo massivo pela internet em 2023 e em 2025. Higiene e Beleza responde por 50% do faturamento do canal.', sources: ['worldpanel'], confidence: 'media-alta', validation: 'Pesquisa de Mercado (Quanti): “Você compra produtos de cabelo pela internet?”' },
+      { id: 'viagens', layer: 'Público', name: 'Viagens com pernoite', unit: 'viagens', vi: 15.52e6, vf: 15.8e6, yi: 2023, yf: 2024, cagrPDF: 0.018, note: 'Viagens com pernoite dos moradores do Brasil, alta de 1,8% em 2024. 2020 e 2021 foram anos de pandemia, por isso a comparação usa só 2023 e 2024.', sources: ['ibgeTurismo2024'], confidence: 'alta', validation: 'Dado oficial, não precisa validar.' },
+      { id: 'revpar', layer: 'B2B', name: 'RevPAR dos hotéis', unit: 'R$', vi: 228.18, vf: 257.43, yi: 2024, yf: 2025, cagrPDF: 0.128, note: 'Receita por quarto disponível no Brasil: junta a ocupação, que subiu 2,1%, e a diária média, que subiu 10,5%.', sources: ['fohb'], confidence: 'media-alta', validation: 'Conferir no InFOHB anual de 2026.' },
+      { id: 'amenities', layer: 'B2B', name: 'Amenities de hotel (mundo)', unit: 'US$', vi: 17.9e9, vf: 50.5e9, yi: 2021, yf: 2031, cagrPDF: 0.109, note: 'Mercado global de amenities, 2021 e projeção para 2031. Não há dado público do Brasil. A Allied informa 10,8% a.a. para 2022 a 2031.', sources: ['allied'], confidence: 'baixa-media', validation: 'Pesquisa B2B (quali): quanto o gasto dos hotéis com amenities cresceu nos últimos anos.' }
+    ],
+    summary: [
+      { label: 'Setor (cabelos)', value: '4% a 9% a.a.' },
+      { label: 'Público (academias)', value: '4,5% a 9,1% a.a.' },
+      { label: 'Canal (e-commerce)', value: '38% a.a.' },
+      { label: 'B2B (amenities)', value: '≈ 11% a.a.' }
+    ],
+    reading: 'O mercado de cabelos é maduro e cresce de 4% a 5% a.a. em dólar. As ocasiões que a WEEK atende crescem mais rápido: o número de academias cresce cerca de 2 vezes esse ritmo (9,1% a.a.), os alunos crescem 4,5% a.a., o e-commerce quase dobrou a presença nos lares em 2 anos e as amenities de hotel crescem cerca de 11% a.a. É o argumento de um nicho em expansão dentro de um mercado grande e estável.'
+  };
+
+  /* Critério de confiança das seções 3 e 4 (market share e CAGR) */
+  var CONFIDENCE_MARKET = {
+    'alta': 'Dado oficial (IBGE).',
+    'media-alta': 'Dado de entidade do setor ou de instituto de pesquisa reconhecido (Euromonitor, Worldpanel, FOHB, Fitness Brasil), que vale conferir.',
+    'media': 'Projeção de consultoria de mercado (Mordor, IMARC) ou número derivado por conta a partir de dado setorial.',
+    'baixa-media': 'Dado antigo ou de outro recorte (outro ano, mercado global), usado como referência.',
+    'baixa': 'Sem dado público, a levantar na pesquisa.'
+  };
+
   return {
+    MARKET_SHARE: MARKET_SHARE,
+    CAGR: CAGR,
+    CONFIDENCE_MARKET: CONFIDENCE_MARKET,
     SOURCES: SOURCES,
     CONFIDENCE: CONFIDENCE,
     STATUS: STATUS,
