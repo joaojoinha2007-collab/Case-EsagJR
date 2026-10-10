@@ -7,92 +7,168 @@
 /*CSS*/
 </style>
 
+<!-- Vetor oficial da marca WEEK haircare (mesmo traçado usado na Matriz CSD), definido uma vez -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="week-mark" data-viewbox="18 10 548 221" fill-rule="evenodd" d="{{WEEK_MARK}}"/>
+    <linearGradient id="wk-sheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".24"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6 6.4 6 11a6 6 0 0 1-12 0c0-4.6 6-11 6-11z"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 12 12 20l-8-8V4h8z"/><circle cx="8.5" cy="8.5" r="1.4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M2 21h20M8 7h3M8 11h3M8 15h3"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+    <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="M10.5 13.5 3 11l1.5-1.5 7.5.5 4.5-4.5a2 2 0 0 1 3 3L15 13l.5 7.5L14 22l-2.5-7.5L8 18v3l-1.5 1L5 18l-4-1.5L2 15h3z"/></symbol>
+    <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-8v6"/><circle cx="6.5" cy="11.5" r="2"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+    <symbol id="i-pie" viewBox="0 0 24 24"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M5 7h14M5 7l-3 7a4 4 0 0 0 6 0zM19 7l-3 7a4 4 0 0 0 6 0z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ CABEÇALHO ============ -->
 <header class="top" id="top">
   <div class="wrap top-in">
-    <a class="brand" href="#inicio" aria-label="Voltar ao início">
-      <img class="on-light" src="{{IMG:esag-color}}" alt="ESAG Júnior" width="900" height="206">
-      <img class="on-dark" src="{{IMG:esag-white}}" alt="ESAG Júnior" width="700" height="437">
+    <a class="brand" href="#inicio" aria-label="Voltar ao início — ESAG Júnior e WEEK haircare">
+      <img class="esag on-light" src="{{IMG:esag-color}}" alt="ESAG Júnior" width="900" height="206">
+      <img class="esag on-dark" src="{{IMG:esag-white}}" alt="ESAG Júnior" width="700" height="437">
+      <span class="brand-sep" aria-hidden="true"></span>
+      <svg class="wk-mini" role="img" aria-label="WEEK haircare" viewBox="18 10 548 221"><use href="#week-mark"/></svg>
     </a>
-    <nav class="top-nav" aria-label="Seções">
+    <nav class="top-nav" id="top-nav" aria-label="Seções">
+      <a href="#resumo">Resumo</a>
+      <a href="#como">Como funciona</a>
       <a href="#segmentos">Segmentos</a>
       <a href="#funil">Funil</a>
       <a href="#simule">Simule</a>
-      <a href="#comparar">B2C × B2B</a>
       <a href="#mercado">Concorrência</a>
       <a href="#crescimento">Crescimento</a>
       <a href="#validar">Premissas</a>
     </nav>
-    <div class="switch" role="group" aria-label="Modelo de negócio">
-      <button type="button" data-model="b2c" aria-pressed="true">B2C</button>
-      <button type="button" data-model="b2b" aria-pressed="false">B2B</button>
+    <div class="top-right">
+      <div class="switch" role="group" aria-label="Modelo de negócio">
+        <button type="button" data-model="b2c" aria-pressed="true">B2C</button>
+        <button type="button" data-model="b2b" aria-pressed="false">B2B</button>
+      </div>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="top-nav" aria-label="Abrir menu de seções"><svg class="ic"><use href="#i-menu"/></svg></button>
     </div>
   </div>
+  <div class="progress" aria-hidden="true"><i id="progress"></i></div>
 </header>
 
 <main>
-  <!-- HERO -->
+  <!-- ============ HERO ============ -->
   <section class="hero" id="inicio">
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="kicker">Estudo de dimensionamento de mercado · ESAG Júnior para WEEK Haircare</p>
-        <h1 id="hero-title">Um mercado potencial de <em>R$ 1,85 bilhão</em> por ano em banhos fora de casa.</h1>
-        <p class="lead" id="hero-lead"></p>
+        <p class="kicker">ESAG Júnior · Estudo de mercado para a WEEK Haircare</p>
+        <h1 id="hero-title">Um mercado potencial de <em>R$ 1,85 bi</em> por ano em banhos fora de casa.</h1>
+        <p class="lead" id="hero-lead">Quanto vale vender kits de shampoo e condicionador de uma lavagem para quem toma banho longe de casa, e qual parte desse mercado a WEEK consegue atender primeiro.</p>
+        <div class="model-pick" role="group" aria-label="Escolha o modelo de negócio">
+          <button type="button" data-model="b2c" aria-pressed="true"><svg class="ic"><use href="#i-users"/></svg><span><b>B2C</b><small>Consumidor final, pelo site</small></span></button>
+          <button type="button" data-model="b2b" aria-pressed="false"><svg class="ic"><use href="#i-building"/></svg><span><b>B2B</b><small>Academias e hotéis</small></span></button>
+        </div>
         <div class="hero-cta">
-          <a class="btn btn-main" href="#funil">Ver como o mercado se afunila</a>
+          <a class="btn btn-main" href="#funil">Ver o funil do mercado <svg class="ic"><use href="#i-arrow"/></svg></a>
           <a class="btn btn-ghost" href="#simule">Simular premissas</a>
         </div>
       </div>
       <figure class="hero-brand">
-        <img class="on-light" src="{{IMG:week-teal}}" alt="WEEK haircare" width="554" height="227">
-        <img class="on-dark" src="{{IMG:week-white}}" alt="WEEK haircare" width="554" height="227">
+        <div class="stage" id="stage" role="img" aria-label="Logotipo WEEK haircare em 3D. Arraste para girar.">
+          <div class="logo3d" id="logo3d" style="transform:rotateX(6deg) rotateY(-16deg)"></div>
+        </div>
+        <div class="stage-shadow" aria-hidden="true"></div>
+        <figcaption class="stage-hint">Arraste para girar · toque duas vezes para dar uma volta</figcaption>
       </figure>
     </div>
+  </section>
+
+  <!-- ============ RESUMO ============ -->
+  <section class="sec sec-tight" id="resumo">
     <div class="wrap">
-      <div class="model-pick" role="group" aria-label="Escolha o modelo de negócio">
-        <button type="button" data-model="b2c" aria-pressed="true"><b>B2C</b><span>Venda ao consumidor final pelo site</span></button>
-        <button type="button" data-model="b2b" aria-pressed="false"><b>B2B</b><span>Venda para academias e hotéis</span></button>
+      <div class="sec-head">
+        <p class="eyebrow">Resumo em 10 segundos</p>
+        <h2 id="resumo-title">O mercado da WEEK em três números</h2>
       </div>
-      <ol class="tiles" id="tiles" aria-label="TAM, SAM e SOM"></ol>
-      <p class="note" id="tiles-note"></p>
+      <div class="bento" id="bento"></div>
+      <p class="note-strip"><svg class="ic"><use href="#i-info"/></svg><span>Valores teóricos de mercado calculados com as premissas do estudo, não previsão de vendas. O SOM ainda não aplica a taxa de captura (a fatia que a WEEK vai conquistar).</span></p>
     </div>
   </section>
 
-  <!-- SEGMENTOS -->
+  <!-- ============ COMO FUNCIONA ============ -->
+  <section class="sec sec-alt" id="como">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Como o estudo funciona</p>
+        <h2>Da contagem de pessoas ao mercado de entrada, em cinco passos</h2>
+        <p class="sub" id="como-sub"></p>
+      </div>
+      <ol class="flow" id="flow"></ol>
+    </div>
+  </section>
+
+  <!-- ============ SEGMENTOS ============ -->
   <section class="sec" id="segmentos">
     <div class="wrap">
-      <p class="eyebrow">1 · De onde vem o mercado</p>
-      <h2 id="seg-title">Onde as pessoas tomam banho fora de casa</h2>
-      <p class="sub" id="seg-sub"></p>
-      <div class="segs" id="segs"></div>
+      <div class="sec-head">
+        <p class="eyebrow">De onde vem o mercado</p>
+        <h2 id="seg-title">Onde as pessoas tomam banho fora de casa</h2>
+        <p class="sub" id="seg-sub"></p>
+      </div>
+      <div class="seg-layout">
+        <div class="panel donut-panel">
+          <div class="donut" id="donut"></div>
+          <ul class="donut-legend" id="donut-legend"></ul>
+        </div>
+        <div class="segs" id="segs"></div>
+      </div>
     </div>
   </section>
 
-  <!-- FUNIL -->
+  <!-- ============ FUNIL ============ -->
   <section class="sec sec-alt" id="funil">
     <div class="wrap">
-      <p class="eyebrow">2 · Do total ao mercado de entrada</p>
-      <h2>Quanto desse mercado faz sentido para a WEEK?</h2>
-      <p class="sub">Cada faixa é o que sobra depois de um filtro de região, público ou canal. Toque em TAM, SAM ou SOM para ver o que o número significa.</p>
-      <div class="funnel-grid">
-        <div class="panel">
-          <div class="funnel" id="funnel"></div>
-          <p class="fine">Largura proporcional ao valor. Faixas muito estreitas ganham largura mínima para continuar visíveis.</p>
-        </div>
-        <div class="panel detail" id="detail" aria-live="polite"></div>
+      <div class="sec-head">
+        <p class="eyebrow">Do total ao mercado de entrada</p>
+        <h2>Quanto desse mercado faz sentido para a WEEK?</h2>
+        <p class="sub">Cada faixa é o que sobra depois de um filtro. Toque em TAM, SAM ou SOM para ver o significado e a conta.</p>
       </div>
-      <div class="panel circles-panel">
-        <div class="circles" id="circles"></div>
-        <p class="fine" id="circles-note"></p>
+      <div class="tabs" role="tablist" aria-label="Forma de visualizar">
+        <button type="button" role="tab" id="tab-funnel" aria-selected="true" aria-controls="pane-funnel" data-view="funnel"><svg class="ic"><use href="#i-filter"/></svg>Funil</button>
+        <button type="button" role="tab" id="tab-circles" aria-selected="false" aria-controls="pane-circles" data-view="circles" tabindex="-1"><svg class="ic"><use href="#i-pie"/></svg>Círculos proporcionais</button>
+      </div>
+      <div class="funnel-grid">
+        <div class="panel big-panel">
+          <div id="pane-funnel" role="tabpanel" aria-labelledby="tab-funnel"><div class="funnel" id="funnel"></div>
+            <p class="fine">Largura proporcional ao valor; faixas muito estreitas ganham largura mínima para continuar visíveis.</p></div>
+          <div id="pane-circles" role="tabpanel" aria-labelledby="tab-circles" hidden><div class="circles" id="circles"></div><p class="fine" id="circles-note"></p></div>
+        </div>
+        <aside class="panel detail" id="detail" aria-live="polite"></aside>
       </div>
     </div>
   </section>
 
-  <!-- SIMULADOR -->
+  <!-- ============ SIMULADOR ============ -->
   <section class="sec" id="simule">
     <div class="wrap">
-      <p class="eyebrow">3 · E se as premissas mudarem?</p>
-      <h2>Arraste e veja o mercado mudar</h2>
-      <p class="sub">As premissas abaixo são as mais incertas do estudo. Os valores iniciais são os do documento; nada aqui altera o estudo original.</p>
+      <div class="sec-head">
+        <p class="eyebrow">E se as premissas mudarem?</p>
+        <h2>Arraste e veja o mercado mudar</h2>
+        <p class="sub">As premissas mais incertas do estudo. Os valores iniciais são os do documento; nada aqui altera o estudo original.</p>
+      </div>
       <div class="sim-grid">
         <form class="panel sim-controls" id="sim-controls" aria-label="Premissas"></form>
         <div class="panel sim-out" id="sim-out" aria-live="polite"></div>
@@ -100,91 +176,110 @@
     </div>
   </section>
 
-  <!-- COMPARAÇÃO -->
+  <!-- ============ COMPARAÇÃO ============ -->
   <section class="sec sec-alt" id="comparar">
     <div class="wrap">
-      <p class="eyebrow">4 · Dois caminhos de entrada</p>
-      <h2>B2C ou B2B?</h2>
-      <p class="sub">Os dois modelos na mesma escala. Eles usam regiões, preços e compradores diferentes, então servem para comparar ordens de grandeza, não para somar.</p>
+      <div class="sec-head">
+        <p class="eyebrow">Dois caminhos de entrada</p>
+        <h2>B2C ou B2B?</h2>
+        <p class="sub">Os dois modelos na mesma escala. Regiões, preços e compradores são diferentes: compare ordens de grandeza, não some.</p>
+      </div>
       <div class="panel" id="compare"></div>
+      <div class="diff-grid" id="diffs"></div>
     </div>
   </section>
 
-  <!-- MARKET SHARE -->
+  <!-- ============ MARKET SHARE ============ -->
   <section class="sec" id="mercado">
     <div class="wrap">
-      <p class="eyebrow">5 · Market share do setor</p>
-      <h2>Quem divide o mercado de cabelos e onde a WEEK entra</h2>
-      <p class="sub">Como a WEEK ainda não vende, o market share é lido de duas formas: quem domina o mercado de cabelos hoje e quanto o banho fora de casa representa dentro dele.</p>
-      <div class="ms-grid">
-        <div class="panel">
-          <h3>Participação em shampoo no Brasil</h3>
-          <p class="fine">Euromonitor, publicado em 2014: o dado público mais recente com a divisão por empresa.</p>
-          <div id="ms-share"></div>
-        </div>
-        <div class="panel">
-          <h3>Peso do nicho da WEEK no setor</h3>
-          <p class="fine">TAM B2C (banho fora de casa) comparado às vendas do mercado de cabelos no Brasil em 2023.</p>
-          <div id="ms-niche"></div>
-        </div>
+      <div class="sec-head">
+        <p class="eyebrow">Market share do setor</p>
+        <h2>Quem divide o mercado de cabelos e onde a WEEK entra</h2>
+        <p class="sub">A WEEK ainda não vende; por isso o market share é lido de duas formas: quem domina o mercado hoje e quanto o banho fora de casa representa nele.</p>
       </div>
-      <div class="facts" id="ms-facts"></div>
-      <p class="reading" id="ms-reading"></p>
-      <details class="all-assump">
-        <summary>Premissas e fontes do market share</summary>
-        <div id="ms-assump"></div>
+      <div class="tabs" role="tablist" aria-label="Leituras do market share">
+        <button type="button" role="tab" id="tab-ms-share" aria-selected="true" aria-controls="ms-pane-share" data-ms="share">Quem domina</button>
+        <button type="button" role="tab" id="tab-ms-niche" aria-selected="false" aria-controls="ms-pane-niche" data-ms="niche" tabindex="-1">Peso do nicho</button>
+        <button type="button" role="tab" id="tab-ms-trend" aria-selected="false" aria-controls="ms-pane-trend" data-ms="trend" tabindex="-1">Tendências 2025</button>
+      </div>
+      <div class="panel big-panel">
+        <div id="ms-pane-share" role="tabpanel" aria-labelledby="tab-ms-share"><div id="ms-share"></div></div>
+        <div id="ms-pane-niche" role="tabpanel" aria-labelledby="tab-ms-niche" hidden><div id="ms-niche"></div></div>
+        <div id="ms-pane-trend" role="tabpanel" aria-labelledby="tab-ms-trend" hidden><div id="ms-trend"></div></div>
+      </div>
+      <blockquote class="reading" id="ms-reading"></blockquote>
+      <details class="more">
+        <summary>Premissas e fontes do market share <svg class="ic chev"><use href="#i-down"/></svg></summary>
+        <div class="more-body" id="ms-assump"></div>
       </details>
     </div>
   </section>
 
-  <!-- CAGR -->
+  <!-- ============ CAGR ============ -->
   <section class="sec sec-alt" id="crescimento">
     <div class="wrap">
-      <p class="eyebrow">6 · CAGR do setor</p>
-      <h2>O mercado está crescendo?</h2>
-      <p class="sub">CAGR é o crescimento médio por ano entre dois valores: (valor final ÷ valor inicial)<sup>1/anos</sup> − 1. O estudo olha três camadas: o setor de cabelos, o público e o canal da WEEK e o nicho B2B.</p>
-      <ol class="cagr-tiles" id="cagr-tiles"></ol>
-      <div class="panel">
-        <div class="cagr-head"><h3>Crescimento médio por ano, por série</h3><div class="legend" id="cagr-legend"></div></div>
-        <div id="cagr-bars"></div>
-        <p class="fine">Taxas recalculadas a partir dos valores inicial e final de cada fonte; todas conferem com o documento. Viagens e RevPAR comparam só dois anos seguidos (crescimento em 1 ano).</p>
+      <div class="sec-head">
+        <p class="eyebrow">CAGR do setor</p>
+        <h2>O mercado está crescendo?</h2>
+        <p class="sub">CAGR é o crescimento médio por ano entre dois valores. Toque em uma camada para filtrar o gráfico.</p>
       </div>
-      <p class="reading" id="cagr-reading"></p>
-      <details class="all-assump">
-        <summary>Valores, fontes e confiança de cada série</summary>
-        <div id="cagr-assump"></div>
-      </details>
-      <details class="cagr">
-        <summary>Faça sua própria conta de CAGR</summary>
-        <form class="cagr-form" id="cagr-form">
-          <label for="cagr-vi">Valor inicial<input id="cagr-vi" name="vi" inputmode="decimal" autocomplete="off" value="28,2"></label>
-          <label for="cagr-vf">Valor final<input id="cagr-vf" name="vf" inputmode="decimal" autocomplete="off" value="43,6"></label>
-          <label for="cagr-n">Anos<input id="cagr-n" name="n" inputmode="decimal" autocomplete="off" value="5"></label>
-        </form>
-        <p class="cagr-out" id="cagr-out" aria-live="polite"></p>
-      </details>
+      <div class="cagr-tiles" id="cagr-tiles" role="group" aria-label="Filtrar por camada"></div>
+      <div class="panel big-panel">
+        <div class="cagr-head"><h3 id="cagr-title">Crescimento médio por ano, todas as séries</h3><button type="button" class="link-btn" id="cagr-all" hidden>Mostrar todas</button></div>
+        <ul class="cbars" id="cagr-bars"></ul>
+        <p class="fine">Taxas recalculadas a partir dos valores inicial e final de cada fonte; todas conferem com o documento. Viagens e RevPAR comparam dois anos seguidos (crescimento em 1 ano).</p>
+      </div>
+      <blockquote class="reading" id="cagr-reading"></blockquote>
+      <div class="two-more">
+        <details class="more">
+          <summary>Valores, fontes e confiança de cada série <svg class="ic chev"><use href="#i-down"/></svg></summary>
+          <div class="more-body" id="cagr-assump"></div>
+        </details>
+        <details class="more">
+          <summary>Faça sua própria conta de CAGR <svg class="ic chev"><use href="#i-down"/></svg></summary>
+          <div class="more-body">
+            <p class="formula">CAGR = (valor final ÷ valor inicial)<sup>1/anos</sup> − 1</p>
+            <form class="cagr-form" id="cagr-form">
+              <label for="cagr-vi">Valor inicial<input id="cagr-vi" name="vi" inputmode="decimal" autocomplete="off" value="28,2"></label>
+              <label for="cagr-vf">Valor final<input id="cagr-vf" name="vf" inputmode="decimal" autocomplete="off" value="43,6"></label>
+              <label for="cagr-n">Anos<input id="cagr-n" name="n" inputmode="decimal" autocomplete="off" value="5"></label>
+            </form>
+            <p class="cagr-out" id="cagr-out" aria-live="polite"></p>
+          </div>
+        </details>
+      </div>
     </div>
   </section>
 
-  <!-- VALIDAR -->
+  <!-- ============ PREMISSAS ============ -->
   <section class="sec" id="validar">
     <div class="wrap">
-      <p class="eyebrow">7 · Próximo passo</p>
-      <h2>O que ainda precisa ser confirmado</h2>
-      <p class="sub">Estas estimativas têm confiança baixa ou média e mexem direto no tamanho do mercado. A pesquisa quantitativa e a qualitativa vão confirmá-las.</p>
-      <div class="checks" id="checks"></div>
-      <details class="all-assump" id="all-assump">
-        <summary>Ver todas as premissas e fontes do <span data-model-name>B2C</span></summary>
-        <div id="assump-list"></div>
+      <div class="sec-head">
+        <p class="eyebrow">Próximo passo</p>
+        <h2>O que validar primeiro</h2>
+        <p class="sub">Cada ponto é uma premissa do <span data-model-name>B2C</span>. Quanto mais à esquerda, menor a confiança; quanto mais alto, mais o SOM muda se ela variar 10%. O canto superior esquerdo é a prioridade da pesquisa.</p>
+      </div>
+      <div class="matrix-grid">
+        <div class="panel big-panel"><div class="matrix" id="matrix"></div></div>
+        <aside class="panel detail" id="assump-detail" aria-live="polite"></aside>
+      </div>
+      <details class="more">
+        <summary>Todas as premissas e fontes do <span data-model-name>B2C</span> <svg class="ic chev"><use href="#i-down"/></svg></summary>
+        <div class="more-body">
+          <div class="chips" id="conf-filter" role="group" aria-label="Filtrar por confiança"></div>
+          <div id="assump-list"></div>
+        </div>
       </details>
     </div>
   </section>
 
-  <!-- NOTAS -->
+  <!-- ============ NOTAS ============ -->
   <section class="sec sec-alt" id="notas">
     <div class="wrap">
-      <p class="eyebrow">8 · Como ler estes números</p>
-      <h2>Antes de usar o estudo</h2>
+      <div class="sec-head">
+        <p class="eyebrow">Como ler estes números</p>
+        <h2>Antes de usar o estudo</h2>
+      </div>
       <div class="notes" id="notes"></div>
     </div>
   </section>
@@ -194,10 +289,11 @@
   <div class="wrap foot-in">
     <div class="foot-brands">
       <img src="{{IMG:esag-white}}" alt="ESAG Júnior" width="700" height="437">
-      <img src="{{IMG:week-white}}" alt="WEEK haircare" width="554" height="227">
+      <span class="brand-sep" aria-hidden="true"></span>
+      <svg class="wk-foot" role="img" aria-label="WEEK haircare" viewBox="18 10 548 221"><use href="#week-mark"/></svg>
     </div>
     <p>Estudo desenvolvido pela ESAG Júnior para a WEEK Haircare. Fonte dos números: “Guia TAM, SAM, SOM, market share e CAGR — WEEK Haircare” (versão atualizada). Valores teóricos de mercado: não são previsão de vendas.</p>
-    <a class="btn btn-foot" href="#inicio">Voltar ao início</a>
+    <a class="btn btn-foot" href="#inicio" aria-label="Voltar ao início"><svg class="ic"><use href="#i-up"/></svg></a>
   </div>
 </footer>
 
