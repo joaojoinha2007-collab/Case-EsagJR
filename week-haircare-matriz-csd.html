@@ -114,7 +114,7 @@ button { font: inherit; color: inherit; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; margin: -1px; }
 
 /* ---------- CABEÇALHO ---------- */
-.top { position: -webkit-sticky; position: sticky; top: 0; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top { position: -webkit-sticky; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); }
 .top-in { display: flex; align-items: center; min-height: var(--top-h); }
 .brand { display: flex; align-items: center; text-decoration: none; color: var(--ink); min-width: 0; }
 .brand .esag { height: 28px; width: auto; }
@@ -702,15 +702,40 @@ function toast(msg, opts) {
 }
 
 /* ---------- DOWNLOAD ---------- */
-function download(name, blob) {
+/* no link publicado, o arquivo é entregue pela capacidade "downloads" (o visitante confirma);
+   aberto como arquivo local, cai no download comum do navegador.
+   Resolve "saved", "declined" ou "error". */
+let downloadsApi;
+function getDownloads() {
+  if (downloadsApi === undefined) {
+    downloadsApi = (window.claude && typeof window.claude.use === "function")
+      ? window.claude.use("downloads").catch(function () { return null; })
+      : Promise.resolve(null);
+  }
+  return downloadsApi;
+}
+async function download(name, blob) {
+  const api = await getDownloads();
+  if (api) {
+    try { await api.save({ filename: name, data: blob }); return "saved"; }
+    catch (err) {
+      if (err && err.code === "declined") return "declined";
+      if (err && err.code === "rate_limited") { toast("Já há um download aguardando confirmação.", { error: true }); return "declined"; }
+      console.error(err);
+      return "error";
+    }
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  if (typeof a.download === "undefined") { window.open(url, "_blank"); }
-  else {
-    a.href = url; a.download = name; a.rel = "noopener"; a.style.display = "none";
-    document.body.appendChild(a); a.click(); a.remove();
-  }
+  a.href = url; a.download = name; a.rel = "noopener"; a.style.display = "none";
+  document.body.appendChild(a); a.click(); a.remove();
   setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  return "saved";
+}
+function downloadToast(result, okMsg) {
+  if (result === "saved") toast(okMsg);
+  else if (result === "declined") toast("Download cancelado.");
+  else toast("Não foi possível baixar o arquivo neste navegador.", { error: true });
 }
 
 /* ---------- CONTADORES ---------- */
@@ -1110,7 +1135,7 @@ function startPointerDrag(e, grip, card) {
 let modalOpen = false;
 function confirmDialog(title, text, okLabel) {
   const m = $("#modal"), ok = $("#modal-ok"), cancel = $("#modal-cancel");
-  if (!m || !ok || !cancel) return Promise.resolve(window.confirm(title + "\n\n" + text));
+  if (!m || !ok || !cancel) return Promise.resolve(false);
   if (modalOpen) return Promise.resolve(false);
   modalOpen = true;
   return new Promise(function (resolve) {
@@ -1157,8 +1182,8 @@ function exportJSON() {
       };
     })
   };
-  download("week-haircare-matriz-csd-" + slugDate() + ".json", new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
-  toast("JSON exportado.");
+  download("week-haircare-matriz-csd-" + slugDate() + ".json", new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }))
+    .then(function (r) { downloadToast(r, "JSON exportado."); });
 }
 function parseImport(raw) {
   const data = JSON.parse(String(raw).replace(/^﻿/, ""));
@@ -1435,7 +1460,7 @@ async function exportPNG() {
     }
   });
   if (!blob) throw new Error("toBlob retornou vazio");
-  download(name, blob);
+  return download(name, blob);
 }
 
 /* ---------- MODO APRESENTAÇÃO ---------- */
@@ -1586,7 +1611,7 @@ function bindActions() {
     btn.disabled = true;
     if (lbl) lbl.textContent = "Gerando…";
     exportPNG()
-      .then(function () { toast("PNG exportado em alta resolução."); })
+      .then(function (r) { downloadToast(r, "PNG exportado em alta resolução."); })
       .catch(function (err) { console.error(err); toast("Não foi possível gerar a imagem neste navegador.", { error: true }); })
       .then(function () { btn.disabled = false; if (lbl) lbl.textContent = "Exportar PNG"; });
   });
