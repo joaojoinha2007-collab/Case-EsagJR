@@ -252,6 +252,38 @@ nav.top-nav a[aria-current="true"] .i, .mnav a[aria-current="true"] .i { color: 
 .recipe li.total { border-top: 2px solid var(--ink); }
 .recipe li.total h4 { font-family: var(--f-display); font-size: 21px; font-weight: 500; }
 
+
+/* quadro dos três ingredientes */
+.mix-wrap { border-top: 2px solid var(--ink); }
+table.mix { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 14.5px; }
+.mix th, .mix td { text-align: left; vertical-align: top; padding: 16px 16px 16px 0; border-bottom: 1px solid var(--rule); }
+.mix thead th { font: 600 15px/1.3 var(--f-ui); color: var(--ink); padding-top: 18px; }
+.mix thead th span { display: block; font: 400 13px/1.4 var(--f-body); color: var(--muted); margin-top: 4px; }
+.mix thead th:first-child, .mix tbody th { width: 22%; }
+.mix tbody th { font: 600 15px/1.35 var(--f-ui); }
+.mix tbody th .role { display: block; font: 600 11px/1.3 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--bc); margin-top: 4px; }
+.mix tr.week th, .mix tr.week td { background: var(--week-soft); border-bottom: 0; }
+.mix tr.week th { padding-left: 14px; border-radius: 12px 0 0 12px; }
+.mix tr.week td:last-child { border-radius: 0 12px 12px 0; }
+.st { display: inline-flex; align-items: center; gap: 7px; font: 600 13.5px/1.2 var(--f-ui); padding: 5px 10px 5px 7px; border-radius: 999px; }
+.st svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.st.yes { background: var(--c-soft); color: var(--c-col); }
+.st.part { background: var(--pending-soft); color: var(--pending); }
+.st.no { background: var(--tint); color: var(--muted); }
+.st.prop { background: var(--surface); color: var(--week-ink); border: 1.5px dashed var(--week); }
+.mix td p { color: var(--ink-2); font-size: 14px; margin-top: 8px; }
+@media (max-width: 860px) {
+  table.mix, .mix thead, .mix tbody, .mix tr, .mix th, .mix td { display: block; width: 100% !important; }
+  .mix thead { display: none; }
+  .mix tbody tr { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .mix tbody th, .mix td { border: 0; padding: 4px 0; }
+  .mix td { display: grid; grid-template-columns: 120px 1fr; gap: 10px; padding: 8px 0; }
+  .mix td::before { content: attr(data-col); font: 600 12.5px/1.4 var(--f-ui); color: var(--muted); }
+  .mix td p { margin-top: 6px; }
+  .mix tr.week { padding: 14px; border-radius: 12px; background: var(--week-soft); }
+  .mix tr.week th { padding-left: 0; }
+}
+
 /* ---------- capítulo 3: concorrentes ---------- */
 .cmp-wrap { border-top: 2px solid var(--ink); }
 table.cmp { width: 100%; border-collapse: collapse; font-size: 14.5px; table-layout: fixed; }
@@ -696,26 +728,10 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
       <span class="kicker"><span class="n">02</span> O achado central</span>
       <h2>O mercado já oferece dose única ou kit de viagem. A oportunidade está em combinar os dois.</h2>
     </div>
-    <div class="gap-grid">
-      <figure class="gapmap">
-        <figcaption><h3 class="sub-h" style="margin-bottom:4px">Formato e kit: a nota de cada marca</h3><p class="small">Dois pontos da régua de Produto, de 0 a 5.</p></figcaption>
-        <svg id="gapmap" viewBox="0 0 440 380" role="img" aria-label="Gráfico de dispersão. H MAX: formato 5, kit 0. Estoril: formato 5, kit 2. Four Bty: formato 3, kit 4. Kerasys: formato 2, kit 3. O canto com formato e kit máximos está vazio."></svg>
-        <ul class="howto">
-          <li>Mais à direita: mais perto da dose única, pronta para levar.</li>
-          <li>Mais acima: mais perto de um kit pronto para levar.</li>
-          <li>O canto superior direito está vazio. A área tracejada é a proposta da WEEK, ainda a desenvolver e validar. Não é uma nota.</li>
-        </ul>
-      </figure>
-      <div>
-        <ul class="recipe">
-          <li><span class="op">1</span><div><h4>Dose única em sachê</h4><p>Shampoo e condicionador separados, um banho cada. Hoje só nas fábricas de amenities (H MAX e Estoril), vendidos em caixas para empresas.</p></div></li>
-          <li><span class="op">+</span><div><h4>Kit pronto para levar</h4><p>Os dois juntos, prontos para a bolsa. Hoje só na Four Bty, com tubos de 30 ml numa bolsinha.</p></div></li>
-          <li><span class="op">+</span><div><h4>Comunicação para quem toma banho fora de casa</h4><p>Academia, trabalho e viagem como tema central da marca. Nenhuma das quatro ocupa esse espaço.</p></div></li>
-          <li class="total"><span class="op">=</span><div><h4>A proposta estratégica da WEEK</h4><p>Uma direção que sai da análise. Ainda não é uma vantagem comprovada: preço, formato e protótipo dependem da pesquisa de mercado e dos testes.</p></div></li>
-        </ul>
-        <div class="means"><span class="tag">Para a WEEK</span><p>O formato já existe e o kit também, mas ninguém vende os dois juntos com uma marca que fale com quem usa. É o principal ponto da matriz de decisões do capítulo 06.</p></div>
-      </div>
-    </div>
+    <p class="lede" style="margin:-16px 0 var(--s6)">A proposta da WEEK junta três coisas. O quadro mostra quais delas cada marca já oferece hoje.</p>
+    <div class="mix-wrap"><table class="mix" id="mixTable"><caption class="sr">O que cada marca oferece dos três ingredientes da proposta da WEEK</caption></table></div>
+    <p class="cap" style="margin-top:10px">Com base nas notas de Formato para uso fora de casa, Kit pronto para levar e Comunicação com quem usa. Dados de 13 e 14/10/2026.</p>
+    <div class="means" style="margin-top:var(--s5)"><span class="tag">Para a WEEK</span><p>Cada ingrediente já existe em alguma marca, mas nenhuma junta os três. A linha da WEEK é uma proposta: ainda depende da pesquisa de mercado e do teste do protótipo. É o principal ponto da matriz de decisões do capítulo 06.</p></div>
   </div>
 </section>
 
@@ -1531,24 +1547,22 @@ function rubricHTML(crit, desc = true) {
   return RUBRIC[crit].map((txt, n) => { const who = BRANDS.filter(b => SCORES[b.id][crit][0] === n); return `<li class="${who.length ? "hit" : ""}"><b>${n}</b><span>${txt}${who.length ? `<span class="who">${who.map(b => bdot(b.id)).join("")}</span>` : ""}</span></li>`; }).reverse().join("");
 }
 
-/* ---------- 02 mapa do cruzamento ---------- */
-function drawGapmap() {
-  const svg = $("#gapmap"); svg.innerHTML = "";
-  const L = 56, R = 412, T = 22, Bt = 318, sx = v => L + (R - L) * v / 5, sy = v => Bt - (Bt - T) * v / 5;
-  svgEl("rect", { x: sx(4.4), y: sy(5.25), width: sx(5.25) - sx(4.4), height: sy(4.4) - sy(5.25), rx: 10, fill: "var(--week-soft)", stroke: "var(--week)", "stroke-width": 1.6, "stroke-dasharray": "5 4" }, svg);
-  svgEl("text", { x: sx(4.82), y: sy(5.25) + 20, "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, fill: "var(--week-ink)", "font-family": "Sora, sans-serif" }, svg).textContent = "WEEK";
-  svgEl("text", { x: sx(4.82), y: sy(5.25) + 35, "text-anchor": "middle", "font-size": 10, fill: "var(--week-ink)" }, svg).textContent = "a validar";
-  for (let i = 0; i <= 5; i++) {
-    svgEl("line", { x1: sx(i), x2: sx(i), y1: T, y2: Bt, class: "cv-grid" }, svg); svgEl("line", { x1: L, x2: R, y1: sy(i), y2: sy(i), class: "cv-grid" }, svg);
-    svgEl("text", { x: sx(i), y: Bt + 18, "text-anchor": "middle", class: "cv-axis" }, svg).textContent = i;
-    svgEl("text", { x: L - 12, y: sy(i) + 4, "text-anchor": "end", class: "cv-axis" }, svg).textContent = i;
-  }
-  svgEl("text", { x: (L + R) / 2, y: Bt + 44, "text-anchor": "middle", class: "cv-xl" }, svg).textContent = "Formato para uso fora de casa  →";
-  svgEl("text", { x: 14, y: (T + Bt) / 2, "text-anchor": "middle", class: "cv-xl", transform: `rotate(-90 14 ${(T + Bt) / 2})` }, svg).textContent = "Kit pronto para levar  →";
-  const pos = { hmax: [-10, -14, "end"], esto: [-12, 4, "end"], four: [0, -16, "middle"], kera: [0, 24, "middle"] };
-  BRANDS.forEach(b => { const x = SCORES[b.id].formato[0], y = SCORES[b.id].kit[0], [dx, dy, an] = pos[b.id], cx = sx(x), cy = sy(y);
-    svgEl("path", { d: markerPath(b.shape, cx, cy, 8), fill: `var(${b.color})`, stroke: "var(--surface)", "stroke-width": 2 }, svg);
-    svgEl("text", { x: cx + dx, y: cy + dy, "text-anchor": an, "font-size": 12.5, "font-weight": 700, fill: "var(--ink)", "font-family": "Sora, sans-serif" }, svg).textContent = `${short(b.id)} (${x}, ${y})`; });
+/* ---------- 02 três ingredientes ---------- */
+const MIX_COLS = [["Dose única em sachê", "um banho por sachê, pronto para levar"], ["Kit pronto para levar", "shampoo e condicionador juntos, com embalagem para a bolsa"], ["Fala com quem toma banho fora de casa", "academia, trabalho e viagem no centro da comunicação"]];
+const MIX = {
+  hmax: [["yes", "Tem", "Sachês de 30 ml de shampoo e de condicionador."], ["no", "Não tem", "Vende cada item em caixas fechadas de 250 sachês."], ["no", "Não", "Site e Instagram falam com o gestor de hotel."]],
+  esto: [["yes", "Tem", "Sachês de papel kraft de 15 ou 30 ml."], ["part", "Em parte", "O kit com nécessaire é montado por uma revenda, não pela marca."], ["no", "Não", "Fala com o gestor de hotel."]],
+  four: [["no", "Não tem", "Tubos de 30 ml, que não são dose única."], ["yes", "Tem", "Kit Travel Hydra numa bolsinha transparente."], ["part", "Em parte", "Cita academia e viagem na página do kit, mas o tema aparece em só 3 de 124 posts."]],
+  kera: [["no", "Não tem", "Frascos a partir de 180 ml; minis de 50 ml."], ["part", "Em parte", "Kits de 180 ml, sem embalagem para levar."], ["no", "Não", "Fala com a consumidora pelo problema do cabelo, não pelo uso fora de casa."]]
+};
+const ST_ICON = { yes: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', part: '<path d="M6 12h12"/>', no: '<path d="M7 7l10 10M17 7L7 17"/>', prop: '<path d="M12 5v14M5 12h14"/>' };
+const st = (k, label) => `<span class="st ${k}"><svg viewBox="0 0 24 24" aria-hidden="true">${ST_ICON[k]}</svg>${label}</span>`;
+function renderMix() {
+  const order = ["hmax", "esto", "four", "kera"];
+  let h = `<thead><tr><th scope="col"><span class="sr">Marca</span></th>${MIX_COLS.map(c => `<th scope="col">${c[0]}<span>${c[1]}</span></th>`).join("")}</tr></thead><tbody>`;
+  order.forEach(id => { h += `<tr style="--bc:var(${B[id].color})"><th scope="row">${bdot(id, B[id].name)}<span class="role">${COMP[id].type}</span></th>${MIX[id].map((c, i) => `<td data-col="${MIX_COLS[i][0]}">${st(c[0], c[1])}<p>${c[2]}</p></td>`).join("")}</tr>`; });
+  h += `<tr class="week"><th scope="row">WEEK<span class="role" style="color:var(--week-ink)">Proposta, a validar</span></th>${MIX_COLS.map(c => `<td data-col="${c[0]}">${st("prop", "Proposta")}<p>${c[0] === "Dose única em sachê" ? "Sachê de 20 a 30 ml, volume a definir com o teste de rendimento." : c[0] === "Kit pronto para levar" ? "Kit como produto principal, vendido pela própria marca." : "Banho fora de casa como tema central do site, das redes e da embalagem."}</p></td>`).join("")}</tr></tbody>`;
+  $("#mixTable").insertAdjacentHTML("beforeend", h);
 }
 
 /* ---------- 03 concorrentes ---------- */
@@ -1852,7 +1866,7 @@ function renderAppendix() {
 
 /* ---------- início ---------- */
 function init() {
-  buildNav(); initTerms(); renderIntro(); drawGapmap();
+  buildNav(); initTerms(); renderIntro(); renderMix();
   renderCmp(); renderCompTabs(); renderCompPanel();
   renderPriceIntro(); renderPrice("banho");
   initCurve(); renderInsights(); renderTables();
