@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap">
 <style>
 /* Layout: relatório editorial em capítulos. Papel verde-claro, réguas finas em vez de caixas, petróleo só na abertura do capítulo final; azul ESAG apenas em navegação e marcas analíticas. */
 :root {
@@ -10,9 +10,9 @@
   --paper: #F4F7F6;
   --surface: #FFFFFF;
   --tint: #EAF0EF;
-  --ink: #102335;
-  --ink-2: #34485A;
-  --muted: #5A6A74;
+  --ink: #0A1724;
+  --ink-2: #1C2A37;
+  --muted: #3D4B57;
   --rule: #D7E0DF;
   --rule-2: #BFCCCB;
   --week: #457875;           /* verde oficial, amostrado da logo WEEK haircare */
@@ -33,15 +33,15 @@
   --shadow: 0 1px 2px rgba(16,35,53,.06), 0 10px 30px rgba(16,35,53,.07);
   /* tipo */
   --f-display: "Newsreader", Georgia, "Times New Roman", serif;
-  --f-ui: "Sora", "Segoe UI", system-ui, sans-serif;
-  --f-body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --f-ui: "Inter", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Inter", "Segoe UI", system-ui, sans-serif;
   --t-hero: clamp(38px, 5.2vw, 76px);
   --t-h2: clamp(30px, 3.6vw, 46px);
   --t-h3: clamp(20px, 1.8vw, 24px);
   --t-lede: clamp(17px, 1.35vw, 19px);
-  --t-body: 16px;
-  --t-small: 14px;
-  --t-cap: 12.5px;
+  --t-body: 17px;
+  --t-small: 14.5px;
+  --t-cap: 13px;
   /* espaço */
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px; --s9: 112px;
   --r: 12px; --r-lg: 18px;
@@ -49,7 +49,7 @@
   --measure: 72ch;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --paper: #0C181C; --surface: #12232A; --tint: #172C33; --ink: #E8F0EF; --ink-2: #C1D0D0; --muted: #93A6A9; --rule: #233A3F; --rule-2: #335056;
+  --paper: #0C181C; --surface: #12232A; --tint: #172C33; --ink: #F2F6F6; --ink-2: #DDE6E6; --muted: #B4C3C5; --rule: #233A3F; --rule-2: #335056;
   --week: #7DB6B0; --week-ink: #9DD1CB; --week-soft: #15322E; --week-logo: #EEF6F5;
   --petrol: #0E2D2A; --on-petrol: #EAF4F2; --on-petrol-2: #A5C6C2;
   --esag: #93ADF5; --esag-soft: #172A52;
@@ -60,7 +60,7 @@
   color-scheme: dark;
 } }
 :root[data-theme="dark"] {
-  --paper: #0C181C; --surface: #12232A; --tint: #172C33; --ink: #E8F0EF; --ink-2: #C1D0D0; --muted: #93A6A9; --rule: #233A3F; --rule-2: #335056;
+  --paper: #0C181C; --surface: #12232A; --tint: #172C33; --ink: #F2F6F6; --ink-2: #DDE6E6; --muted: #B4C3C5; --rule: #233A3F; --rule-2: #335056;
   --week: #7DB6B0; --week-ink: #9DD1CB; --week-soft: #15322E; --week-logo: #EEF6F5;
   --petrol: #0E2D2A; --on-petrol: #EAF4F2; --on-petrol-2: #A5C6C2;
   --esag: #93ADF5; --esag-soft: #172A52;
@@ -101,7 +101,7 @@ button { font: inherit; color: inherit; }
 .small { font-size: var(--t-small); color: var(--muted); }
 .cap { font-size: var(--t-cap); color: var(--muted); line-height: 1.5; }
 .sub-h { font: 600 var(--t-h3)/1.25 var(--f-ui); letter-spacing: -0.01em; margin-bottom: var(--s4); }
-.label { font: 600 11.5px/1.3 var(--f-ui); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.label { font: 700 11.5px/1.3 var(--f-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
 
 /* meaning callout: "o que isso significa para a WEEK" */
 .means { display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 18px 20px; border-radius: var(--r); background: var(--week-soft); max-width: 1000px; }
@@ -260,7 +260,7 @@ table.mix { width: 100%; border-collapse: collapse; table-layout: fixed; font-si
 .mix thead th { font: 600 15px/1.3 var(--f-ui); color: var(--ink); padding-top: 18px; }
 .mix thead th span { display: block; font: 400 13px/1.4 var(--f-body); color: var(--muted); margin-top: 4px; }
 .mix thead th:first-child, .mix tbody th { width: 22%; }
-.mix tbody th { font: 600 15px/1.35 var(--f-ui); }
+.mix tbody th { font: 700 15.5px/1.35 var(--f-ui); color: var(--ink); }
 .mix tbody th .role { display: block; font: 600 11px/1.3 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--bc); margin-top: 4px; }
 .mix tr.week th, .mix tr.week td { background: var(--week-soft); border-bottom: 0; }
 .mix tr.week th { padding-left: 14px; border-radius: 12px 0 0 12px; }
@@ -286,15 +286,16 @@ table.mix { width: 100%; border-collapse: collapse; table-layout: fixed; font-si
 
 /* ---------- capítulo 3: concorrentes ---------- */
 .cmp-wrap { border-top: 2px solid var(--ink); }
-table.cmp { width: 100%; border-collapse: collapse; font-size: 14.5px; table-layout: fixed; }
+table.cmp { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.55; table-layout: fixed; }
+table.mix, table.tbl, table.score-table, .facts, .crit-bars { line-height: 1.55; }
 .cmp th, .cmp td { text-align: left; vertical-align: top; padding: 13px 14px; border-bottom: 1px solid var(--rule); }
 .cmp thead th { padding-top: 18px; padding-bottom: 14px; position: sticky; top: calc(84px + env(safe-area-inset-top, 0px)); background: var(--paper); z-index: 2; box-shadow: 0 1px 0 var(--rule-2); }
 .cmp thead th .nm { font: 600 16px/1.25 var(--f-ui); display: flex; gap: 8px; align-items: center; color: var(--ink); }
 .cmp thead th .role { display: block; font: 600 11px/1.35 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--bc); margin-top: 6px; }
 .cmp thead th:first-child, .cmp tbody th { width: 170px; }
-.cmp tbody th { font: 600 12px/1.4 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.cmp tbody th { font: 700 13px/1.4 var(--f-ui); letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
 .cmp tbody th .term { text-transform: none; letter-spacing: 0; }
-.cmp td { color: var(--ink-2); }
+.cmp td { color: var(--ink); }
 .cmp td b.big { font: 600 22px/1 var(--f-ui); color: var(--ink); font-variant-numeric: tabular-nums; }
 .cmp tr.grp th, .cmp tr.grp td { background: var(--tint); }
 .lvl { font: 600 12px var(--f-ui); padding: 3px 9px; border-radius: 999px; white-space: nowrap; display: inline-block; }
@@ -916,8 +917,8 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
           <rect x="40" y="96" width="380" height="300" rx="34" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
           <path d="M150 96 C150 52 310 52 310 96" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="10" stroke-linecap="round"/>
           <line x1="40" y1="140" x2="420" y2="140" stroke="rgba(255,255,255,.2)" stroke-dasharray="6 6"/>
-          <g transform="rotate(-7 160 270)"><rect x="92" y="170" width="140" height="196" rx="14" fill="#EEF6F5"/><path d="M92 196 h140" stroke="#163F3C" stroke-opacity=".25" stroke-dasharray="4 5"/><text x="162" y="268" text-anchor="middle" font-family="Sora, sans-serif" font-weight="600" font-size="17" fill="#163F3C">SHAMPOO</text><text x="162" y="290" text-anchor="middle" font-family="Manrope, sans-serif" font-size="12" fill="#457875">dose única</text></g>
-          <g transform="rotate(6 300 268)"><rect x="232" y="164" width="140" height="196" rx="14" fill="#A9D6CF"/><path d="M232 190 h140" stroke="#163F3C" stroke-opacity=".25" stroke-dasharray="4 5"/><text x="302" y="262" text-anchor="middle" font-family="Sora, sans-serif" font-weight="600" font-size="14.5" fill="#163F3C">CONDICIONADOR</text><text x="302" y="284" text-anchor="middle" font-family="Manrope, sans-serif" font-size="12" fill="#163F3C" fill-opacity=".75">dose única</text></g>
+          <g transform="rotate(-7 160 270)"><rect x="92" y="170" width="140" height="196" rx="14" fill="#EEF6F5"/><path d="M92 196 h140" stroke="#163F3C" stroke-opacity=".25" stroke-dasharray="4 5"/><text x="162" y="268" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="17" fill="#163F3C">SHAMPOO</text><text x="162" y="290" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#457875">dose única</text></g>
+          <g transform="rotate(6 300 268)"><rect x="232" y="164" width="140" height="196" rx="14" fill="#A9D6CF"/><path d="M232 190 h140" stroke="#163F3C" stroke-opacity=".25" stroke-dasharray="4 5"/><text x="302" y="262" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="14.5" fill="#163F3C">CONDICIONADOR</text><text x="302" y="284" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#163F3C" fill-opacity=".75">dose única</text></g>
         </svg>
         <figcaption class="cap">Ilustração conceitual. Não é a embalagem oficial da WEEK.</figcaption>
       </figure>
