@@ -45,7 +45,7 @@
   /* espaço */
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px; --s9: 112px;
   --r: 12px; --r-lg: 18px;
-  --wrap: 1440px;
+  --wrap: 1264px;
   --measure: 72ch;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
@@ -633,6 +633,39 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 .totop { position: fixed; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 40; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); box-shadow: var(--shadow); display: grid; place-items: center; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
 .totop.show { opacity: 1; pointer-events: auto; }
 .totop svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- tabelas e matrizes mais compactas ---------- */
+
+
+table.mix, table.cmp { font-size: 13.5px; line-height: 1.5; }
+.mix th, .mix td { padding: 11px 14px 11px 0; }
+.mix thead th { font-size: 14px; padding-top: 14px; }
+.mix thead th span { font-size: 12.5px; }
+.mix tbody th { font-size: 14.5px; }
+.mix td p { font-size: 13px; margin-top: 6px; }
+.st { font-size: 12.5px; padding: 4px 9px 4px 6px; }
+.st svg { width: 14px; height: 14px; }
+.cmp th, .cmp td { padding: 9px 12px; }
+.cmp thead th { padding-top: 14px; padding-bottom: 10px; }
+.cmp thead th .nm { font-size: 15px; }
+.cmp thead th:first-child, .cmp tbody th { width: 150px; }
+.cmp tbody th { font-size: 12px; }
+.cmp td b.big { font-size: 19px; }
+.tbl { font-size: 13.5px; }
+.tbl th, .tbl td { padding: 9px 12px 9px 0; }
+.price-card { padding: clamp(16px, 2.2vw, 24px); }
+.bar-row { grid-template-columns: 190px 1fr; }
+.bands, .axis-note { margin-left: 206px; }
+.bar-track { height: 28px; }
+.quad { padding: clamp(14px, 1.8vw, 20px); gap: 10px; }
+.quad-h h3 { font-size: clamp(18px, 1.6vw, 21px); }
+.it { padding: 9px 12px; font-size: 13.5px; }
+.it .n { width: 24px; height: 24px; font-size: 12px; }
+.erac-detail { padding: clamp(18px, 2.4vw, 28px); }
+.score-table { font-size: 13px; }
+.score-table th, .score-table td { padding: 7px 10px; }
+@media (max-width: 900px) { .cmp td { padding: 6px 0; } }
+@media (max-width: 700px) { .bands, .axis-note { margin-left: 0; } .bar-row { grid-template-columns: 1fr; } }
 @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
 .anim-in { animation: rise .3s ease both; }
 </style>
