@@ -338,7 +338,7 @@ table.mix, table.tbl, table.score-table, .facts, .crit-bars { line-height: 1.55;
 .dp-cols h4 .chip { margin-left: auto; font-size: 11px; padding: 3px 8px; }
 .dp-cols ul { list-style: none; padding: 0; display: grid; }
 .dp-cols li { padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; color: var(--ink-2); }
-.dp-foot { display: grid; grid-template-columns: 1.2fr .8fr; gap: clamp(20px, 3vw, 40px); margin-top: var(--s6); align-items: start; }
+.dp-foot { display: grid; grid-template-columns: minmax(0, 560px); gap: clamp(20px, 3vw, 40px); margin-top: var(--s6); align-items: start; }
 @media (max-width: 900px) { .dp-foot { grid-template-columns: 1fr; } }
 .crit-bars { display: grid; gap: 10px; }
 .crit-bars .row { display: grid; grid-template-columns: minmax(0, 1fr) 120px 34px; gap: 10px; align-items: center; font-size: 14px; }
@@ -684,7 +684,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="visao" data-nav="Como ler">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">01</span> Antes de começar</span>
+      <span class="kicker">Antes de começar</span>
       <h2>O que é uma análise de concorrentes e como ela foi feita</h2>
       <p class="lede">É um estudo das empresas que disputam o mesmo cliente. Serve para encontrar espaços que ninguém ocupa, ajustar preço, posicionamento e comunicação e descobrir o que vale copiar e o que é melhor evitar.</p>
     </div>
@@ -715,10 +715,6 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
       </div>
     </div>
 
-    <div class="glossary">
-      <h3 class="sub-h">Termos que aparecem nesta página</h3>
-      <dl id="glossary"></dl>
-    </div>
   </div>
 </section>
 
@@ -726,13 +722,12 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="achado" data-nav="Achado central">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">02</span> O achado central</span>
+      <span class="kicker">O achado central</span>
       <h2>O mercado já oferece dose única ou kit de viagem. A oportunidade está em combinar os dois.</h2>
     </div>
     <p class="lede" style="margin:-16px 0 var(--s6)">A proposta da WEEK junta três coisas. O quadro mostra quais delas cada marca já oferece hoje.</p>
     <div class="mix-wrap"><table class="mix" id="mixTable"><caption class="sr">O que cada marca oferece dos três ingredientes da proposta da WEEK</caption></table></div>
     <p class="cap" style="margin-top:10px">Com base nas notas de Formato para uso fora de casa, Kit pronto para levar e Comunicação com quem usa. Dados de 13 e 14/10/2026.</p>
-    <div class="means" style="margin-top:var(--s5)"><span class="tag">Para a WEEK</span><p>Cada ingrediente já existe em alguma marca, mas nenhuma junta os três. A linha da WEEK é uma proposta: ainda depende da pesquisa de mercado e do teste do protótipo. É o principal ponto da matriz de decisões do capítulo 06.</p></div>
   </div>
 </section>
 
@@ -740,7 +735,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="concorrentes" data-nav="Concorrentes">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">03</span> Os concorrentes</span>
+      <span class="kicker">Os concorrentes</span>
       <h2>Quatro marcas, lado a lado</h2>
       <p class="lede">Duas fábricas que vendem para hotéis, uma marca de cabelo que vende no próprio site e a marca que as fundadoras têm como referência. A tabela compara os mesmos pontos para as quatro. Abaixo dela está a ficha completa de cada uma.</p>
     </div>
@@ -759,7 +754,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="precos" data-nav="Preços">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">04</span> Preços</span>
+      <span class="kicker">Preços</span>
       <h2>Quanto custa um banho em cada marca</h2>
       <p class="lede">Os valores abaixo são das concorrentes e servem como referência para a pesquisa. Não são preços definidos para a WEEK. Antes de comparar, vale saber que eles vêm de três tipos de venda diferentes.</p>
     </div>
@@ -779,20 +774,6 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
     <div class="price-card" id="pricePanel" role="tabpanel" aria-labelledby="pt-banho"></div>
     <h3 class="sub-h" style="margin-top:var(--s7);margin-bottom:0">Condições de compra de cada marca</h3>
     <div class="conds" id="condGrid" style="margin-top:var(--s4)"></div>
-    <div class="question">
-      <div class="q"><span class="label">A pergunta central da pesquisa de mercado</span><p>Em qual faixa de preço a WEEK consegue entregar uma experiência premium e, ao mesmo tempo, manter uma proposta atrativa?</p></div>
-      <div class="a">
-        <h4>O preço da WEEK ainda não está definido</h4>
-        <p>Ele depende do custo de produção, levantado com os fornecedores depois que a fórmula estiver pronta, da pesquisa de disposição a pagar (semanas 4 e 5) e do plano financeiro (semanas 7 e 8).</p>
-        <p>O kit deve ser comparado com a Four Bty, e não com o amenity. As referências que a pesquisa vai usar:</p>
-        <div class="refs">
-          <div class="ref"><b>~R$ 0,94</b><span>par H MAX, fábrica</span></div>
-          <div class="ref"><b>~R$ 9,50</b><span>30 ml de shampoo Kerasys</span></div>
-          <div class="ref"><b>R$ 19,90</b><span>kit avulso Naturys Eco</span></div>
-          <div class="ref"><b>R$ 27,39</b><span>Kit Travel Hydra</span></div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -800,7 +781,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="curva" data-nav="Curva de valor">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">05</span> <button class="term" data-term="curva">Curva de valor</button></span>
+      <span class="kicker"><button class="term" data-term="curva">Curva de valor</button></span>
       <h2>Onde cada marca entrega bem, e onde ninguém entrega</h2>
       <p class="lede">A curva de valor coloca as notas das quatro marcas no mesmo gráfico. Comece por um bloco e escolha um ponto para ver a régua e o motivo de cada nota.</p>
     </div>
@@ -844,7 +825,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="decisoes" data-nav="Decisões">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">06</span> <button class="term" data-term="erac">Matriz ERAC</button></span>
+      <span class="kicker"><button class="term" data-term="erac">Matriz ERAC</button></span>
       <h2>O que a WEEK deve eliminar, reduzir, ampliar e criar</h2>
       <p class="lede">A matriz transforma as notas da curva em decisões. Cada item parte de uma nota: onde todas as marcas ficaram baixas, há espaço para ampliar ou criar; onde o mercado gasta esforço em algo que não chega ao consumidor, há o que eliminar ou reduzir.</p>
     </div>
@@ -871,7 +852,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="plano" data-nav="Plano de ação">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">07</span> Plano de ação</span>
+      <span class="kicker">Plano de ação</span>
       <h2>O que fazer, e em que ordem</h2>
       <p class="lede">As recomendações das quatro análises, organizadas pelo momento em que devem ser feitas. Cada uma tem um <button class="term" data-term="5w2h">5W2H</button> completo, na aba ao lado. São propostas da equipe para discutir com vocês, não decisões aprovadas.</p>
     </div>
@@ -890,7 +871,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <section class="chapter" id="validacao" data-nav="O que falta">
   <div class="wrap">
     <div class="head">
-      <span class="kicker"><span class="n">08</span> O que já sabemos e o que falta</span>
+      <span class="kicker">O que já sabemos e o que falta</span>
       <h2>Fatos encontrados, propostas e o que ainda precisa ser validado</h2>
       <p class="lede">A análise não está fechada. Parte das propostas depende de dados que ainda não temos, e a matriz será revista conforme os resultados chegarem.</p>
     </div>
@@ -901,7 +882,7 @@ details.w5[open] .w5-t svg { transform: rotate(45deg); }
 <!-- CONCLUSÃO -->
 <section class="final" id="conclusao" data-nav="Conclusão">
   <div class="wrap">
-    <span class="kicker"><span class="n">09</span> Conclusão</span>
+    <span class="kicker">Conclusão</span>
     <div class="final-grid">
       <div>
         <h2>A oportunidade da WEEK não está apenas no sachê. <em>Está na experiência completa.</em></h2>
@@ -1542,8 +1523,7 @@ function renderIntro() {
   $("#process").innerHTML = STEPS.slice(0, 5).map(s => `<li><h4>${s[0]}</h4><p>${s[1]}</p></li>`).join("");
   $("#weights").innerHTML = BLOCKS.map(bl => `<div class="w"><span><b>${bl.name}</b><br><span class="small">${bl.measures}</span></span><span aria-label="peso ${bl.weight} de 3"><span class="pips">${[1, 2, 3].map(i => `<i class="${i <= bl.weight ? "on" : ""}"></i>`).join("")}</span> <span class="small">peso ${bl.weight}</span></span></div>`).join("");
   $("#rubricExample").innerHTML = rubricHTML("kit", false);
-  $("#glossary").innerHTML = GLOSS.map(g => `<div><dt>${g[0]}</dt><dd>${g[1]}</dd></div>`).join("");
-}
+  }
 function rubricHTML(crit, desc = true) {
   return RUBRIC[crit].map((txt, n) => { const who = BRANDS.filter(b => SCORES[b.id][crit][0] === n); return `<li class="${who.length ? "hit" : ""}"><b>${n}</b><span>${txt}${who.length ? `<span class="who">${who.map(b => bdot(b.id)).join("")}</span>` : ""}</span></li>`; }).reverse().join("");
 }
@@ -1593,7 +1573,6 @@ function renderCompPanel() {
       <div><h4>O que a WEEK pode aprender <span class="chip read">proposta</span></h4><ul>${c.learn.map(x => `<li>${x}</li>`).join("")}</ul></div>
     </div>
     <div class="dp-foot">
-      <div class="means"><span class="tag">Para a WEEK</span><p>${c.reading}</p></div>
       <div><span class="label">Nota por critério</span><div class="crit-bars" style="--bc:var(${b.color});margin-top:10px">${BLOCKS.map(bl => `<div class="row"><span>${bl.short || bl.name} <span class="small">· peso ${bl.weight}</span></span><span class="trk"><span class="fill" style="width:${avg(b.id, bl.id) / 5 * 100}%"></span></span><b>${DOC_AVG[b.id][bl.id]}</b></div>`).join("")}</div>
         <button class="linkbtn" style="margin-top:10px" data-goto="${b.id}">Ver ${short(b.id)} em destaque na curva →</button></div>
     </div>`;
@@ -1613,7 +1592,7 @@ function renderPrice(v) {
       ${barRows([{ id: "hmax", t: "H MAX", s: "Preço de fábrica, sem ST e frete. Orçamento, 13/10/2026.", v: 0.94, p: "~" }, { id: "esto", t: "Estoril (Naturys Eco)", s: "Em pacotes de revenda (cálculo da equipe), 13/10/2026.", v: 2.43, p: "~" }, { id: "kera", t: "Kerasys", s: "30 ml de cada, a partir do kit Moisturizing de 2 × 180 ml por R$ 119,90 (cálculo da equipe).", v: 19.98, p: "~" }, { id: "four", t: "Four Bty", s: "Kit Travel Hydra, 2 × 30 ml, loja oficial em 14/10/2026.", v: 27.39 }], 30)}
       <div class="bands" aria-hidden="true">${BANDS.map(b => `<div class="b" style="left:${b[0] / 30 * 100}%;width:${(b[1] - b[0]) / 30 * 100}%"><b>nota ${b[2]}</b><span>${b[3]}</span></div>`).join("")}</div>
       <p class="axis-note">Escala de R$ 0 a R$ 30, com as faixas da régua de notas. Acima de R$ 30, a nota seria 0.</p>
-      <div class="means" style="margin-top:20px"><span class="tag">Para a WEEK</span><p>A WEEK não vai ganhar no preço do sachê de hotel. O kit deve ser comparado com a Four Bty e a Kerasys, que vendem qualidade, e o custo por banho deve aparecer junto com o que a fórmula entrega.</p></div>`;
+`;
     animBars(p);
   } else if (v === "b2b") {
     p.innerHTML = `<h3>Venda para empresas (<button class="term" data-term="b2b">B2B</button>): quanto o hotel ou a academia paga por sachê</h3>
