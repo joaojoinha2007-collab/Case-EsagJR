@@ -1,0 +1,1644 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Setor Têxtil SC em Dados</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Dashboard interativo de Matemática Aplicada sobre o emprego e as unidades industriais da indústria têxtil de Santa Catarina (2013–2024). Trabalho interdisciplinar UDESC/ESAG.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: relatório executivo — faixa institucional branca fixa no topo; seções numa coluna de 1200px que alternam papel branco e cinza-azulado;
+   em cada painel o gráfico ocupa ~2/3 e o quadro analítico ~1/3. Tema claro único, por escolha (marcas institucionais sobre branco). */
+:root{
+  color-scheme: light;
+  --paper:#FFFFFF;
+  --ground:#F4F5F9;
+  --ground-2:#ECEEF5;
+  --ink:#191A33;
+  --ink-2:#43455E;
+  --muted:#686A82;
+  --line:#E1E3EC;
+  --line-2:#C8CBD9;
+  --navy:#2D2868;
+  --navy-2:#3E3A86;
+  --navy-soft:#ECEBF6;
+  --gold:#BFA46A;
+  --gold-ink:#7A5F24;
+  --gold-soft:#F7F1E3;
+  --s-emp:#2E4FB8;
+  --s-emp-soft:#E7ECFA;
+  --s-fab:#B07A1E;
+  --s-fab-soft:#F8EFDD;
+  --up:#1E7F4F;
+  --up-soft:#E2F2E9;
+  --down:#C23B32;
+  --down-soft:#FBE8E6;
+  --trend:#4B4D66;
+  --poly:#7A4FB5;
+  --f-display:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --f-body:'Public Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --f-mono:'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  --radius:10px;
+  --header-h:76px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--f-body);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--paper)}
+img{max-width:100%}
+h1,h2,h3,h4{margin:0;text-wrap:balance;color:var(--navy)}
+p{margin:0}
+a{color:var(--navy-2)}
+button,select{font:inherit}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px}
+
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:720px){.wrap{padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}}
+
+/* ============ HEADER ============ */
+.site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--paper);border-bottom:1px solid var(--line)}
+.head-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:var(--header-h);padding-block:8px}
+.brand{display:flex;align-items:center;gap:18px;flex:none;text-decoration:none}
+.brand img{display:block;width:auto}
+.brand .logo-udesc{height:44px}
+.brand .logo-esag{height:52px}
+.brand .sep{width:1px;height:40px;background:var(--line-2)}
+.nav{display:flex;gap:2px;flex-wrap:nowrap}
+.nav a{
+  text-decoration:none;color:var(--ink-2);font-size:13.5px;font-weight:600;
+  padding:8px 10px;border-radius:999px;white-space:nowrap;transition:background .15s,color .15s;
+}
+.nav a:hover{background:var(--ground)}
+.nav a.active{background:var(--navy);color:#fff}
+.menu-btn{display:none;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--paper);color:var(--navy);
+  font-weight:700;font-size:14px;padding:9px 14px;border-radius:999px;cursor:pointer}
+.menu-btn svg{width:16px;height:16px}
+@media (max-width:1300px){
+  .menu-btn{display:inline-flex}
+  .nav{display:none;position:absolute;left:0;right:0;top:100%;background:var(--paper);border-bottom:1px solid var(--line);
+    flex-direction:column;padding:8px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));box-shadow:0 14px 24px -18px rgba(25,26,51,.35)}
+  .nav.open{display:flex}
+  .nav a{padding:12px 14px;border-radius:8px;font-size:15px}
+}
+@media (max-width:520px){
+  :root{--header-h:64px}
+  .brand{gap:12px}
+  .brand .logo-udesc{height:32px}
+  .brand .logo-esag{height:40px}
+  .brand .sep{height:30px}
+  .menu-btn span{display:none}
+}
+
+/* ============ SECTIONS ============ */
+section{scroll-margin-top:calc(var(--header-h) + 8px)}
+.band{padding-block:72px}
+.band.paper{background:var(--paper)}
+@media (max-width:640px){.band{padding-block:48px}}
+.sec-head{display:grid;gap:10px;max-width:760px;margin-bottom:32px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink)}
+.sec-head h2{font-family:var(--f-display);font-size:clamp(28px,3.6vw,40px);line-height:1.12;font-weight:700}
+.sec-head .lede{color:var(--ink-2);font-size:17px;max-width:68ch}
+.sub-head{display:grid;gap:6px;margin:56px 0 20px;max-width:760px}
+.sub-head h3{font-family:var(--f-display);font-size:clamp(22px,2.6vw,28px);line-height:1.2}
+.sub-head p{color:var(--ink-2)}
+.question{font-family:var(--f-display);font-style:italic;color:var(--ink-2);font-size:17px}
+
+/* ============ HERO ============ */
+.hero{
+  background:
+    repeating-linear-gradient(0deg, rgba(45,40,104,.035) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(90deg, rgba(191,164,106,.06) 0 1px, transparent 1px 7px),
+    var(--paper);
+  border-bottom:1px solid var(--line);
+  padding-block:56px 48px;
+}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:48px;align-items:end}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+.inst{display:inline-flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:13px;font-weight:600;color:var(--navy);
+  border:1px solid var(--line-2);background:var(--paper);padding:6px 12px;border-radius:999px;margin-bottom:22px}
+.inst .dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.hero h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5.2vw,60px);line-height:1.04;letter-spacing:-.01em}
+.hero h1 em{font-style:italic;color:var(--gold-ink);font-weight:600}
+.hero .subtitle{margin-top:20px;font-size:clamp(17px,1.6vw,20px);color:var(--ink-2);max-width:60ch}
+.hero-aside{display:grid;gap:14px;font-size:15px;color:var(--ink-2);border-left:2px solid var(--gold);padding-left:20px}
+.hero-aside strong{color:var(--ink)}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{font-family:var(--f-mono);font-size:12px;font-weight:500;color:var(--navy);background:var(--navy-soft);padding:5px 10px;border-radius:6px}
+
+/* ============ KPI ============ */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:820px){.kpi-grid{grid-template-columns:1fr}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 26px 22px;display:grid;gap:16px;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--kc)}
+.kpi[data-k="emp"]{--kc:var(--s-emp);--kc-soft:var(--s-emp-soft)}
+.kpi[data-k="fab"]{--kc:var(--s-fab);--kc-soft:var(--s-fab-soft)}
+.kpi-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.kpi-label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2)}
+.period{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--kc);background:var(--kc-soft);padding:4px 9px;border-radius:6px;white-space:nowrap}
+.kpi-main{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.kpi-value{font-family:var(--f-display);font-weight:700;font-size:clamp(46px,6vw,64px);line-height:.95;color:var(--ink);font-variant-numeric:tabular-nums lining-nums}
+.kpi-unit{font-size:15px;color:var(--ink-2);margin-top:8px}
+.kpi-spark{width:min(220px,100%);height:64px;flex:none}
+.kpi-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kpi-stats div{background:var(--paper);padding:12px 14px;display:grid;gap:2px;min-width:0}
+.kpi-stats dt{font-size:12px;color:var(--muted);font-weight:600}
+.kpi-stats dd{margin:0;font-size:19px;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi-stats dd small{display:block;font-size:12px;font-weight:500;color:var(--muted)}
+@media (max-width:480px){.kpi-stats{grid-template-columns:1fr 1fr}.kpi-stats div:last-child{grid-column:1/-1}}
+.kpi-note{font-size:14.5px;color:var(--ink-2)}
+.up{color:var(--up)} .down{color:var(--down)}
+.tag{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:13px;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.tag.up{background:var(--up-soft)} .tag.down{background:var(--down-soft)} .tag.flat{background:var(--ground-2);color:var(--ink-2)}
+
+.exec{margin-top:20px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:0;background:var(--navy);color:#fff;border-radius:14px;overflow:hidden}
+@media (max-width:820px){.exec{grid-template-columns:1fr}}
+.exec-quote{padding:30px 32px;display:grid;gap:12px}
+.exec-quote .eyebrow{color:var(--gold)}
+.exec-quote blockquote{margin:0;font-family:var(--f-display);font-size:clamp(21px,2.4vw,27px);line-height:1.3;font-weight:600}
+.exec-quote blockquote b{color:#F1DDAA;font-weight:700}
+.exec-side{padding:30px 32px;background:var(--navy-2);display:grid;gap:12px;font-size:15px;color:#E6E5F3}
+.exec-side strong{color:#fff}
+.alert{display:flex;gap:12px;align-items:flex-start;margin-top:20px;background:var(--gold-soft);border:1px solid #E7D9B5;border-radius:10px;padding:14px 16px;font-size:14.5px;color:var(--ink)}
+.alert svg{flex:none;width:20px;height:20px;color:var(--gold-ink);margin-top:2px}
+
+/* ============ PANELS / DASH ============ */
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}
+.ground .panel, .band:not(.paper) .panel{border-color:var(--line)}
+.band.paper .panel{background:var(--paper);border-color:var(--line)}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.panel-title{font-size:17px;font-weight:800;color:var(--ink)}
+.panel-sub{font-size:13.5px;color:var(--muted);margin-top:2px}
+.dash{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;align-items:start}
+@media (max-width:980px){.dash{grid-template-columns:1fr}}
+.side{display:grid;gap:16px;min-width:0}
+@media (min-width:640px) and (max-width:980px){.side{grid-template-columns:1fr 1fr}}
+.chart-box{position:relative;height:clamp(280px,38vw,420px);width:100%}
+.chart-box.sm{height:clamp(220px,26vw,280px)}
+.chart-box.xs{height:200px}
+.source{font-size:12.5px;color:var(--muted);margin-top:12px}
+.source b{color:var(--ink-2);font-weight:600}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:flex-end;margin-bottom:18px}
+.ctl{display:grid;gap:6px}
+.ctl-label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.seg{display:inline-flex;background:var(--ground);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;color:var(--ink-2);font-weight:600;font-size:14px;padding:8px 13px;border-radius:7px;cursor:pointer;min-height:38px}
+.seg button:hover{background:var(--ground-2)}
+.seg button[aria-pressed="true"]{background:var(--paper);color:var(--navy);box-shadow:0 1px 2px rgba(25,26,51,.14),0 0 0 1px var(--line-2)}
+select.sel{appearance:none;-webkit-appearance:none;border:1px solid var(--line-2);background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2343455E' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 12px center;
+  color:var(--ink);font-weight:600;font-size:14px;padding:8px 34px 8px 12px;border-radius:8px;min-height:40px;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.lg{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;cursor:pointer;min-height:34px}
+.lg[aria-pressed="false"]{opacity:.5;text-decoration:line-through}
+.lg.static{cursor:default}
+.sw{width:18px;height:0;border-top:3px solid var(--c);border-radius:2px;flex:none}
+.sw.dash{border-top-style:dashed}
+.sw.dot{border-top-style:dotted;border-top-width:4px}
+.sw.box{height:10px;border:0;background:var(--c);border-radius:3px;width:12px}
+
+.years{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 6px;margin-top:12px;scrollbar-width:thin}
+.years button{flex:none;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);font-family:var(--f-mono);font-size:13px;font-weight:600;
+  padding:7px 10px;border-radius:8px;cursor:pointer;min-height:36px}
+.years button:hover{border-color:var(--line-2)}
+.years button[aria-pressed="true"]{background:var(--kc,var(--navy));border-color:var(--kc,var(--navy));color:#fff}
+.years button.nodata{border-style:dashed;color:var(--muted)}
+.dash[data-k="emp"]{--kc:var(--s-emp);--kc-soft:var(--s-emp-soft)}
+.dash[data-k="fab"]{--kc:var(--s-fab);--kc-soft:var(--s-fab-soft)}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:12px;min-width:0}
+.card h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-family:var(--f-body)}
+.big{font-family:var(--f-display);font-weight:700;font-size:38px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums lining-nums}
+.big small{font-family:var(--f-body);font-size:14px;font-weight:500;color:var(--muted);margin-left:6px}
+.kv{display:grid;gap:8px;margin:0}
+.kv > div{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-top:1px solid var(--line);padding-top:8px}
+.kv dt{font-size:13.5px;color:var(--ink-2)}
+.kv dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.empty{display:grid;gap:6px;padding:14px;border:1px dashed var(--line-2);border-radius:10px;background:var(--ground);color:var(--ink-2);font-size:14px}
+.empty strong{color:var(--ink)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.pair .ctl{min-width:0}
+.pair select.sel{width:100%}
+.big.up{color:var(--up)} .big.down{color:var(--down)}
+@media (max-width:560px){.panel{padding:16px}.card{padding:16px}}
+.mini-note{font-size:13px;color:var(--muted)}
+
+.reading{margin-top:20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:980px){.reading{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.reading{grid-template-columns:1fr}}
+.read{border-top:3px solid var(--rc,var(--line-2));background:var(--paper);border-radius:0 0 10px 10px;padding:14px 16px;display:grid;gap:6px;border-left:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.read.r-down{--rc:var(--down)} .read.r-up{--rc:var(--up)} .read.r-flat{--rc:var(--gold)}
+.read .when{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--ink-2)}
+.read b{font-size:15px;color:var(--ink)}
+.read p{font-size:14px;color:var(--ink-2)}
+.caveat{margin-top:16px;font-size:14px;color:var(--ink-2);display:flex;gap:10px;align-items:flex-start}
+.caveat::before{content:"i";flex:none;width:20px;height:20px;border-radius:50%;background:var(--navy-soft);color:var(--navy);font-weight:800;font-size:12px;display:grid;place-items:center;font-family:var(--f-display);font-style:italic;margin-top:1px}
+
+/* variations */
+.var-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.var-grid.single{grid-template-columns:1fr}
+@media (max-width:900px){.var-grid{grid-template-columns:1fr}}
+.insights{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+@media (max-width:980px){.insights{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.insights{grid-template-columns:1fr}}
+.ins{text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:14px 16px;cursor:pointer;display:grid;gap:4px;color:var(--ink);position:relative}
+.ins:hover{border-color:var(--line-2)}
+.ins[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy)}
+.ins .k{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ins .v{font-family:var(--f-display);font-weight:700;font-size:28px;line-height:1.05;font-variant-numeric:tabular-nums}
+.ins .d{font-size:13px;color:var(--ink-2)}
+.ins .go{font-size:12px;font-weight:700;color:var(--navy-2)}
+.detail{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:980px){.detail{grid-template-columns:1fr}}
+.summary-line{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+/* tmv */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:980px){.split{grid-template-columns:1fr}}
+.phase-chips{display:flex;flex-wrap:wrap;gap:6px}
+.phase-chips button{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;display:inline-flex;gap:6px;align-items:center;min-height:36px}
+.phase-chips button[aria-pressed="true"]{border-color:var(--navy);background:var(--navy);color:#fff}
+.phase-chips .pdot{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.concept{background:var(--navy-soft);border-radius:12px;padding:18px 20px;display:grid;gap:8px;margin-bottom:20px}
+.concept p{color:var(--ink);font-size:15.5px}
+.concept .defn{font-family:var(--f-display);font-size:18px;line-height:1.45}
+.formula{font-family:var(--f-mono);font-size:14px;font-weight:500;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--navy);white-space:pre-wrap;overflow-wrap:anywhere}
+.formula.big-f{font-size:clamp(16px,2vw,20px);font-weight:600}
+.r2bar{height:10px;border-radius:999px;background:var(--ground-2);overflow:hidden}
+.r2bar i{display:block;height:100%;background:var(--navy);border-radius:999px;transition:width .3s}
+
+/* timeline */
+.timeline{overflow-x:auto}
+.tl-inner{display:grid;gap:14px;min-width:640px}
+.tl-row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;align-items:center}
+.tl-name{font-size:13px;font-weight:700;color:var(--ink)}
+.tl-track{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:3px}
+.tl-seg{border-radius:6px;padding:8px 8px;font-size:12px;font-weight:700;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:grid;gap:1px}
+.tl-seg small{font-family:var(--f-mono);font-weight:500;font-size:11px;opacity:.9}
+.tl-seg.s-down{background:var(--down)} .tl-seg.s-up{background:var(--up)} .tl-seg.s-flat{background:var(--gold-ink)}
+.tl-seg.s-na{background:var(--ground);color:var(--muted);border:1px dashed var(--line-2)}
+.tl-axis{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-left:122px}
+.events{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.events button{width:100%;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 12px;cursor:pointer;display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:start;color:var(--ink)}
+.events button[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy);background:var(--navy-soft)}
+.events .yr{font-family:var(--f-mono);font-weight:600;font-size:14px;color:var(--navy)}
+.events .tx{font-size:13.5px;color:var(--ink-2)}
+.events .tx b{display:block;color:var(--ink);font-size:14px}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
+@media (max-width:900px){.trio{grid-template-columns:1fr}}
+.trio .card p{font-size:14.5px;color:var(--ink-2)}
+.trio .card h5{margin:0;font-size:16px;color:var(--navy)}
+
+/* management */
+.axes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+@media (max-width:760px){.axes{grid-template-columns:1fr}}
+.axis-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:10px;align-content:start}
+.axis-card .n{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--gold-ink)}
+.axis-card h4{font-family:var(--f-display);font-size:21px}
+.axis-card p{color:var(--ink-2);font-size:15px}
+.axis-card .evid{font-size:13.5px;background:var(--ground);border-radius:8px;padding:10px 12px;color:var(--ink)}
+.axis-card .flag{font-size:13px;color:var(--gold-ink);font-weight:600}
+.final{margin-top:28px;border-radius:16px;background:var(--navy);color:#fff;padding:clamp(24px,4vw,44px);display:grid;gap:14px}
+.final .eyebrow{color:var(--gold)}
+.final p.lead{font-family:var(--f-display);font-size:clamp(22px,2.8vw,32px);line-height:1.25;font-weight:600;max-width:40ch}
+.final p{color:#E3E2F2;max-width:75ch}
+
+/* methodology */
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.notes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.notes{grid-template-columns:1fr}}
+.note{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:16px 18px;display:grid;gap:6px;align-content:start}
+.note b{color:var(--ink);font-size:15px}
+.note p{font-size:14px;color:var(--ink-2)}
+details.acc{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+details.acc > summary{cursor:pointer;list-style:none;padding:16px 18px;display:flex;justify-content:space-between;gap:12px;align-items:center;font-weight:700;color:var(--navy);font-size:16px}
+details.acc > summary::-webkit-details-marker{display:none}
+details.acc > summary::after{content:"+";font-family:var(--f-mono);font-size:20px;color:var(--gold-ink);line-height:1}
+details.acc[open] > summary::after{content:"−"}
+details.acc > summary .q{font-weight:500;color:var(--muted);font-size:13.5px;margin-left:auto;margin-right:10px;text-align:right}
+@media (max-width:640px){details.acc > summary .q{display:none}}
+.acc-body{padding:0 18px 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 22px}
+@media (max-width:700px){.acc-body{grid-template-columns:1fr}}
+.acc-body > div{display:grid;gap:4px;min-width:0}
+.acc-body h6{margin:0;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.acc-body p{font-size:14.5px;color:var(--ink)}
+.acc-body .full{grid-column:1/-1}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--ground);font-weight:700;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+td.na{color:var(--muted)}
+.ok{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--up)}
+.bad{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--down)}
+.audit td:first-child{white-space:normal;min-width:220px}
+.refs{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.refs li{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14px;color:var(--ink);overflow-wrap:anywhere}
+.refs li .use{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-ink);margin-bottom:4px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+ul.plain{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14.5px;color:var(--ink-2)}
+code{font-family:var(--f-mono);font-size:13px;background:var(--ground);padding:1px 6px;border-radius:4px;color:var(--navy)}
+
+footer{background:var(--paper);border-top:1px solid var(--line);padding-block:32px;font-size:13.5px;color:var(--muted)}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.foot .brand .logo-udesc{height:34px}.foot .brand .logo-esag{height:40px}
+.to-top{position:fixed;right:max(18px,calc(env(safe-area-inset-right,0px) + 12px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;
+  width:46px;height:46px;border-radius:50%;border:0;background:var(--navy);color:#fff;cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 6px 18px -6px rgba(25,26,51,.5);opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.to-top.show{opacity:1;pointer-events:auto;transform:none}
+.to-top svg{width:20px;height:20px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.chart-fallback{font-size:14px;color:var(--down);padding:16px}
+</style>
+
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="brand" href="#visao-geral" aria-label="UDESC e ESAG — voltar ao início">
+      <img class="logo-udesc" src="assets/udesc-logo.png" alt="UDESC — Universidade do Estado de Santa Catarina" width="730" height="266">
+      <span class="sep" aria-hidden="true"></span>
+      <img class="logo-esag" src="assets/esag-logo.png" alt="ESAG — Centro de Ciências da Administração e Socioeconômicas" width="834" height="622">
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      <span>Seções</span>
+    </button>
+    <nav class="nav" id="nav" aria-label="Seções do dashboard">
+      <a href="#visao-geral">Visão geral</a>
+      <a href="#emprego">Emprego</a>
+      <a href="#unidades">Unidades industriais</a>
+      <a href="#variacoes">Variações históricas</a>
+      <a href="#tendencias">Tendências e regressões</a>
+      <a href="#interpretacao">Interpretação gerencial</a>
+      <a href="#metodologia">Metodologia e fontes</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ================= VISÃO GERAL ================= -->
+<section id="visao-geral">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="inst"><span class="dot" aria-hidden="true"></span>Trabalho Interdisciplinar — Administração Empresarial | UDESC/ESAG</div>
+        <h1>Setor Têxtil de Santa Catarina: <em>uma análise através dos dados</em></h1>
+        <p class="subtitle">Uma investigação da evolução do emprego e das unidades industriais entre 2013 e 2024, utilizando ferramentas de Matemática Aplicada para compreender as transformações do setor.</p>
+      </div>
+      <div class="hero-aside">
+        <p>Este dashboard transforma duas séries históricas do IBGE em indicadores: <strong>quanto</strong> o setor mudou, <strong>quando</strong> mudou, <strong>em que ritmo</strong> e <strong>para onde</strong> a tendência aponta.</p>
+        <div class="facts">
+          <span class="fact">CNAE 2.0 · divisão 13</span>
+          <span class="fact">Fabricação de produtos têxteis</span>
+          <span class="fact">Fonte: IBGE / SIDRA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Visão executiva</span>
+        <h2>Os dois indicadores terminaram em direções opostas</h2>
+      </div>
+      <div class="kpi-grid" id="kpis"></div>
+
+      <div class="exec">
+        <div class="exec-quote">
+          <span class="eyebrow">Principal conclusão do estudo</span>
+          <blockquote>O setor terminou os períodos analisados com <b>mais unidades industriais</b>, mas <b>menos empregados</b> do que no início das respectivas séries.</blockquote>
+        </div>
+        <div class="exec-side">
+          <p>As duas séries caíram juntas na recessão de 2015–2016 e se recuperaram depois, mas não terminaram no mesmo lugar.</p>
+          <p><strong>Cautela:</strong> o número de fábricas, isoladamente, não permite concluir se a produtividade aumentou ou diminuiu. Para isso seriam necessários dados de produção, que não fazem parte destas séries.</p>
+        </div>
+      </div>
+
+      <div class="alert" role="note">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 1.5 17h17L10 2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 8v4.2M10 14.6v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <p><strong>Períodos diferentes.</strong> A série de emprego vai de 2013 a <strong>2024</strong>; a de unidades industriais vai de 2013 a <strong>2023</strong>, porque o dado de 2024 da PIA-Empresa ainda não foi divulgado. As variações de cada indicador se referem ao seu próprio período e não devem ser comparadas como se fossem do mesmo intervalo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EMPREGO ================= -->
+<section id="emprego" class="band paper">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Dashboard 1 · Pessoas empregadas · 2013–2024</span>
+      <h2>Evolução do emprego na indústria têxtil catarinense</h2>
+      <p class="lede">Pessoas assalariadas (com vínculo de trabalho) nas unidades da indústria têxtil de SC em 31 de dezembro de cada ano. Toque em um ponto ou em um ano para ver a variação em relação ao ano anterior.</p>
+    </div>
+    <div id="dash-emp"></div>
+    <div class="reading">
+      <div class="read r-down"><span class="when">2013 → 2015</span><b>Forte queda</b><p>O setor perdeu 9.444 empregos em dois anos (−14,9%), no início da recessão de 2015–2016.</p></div>
+      <div class="read r-up"><span class="when">2015 → 2021</span><b>Recuperação</b><p>O emprego voltou a crescer e chegou a 63.389 em 2021, praticamente o nível de 2013.</p></div>
+      <div class="read r-down"><span class="when">2021 → 2023</span><b>Nova queda</b><p>Em 2022 e 2023 o setor somou 3.296 vagas a menos.</p></div>
+      <div class="read r-up"><span class="when">2023 → 2024</span><b>Retomada</b><p>Em 2024 o emprego voltou a crescer, com 1.107 empregados a mais do que em 2023.</p></div>
+    </div>
+    <p class="caveat">Para o mercado de trabalho, a série mostra um setor sensível aos ciclos da economia: perde vagas rapidamente nas crises e leva anos para recuperá-las. O formato do gráfico, sozinho, não prova a causa de cada movimento. As explicações de contexto (recessão, pandemia, inflação do vestuário) vêm das fontes citadas no estudo.</p>
+  </div>
+</section>
+
+<!-- ================= UNIDADES ================= -->
+<section id="unidades" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Dashboard 2 · Unidades industriais · 2013–2023</span>
+      <h2>Evolução das unidades industriais (fábricas)</h2>
+      <p class="lede">Unidades locais industriais da divisão têxtil em funcionamento em SC, segundo a PIA-Empresa, que considera indústrias com cinco ou mais pessoas ocupadas.</p>
+    </div>
+    <div id="dash-fab"></div>
+    <div class="reading">
+      <div class="read r-down"><span class="when">2013 → 2016</span><b>Queda até o mínimo</b><p>O número de fábricas caiu até o mínimo de 1.088 unidades em 2016.</p></div>
+      <div class="read r-up"><span class="when">2016 → 2022</span><b>Recuperação</b><p>Com pequenas oscilações, o setor abriu em média 31 fábricas por ano até 2022.</p></div>
+      <div class="read r-up"><span class="when">2022</span><b>Máximo da série</b><p>1.273 unidades em 2022, o maior valor observado.</p></div>
+      <div class="read r-flat"><span class="when">2022 → 2023</span><b>Estabilização</b><p>Pequena queda para 1.268 unidades (−5). O indicador sugere estabilidade perto de 1.270, sem crescimento contínuo no período todo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VARIAÇÕES ================= -->
+<section id="variacoes" class="band paper">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Dashboard 3 · Variações sucessivas</span>
+      <h2>Quanto o setor ganhou ou perdeu a cada ano</h2>
+      <p class="lede">Cada barra compara um ano com o anterior. Barras acima de zero (▲ verde) são crescimento; abaixo de zero (▼ vermelho), queda. Toque em uma barra para ver os valores.</p>
+    </div>
+
+    <div class="insights" id="insights"></div>
+
+    <div class="panel">
+      <div class="controls" id="varControls">
+        <div class="ctl"><span class="ctl-label" id="lbl-vind">Indicador</span>
+          <div class="seg" role="group" aria-labelledby="lbl-vind" data-ctl="ind">
+            <button type="button" data-v="ambos">Ambos</button><button type="button" data-v="emp">Empregados</button><button type="button" data-v="fab">Fábricas</button>
+          </div></div>
+        <div class="ctl"><span class="ctl-label" id="lbl-vmed">Medida</span>
+          <div class="seg" role="group" aria-labelledby="lbl-vmed" data-ctl="medida">
+            <button type="button" data-v="abs">Absoluta</button><button type="button" data-v="pct">Percentual</button>
+          </div></div>
+        <div class="ctl"><span class="ctl-label" id="lbl-vsin">Exibir</span>
+          <div class="seg" role="group" aria-labelledby="lbl-vsin" data-ctl="sinal">
+            <button type="button" data-v="todas">Todas</button><button type="button" data-v="up">▲ Crescimento</button><button type="button" data-v="down">▼ Queda</button>
+          </div></div>
+        <div class="ctl"><span class="ctl-label">Período</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label class="sr-only" for="varDe">Ano inicial</label><select class="sel" id="varDe"></select>
+            <span aria-hidden="true" style="color:var(--muted)">até</span>
+            <label class="sr-only" for="varAte">Ano final</label><select class="sel" id="varAte"></select>
+          </div></div>
+      </div>
+      <div class="var-grid" id="varGrid">
+        <div id="varCard-emp">
+          <div class="panel-head"><div><div class="panel-title">Empregados: ganho ou perda anual</div><div class="panel-sub" id="varSub-emp"></div></div></div>
+          <div class="chart-box sm"><canvas id="cVarEmp" role="img" aria-label="Gráfico de barras das variações anuais de empregados"></canvas></div>
+          <div class="summary-line" id="varSum-emp"></div>
+        </div>
+        <div id="varCard-fab">
+          <div class="panel-head"><div><div class="panel-title">Fábricas: ganho ou perda anual</div><div class="panel-sub" id="varSub-fab"></div></div></div>
+          <div class="chart-box sm"><canvas id="cVarFab" role="img" aria-label="Gráfico de barras das variações anuais de unidades industriais"></canvas></div>
+          <div class="summary-line" id="varSum-fab"></div>
+        </div>
+      </div>
+      <p class="source"><b>Fonte:</b> Tabela 2 do estudo, calculada a partir de IBGE (2023; 2026a; 2026b). Percentuais sobre o valor do ano anterior.</p>
+    </div>
+
+    <div class="detail" id="varDetail"></div>
+  </div>
+</section>
+
+<!-- ================= TENDÊNCIAS ================= -->
+<section id="tendencias" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Dashboards 4, 5 e 6 · Ritmo e tendência</span>
+      <h2>Tendências e regressões</h2>
+      <p class="lede">Três ferramentas para ler o ritmo das séries: a taxa média de variação por fase, a reta de regressão com a sua derivada e os pontos de virada.</p>
+    </div>
+
+    <!-- TMV -->
+    <div class="sub-head" id="tmv">
+      <span class="eyebrow">Taxa Média de Variação (TMV)</span>
+      <h3>Em que ritmo cada fase aconteceu?</h3>
+    </div>
+    <div class="concept">
+      <p class="defn">A Taxa Média de Variação mostra quanto um indicador variou, em média, por ano entre dois momentos. Ela resume o ritmo de mudança de um intervalo, mas não significa que o indicador tenha crescido ou caído exatamente nessa quantidade em todos os anos.</p>
+      <div class="formula">TMV = (V<sub>f</sub> − V<sub>i</sub>) ÷ (ano final − ano inicial)   →   inclinação da reta secante</div>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctl"><span class="ctl-label" id="lbl-tind">Indicador</span>
+          <div class="seg" role="group" aria-labelledby="lbl-tind" id="tmvInd">
+            <button type="button" data-v="emp">Empregados</button><button type="button" data-v="fab">Fábricas</button>
+          </div></div>
+        <div class="ctl"><span class="ctl-label" id="lbl-tfase">Fase</span>
+          <div class="phase-chips" role="group" aria-labelledby="lbl-tfase" id="tmvChips"></div></div>
+      </div>
+      <div class="split">
+        <div>
+          <div class="panel-title">TMV por fase</div>
+          <div class="panel-sub" id="tmvBarsSub"></div>
+          <div class="chart-box sm"><canvas id="cTmvBars" role="img" aria-label="Barras horizontais com a TMV de cada fase"></canvas></div>
+        </div>
+        <div>
+          <div class="panel-title">A reta secante da fase selecionada</div>
+          <div class="panel-sub">A TMV é a inclinação da reta que liga o primeiro ao último ponto da fase.</div>
+          <div class="chart-box sm"><canvas id="cTmvLine" role="img" aria-label="Série histórica com a reta secante da fase selecionada"></canvas></div>
+        </div>
+      </div>
+      <div class="detail" id="tmvDetail" style="margin-top:18px"></div>
+      <p class="source"><b>Fonte:</b> Tabela 3 do estudo (fases definidas pelos pontos de virada de cada série), com base em IBGE (2023; 2026a; 2026b).</p>
+    </div>
+
+    <!-- REGRESSÃO -->
+    <div class="sub-head" id="regressao">
+      <span class="eyebrow">Regressão linear e Taxa de Variação Instantânea (TVI)</span>
+      <h3>Qual é a tendência e qual é a sua derivada?</h3>
+    </div>
+    <div class="concept">
+      <p>A regressão linear ajusta uma reta aos dados históricos pelo método dos mínimos quadrados, representando a tendência geral. Nesse modelo, <strong>a derivada é igual ao coeficiente angular <i>b</i></strong> da reta, ou seja, a variação estimada por ano. Na Administração, ela é lida como <strong>variação marginal</strong>: quanto o indicador tende a mudar no próximo ano, mantido o ritmo. Uma tendência estatística <strong>não é uma previsão garantida</strong>.</p>
+      <div class="formula">y = a + b·t   (t = 0 em 2013)      y′ = b      R² ∈ [0, 1]</div>
+    </div>
+    <div class="dash" data-k="emp" id="regDash">
+      <div class="panel">
+        <div class="controls">
+          <div class="ctl"><span class="ctl-label" id="lbl-rind">Indicador</span>
+            <div class="seg" role="group" aria-labelledby="lbl-rind" id="regInd">
+              <button type="button" data-v="emp">Empregados</button><button type="button" data-v="fab">Fábricas</button>
+            </div></div>
+          <div class="ctl"><span class="ctl-label" id="lbl-rreta">Reta</span>
+            <div class="seg" role="group" aria-labelledby="lbl-rreta" id="regReta"></div></div>
+        </div>
+        <div class="legend" id="regLegend"></div>
+        <div class="chart-box"><canvas id="cReg" role="img" aria-label="Série histórica com reta de regressão"></canvas></div>
+        <p class="source"><b>Fonte:</b> equações (11) e (12) e Tabela 4 do estudo; ajuste por mínimos quadrados (INCLINAÇÃO, INTERCEPÇÃO e RQUAD no Excel).</p>
+      </div>
+      <div class="side" id="regSide"></div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Inclinações por intervalo (Tabela 4)</div>
+          <div class="panel-sub">Retas calculadas separadamente para trechos da série. É uma análise diferente da reta de longo prazo: cada barra mostra a TVI estimada só naquele intervalo. Toque em uma barra para desenhar a reta no gráfico acima.</div>
+        </div>
+      </div>
+      <div class="two">
+        <div><div class="panel-title" style="font-size:15px">Empregados por ano</div><div class="panel-sub">Último ano = 2024</div><div class="chart-box xs"><canvas id="cTviEmp" role="img" aria-label="Inclinação por intervalo, empregados"></canvas></div></div>
+        <div><div class="panel-title" style="font-size:15px">Fábricas por ano</div><div class="panel-sub">Último ano = 2023</div><div class="chart-box xs"><canvas id="cTviFab" role="img" aria-label="Inclinação por intervalo, fábricas"></canvas></div></div>
+      </div>
+      <p class="caveat">Empregados: a tendência passou de −882 por ano (2013–2018) para +531 (2019–2024) e voltou a ser negativa a partir de 2021 (−897). Como 2024 já registrou alta, a queda perdeu intensidade. Fábricas: o crescimento acelerou a partir de 2019 (+24 por ano, R² = 0,82) e quase parou nos anos recentes (+1,5 por ano), sinal de estabilização perto de 1.270 unidades.</p>
+    </div>
+
+    <!-- PONTOS DE VIRADA -->
+    <div class="sub-head" id="viradas">
+      <span class="eyebrow">Máximos, mínimos e mudanças de tendência</span>
+      <h3>Quando o rumo mudou?</h3>
+      <p>Linha do tempo das fases de cada série (Quadro 5 do estudo).</p>
+    </div>
+    <div class="panel">
+      <div class="timeline" id="timeline"></div>
+    </div>
+
+    <div class="dash" style="margin-top:20px" id="turnDash" data-k="emp">
+      <div class="panel">
+        <div class="controls">
+          <div class="ctl"><span class="ctl-label" id="lbl-vind2">Indicador</span>
+            <div class="seg" role="group" aria-labelledby="lbl-vind2" id="turnInd">
+              <button type="button" data-v="emp">Empregados</button><button type="button" data-v="fab">Fábricas</button>
+            </div></div>
+          <div class="ctl"><span class="ctl-label">Camadas</span>
+            <div class="legend" id="turnLegend"></div></div>
+        </div>
+        <div class="chart-box"><canvas id="cTurn" role="img" aria-label="Série com pontos de virada e curva polinomial"></canvas></div>
+        <p class="source"><b>Fonte:</b> Quadro 5 e equações (13) e (14) do estudo. A curva polinomial é uma aproximação: não reproduz todas as oscilações reais.</p>
+      </div>
+      <div class="side" id="turnSide"></div>
+    </div>
+
+    <div class="trio">
+      <div class="card"><h5>Máximo e mínimo observados</h5><p>São o maior e o menor valor efetivamente registrados na série. Exemplo: o mínimo de empregados foi 54.031, em 2015. O máximo, 63.475, está no primeiro ano (2013), e quase foi igualado em 2021.</p></div>
+      <div class="card"><h5>Mudança de tendência</h5><p>É o ano em que a série troca de direção nos dados observados, de queda para alta ou de alta para queda. Exemplo: 2015 (queda → alta) e 2021 (alta → queda) no emprego.</p></div>
+      <div class="card"><h5>Ponto de inflexão</h5><p>É uma propriedade da <strong>curva ajustada</strong>, e não dos dados: o ponto em que f″(t) = 0 e a curvatura muda. Para o emprego, t ≈ 6,2 (por volta de 2019): o emprego continuou crescendo, mas cada vez mais devagar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INTERPRETAÇÃO ================= -->
+<section id="interpretacao" class="band paper">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Dashboard 7 · Comparação e leitura gerencial</span>
+      <h2>Mais fábricas, menos empregados: o que isso significa?</h2>
+      <p class="lede">Para comparar indicadores de escalas tão diferentes, os dois foram convertidos em índice com 2013 = 100, calculado a partir dos valores originais. Toque em um ano para ver a distância entre as séries.</p>
+    </div>
+
+    <div class="dash" data-k="emp">
+      <div class="panel">
+        <div class="controls">
+          <div class="ctl"><span class="ctl-label" id="lbl-cview">Visualização</span>
+            <div class="seg" role="group" aria-labelledby="lbl-cview" id="cmpView">
+              <button type="button" data-v="idx">Índice (2013 = 100)</button><button type="button" data-v="abs">Valores originais</button>
+            </div></div>
+        </div>
+        <div id="cmpIdx">
+          <div class="legend" id="cmpLegend"></div>
+          <div class="chart-box"><canvas id="cIdx" role="img" aria-label="Índices de empregados e fábricas com 2013 igual a 100"></canvas></div>
+        </div>
+        <div id="cmpAbs" hidden>
+          <div class="two">
+            <div><div class="panel-title" style="font-size:15px">Empregados (2013–2024)</div><div class="chart-box sm"><canvas id="cAbsEmp" role="img" aria-label="Série de empregados"></canvas></div></div>
+            <div><div class="panel-title" style="font-size:15px">Fábricas (2013–2023)</div><div class="chart-box sm"><canvas id="cAbsFab" role="img" aria-label="Série de fábricas"></canvas></div></div>
+          </div>
+        </div>
+        <p class="source"><b>Fonte:</b> índices calculados nesta página a partir da Tabela 1 do estudo: índice = valor do ano ÷ valor de 2013 × 100.</p>
+      </div>
+      <div class="side" id="cmpSide"></div>
+    </div>
+
+    <p class="caveat">Essa divergência é relevante para investigar mudanças na estrutura produtiva, mas não prova, por si só, aumento de produtividade, automação ou redução do porte das empresas. As duas séries vêm de pesquisas diferentes (CEMPRE e PIA-Empresa, esta só com indústrias de 5 ou mais pessoas ocupadas). Por isso esta página não calcula “empregados por fábrica” nem produtividade.</p>
+
+    <div class="sub-head">
+      <span class="eyebrow">Interpretação para a Administração</span>
+      <h3>Quatro mensagens para quem decide no setor</h3>
+    </div>
+    <div class="axes">
+      <article class="axis-card"><span class="n">Eixo 1</span><h4>Planejamento estratégico</h4>
+        <p>O setor alterna fases de crescimento e queda em poucos anos. Acompanhar indicadores, elaborar cenários e manter reserva financeira ajuda a empresa a atravessar os períodos de instabilidade.</p>
+        <div class="evid">Evidência: −6.549 empregos em 2015 e −3.296 em 2022–2023, depois de anos de recuperação.</div></article>
+      <article class="axis-card"><span class="n">Eixo 2</span><h4>Gestão de pessoas</h4>
+        <p>A redução do emprego no período completo, somada às oscilações anuais e à dificuldade de encontrar trabalhadores relatada pelo setor (Laps, [2022?]), reforça a importância de retenção, qualificação e melhores condições de trabalho.</p>
+        <div class="evid">Evidência: −2.275 empregados (−3,6%) entre 2013 e 2024.</div></article>
+      <article class="axis-card"><span class="n">Eixo 3</span><h4>Produtividade e inovação</h4>
+        <p>O comportamento distinto entre emprego e fábricas levanta perguntas sobre produtividade, tecnologia e estrutura produtiva, que exigem dados adicionais (produção, faturamento, investimento) para serem respondidas.</p>
+        <span class="flag">Hipótese a investigar, não conclusão do estudo.</span></article>
+      <article class="axis-card"><span class="n">Eixo 4</span><h4>Oportunidades com cautela</h4>
+        <p>O número de fábricas está estável em patamar alto, o emprego voltou a crescer em 2024 e a FIESC registrou crescimento de <strong>7,1% na produção têxtil catarinense em 2024</strong> (FIESC, 2025a). A instabilidade recente recomenda decisões baseadas em dados.</p>
+        <span class="flag">O dado de 7,1% tem fonte e escopo próprios (produção, FIESC), distintos das séries de emprego e fábricas do IBGE.</span></article>
+    </div>
+
+    <div class="final">
+      <span class="eyebrow">Conclusão executiva</span>
+      <p class="lead">Um setor que se recuperou da crise de 2015–2016, mas que hoje opera com estruturas mais enxutas: há mais fábricas do que há dez anos, com menos empregados no total.</p>
+      <p>A variação absoluta e a percentual mostram o tamanho das mudanças; as variações sucessivas e a TMV mostram quando e em que ritmo elas aconteceram; e a TVI, obtida pela derivada, mostra para onde o setor está indo: emprego em sinais de estabilização e fábricas estáveis perto de 1.270 unidades.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= METODOLOGIA ================= -->
+<section id="metodologia" class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Transparência metodológica</span>
+      <h2>Metodologia, conceitos e fontes</h2>
+      <p class="lede">Todos os números desta página são recalculados a partir da Tabela 1 do estudo e conferidos com o documento e com a planilha de cálculos.</p>
+    </div>
+
+    <div class="notes">
+      <div class="note"><b>Períodos diferentes</b><p>Emprego: 2013–2024 (12 anos). Fábricas: 2013–2023 (11 anos). Cada variação usa o período da sua própria série.</p></div>
+      <div class="note"><b>Fábricas sem dado de 2024</b><p>O valor de 2024 da PIA-Empresa ainda não foi divulgado. Ele aparece como “sem dado” e nunca é estimado ou tratado como zero.</p></div>
+      <div class="note"><b>Mudança na série de emprego</b><p>2013–2021 vêm da série histórica do CEMPRE (tabela 6450), encerrada em 2021; 2022–2024 vêm da série que a substituiu (tabela 9529).</p></div>
+      <div class="note"><b>Cautela entre 2021 e 2022</b><p>Os valores mostram continuidade entre as duas séries, mas a variação 2021 → 2022 (−895) compara fontes diferentes e deve ser lida com cautela.</p></div>
+      <div class="note"><b>Limites das regressões</b><p>Com R² de 0,10 (emprego) e 0,36 (fábricas), uma única reta descreve mal séries que sobem e descem. Por isso o estudo também calcula retas por intervalo.</p></div>
+      <div class="note"><b>Tendência não é previsão</b><p>Retas e polinômios resumem o passado. Nenhum valor futuro é projetado nesta página.</p></div>
+    </div>
+
+    <div class="sub-head"><span class="eyebrow">Conceitos</span><h3>O que cada ferramenta responde</h3></div>
+    <div id="concepts"></div>
+
+    <div class="sub-head"><span class="eyebrow">Base de dados</span><h3>Tabela 1 e variações sucessivas (Tabela 2)</h3><p>Valores de entrada do IBGE e variações derivadas deles.</p></div>
+    <div class="table-wrap"><table id="dataTable"></table></div>
+
+    <div class="sub-head"><span class="eyebrow">Auditoria dos cálculos</span><h3>Documento × planilha × recálculo desta página</h3>
+      <p>Cada resultado publicado no estudo foi recalculado a partir dos dados de origem. A coluna “Confere” compara o recálculo, arredondado como no documento, com o valor publicado.</p></div>
+    <div class="table-wrap"><table class="audit" id="auditTable"></table></div>
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-title">Observações da auditoria</div>
+      <ul class="plain" style="margin-top:10px">
+        <li>Não foram encontradas divergências numéricas entre o documento Word e a planilha Excel: todos os valores publicados conferem com as fórmulas.</li>
+        <li>A planilha traz dois cálculos que o documento não cita: a <strong>diferença central</strong> ano a ano e a <strong>taxa composta anual</strong> (−0,33% ao ano para empregados; +0,40% ao ano para fábricas). A taxa composta é exibida no painel da TMV apenas para mostrar a diferença entre os dois conceitos.</li>
+        <li>O documento informa a equação do polinômio de 3º grau apenas para os empregados. Para as fábricas, publica só o R² (0,85) e a inflexão “por volta de 2019”. A equação das fábricas mostrada aqui foi recalculada pelo mesmo método e confere com esses dois resultados.</li>
+        <li>O Quadro 5 descreve o crescimento do emprego como “2016 a 2021”, e a Tabela 3 usa a fase 2015–2021. As duas leituras são compatíveis: 2015 é o ponto mínimo, onde começa a alta. A página segue a Tabela 3 para as fases.</li>
+        <li>Os R² das retas por intervalo (exceto o de 0,82, publicado) foram calculados nesta página e estão identificados como tal.</li>
+      </ul>
+    </div>
+
+    <div class="sub-head"><span class="eyebrow">Ferramentas</span><h3>Fórmulas usadas no Excel</h3></div>
+    <div class="panel">
+      <ul class="plain">
+        <li>Variação absoluta e percentual: <code>=B3−B2</code> e <code>=(B3−B2)/B2</code>, formatada como porcentagem.</li>
+        <li>Variação acumulada (conferência): <code>=PRODUCT(F7:F17)−1</code>, produto dos fatores (1 + i).</li>
+        <li>Taxa média de variação: <code>=(valor final − valor inicial)/(ano final − ano inicial)</code>.</li>
+        <li>Reta de regressão e TVI: <code>=INCLINAÇÃO(valores; t)</code>, <code>=INTERCEPÇÃO(valores; t)</code> e <code>=RQUAD(valores; t)</code>.</li>
+        <li>Linha de tendência no gráfico: “Adicionar Linha de Tendência” → Linear ou Polinomial (ordem 3), exibindo equação e R².</li>
+      </ul>
+    </div>
+
+    <div class="sub-head"><span class="eyebrow">Referências</span><h3>Fontes dos dados e bibliografia</h3></div>
+    <ul class="refs" id="refs"></ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand" aria-hidden="true">
+      <img class="logo-udesc" src="assets/udesc-logo.png" alt="" width="730" height="266">
+      <span class="sep"></span>
+      <img class="logo-esag" src="assets/esag-logo.png" alt="" width="834" height="622">
+    </div>
+    <p>Trabalho Interdisciplinar — Administração Empresarial · UDESC/ESAG · Dados: IBGE/SIDRA. Elaborado pelos autores (2026).</p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Voltar ao início">
+  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V4M4.5 9.5 10 4l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   1. DADOS DE ORIGEM — única fonte de verdade (Tabela 1 do estudo)
+   ===================================================================== */
+const ANO0 = 2013;
+const ANOS = [2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+const SERIES = {
+  emp: {
+    id:'emp', nome:'Pessoas empregadas', curto:'Empregados', unid:'empregados', unid1:'empregado',
+    cor:'--s-emp', soft:'--s-emp-soft',
+    fonte:'IBGE, CEMPRE: tabela 6450 (2013–2021) e tabela 9529 (2022–2024). CNAE 2.0, divisão 13.',
+    v:[63475,60580,54031,54339,58201,58665,57583,59623,63389,62494,60093,61200]
+  },
+  fab: {
+    id:'fab', nome:'Unidades industriais', curto:'Fábricas', unid:'unidades', unid1:'unidade',
+    cor:'--s-fab', soft:'--s-fab-soft',
+    fonte:'IBGE, PIA-Empresa: tabela 1849. CNAE 2.0, divisão 13; empresas com 5 ou mais pessoas ocupadas.',
+    v:[1218,1208,1101,1088,1173,1156,1178,1209,1265,1273,1268,null] // 2024 não divulgado
+  }
+};
+
+/* Resultados publicados no documento (usados para exibição e auditoria) */
+const DOC = {
+  reg: { emp:{a:57968, b:273.7, r2:0.10, aDec:0, bDec:1}, fab:{a:1137.5, b:11.4, r2:0.36, aDec:1, bDec:1} },
+  fases: {
+    emp:[ {de:2013,ate:2015,nome:'Queda',tipo:'down',tmv:-4722,abs:-9444,pct:-14.9},
+          {de:2015,ate:2021,nome:'Recuperação',tipo:'up',tmv:1560,abs:9358,pct:17.3},
+          {de:2021,ate:2023,nome:'Nova queda',tipo:'down',tmv:-1648,abs:-3296,pct:-5.2},
+          {de:2023,ate:2024,nome:'Retomada',tipo:'up',tmv:1107,abs:1107,pct:1.8} ],
+    fab:[ {de:2013,ate:2016,nome:'Queda',tipo:'down',tmv:-43,abs:-130,pct:-10.7},
+          {de:2016,ate:2022,nome:'Recuperação',tipo:'up',tmv:31,abs:185,pct:17.0},
+          {de:2022,ate:2023,nome:'Estabilidade',tipo:'flat',tmv:-5,abs:-5,pct:-0.4} ]
+  },
+  // Tabela 4 — inclinação da reta por intervalo
+  tvi: [
+    {id:'p1', rot:'2013–2018', de:2013, ate:null, emp:-882, fab:-12, fimFixo:2018},
+    {id:'p2', rot:'2019–último', de:2019, ate:'ult', emp:531, fab:24},
+    {id:'p3', rot:'2021–último', de:2021, ate:'ult', emp:-897, fab:1.5}
+  ],
+  tviR2fabP2: 0.82,
+  poly: { emp:{c:[63459.2,-5583.1,1187.8,-64.4], r2:0.75, infl:6.2}, fab:{r2:0.85} },
+  sucessivas: {
+    emp:{abs:[-2895,-6549,308,3862,464,-1082,2040,3766,-895,-2401,1107], pct:[-4.6,-10.8,0.6,7.1,0.8,-1.8,3.5,6.3,-1.4,-3.8,1.8]},
+    fab:{abs:[-10,-107,-13,85,-17,22,31,56,8,-5], pct:[-0.8,-8.9,-1.2,7.8,-1.4,1.9,2.6,4.6,0.6,-0.4]}
+  },
+  // Planilha (aba Empregados / Fabricas), valores das células de resultado
+  planilha: {
+    emp:{abs:-2275, pct:-0.03584088223710122, acum:-0.035840882237101135, tmv:-206.8181818181818, comp:-0.0033125865178220693, b:273.66083916083915, a:57967.61538461538, r2:0.10017250077470417, max:63475, anoMax:2013, min:54031, anoMin:2015},
+    fab:{abs:50, pct:0.041050903119868636, acum:0.04105090311986892, tmv:5, comp:0.004031172076711664, b:11.354545454545455, a:1137.5, r2:0.35650483795037285, max:1273, anoMax:2022, min:1088, anoMin:2016}
+  }
+};
+
+/* Leitura em linguagem simples das fases (texto do estudo) */
+const LEITURA_FASE = {
+  emp:[
+    'Início da recessão de 2015–2016: o setor perdeu, em média, 4.722 empregos por ano. A queda foi concentrada em 2014–2015 (−6.549).',
+    'Saída da recessão e retomada pós-pandemia: o setor recuperou, em média, 1.560 empregos por ano, voltando quase ao nível de 2013.',
+    'O emprego voltou a cair, em média 1.648 vagas por ano. Segundo o Observatório FIESC, a inflação dos bens semiduráveis, como o vestuário, reduziu a demanda nesse período.',
+    'O setor voltou a contratar: +1.107 empregados em um ano, acompanhando o crescimento da produção registrado pela FIESC.'
+  ],
+  fab:[
+    'O número de fábricas caiu, em média, 43 unidades por ano até o mínimo de 1.088 em 2016.',
+    'Recuperação com pequenas oscilações: o setor abriu, em média, 31 fábricas por ano até o máximo de 1.273 em 2022.',
+    'Praticamente sem mudança (−5 unidades): o número de fábricas se estabilizou perto de 1.270.'
+  ]
+};
+
+const LEITURA_REG = {
+  emp:{
+    lp:'A inclinação de +273,7 empregados por ano (≈ +274) indica leve alta no ajuste de longo prazo. Mas R² = 0,10: a reta explica só cerca de 10% da variação observada, porque a série sobe e desce demais. O sinal positivo não prova crescimento contínuo e não é uma previsão.',
+    p1:'No início da série a tendência era de queda: −882 empregados por ano, puxada pela perda de 2014–2015.',
+    p2:'De 2019 a 2024 a inclinação fica positiva (+531 por ano), refletindo a recuperação de 2020–2021.',
+    p3:'Considerando só os anos a partir de 2021, a tendência volta a ser negativa (−897 por ano). Como 2024 já registrou alta, a queda está perdendo intensidade e o emprego dá sinais de estabilização.'
+  },
+  fab:{
+    lp:'A inclinação de +11,4 unidades por ano (≈ +11) indica leve alta no longo prazo. Com R² = 0,36, o ajuste é melhor que o do emprego, mas ainda explica apenas parte da variação. Não deve ser lido como previsão.',
+    p1:'No início da série a tendência era de queda: −12 fábricas por ano.',
+    p2:'A partir de 2019 o crescimento acelerou: +24 fábricas por ano, com bom ajuste (R² = 0,82, publicado no estudo).',
+    p3:'Nos anos mais recentes a inclinação cai para apenas +1,5 fábrica por ano: o número de fábricas está se estabilizando perto de 1.270 unidades.'
+  }
+};
+
+const EVENTOS = {
+  emp:[
+    {ano:2013, tit:'Máximo observado', tx:'63.475 empregados, no primeiro ano da série.'},
+    {ano:2015, tit:'Mínimo observado · queda → alta', tx:'54.031 empregados. A partir daqui a série volta a subir.'},
+    {ano:2019, tit:'Ponto de inflexão (polinômio)', tx:'f″(t) = 0 em t ≈ 6,2. O emprego segue crescendo, mas cada vez mais devagar.', infl:true},
+    {ano:2021, tit:'Mudança alta → queda', tx:'63.389 empregados, quase igualando o máximo de 2013.'},
+    {ano:2023, tit:'Mudança queda → alta', tx:'60.093 empregados, após duas quedas seguidas.'},
+    {ano:2024, tit:'Retomada', tx:'61.200 empregados (+1.107). O polinômio não capta essa retomada.'}
+  ],
+  fab:[
+    {ano:2016, tit:'Mínimo observado · queda → alta', tx:'1.088 fábricas, o menor valor da série.'},
+    {ano:2019, tit:'Ponto de inflexão (polinômio)', tx:'Por volta de 2019 (t ≈ 6,2 no recálculo): o crescimento passa a desacelerar.', infl:true},
+    {ano:2022, tit:'Máximo observado · alta → estabilidade', tx:'1.273 fábricas, o maior valor da série.'},
+    {ano:2023, tit:'Estabilidade', tx:'1.268 fábricas (−5). Último dado divulgado.'}
+  ]
+};
+
+/* =====================================================================
+   2. CÁLCULOS — tudo derivado dos dados de origem
+   ===================================================================== */
+const val = (k,y) => { const v = SERIES[k].v[y-ANO0]; return v == null ? null : v; };
+const ultimo = k => { let y = ANOS[ANOS.length-1]; while (val(k,y) == null) y--; return y; };
+const anosCom = k => ANOS.filter(y => val(k,y) != null);
+const varAbs = (k,a,b) => (val(k,a)==null||val(k,b)==null) ? null : val(k,b)-val(k,a);
+const varPct = (k,a,b) => (val(k,a)==null||val(k,b)==null) ? null : (val(k,b)-val(k,a))/val(k,a);
+const tmv = (k,a,b) => { const d = varAbs(k,a,b); return d==null ? null : d/(b-a); };
+const compostaAnual = (k,a,b) => Math.pow(val(k,b)/val(k,a), 1/(b-a)) - 1;
+function acumulado(k,a,b){ // produto dos fatores (1+i) − 1
+  let f = 1; for (let y=a+1; y<=b; y++){ const p = varPct(k,y-1,y); if (p==null) return null; f *= (1+p); } return f-1;
+}
+function somaSimples(k,a,b){ let s=0; for (let y=a+1;y<=b;y++){ const p=varPct(k,y-1,y); if(p==null) return null; s+=p; } return s; }
+function linreg(k,a,b){
+  const pts=[]; for (let y=a;y<=b;y++){ const v=val(k,y); if(v!=null) pts.push([y-ANO0,v]); }
+  const n=pts.length, mx=pts.reduce((s,p)=>s+p[0],0)/n, my=pts.reduce((s,p)=>s+p[1],0)/n;
+  let sxy=0,sxx=0,syy=0; pts.forEach(([x,y])=>{sxy+=(x-mx)*(y-my);sxx+=(x-mx)**2;syy+=(y-my)**2;});
+  const slope=sxy/sxx; return {a:my-slope*mx, b:slope, r2:(sxy*sxy)/(sxx*syy), de:a, ate:b};
+}
+function polyfit3(k){ // mínimos quadrados, grau 3, coeficientes em ordem crescente
+  const pts = anosCom(k).map(y=>[y-ANO0,val(k,y)]); const m=4;
+  const A=[...Array(m)].map(()=>Array(m+1).fill(0));
+  pts.forEach(([x,y])=>{ for(let i=0;i<m;i++){ for(let j=0;j<m;j++) A[i][j]+=Math.pow(x,i+j); A[i][m]+=y*Math.pow(x,i); } });
+  for(let i=0;i<m;i++){ let p=i; for(let r=i+1;r<m;r++) if(Math.abs(A[r][i])>Math.abs(A[p][i])) p=r; [A[i],A[p]]=[A[p],A[i]];
+    for(let r=0;r<m;r++){ if(r===i) continue; const f=A[r][i]/A[i][i]; for(let c=i;c<=m;c++) A[r][c]-=f*A[i][c]; } }
+  const c=A.map((row,i)=>row[m]/row[i]);
+  const f=t=>c[0]+c[1]*t+c[2]*t*t+c[3]*t*t*t;
+  const my=pts.reduce((s,p)=>s+p[1],0)/pts.length;
+  const r2=1-pts.reduce((s,[x,y])=>s+(y-f(x))**2,0)/pts.reduce((s,[,y])=>s+(y-my)**2,0);
+  return {c, f, r2, infl:-c[2]/(3*c[3])};
+}
+function extremos(k){ const ys=anosCom(k); let mx=ys[0],mn=ys[0]; ys.forEach(y=>{ if(val(k,y)>val(k,mx)) mx=y; if(val(k,y)<val(k,mn)) mn=y; }); return {max:mx,min:mn}; }
+const tviFim = (p,k) => p.fimFixo || ultimo(k);
+
+/* =====================================================================
+   3. FORMATAÇÃO (padrão brasileiro)
+   ===================================================================== */
+const MINUS = '−';
+const N = (v,d=0) => Number(v).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d}).replace('-', '\u2212');
+function S(v,d=0){ const r=Number(v.toFixed(d)); if (r===0) return N(0,d); return (r>0?'+':MINUS)+N(Math.abs(r),d); }
+const P = (frac,d=1) => S(frac*100,d)+'%';
+const dir = v => v>0 ? 'up' : v<0 ? 'down' : 'flat';
+const arrow = v => v>0 ? '▲' : v<0 ? '▼' : '■';
+const dirTxt = v => v>0 ? 'Crescimento' : v<0 ? 'Queda' : 'Estável';
+const tag = (v,txt) => `<span class="tag ${dir(v)}">${arrow(v)} ${txt}</span>`;
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* =====================================================================
+   4. CHART.JS — padrões e plugins próprios
+   ===================================================================== */
+if (typeof Chart === 'undefined') {
+  document.querySelectorAll('canvas').forEach(c=>{ const d=document.createElement('p'); d.className='chart-fallback'; d.textContent='Não foi possível carregar a biblioteca de gráficos. Verifique a conexão e recarregue a página; os números e tabelas continuam disponíveis abaixo.'; c.replaceWith(d); });
+}
+const C = {};
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const charts = [];
+function readColors(){
+  ['--ink','--ink-2','--muted','--line','--line-2','--navy','--s-emp','--s-emp-soft','--s-fab','--s-fab-soft','--up','--down','--up-soft','--down-soft','--trend','--poly','--gold','--gold-ink','--gold-soft','--paper','--ground'].forEach(n=>C[n.slice(2)]=css(n));
+}
+readColors();
+const alpha = (hex,a) => { const h=hex.replace('#',''); const n=parseInt(h,16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
+const narrow = () => window.innerWidth < 560;
+
+if (window.Chart){
+  Chart.defaults.font.family = "'Public Sans','Segoe UI',system-ui,sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = C.muted;
+  if (reduce) Chart.defaults.animation = false; else Chart.defaults.animation.duration = 450;
+  Chart.defaults.maintainAspectRatio = false;
+  Chart.defaults.plugins.legend.display = false;
+  Object.assign(Chart.defaults.plugins.tooltip, {
+    backgroundColor:'#191A33', titleColor:'#fff', bodyColor:'#E9E9F2', padding:12, cornerRadius:8,
+    titleFont:{weight:'700',size:13}, bodyFont:{size:13}, displayColors:true, boxPadding:4, usePointStyle:true
+  });
+
+  /* Faixas, linhas verticais e rótulos de pontos — configurados em chart.$bands / chart.$labels */
+  Chart.register({
+    id:'bandsAndLabels',
+    beforeDatasetsDraw(chart){
+      const bands = chart.$bands; if(!bands||!bands.length) return;
+      const {ctx, chartArea:a, scales:{x}} = chart; ctx.save();
+      bands.forEach(b=>{
+        if (b.line!=null){
+          const px = x.getPixelForValue(b.line); if(px<a.left-1||px>a.right+1) return;
+          ctx.strokeStyle=b.color||C['line-2']; ctx.lineWidth=b.width||1.5; ctx.setLineDash(b.dash||[]);
+          ctx.beginPath(); ctx.moveTo(px,a.top); ctx.lineTo(px,a.bottom); ctx.stroke(); ctx.setLineDash([]);
+          if (b.label){ ctx.font="600 11px 'Public Sans',sans-serif"; ctx.fillStyle=b.textColor||C.muted; ctx.textAlign=b.align||'left'; ctx.fillText(b.label, px+(b.align==='right'?-6:6), a.top+12); }
+        } else {
+          let x0 = b.from==null ? a.left : x.getPixelForValue(b.from); let x1 = b.to==null ? a.right : x.getPixelForValue(b.to);
+          x0=Math.max(a.left,x0); x1=Math.min(a.right,x1);
+          ctx.fillStyle=b.color; ctx.fillRect(x0,a.top,x1-x0,a.bottom-a.top);
+          if (b.label){ ctx.font="600 11px 'Public Sans',sans-serif"; ctx.fillStyle=b.textColor||C.muted;
+            if (ctx.measureText(b.label).width + 6 <= x1-x0){ ctx.textAlign='center'; ctx.fillText(b.label,(x0+x1)/2,a.top+14); }
+            else { ctx.translate((x0+x1)/2 + 4, a.top + 6); ctx.rotate(Math.PI/2); ctx.textAlign='left'; ctx.fillText(b.label,0,0); ctx.setTransform(1,0,0,1,0,0); ctx.scale(chart.currentDevicePixelRatio,chart.currentDevicePixelRatio); }
+          }
+        }
+      });
+      ctx.restore();
+    },
+    afterDatasetsDraw(chart){
+      const labels = chart.$labels; if(!labels||!labels.length) return;
+      const {ctx, chartArea:a} = chart; ctx.save();
+      labels.forEach(l=>{
+        const meta = chart.getDatasetMeta(l.ds); if (!meta || meta.hidden || !chart.isDatasetVisible(l.ds)) return;
+        const el = meta.data[l.i]; if(!el || el.skip) return;
+        const {x,y} = el.getProps(['x','y'], true);
+        ctx.font = "700 12px 'Public Sans',sans-serif";
+        const w = ctx.measureText(l.text).width + 14, h = 22;
+        let bx = Math.min(Math.max(x - w/2, a.left), a.right - w);
+        let by = l.pos==='below' ? y + 12 : y - 12 - h;
+        if (by < a.top) by = y + 12; if (by + h > a.bottom) by = y - 12 - h;
+        ctx.fillStyle = C.paper; ctx.strokeStyle = l.color || C.ink; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.roundRect(bx, by, w, h, 6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = l.color || C.ink; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(l.text, bx + w/2, by + h/2 + .5);
+      });
+      ctx.restore();
+    }
+  });
+}
+function axisY(fmt, extra={}){
+  return Object.assign({ border:{display:false}, grid:{color:C.line, drawTicks:false}, ticks:{color:C.muted, padding:8, callback:fmt, maxTicksLimit:6} }, extra);
+}
+function axisX(extra={}){
+  return Object.assign({ border:{color:C['line-2']}, grid:{display:false}, ticks:{color:C['ink-2'], maxRotation:0, autoSkip:true, autoSkipPadding:10, font:{family:"'IBM Plex Mono',monospace", size:11}} }, extra);
+}
+function make(id, cfg){ if(!window.Chart) return null; const el=document.getElementById(id); if(!el) return null; const ch=new Chart(el,cfg); charts.push(ch); return ch; }
+const cssVarColor = k => C[SERIES[k].cor.slice(2)];
+const cssVarSoft = k => C[SERIES[k].soft.slice(2)];
+
+/* =====================================================================
+   5. KPIs (Visão geral)
+   ===================================================================== */
+function spark(k){
+  const ys = anosCom(k), vs = ys.map(y=>val(k,y)), W=220, H=64, p=6;
+  const mn=Math.min(...vs), mx=Math.max(...vs);
+  const X = y => p + (y-ANO0)/(ANOS.length-1)*(W-2*p), Y = v => H-p - (v-mn)/(mx-mn)*(H-2*p);
+  const d = ys.map((y,i)=>(i?'L':'M')+X(y).toFixed(1)+' '+Y(vs[i]).toFixed(1)).join(' ');
+  const col = cssVarColor(k), last = ys[ys.length-1];
+  return `<svg class="kpi-spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Minigráfico da série ${ys[0]}–${last}">
+    <path d="${d} L${X(last)} ${H} L${X(ys[0])} ${H}Z" fill="${alpha(col,.08)}"/>
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${X(ys[0])}" cy="${Y(vs[0])}" r="3.5" fill="${C.paper}" stroke="${col}" stroke-width="2"/>
+    <circle cx="${X(last)}" cy="${Y(vs[vs.length-1])}" r="4.5" fill="${col}" stroke="${C.paper}" stroke-width="2"/></svg>`;
+}
+function renderKPIs(){
+  const box = document.getElementById('kpis');
+  box.innerHTML = ['emp','fab'].map(k=>{
+    const s=SERIES[k], u=ultimo(k), d=varAbs(k,ANO0,u), p=varPct(k,ANO0,u), t=tmv(k,ANO0,u);
+    const por100 = Math.round(val(k,u)/val(k,ANO0)*100);
+    const note = k==='emp'
+      ? `De cada 100 empregos existentes em 2013, cerca de ${por100} permaneciam em ${u}.`
+      : `Para cada 100 fábricas de 2013, havia ${por100} em ${u}. O dado de 2024 ainda não foi divulgado.`;
+    return `<article class="kpi" data-k="${k}">
+      <div class="kpi-top"><span class="kpi-label">${s.nome} · ${u}</span><span class="period">Série ${ANO0}–${u}</span></div>
+      <div class="kpi-main"><div><div class="kpi-value">${N(val(k,u))}</div>
+        <div class="kpi-unit">${k==='emp'?'empregados com vínculo na indústria têxtil de SC':'unidades industriais (fábricas) em funcionamento em SC'}</div></div>${spark(k)}</div>
+      <dl class="kpi-stats">
+        <div><dt>Em ${ANO0}</dt><dd>${N(val(k,ANO0))}<small>valor inicial</small></dd></div>
+        <div><dt>Variação absoluta</dt><dd class="${dir(d)}">${arrow(d)} ${S(d)}<small>${s.unid}</small></dd></div>
+        <div><dt>Variação percentual</dt><dd class="${dir(p)}">${arrow(p)} ≈ ${P(p)}<small>TMV ${t%1? '≈ ':''}${S(t)} ${s.unid}/ano</small></dd></div>
+      </dl>
+      <p class="kpi-note">${note}</p>
+    </article>`;
+  }).join('');
+}
+
+/* =====================================================================
+   6. DASHBOARDS DE SÉRIE (Emprego / Unidades) — componente reutilizável
+   ===================================================================== */
+const dashState = { emp:{sel:2024, de:2013, ate:2024, reg:false, ext:true}, fab:{sel:2023, de:2013, ate:2023, reg:false, ext:true} };
+const dashCharts = {};
+function buildDash(k){
+  const s=SERIES[k], root=document.getElementById('dash-'+k), u=ultimo(k);
+  const opts = ANOS.map(y=>`<option value="${y}"${val(k,y)==null?' disabled':''}>${y}${val(k,y)==null?' (sem dado)':''}</option>`).join('');
+  root.innerHTML = `<div class="dash" data-k="${k}">
+    <div class="panel">
+      <div class="panel-head">
+        <div><div class="panel-title">${s.nome}, Santa Catarina (${ANO0}–${u})</div>
+          <div class="panel-sub question">${k==='emp'?'Como evoluiu o emprego na indústria têxtil catarinense?':'Como evoluiu o número de unidades industriais?'}</div></div>
+        <div class="legend" role="group" aria-label="Camadas do gráfico">
+          <span class="lg static"><span class="sw" style="--c:${cssVarColor(k)}"></span>Série observada</span>
+          <button type="button" class="lg" data-tg="ext" aria-pressed="true"><span class="sw box" style="--c:${C.ink}"></span>Máx. e mín.</button>
+          <button type="button" class="lg" data-tg="reg" aria-pressed="false"><span class="sw dash" style="--c:${C.trend}"></span>Reta de regressão</button>
+        </div>
+      </div>
+      <div class="chart-box"><canvas id="cDash-${k}" role="img" aria-label="Gráfico de linha: ${s.nome}, ${ANO0} a ${u}"></canvas></div>
+      <div class="years" role="group" aria-label="Selecionar ano">${ANOS.map(y=>`<button type="button" data-y="${y}" class="${val(k,y)==null?'nodata':''}" aria-pressed="false"${val(k,y)==null?` aria-label="${y}, sem dado divulgado"`:''}>${y}</button>`).join('')}</div>
+      <p class="source"><b>Fonte:</b> ${s.fonte} Tabela 1 do estudo.</p>
+    </div>
+    <div class="side">
+      <div class="card" aria-live="polite" id="selCard-${k}"></div>
+      <div class="card">
+        <h4>Comparar dois anos</h4>
+        <div class="pair">
+          <div class="ctl"><label class="ctl-label" for="de-${k}">De</label><select class="sel" id="de-${k}">${opts}</select></div>
+          <div class="ctl"><label class="ctl-label" for="ate-${k}">Até</label><select class="sel" id="ate-${k}">${opts}</select></div>
+        </div>
+        <div id="cmp-${k}" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>`;
+  const st = dashState[k];
+  root.querySelector('#de-'+k).value = st.de; root.querySelector('#ate-'+k).value = st.ate;
+  root.querySelector('#de-'+k).addEventListener('change',e=>{ st.de=+e.target.value; renderDashCompare(k); });
+  root.querySelector('#ate-'+k).addEventListener('change',e=>{ st.ate=+e.target.value; renderDashCompare(k); });
+  root.querySelectorAll('.years button').forEach(b=>b.addEventListener('click',()=>{ st.sel=+b.dataset.y; updateDash(k); }));
+  root.querySelectorAll('[data-tg]').forEach(b=>b.addEventListener('click',()=>{ st[b.dataset.tg]=!st[b.dataset.tg]; b.setAttribute('aria-pressed',st[b.dataset.tg]); updateDash(k); }));
+
+  const reg = linreg(k,ANO0,u), col=cssVarColor(k);
+  dashCharts[k] = make('cDash-'+k, {
+    type:'line',
+    data:{ labels:ANOS.map(String), datasets:[
+      { label:s.nome, data:s.v.slice(), borderColor:col, backgroundColor:alpha(col,.07), fill:'origin', borderWidth:2.5, tension:0,
+        pointRadius:5, pointHoverRadius:8, pointBackgroundColor:C.paper, pointBorderColor:col, pointBorderWidth:2, spanGaps:false },
+      { label:'Reta de regressão', data:ANOS.map(y=> y<=u ? reg.a+reg.b*(y-ANO0) : null), borderColor:C.trend, borderDash:[6,5], borderWidth:2,
+        pointRadius:0, pointHoverRadius:0, hidden:true, fill:false }
+    ]},
+    options:{
+      interaction:{mode:'index', intersect:false},
+      layout:{padding:{top:8,right:8}},
+      scales:{ x:axisX(), y:axisY(v=>N(v), {grace:'8%', beginAtZero:false}) },
+      plugins:{ tooltip:{ callbacks:{
+        title:it=>'Ano '+it[0].label,
+        label:it=>{ if(it.raw==null) return null; return it.datasetIndex===0 ? ` ${s.curto}: ${N(it.raw)}` : ` Reta (tendência): ${N(it.raw)}`; },
+        afterBody:it=>{ const y=+it[0].label, d=varAbs(k,y-1,y); if(val(k,y)==null) return 'Sem dado divulgado'; if(d==null) return 'Primeiro ano da série'; return `Em relação a ${y-1}: ${S(d)} (${P(varPct(k,y-1,y))})`; }
+      }}},
+      onClick:(e,els)=>{ if(els.length){ st.sel = ANO0 + els[0].index; updateDash(k); } }
+    }
+  });
+  updateDash(k); renderDashCompare(k);
+}
+function updateDash(k){
+  const st=dashState[k], s=SERIES[k], ch=dashCharts[k], ex=extremos(k), col=cssVarColor(k);
+  document.querySelectorAll(`#dash-${k} .years button`).forEach(b=>b.setAttribute('aria-pressed', +b.dataset.y===st.sel));
+  if (ch){
+    const i=st.sel-ANO0;
+    ch.data.datasets[0].pointRadius = ANOS.map((y,j)=> j===i ? 8 : (st.ext && (y===ex.max||y===ex.min)) ? 7 : 4.5);
+    ch.data.datasets[0].pointBackgroundColor = ANOS.map((y,j)=> j===i ? col : C.paper);
+    ch.data.datasets[1].hidden = !st.reg;
+    const bands = [{line:i, color:alpha(col,.45), width:1.5}];
+    if (k==='emp') bands.push({line:8.5, color:C['line-2'], dash:[3,4], width:1, label:'Troca de série CEMPRE', align: narrow()?'right':'left'});
+    if (k==='fab') bands.push({from:10.5, to:null, color:alpha(C.muted,.08), label:'sem dado'});
+    ch.$bands = bands;
+    ch.$labels = st.ext ? [
+      {ds:0, i:ex.max-ANO0, text:'Máx. '+N(val(k,ex.max)), pos:'above', color:C.ink},
+      {ds:0, i:ex.min-ANO0, text:'Mín. '+N(val(k,ex.min)), pos:'below', color:C.ink}
+    ] : [];
+    ch.update();
+  }
+  const card=document.getElementById('selCard-'+k), y=st.sel, v=val(k,y);
+  if (v==null){
+    card.innerHTML = `<h4>Ano selecionado · ${y}</h4><div class="empty"><strong>Sem dado para ${y}</strong>O IBGE ainda não divulgou a PIA-Empresa de ${y}. O valor não é estimado nem tratado como zero; a série de fábricas termina em ${ultimo(k)}.</div>`;
+    return;
+  }
+  const d=varAbs(k,y-1,y);
+  card.innerHTML = `<h4>Ano selecionado · ${y}</h4>
+    <div class="big">${N(v)}<small>${s.unid}</small></div>
+    ${d==null ? `<div class="empty"><strong>Primeiro ano da série</strong>Não há ano anterior para comparar.</div>` : `
+    <div>${tag(d, dirTxt(d)+' em relação a '+(y-1))}</div>
+    <dl class="kv">
+      <div><dt>Diferença absoluta</dt><dd class="${dir(d)}">${S(d)} ${s.unid}</dd></div>
+      <div><dt>Variação percentual</dt><dd class="${dir(d)}">${P(varPct(k,y-1,y))}</dd></div>
+      <div><dt>Valor em ${y-1}</dt><dd>${N(val(k,y-1))}</dd></div>
+    </dl>`}
+    ${k==='emp' && y===2022 ? '<p class="mini-note">Atenção: 2021 → 2022 compara a série encerrada do CEMPRE com a nova série. Leia com cautela.</p>' : ''}`;
+}
+function renderDashCompare(k){
+  const st=dashState[k], s=SERIES[k], box=document.getElementById('cmp-'+k);
+  const a=st.de, b=st.ate;
+  if (b<=a){ box.innerHTML = `<div class="empty">Escolha um ano final posterior ao ano inicial.</div>`; return; }
+  const d=varAbs(k,a,b);
+  if (d==null){ box.innerHTML = `<div class="empty">Sem dado para um dos anos escolhidos.</div>`; return; }
+  const t=tmv(k,a,b);
+  box.innerHTML = `<dl class="kv">
+    <div><dt>${a} → ${b}</dt><dd>${N(val(k,a))} → ${N(val(k,b))}</dd></div>
+    <div><dt>Variação absoluta</dt><dd class="${dir(d)}">${arrow(d)} ${S(d)}</dd></div>
+    <div><dt>Variação percentual</dt><dd class="${dir(d)}">${P(varPct(k,a,b))}</dd></div>
+    <div><dt>TMV (${b-a} ${b-a>1?'anos':'ano'})</dt><dd>${Number.isInteger(t)?'':'≈ '}${S(t)} /ano</dd></div>
+  </dl>`;
+}
+
+/* =====================================================================
+   7. VARIAÇÕES SUCESSIVAS
+   ===================================================================== */
+const vs = { ind:'ambos', medida:'abs', sinal:'todas', de:2013, ate:2024, sel:2015 };
+const varCharts = {};
+function varValue(k,y){ return vs.medida==='abs' ? varAbs(k,y-1,y) : (varPct(k,y-1,y)==null?null:varPct(k,y-1,y)*100); }
+function buildVar(){
+  const de=document.getElementById('varDe'), ate=document.getElementById('varAte');
+  de.innerHTML = ANOS.slice(0,-1).map(y=>`<option value="${y}">${y}</option>`).join('');
+  ate.innerHTML = ANOS.slice(1).map(y=>`<option value="${y}">${y}</option>`).join('');
+  de.value=vs.de; ate.value=vs.ate;
+  de.addEventListener('change',()=>{ vs.de=+de.value; if(vs.ate<=vs.de){ vs.ate=vs.de+1; ate.value=vs.ate; } fixSel(); updateVar(); });
+  ate.addEventListener('change',()=>{ vs.ate=+ate.value; if(vs.de>=vs.ate){ vs.de=vs.ate-1; de.value=vs.de; } fixSel(); updateVar(); });
+  document.querySelectorAll('#varControls .seg').forEach(g=>{
+    g.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ vs[g.dataset.ctl]=b.dataset.v; fixSel(); updateVar(); }));
+  });
+  ['emp','fab'].forEach(k=>{
+    varCharts[k] = make(k==='emp'?'cVarEmp':'cVarFab', {
+      type:'bar', data:{labels:[], datasets:[{data:[], borderRadius:4, borderSkipped:false, barPercentage:.72, categoryPercentage:.9}]},
+      options:{
+        layout:{padding:{top:6}},
+        scales:{ x:axisX(), y:axisY(v=> vs.medida==='abs' ? S(v) : S(v,0)+'%', {
+          grid:{ color:c=> c.tick && c.tick.value===0 ? C['ink-2'] : C.line, lineWidth:c=> c.tick && c.tick.value===0 ? 1.5 : 1, drawTicks:false }, grace:'10%' }) },
+        plugins:{ tooltip:{ callbacks:{
+          title:it=>{ const y=varCharts[k].$years[it[0].dataIndex]; return `${y-1} → ${y}`; },
+          label:it=>{ const y=varCharts[k].$years[it.dataIndex]; const d=varAbs(k,y-1,y); if(d==null) return ' Sem dado'; return ` ${arrow(d)} ${S(d)} ${SERIES[k].unid} (${P(varPct(k,y-1,y))})`; },
+          afterLabel:it=>{ const y=varCharts[k].$years[it.dataIndex]; return val(k,y)==null?'':` ${N(val(k,y-1))} → ${N(val(k,y))}`; }
+        }}},
+        onClick:(e,els)=>{ if(els.length){ vs.sel = varCharts[k].$years[els[0].index]; updateVar(); } }
+      }
+    });
+  });
+  const ins = [
+    {k:'emp', y:2015, rot:'Maior queda de emprego', exp:'Início da recessão de 2015–2016.'},
+    {k:'fab', y:2015, rot:'Maior queda de fábricas', exp:'Mesmo ano da maior perda de empregos.'},
+    {k:'emp', y:2017, rot:'Maior ganho de emprego', exp:'Saída da recessão.'},
+    {k:'fab', y:2017, rot:'Maior ganho de fábricas', exp:'Mesma virada de 2017.'}
+  ];
+  const box=document.getElementById('insights');
+  box.innerHTML = ins.map((o,i)=>{ const d=varAbs(o.k,o.y-1,o.y); return `<button type="button" class="ins" data-i="${i}" aria-pressed="false">
+    <span class="k">${o.rot}</span><span class="v ${dir(d)}">${arrow(d)} ${S(d)}</span>
+    <span class="d">${o.y-1}–${o.y} · ${SERIES[o.k].unid} (${P(varPct(o.k,o.y-1,o.y))}). ${o.exp}</span><span class="go">Destacar no gráfico →</span></button>`; }).join('');
+  box.querySelectorAll('.ins').forEach(b=>b.addEventListener('click',()=>{
+    const o=ins[+b.dataset.i]; if(vs.ind!=='ambos') vs.ind=o.k; vs.sinal='todas';
+    if(vs.de>o.y-1) vs.de=o.y-1; if(vs.ate<o.y) vs.ate=o.y; de.value=vs.de; ate.value=vs.ate;
+    vs.sel=o.y; vs.insight=+b.dataset.i; updateVar();
+  }));
+  box.$ins = ins;
+}
+function fixSel(){ if (vs.sel<=vs.de || vs.sel>vs.ate) vs.sel = vs.de+1; vs.insight=null; }
+function updateVar(){
+  document.querySelectorAll('#varControls .seg').forEach(g=>g.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', vs[g.dataset.ctl]===b.dataset.v)));
+  const show = {emp: vs.ind!=='fab', fab: vs.ind!=='emp'};
+  document.getElementById('varGrid').classList.toggle('single', vs.ind!=='ambos');
+  const insBox=document.getElementById('insights');
+  insBox.querySelectorAll('.ins').forEach(b=>{ const o=insBox.$ins[+b.dataset.i]; b.setAttribute('aria-pressed', vs.insight===+b.dataset.i || (vs.insight==null && o.y===vs.sel && show[o.k] && false)); });
+  const years=[]; for(let y=vs.de+1;y<=vs.ate;y++) years.push(y);
+  ['emp','fab'].forEach(k=>{
+    document.getElementById('varCard-'+k).hidden = !show[k];
+    const ch=varCharts[k], s=SERIES[k];
+    const values = years.map(y=>{ const v=varValue(k,y); if(v==null) return null; if(vs.sinal==='up'&&v<=0) return null; if(vs.sinal==='down'&&v>=0) return null; return v; });
+    document.getElementById('varSub-'+k).textContent = `${vs.de}–${vs.ate} · ${vs.medida==='abs'? s.unid+' por ano' : '% sobre o ano anterior'}${vs.sinal!=='todas' ? ' · só '+(vs.sinal==='up'?'crescimento':'queda') : ''}`;
+    if (ch){
+      ch.$years = years;
+      ch.data.labels = years.map(y=> narrow() ? `${String(y-1).slice(2)}–${String(y).slice(2)}` : `${y-1}–${String(y).slice(2)}`);
+      const ds = ch.data.datasets[0]; ds.data = values;
+      ds.backgroundColor = years.map((y,i)=> values[i]==null ? 'transparent' : alpha(values[i]>0?C.up:C.down, y===vs.sel ? 1 : .78));
+      ds.borderColor = years.map(y=> y===vs.sel ? C.ink : 'transparent');
+      ds.borderWidth = years.map(y=> y===vs.sel ? 2 : 0);
+      const bands=[]; const naIdx = years.findIndex(y=>val(k,y)==null);
+      if (naIdx>=0) bands.push({from:naIdx-.5, to:null, color:alpha(C.muted,.08), label:'sem dado'});
+      ch.$bands = bands;
+      ch.update();
+    }
+    // resumo do período filtrado
+    const valid = years.filter(y=>varAbs(k,y-1,y)!=null);
+    const ups = valid.filter(y=>varAbs(k,y-1,y)>0).length, downs = valid.filter(y=>varAbs(k,y-1,y)<0).length;
+    const fim = Math.min(vs.ate, ultimo(k));
+    const sumBox = document.getElementById('varSum-'+k);
+    if (fim<=vs.de){ sumBox.innerHTML = `<div class="empty" style="width:100%"><strong>Sem dados neste período</strong>A série de fábricas termina em ${ultimo(k)}.</div>`; return; }
+    const ac = acumulado(k,vs.de,fim), ss = somaSimples(k,vs.de,fim);
+    sumBox.innerHTML = `${tag(1, ups+' '+(ups===1?'ano':'anos')+' de alta')} ${tag(-1, downs+' '+(downs===1?'ano':'anos')+' de queda')}
+      <span class="tag flat">Acumulado ${vs.de}–${fim}: ${P(ac)} (composto)</span>
+      <span class="tag flat" title="Somar porcentagens sucessivas dá resultado incorreto">Soma simples das taxas: ${P(ss)} ✗</span>`;
+  });
+  renderVarDetail(show);
+}
+function renderVarDetail(show){
+  const y=vs.sel, box=document.getElementById('varDetail');
+  const opts=[]; for(let a=vs.de+1;a<=vs.ate;a++) opts.push(`<option value="${a}"${a===y?' selected':''}>${a-1} → ${a}</option>`);
+  const block = k => {
+    const s=SERIES[k], d=varAbs(k,y-1,y);
+    if (d==null) return `<div class="card"><h4>${s.curto} · ${y-1} → ${y}</h4><div class="empty"><strong>Sem dado para ${y}</strong>A série de ${s.unid} industriais termina em ${ultimo(k)}. Nenhum valor foi estimado.</div></div>`;
+    return `<div class="card"><h4>${s.curto} · ${y-1} → ${y}</h4>
+      <div class="big ${dir(d)}">${arrow(d)} ${S(d)}<small>${s.unid}</small></div>
+      <dl class="kv"><div><dt>Valor inicial (${y-1})</dt><dd>${N(val(k,y-1))}</dd></div>
+      <div><dt>Valor final (${y})</dt><dd>${N(val(k,y))}</dd></div>
+      <div><dt>Variação percentual</dt><dd class="${dir(d)}">${P(varPct(k,y-1,y))}</dd></div></dl></div>`;
+  };
+  box.innerHTML = `<div class="card"><h4>Transição selecionada</h4>
+      <label class="ctl-label" for="varSel">Escolha a transição</label>
+      <select class="sel" id="varSel">${opts.join('')}</select>
+      <p class="mini-note">Também é possível tocar em uma barra. Os percentuais sucessivos não podem ser somados: o acumulado multiplica os fatores (1 + taxa).</p>
+      ${y===2022 && show.emp ? '<p class="mini-note"><b>Cautela:</b> 2021 → 2022 compara duas séries diferentes do CEMPRE.</p>':''}</div>
+    ${show.emp ? block('emp') : ''}${show.fab ? block('fab') : ''}`;
+  if (!(show.emp && show.fab)) box.style.gridTemplateColumns = window.innerWidth>980 ? 'minmax(0,1fr) minmax(0,2fr)' : '';
+  else box.style.gridTemplateColumns = '';
+  document.getElementById('varSel').addEventListener('change',e=>{ vs.sel=+e.target.value; vs.insight=null; updateVar(); });
+}
+
+/* =====================================================================
+   8. TMV POR FASE
+   ===================================================================== */
+const ts = { ind:'emp', fase:1 };
+let tmvBars, tmvLine;
+function fasesDe(k){ const u=ultimo(k); return DOC.fases[k].concat([{de:ANO0, ate:u, nome:'Período completo', tipo:'all'}]); }
+function buildTmv(){
+  document.querySelectorAll('#tmvInd button').forEach(b=>b.addEventListener('click',()=>{ ts.ind=b.dataset.v; ts.fase=1; updateTmv(); }));
+  tmvBars = make('cTmvBars', { type:'bar', data:{labels:[],datasets:[{data:[],borderRadius:4,borderSkipped:false,barPercentage:.7}]},
+    options:{ indexAxis:'y', layout:{padding:{right:12}},
+      scales:{ y:{border:{display:false},grid:{display:false},ticks:{color:C['ink-2'],font:{size:12,weight:'600'}}},
+               x:axisY(v=>S(v),{grid:{color:c=>c.tick&&c.tick.value===0?C['ink-2']:C.line, lineWidth:c=>c.tick&&c.tick.value===0?1.5:1, drawTicks:false}, grace:'12%'}) },
+      plugins:{tooltip:{callbacks:{ title:it=>{const f=fasesDe(ts.ind)[it[0].dataIndex]; return `${f.de}–${f.ate} · ${f.nome}`;},
+        label:it=>` TMV: ${S(it.raw)} ${SERIES[ts.ind].unid}/ano` }}},
+      onClick:(e,els)=>{ if(els.length){ ts.fase=els[0].index; updateTmv(); } } } });
+  tmvLine = make('cTmvLine', { type:'line', data:{labels:ANOS.map(String), datasets:[
+      {data:[],borderWidth:2,pointRadius:3.5,pointBackgroundColor:C.paper,pointBorderWidth:2,tension:0,spanGaps:false},
+      {data:[],borderColor:C['gold-ink'],borderWidth:3,pointRadius:6,pointBackgroundColor:C['gold-ink'],pointBorderColor:C.paper,pointBorderWidth:2,spanGaps:true,tension:0}]},
+    options:{ interaction:{mode:'nearest',intersect:true}, scales:{x:axisX(), y:axisY(v=>N(v),{grace:'6%'})},
+      plugins:{tooltip:{filter:it=>it.raw!=null, callbacks:{title:it=>'Ano '+it[0].label, label:it=> it.datasetIndex===0 ? ` ${SERIES[ts.ind].curto}: ${N(it.raw)}` : ` Ponto da secante: ${N(it.raw)}`}}} } });
+  updateTmv();
+}
+function updateTmv(){
+  const k=ts.ind, s=SERIES[k], fases=fasesDe(k), f=fases[ts.fase];
+  document.querySelectorAll('#tmvInd button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.v===k));
+  const chips=document.getElementById('tmvChips');
+  chips.innerHTML = fases.map((x,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===ts.fase}"><span class="pdot" style="--c:${x.tipo==='up'?C.up:x.tipo==='down'?C.down:x.tipo==='flat'?C['gold-ink']:C.trend}"></span>${x.de}–${x.ate} · ${x.nome}</button>`).join('');
+  chips.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ ts.fase=+b.dataset.i; updateTmv(); }));
+  document.getElementById('tmvBarsSub').textContent = `${s.unid} por ano · Período completo = ${ANO0}–${ultimo(k)}`;
+  const vals = fases.map(x=>tmv(k,x.de,x.ate));
+  if (tmvBars){
+    tmvBars.data.labels = fases.map(x=> narrow() ? `${String(x.de).slice(2)}–${String(x.ate).slice(2)}` : `${x.de}–${x.ate}`);
+    const ds=tmvBars.data.datasets[0]; ds.data=vals;
+    ds.backgroundColor = fases.map((x,i)=>{ const c = x.tipo==='all' ? C.trend : vals[i]>0 ? C.up : C.down; return alpha(c, i===ts.fase?1:.55); });
+    ds.borderColor = fases.map((x,i)=> i===ts.fase ? C.ink : 'transparent'); ds.borderWidth = fases.map((x,i)=> i===ts.fase?2:0);
+    tmvBars.update();
+  }
+  if (tmvLine){
+    const col=cssVarColor(k);
+    const d0=tmvLine.data.datasets[0]; d0.data=s.v.slice(); d0.borderColor=col; d0.pointBorderColor=col;
+    tmvLine.data.datasets[1].data = ANOS.map(y=> (y===f.de||y===f.ate) ? val(k,y) : null);
+    tmvLine.$bands = [{from:f.de-ANO0, to:f.ate-ANO0, color:alpha(f.tipo==='up'?C.up:f.tipo==='down'?C.down:C.gold, .10)}].concat(k==='fab'?[{from:10.5,to:null,color:alpha(C.muted,.08),label:'sem dado'}]:[]);
+    const t=tmv(k,f.de,f.ate);
+    tmvLine.$labels = [{ds:1, i:f.ate-ANO0, text:`TMV ${S(t)}/ano`, pos: t>=0?'above':'below', color:C['gold-ink']}];
+    tmvLine.update();
+  }
+  const t=tmv(k,f.de,f.ate), d=varAbs(k,f.de,f.ate), p=varPct(k,f.de,f.ate);
+  const leitura = f.tipo==='all'
+    ? `No período completo, o ritmo médio foi de ${S(t)} ${s.unid} por ano. Essa média esconde fases bem diferentes; por isso o estudo calcula a TMV por fase. Não confunda com a taxa composta anual, calculada na planilha: ${P(compostaAnual(k,f.de,f.ate),2)} ao ano, que é uma taxa percentual, não uma quantidade de ${s.unid}.`
+    : LEITURA_FASE[k][ts.fase];
+  document.getElementById('tmvDetail').innerHTML = `
+    <div class="card"><h4>${f.nome} · ${f.de}–${f.ate}</h4><div class="big ${dir(t)}">${arrow(t)} ${Number.isInteger(t)?'':'≈ '}${S(Math.round(t))}<small>${s.unid}/ano</small></div>
+      <p class="mini-note">TMV = (${N(val(k,f.ate))} − ${N(val(k,f.de))}) ÷ (${f.ate} − ${f.de})${Number.isInteger(t)?'':` = ${N(t,1)}`}</p></div>
+    <div class="card"><h4>Valores da fase</h4><dl class="kv">
+      <div><dt>Ano inicial · valor</dt><dd>${f.de} · ${N(val(k,f.de))}</dd></div>
+      <div><dt>Ano final · valor</dt><dd>${f.ate} · ${N(val(k,f.ate))}</dd></div>
+      <div><dt>Variação absoluta</dt><dd class="${dir(d)}">${S(d)}</dd></div>
+      <div><dt>Variação percentual</dt><dd class="${dir(d)}">${P(p)}</dd></div></dl></div>
+    <div class="card"><h4>Em linguagem simples</h4><p style="font-size:15px">${leitura}</p></div>`;
+}
+
+/* =====================================================================
+   9. REGRESSÃO + TVI POR INTERVALO
+   ===================================================================== */
+const rs = { ind:'emp', reta:'lp', show:true, lpRef:true };
+let regChart, tviCharts={};
+const RETAS = [{id:'lp', rot:'Longo prazo'}].concat(DOC.tvi.map(p=>({id:p.id, rot:p.rot})));
+function retaDef(k,id){
+  const u=ultimo(k);
+  if (id==='lp') return {de:ANO0, ate:u, nome:`Longo prazo (${ANO0}–${u})`};
+  const p=DOC.tvi.find(x=>x.id===id); return {de:p.de, ate:tviFim(p,k), nome:`${p.de}–${tviFim(p,k)}`, doc:p[k]};
+}
+function buildReg(){
+  document.getElementById('regReta').innerHTML = RETAS.map(r=>`<button type="button" data-v="${r.id}">${r.rot}</button>`).join('');
+  document.querySelectorAll('#regInd button').forEach(b=>b.addEventListener('click',()=>{ rs.ind=b.dataset.v; updateReg(); }));
+  document.querySelectorAll('#regReta button').forEach(b=>b.addEventListener('click',()=>{ rs.reta=b.dataset.v; updateReg(); }));
+  regChart = make('cReg', { type:'line', data:{labels:ANOS.map(String), datasets:[
+      {label:'Observado', data:[], borderWidth:2, pointRadius:4.5, pointBackgroundColor:C.paper, pointBorderWidth:2, tension:0, spanGaps:false, borderColor:C['line-2']},
+      {label:'Reta de longo prazo', data:[], borderColor:C.trend, borderDash:[6,5], borderWidth:2, pointRadius:0, pointHoverRadius:0},
+      {label:'Reta do intervalo', data:[], borderColor:C['gold-ink'], borderWidth:3, pointRadius:0, pointHoverRadius:0}
+    ]},
+    options:{ interaction:{mode:'index',intersect:false}, scales:{x:axisX(), y:axisY(v=>N(v),{grace:'8%'})},
+      plugins:{tooltip:{filter:it=>it.raw!=null, callbacks:{title:it=>'Ano '+it[0].label, label:it=>` ${it.dataset.label}: ${N(it.raw,it.datasetIndex?0:0)}`}}} } });
+  ['emp','fab'].forEach(k=>{
+    tviCharts[k] = make(k==='emp'?'cTviEmp':'cTviFab', { type:'bar',
+      data:{labels:DOC.tvi.map(p=>`${p.de}–${tviFim(p,k)}`), datasets:[{data:DOC.tvi.map(p=>p[k]), borderRadius:4, borderSkipped:false, barPercentage:.62}]},
+      options:{ indexAxis:'y', layout:{padding:{right:10}},
+        scales:{ y:{border:{display:false},grid:{display:false},ticks:{color:C['ink-2'],font:{family:"'IBM Plex Mono',monospace",size:11}}},
+          x:axisY(v=>S(v),{grid:{color:c=>c.tick&&c.tick.value===0?C['ink-2']:C.line, lineWidth:c=>c.tick&&c.tick.value===0?1.5:1, drawTicks:false}, grace:'15%'}) },
+        plugins:{tooltip:{callbacks:{label:it=>` ${S(it.raw, k==='fab'&&it.raw%1?1:0)} ${SERIES[k].unid} por ano`}}},
+        onClick:(e,els)=>{ if(els.length){ rs.ind=k; rs.reta=DOC.tvi[els[0].index].id; updateReg(); document.getElementById('regressao').scrollIntoView({behavior:reduce?'auto':'smooth'}); } } } });
+  });
+  updateReg();
+}
+function updateReg(){
+  const k=rs.ind, s=SERIES[k], col=cssVarColor(k), u=ultimo(k), def=retaDef(k,rs.reta);
+  document.getElementById('regDash').dataset.k=k;
+  document.querySelectorAll('#regInd button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.v===k));
+  document.querySelectorAll('#regReta button').forEach(b=>{ b.setAttribute('aria-pressed', b.dataset.v===rs.reta); const r=RETAS.find(x=>x.id===b.dataset.v); b.textContent = r.id==='lp' ? r.rot : r.rot.replace('último', String(u)); });
+  const lp=linreg(k,ANO0,u), cur=linreg(k,def.de,def.ate);
+  const lg=document.getElementById('regLegend');
+  lg.innerHTML = `<span class="lg static"><span class="sw" style="--c:${col}"></span>${s.curto} observados</span>
+    <button type="button" class="lg" id="tgLine" aria-pressed="${rs.show}"><span class="sw ${rs.reta==='lp'?'dash':''}" style="--c:${rs.reta==='lp'?C.trend:C['gold-ink']}"></span>${rs.reta==='lp'?'Reta de longo prazo':'Reta do intervalo '+def.nome}</button>
+    ${rs.reta!=='lp' ? `<button type="button" class="lg" id="tgLp" aria-pressed="${rs.lpRef}"><span class="sw dash" style="--c:${C.trend}"></span>Longo prazo (referência)</button>`:''}`;
+  lg.querySelector('#tgLine').addEventListener('click',()=>{ rs.show=!rs.show; updateReg(); });
+  const tl=lg.querySelector('#tgLp'); if(tl) tl.addEventListener('click',()=>{ rs.lpRef=!rs.lpRef; updateReg(); });
+  if (regChart){
+    const d=regChart.data.datasets;
+    d[0].data=s.v.slice(); d[0].borderColor=col; d[0].pointBorderColor=col; d[0].label=s.curto;
+    d[1].data=ANOS.map(y=> y<=u ? lp.a+lp.b*(y-ANO0) : null);
+    d[1].hidden = rs.reta==='lp' ? !rs.show : !rs.lpRef;
+    d[2].data=ANOS.map(y=> y>=def.de && y<=def.ate ? cur.a+cur.b*(y-ANO0) : null);
+    d[2].hidden = rs.reta==='lp' || !rs.show; d[2].label='Reta '+def.nome;
+    regChart.$bands = (rs.reta!=='lp' ? [{from:def.de-ANO0, to:def.ate-ANO0, color:alpha(C.gold,.12)}] : []).concat(k==='fab'?[{from:10.5,to:null,color:alpha(C.muted,.08),label:'sem dado'}]:[]);
+    regChart.update();
+  }
+  Object.entries(tviCharts).forEach(([kk,ch])=>{ if(!ch) return; const ds=ch.data.datasets[0];
+    ds.backgroundColor = DOC.tvi.map(p=> alpha(p[kk]>0?C.up:C.down, (kk===k && p.id===rs.reta)?1:.6));
+    ds.borderColor = DOC.tvi.map(p=> (kk===k && p.id===rs.reta)?C.ink:'transparent'); ds.borderWidth = DOC.tvi.map(p=>(kk===k && p.id===rs.reta)?2:0);
+    ch.update(); });
+  // painel lateral
+  let eq, slopeTxt, r2, r2note;
+  if (rs.reta==='lp'){
+    const D=DOC.reg[k];
+    eq = `y = ${N(D.a,D.aDec)} ${D.b<0?'−':'+'} ${N(Math.abs(D.b),D.bDec)}t`;
+    slopeTxt = `${S(D.b,1)} ${s.unid} por ano (≈ ${S(Math.round(D.b))})`;
+    r2 = D.r2; r2note = 'R² publicado no estudo (equações 11 e 12).';
+  } else {
+    eq = `y = ${N(cur.a,1)} ${cur.b<0?'−':'+'} ${N(Math.abs(cur.b),1)}t`;
+    slopeTxt = `${S(def.doc, def.doc%1?1:0)} ${s.unid} por ano`;
+    r2 = cur.r2;
+    r2note = (k==='fab' && rs.reta==='p2') ? 'R² = 0,82, publicado no estudo.' : 'R² calculado nesta página com os mesmos dados (o estudo publica apenas o R² de 0,82 das fábricas em 2019–2023).';
+  }
+  document.getElementById('regSide').innerHTML = `
+    <div class="card"><h4>Equação · ${def.nome}</h4>
+      <div class="formula big-f">${eq}</div>
+      <p class="mini-note">t = anos desde 2013 (t = 0 em 2013). ${rs.reta==='lp'?'':'Coeficientes calculados nesta página; a inclinação confere com a Tabela 4.'}</p></div>
+    <div class="card"><h4>Coeficiente angular = TVI</h4>
+      <div class="big ${dir(rs.reta==='lp'?DOC.reg[k].b:def.doc)}" style="font-size:30px">${slopeTxt}</div>
+      <p class="mini-note">A derivada de y = a + b·t é y′ = b: a variação estimada por ano, igual em todos os pontos da reta.</p></div>
+    <div class="card"><h4>Qualidade do ajuste · R²</h4>
+      <div class="big" style="font-size:30px">${N(r2,2)}</div>
+      <div class="r2bar" role="img" aria-label="R² de ${N(r2,2)} numa escala de 0 a 1"><i style="width:${Math.max(2,r2*100)}%"></i></div>
+      <p class="mini-note">${r2note} Quanto mais perto de 1, mais a reta se aproxima dos pontos reais.</p></div>
+    <div class="card"><h4>Leitura</h4><p style="font-size:14.5px">${LEITURA_REG[k][rs.reta]}</p></div>`;
+}
+
+/* =====================================================================
+   10. PONTOS DE VIRADA + POLINÔMIO + LINHA DO TEMPO
+   ===================================================================== */
+const tu = { ind:'emp', poly:true, ev:1 };
+let turnChart;
+function buildTimeline(){
+  const seg = (k,f) => { const span = f.ate-f.de; const cls = f.tipo==='up'?'s-up':f.tipo==='down'?'s-down':'s-flat';
+    return `<div class="tl-seg ${cls}" style="grid-column:${f.de-ANO0+1} / span ${span}" title="${f.de}–${f.ate}: ${f.nome}">${f.nome}<small>${f.de}–${f.ate}</small></div>`; };
+  const rows = ['emp','fab'].map(k=>`<div class="tl-row"><div class="tl-name">${SERIES[k].curto}</div><div class="tl-track">${DOC.fases[k].map(f=>seg(k,f)).join('')}${k==='fab'?'<div class="tl-seg s-na" style="grid-column:11 / span 1" title="2023–2024: sem dado">sem dado<small>2024</small></div>':''}</div></div>`).join('');
+  document.getElementById('timeline').innerHTML = `<div class="tl-inner">` + rows + `<div class="tl-axis" aria-hidden="true">${ANOS.map(y=>`<span>${String(y).slice(2)}</span>`).join('')}</div></div>
+    <p class="mini-note" style="margin-top:14px">Cada faixa vai de um ponto de virada ao seguinte. ▲ verde = crescimento; ▼ vermelho = queda; dourado = estabilidade; tracejado = sem dado. Em telas estreitas, deslize a linha do tempo para os lados.</p>`;
+}
+function buildTurn(){
+  document.querySelectorAll('#turnInd button').forEach(b=>b.addEventListener('click',()=>{ tu.ind=b.dataset.v; tu.ev=1; updateTurn(); }));
+  turnChart = make('cTurn', { type:'line', data:{datasets:[
+      {label:'Observado', data:[], borderWidth:2.5, pointRadius:4.5, pointBackgroundColor:C.paper, pointBorderWidth:2, tension:0, order:2},
+      {label:'Polinômio de 3º grau', data:[], borderColor:C.poly, borderWidth:2, borderDash:[2,4], pointRadius:0, pointHoverRadius:0, tension:0, order:3},
+      {label:'Ponto de inflexão', data:[], borderColor:C.poly, backgroundColor:C.poly, pointRadius:7, pointStyle:'rectRot', showLine:false, order:1}
+    ]},
+    options:{ interaction:{mode:'nearest', intersect:false, axis:'x'},
+      scales:{ x:axisX({type:'linear', min:ANO0, max:2024, ticks:{stepSize:1, callback:v=>String(v), color:C['ink-2'], maxRotation:0, autoSkipPadding:8, font:{family:"'IBM Plex Mono',monospace",size:11}}}), y:axisY(v=>N(v),{grace:'10%'}) },
+      plugins:{tooltip:{filter:it=>it.datasetIndex!==1, callbacks:{ title:it=> it[0].datasetIndex===2 ? 'Inflexão da curva' : 'Ano '+it[0].raw.x,
+        label:it=> it.datasetIndex===2 ? ` t ≈ ${N(it.raw.x-ANO0,1)} (≈ ${Math.round(it.raw.x)}) · f(t) ≈ ${N(it.raw.y)}` : ` ${SERIES[tu.ind].curto}: ${N(it.raw.y)}` }}},
+      onClick:(e,els)=>{ const el=els.find(x=>x.datasetIndex===0); if(!el) return; const y=ANO0+el.index; const i=EVENTOS[tu.ind].findIndex(ev=>ev.ano===y&&!ev.infl); if(i>=0){ tu.ev=i; updateTurn(); } } } });
+  updateTurn();
+}
+function updateTurn(){
+  const k=tu.ind, s=SERIES[k], col=cssVarColor(k), u=ultimo(k), pf=polyfit3(k), evs=EVENTOS[k], ev=evs[tu.ev]||evs[0];
+  document.getElementById('turnDash').dataset.k=k;
+  document.querySelectorAll('#turnInd button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.v===k));
+  const lg=document.getElementById('turnLegend');
+  lg.innerHTML = `<button type="button" class="lg" id="tgPoly" aria-pressed="${tu.poly}"><span class="sw dot" style="--c:${C.poly}"></span>Polinômio de 3º grau e inflexão</button>`;
+  lg.querySelector('#tgPoly').addEventListener('click',()=>{ tu.poly=!tu.poly; updateTurn(); });
+  if (turnChart){
+    const d=turnChart.data.datasets;
+    d[0].data = anosCom(k).map(y=>({x:y,y:val(k,y)})); d[0].borderColor=col; d[0].pointBorderColor=col; d[0].label=s.curto;
+    const pts=[]; for(let t=0;t<=u-ANO0+1e-9;t+=0.1) pts.push({x:ANO0+t, y:pf.f(t)}); d[1].data=pts;
+    d[2].data=[{x:ANO0+pf.infl, y:pf.f(pf.infl)}];
+    d[1].hidden = d[2].hidden = !tu.poly;
+    const ex=extremos(k);
+    const evYears = evs.filter(e=>!e.infl).map(e=>e.ano);
+    d[0].pointRadius = anosCom(k).map(y=> y===ev.ano && !ev.infl ? 8 : evYears.includes(y) ? 6 : 3.5);
+    d[0].pointBackgroundColor = anosCom(k).map(y=> y===ev.ano && !ev.infl ? col : C.paper);
+    turnChart.$labels = [{ds:0,i:ex.max-ANO0,text:'Máx. '+N(val(k,ex.max)),pos:'above',color:C.ink},{ds:0,i:ex.min-ANO0,text:'Mín. '+N(val(k,ex.min)),pos:'below',color:C.ink}];
+    turnChart.$bands = [{line: ev.infl ? ANO0+pf.infl : ev.ano, color: alpha(ev.infl?C.poly:col,.5), width:1.5}].concat(k==='fab'?[{from:2023.5,to:null,color:alpha(C.muted,.08),label:'sem dado'}]:[]);
+    turnChart.update();
+  }
+  const c = pf.c; // coeficientes recalculados; para empregados conferem com a equação (13)
+  const fmtC = (v,d=1) => (v<0?'− ':'+ ')+N(Math.abs(v),d);
+  const eq = `f(t) = ${c[3]<0?'−':''}${N(Math.abs(c[3]),k==='emp'?1:2)}t³ ${fmtC(c[2],k==='emp'?1:2)}t² ${fmtC(c[1],k==='emp'?1:2)}t ${fmtC(c[0],k==='emp'?1:2)}`;
+  const d1 = `f′(t) = ${c[3]<0?'−':''}${N(Math.abs(3*c[3]),1)}t² ${fmtC(2*c[2],1)}t ${fmtC(c[1],1)}`;
+  const d2 = `f″(t) = ${c[3]<0?'−':''}${N(Math.abs(6*c[3]),1)}t ${fmtC(2*c[2],1)}`;
+  const tInfl = pf.infl;
+  document.getElementById('turnSide').innerHTML = `
+    <div class="card"><h4>Momentos da série · ${s.curto}</h4>
+      <ul class="events">${evs.map((e,i)=>`<li><button type="button" data-i="${i}" aria-pressed="${i===tu.ev}"><span class="yr">${e.infl?'≈ ':''}${e.ano}</span><span class="tx"><b>${e.tit}</b>${e.tx}</span></button></li>`).join('')}</ul></div>
+    <div class="card"><h4>Polinômio de 3º grau ${k==='emp'?'(equação 13)':'(recalculado)'}</h4>
+      <div class="formula">${eq}</div><div class="formula">${d1}</div><div class="formula">${d2}</div>
+      <p class="mini-note">f″(t) = 0 → t = ${N(2*c[2],1)} ÷ ${N(Math.abs(6*c[3]),1)} ≈ ${N(tInfl,1)} → por volta de ${Math.round(ANO0+tInfl)}. R² = ${N(DOC.poly[k].r2,2)} (publicado no estudo).
+      ${k==='fab' ? ' O estudo não publica esta equação; ela foi recalculada pelo mesmo método e confere com o R² e a inflexão informados.' : ' Igualando f′(t) a zero, a curva tem mínimo por volta de 2016 e máximo por volta de 2021–2022.'}</p></div>`;
+  document.querySelectorAll('#turnSide .events button').forEach(b=>b.addEventListener('click',()=>{ tu.ev=+b.dataset.i; if(EVENTOS[k][tu.ev].infl) tu.poly=true; updateTurn(); }));
+}
+
+/* =====================================================================
+   11. COMPARAÇÃO (índice 2013 = 100)
+   ===================================================================== */
+const cs = { view:'idx', sel:2023 };
+let idxChart, absCharts={};
+const idx = (k,y) => val(k,y)==null ? null : val(k,y)/val(k,ANO0)*100;
+function maiorDivergencia(){ let best=null; ANOS.forEach(y=>{ if(idx('emp',y)==null||idx('fab',y)==null) return; const g=idx('fab',y)-idx('emp',y); if(!best||Math.abs(g)>Math.abs(best.g)) best={y,g}; }); return best; }
+function buildCmp(){
+  document.querySelectorAll('#cmpView button').forEach(b=>b.addEventListener('click',()=>{ cs.view=b.dataset.v; updateCmp(); }));
+  const lg=document.getElementById('cmpLegend');
+  lg.innerHTML = `<button type="button" class="lg" data-ds="0" aria-pressed="true"><span class="sw" style="--c:${C['s-emp']}"></span>Empregados (2013–2024)</button>
+    <button type="button" class="lg" data-ds="1" aria-pressed="true"><span class="sw" style="--c:${C['s-fab']}"></span>Fábricas (2013–2023)</button>
+    <span class="lg static"><span class="sw box" style="--c:${alpha(C.gold,.35)}"></span>Distância entre os índices</span>`;
+  idxChart = make('cIdx', { type:'line', data:{labels:ANOS.map(String), datasets:[
+      {label:'Empregados', data:ANOS.map(y=>idx('emp',y)), borderColor:C['s-emp'], borderWidth:2.5, pointRadius:4, pointBackgroundColor:C.paper, pointBorderColor:C['s-emp'], pointBorderWidth:2, tension:0},
+      {label:'Fábricas', data:ANOS.map(y=>idx('fab',y)), borderColor:C['s-fab'], borderWidth:2.5, pointRadius:4, pointBackgroundColor:C.paper, pointBorderColor:C['s-fab'], pointBorderWidth:2, tension:0, fill:{target:0, above:alpha(C.gold,.18), below:alpha(C.gold,.18)}, spanGaps:false}
+    ]},
+    options:{ interaction:{mode:'index',intersect:false},
+      scales:{ x:axisX(), y:axisY(v=>N(v),{grid:{color:c=>c.tick&&c.tick.value===100?C['ink-2']:C.line, lineWidth:c=>c.tick&&c.tick.value===100?1.5:1, drawTicks:false}, suggestedMin:80, suggestedMax:110}) },
+      plugins:{tooltip:{callbacks:{ title:it=>'Ano '+it[0].label, label:it=> it.raw==null ? ` ${it.dataset.label}: sem dado` : ` ${it.dataset.label}: ${N(it.raw,1)}`,
+        afterBody:it=>{ const y=+it[0].label; const e=idx('emp',y), f=idx('fab',y); return (e!=null&&f!=null) ? `Distância: ${N(Math.abs(f-e),1)} pontos` : ''; } }}},
+      onClick:(e,els)=>{ if(els.length){ cs.sel=ANO0+els[0].index; updateCmp(); } } } });
+  lg.querySelectorAll('[data-ds]').forEach(b=>b.addEventListener('click',()=>{ if(!idxChart) return; const i=+b.dataset.ds; const vis=idxChart.isDatasetVisible(i); idxChart.setDatasetVisibility(i,!vis); b.setAttribute('aria-pressed',!vis); idxChart.update(); }));
+  ['emp','fab'].forEach(k=>{ const col=cssVarColor(k);
+    absCharts[k]=make(k==='emp'?'cAbsEmp':'cAbsFab',{type:'line',data:{labels:ANOS.map(String),datasets:[{label:SERIES[k].curto,data:SERIES[k].v.slice(),borderColor:col,borderWidth:2.5,pointRadius:3.5,pointBackgroundColor:C.paper,pointBorderColor:col,pointBorderWidth:2,tension:0}]},
+      options:{interaction:{mode:'index',intersect:false},scales:{x:axisX(),y:axisY(v=>N(v),{grace:'8%'})},plugins:{tooltip:{callbacks:{title:it=>'Ano '+it[0].label,label:it=> it.raw==null?' Sem dado':` ${SERIES[k].curto}: ${N(it.raw)}`}}}}});
+    if(absCharts[k] && k==='fab') absCharts[k].$bands=[{from:10.5,to:null,color:alpha(C.muted,.08),label:'sem dado'}];
+  });
+  updateCmp();
+}
+function updateCmp(){
+  document.querySelectorAll('#cmpView button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.v===cs.view));
+  document.getElementById('cmpIdx').hidden = cs.view!=='idx'; document.getElementById('cmpAbs').hidden = cs.view!=='abs';
+  const md = maiorDivergencia(), y=cs.sel;
+  if (idxChart){
+    idxChart.$bands=[{line:y-ANO0, color:alpha(C.navy,.35), width:1.5},{from:10.5,to:null,color:alpha(C.muted,.06),label:'sem dado'}];
+    idxChart.$labels=[{ds:1,i:md.y-ANO0,text:'Maior distância: '+N(Math.abs(md.g),1)+' pts',pos:'above',color:C['gold-ink']}];
+    idxChart.update();
+  }
+  const e=idx('emp',y), f=idx('fab',y);
+  const ue=ultimo('emp'), uf=ultimo('fab');
+  document.getElementById('cmpSide').innerHTML = `
+    <div class="card" aria-live="polite"><h4>Ano selecionado · ${y}</h4>
+      <dl class="kv">
+        <div><dt><span class="sw" style="--c:${C['s-emp']};display:inline-block;vertical-align:middle;margin-right:6px"></span>Índice de empregados</dt><dd>${e==null?'sem dado':N(e,1)}</dd></div>
+        <div><dt><span class="sw" style="--c:${C['s-fab']};display:inline-block;vertical-align:middle;margin-right:6px"></span>Índice de fábricas</dt><dd>${f==null?'sem dado':N(f,1)}</dd></div>
+        <div><dt>Distância entre índices</dt><dd>${e==null||f==null?'—':N(Math.abs(f-e),1)+' pontos'}</dd></div>
+      </dl>
+      ${f==null?`<div class="empty"><strong>Fábricas sem dado em ${y}</strong>A comparação vale até ${uf}.</div>`:''}
+      <p class="mini-note">Índice 100 = nível de 2013. Selecione o ano tocando no gráfico.</p></div>
+    <div class="card"><h4>Onde cada série terminou</h4>
+      <dl class="kv"><div><dt>Empregados em ${ue}</dt><dd class="down">${N(idx('emp',ue),1)} (${P(varPct('emp',ANO0,ue))})</dd></div>
+      <div><dt>Fábricas em ${uf}</dt><dd class="up">${N(idx('fab',uf),1)} (${P(varPct('fab',ANO0,uf))})</dd></div></dl>
+      <p class="mini-note">Maior distância: ${md.y} (${N(Math.abs(md.g),1)} pontos). Entre 2015 e 2022, as duas séries se moveram quase sempre na mesma direção; a divergência cresce no fim, quando o emprego cai e as fábricas ficam estáveis.</p></div>`;
+}
+
+/* =====================================================================
+   12. METODOLOGIA: conceitos, tabela, auditoria, referências
+   ===================================================================== */
+function renderConcepts(){
+  const L = [
+    ['Variação absoluta','Quantos empregados ou fábricas o setor ganhou ou perdeu?','A diferença entre o valor final e o inicial, na própria unidade de medida.','Medir o tamanho real da mudança.','Variação absoluta = V<sub>f</sub> − V<sub>i</sub>  (1)','Empregados: 61.200 − 63.475 = −2.275. Fábricas: 1.268 − 1.218 = +50.','Dimensiona, por exemplo, quantas vagas o setor perdeu: a base para planejar recrutamento e capacidade.'],
+    ['Variação percentual','Quanto isso representa em proporção ao início?','A variação absoluta dividida pelo valor inicial, em porcentagem.','Comparar grandezas de tamanhos diferentes.','Variação % = (Variação absoluta ÷ V<sub>i</sub>) × 100  (2)','Empregados: −2.275 ÷ 63.475 × 100 ≈ −3,6%. Fábricas: 50 ÷ 1.218 × 100 ≈ +4,1%.','De cada 100 empregos de 2013, cerca de 96 permaneciam em 2024; para cada 100 fábricas, havia 104 em 2023.'],
+    ['Variações sucessivas','Em quais anos houve os maiores ganhos e perdas?','A mesma conta feita ano a ano, sempre sobre o valor do ano anterior.','Localizar os anos críticos e os anos de recuperação.','Acumulado = (1 + i<sub>1</sub>) × (1 + i<sub>2</sub>) × … × (1 + i<sub>n</sub>) − 1','Multiplicando os 11 fatores dos empregados obtém-se −3,6%. Somar as taxas daria cerca de −2,3%, um resultado errado.','Mostra quando agir: 2014–2015 (−10,8%) foi o pior ano; 2016–2017 (+7,1%), o melhor.'],
+    ['Taxa Média de Variação (TMV)','Qual foi o ritmo médio por ano no período?','A inclinação da reta secante que liga o ponto inicial ao final.','Resumir o ritmo de uma fase em uma quantidade por ano.','TMV = (V<sub>f</sub> − V<sub>i</sub>) ÷ (ano final − ano inicial)  (3)','Período completo: −2.275 ÷ 11 ≈ −207 empregados por ano. 2015–2021: +1.560 por ano.','Ajuda a definir metas de ritmo. Não é uma taxa percentual composta: a taxa composta anual dos empregados é −0,33% ao ano.'],
+    ['Regressão linear','Qual é a tendência geral da série?','A reta y = a + b·t que melhor se ajusta aos pontos pelo método dos mínimos quadrados, com t = 0 em 2013.','Resumir a tendência de uma série que oscila.','y = a + b·t  (4)','Empregados: y = 57.968 + 273,7t. Fábricas: y = 1.137,5 + 11,4t.','Indica a direção de longo prazo, mas não é uma previsão garantida do futuro.'],
+    ['Taxa de Variação Instantânea (TVI)','Qual é a tendência atual: acelerando, diminuindo ou estabilizando?','A derivada da função, isto é, a inclinação da reta tangente. Na reta de regressão, a derivada é o próprio coeficiente b.','Ler a variação marginal: quanto o indicador tende a mudar no próximo ano, mantido o ritmo.','y′ = b','Longo prazo: +274 empregados e +11 fábricas por ano. Desde 2021: −897 empregados e +1,5 fábrica por ano.','Comparar a TVI de períodos diferentes mostra se a tendência está acelerando, perdendo força ou estabilizando.'],
+    ['Coeficiente de determinação (R²)','Quanto a reta representa bem os dados?','Um número entre 0 e 1 que mede o quanto a reta se aproxima dos pontos reais.','Avaliar a confiança na tendência estimada.','=RQUAD(valores; t) no Excel. R² = 1 − SQ<sub>resíduos</sub> ÷ SQ<sub>total</sub>','Empregados: 0,10. Fábricas: 0,36. Fábricas em 2019–2023: 0,82.','R² baixo pede cautela: a tendência existe, mas explica pouco do que aconteceu.'],
+    ['Máximos, mínimos e pontos de inflexão','Quando o setor atingiu seu melhor e pior momento e quando o rumo mudou?','Máximos e mínimos são os extremos observados (ou onde f′(t) = 0 na curva). O ponto de inflexão é onde f″(t) = 0 e a curvatura muda.','Datar as viradas e identificar quando o crescimento começa a desacelerar.','f′(t) = −193,1t² + 2.375,6t − 5.583,1   f″(t) = −386,2t + 2.375,6','f″(t) = 0 → t ≈ 6,2 → por volta de 2019. Mínimo observado de empregados: 54.031 (2015).','A partir da inflexão, o emprego continuou crescendo, mas cada vez mais devagar: um sinal de alerta antecipado para o gestor.']
+  ];
+  document.getElementById('concepts').innerHTML = L.map(c=>`<details class="acc"><summary>${c[0]}<span class="q">${c[1]}</span></summary>
+    <div class="acc-body"><div><h6>O que é</h6><p>${c[2]}</p></div><div><h6>Para que serve</h6><p>${c[3]}</p></div>
+    <div class="full"><h6>Fórmula utilizada</h6><div class="formula">${c[4]}</div></div>
+    <div><h6>Exemplo do estudo</h6><p>${c[5]}</p></div><div><h6>Na prática administrativa</h6><p>${c[6]}</p></div></div></details>`).join('');
+}
+function renderTable(){
+  const cell = (v,f) => v==null ? '<td class="na">–</td>' : `<td class="${f? dir(v):''}">${f? f(v) : N(v)}</td>`;
+  const rows = ANOS.map(y=>`<tr><td>${y}</td><td>${y-ANO0}</td>${cell(val('emp',y))}${cell(varAbs('emp',y-1,y),v=>S(v))}${cell(varPct('emp',y-1,y),v=>P(v))}${cell(val('fab',y))}${cell(varAbs('fab',y-1,y),v=>S(v))}${cell(varPct('fab',y-1,y),v=>P(v))}</tr>`).join('');
+  document.getElementById('dataTable').innerHTML = `<caption class="sr-only">Série histórica e variações sucessivas</caption>
+    <thead><tr><th>Ano</th><th>t</th><th>Empregados</th><th>Δ abs.</th><th>Δ %</th><th>Fábricas</th><th>Δ abs.</th><th>Δ %</th></tr></thead><tbody>${rows}</tbody>`;
+}
+function renderAudit(){
+  const ok = '<span class="ok">✓ Confere</span>', no = '<span class="bad">✗ Revisar</span>';
+  const R = [];
+  const add = (item, docTxt, docNum, dec, calc, plan) => R.push({item, docTxt, calc, dec, pass: Number(calc.toFixed(dec))===docNum, plan});
+  const PL=DOC.planilha;
+  ['emp','fab'].forEach(k=>{ const u=ultimo(k), s=SERIES[k];
+    add(`${s.curto}: variação absoluta ${ANO0}–${u}`, S(PL[k].abs), PL[k].abs, 0, varAbs(k,ANO0,u), S(PL[k].abs));
+    add(`${s.curto}: variação percentual`, P(varPct(k,ANO0,u)).replace(/^/,'≈ '), k==='emp'?-3.6:4.1, 1, varPct(k,ANO0,u)*100, N(PL[k].pct*100,2)+'%');
+    add(`${s.curto}: acumulado pelo produto dos fatores (deve igualar a variação %)`, k==='emp'?'≈ −3,6%':'≈ +4,1%', k==='emp'?-3.6:4.1, 1, acumulado(k,ANO0,u)*100, N(PL[k].acum*100,2)+'%');
+    add(`${s.curto}: TMV do período completo`, k==='emp'?'≈ −207 /ano':'+5 /ano', k==='emp'?-207:5, 0, tmv(k,ANO0,u), N(PL[k].tmv,1));
+    const lr=linreg(k,ANO0,u), D=DOC.reg[k];
+    add(`${s.curto}: intercepto a da reta`, N(D.a,D.aDec), D.a, D.aDec, lr.a, N(PL[k].a,2));
+    add(`${s.curto}: inclinação b (TVI de longo prazo)`, S(D.b,1), D.b, 1, lr.b, N(PL[k].b,2));
+    add(`${s.curto}: R² da reta`, N(D.r2,2), D.r2, 2, lr.r2, N(PL[k].r2,3));
+    const ex=extremos(k);
+    add(`${s.curto}: máximo (${ex.max})`, N(PL[k].max), PL[k].max, 0, val(k,ex.max), `${N(PL[k].max)} (${PL[k].anoMax})`);
+    add(`${s.curto}: mínimo (${ex.min})`, N(PL[k].min), PL[k].min, 0, val(k,ex.min), `${N(PL[k].min)} (${PL[k].anoMin})`);
+    DOC.fases[k].forEach(f=>{ add(`${s.curto}: TMV ${f.de}–${f.ate} (${f.nome.toLowerCase()})`, S(f.tmv)+' /ano', f.tmv, 0, tmv(k,f.de,f.ate), '—'); });
+    DOC.tvi.forEach(p=>{ const e=tviFim(p,k); add(`${s.curto}: inclinação ${p.de}–${e} (Tabela 4)`, S(p[k], p[k]%1?1:0), p[k], p[k]%1?1:0, linreg(k,p.de,e).b, '—'); });
+    const sc=DOC.sucessivas[k]; let okAbs=0, okPct=0; const n=sc.abs.length;
+    sc.abs.forEach((v,i)=>{ const y=ANO0+i+1; if(varAbs(k,y-1,y)===v) okAbs++; if(Number((varPct(k,y-1,y)*100).toFixed(1))===sc.pct[i]) okPct++; });
+    R.push({item:`${s.curto}: ${n} variações sucessivas (Tabela 2)`, docTxt:`${n} valores absolutos e ${n} percentuais`, calcTxt:`${okAbs}/${n} absolutos e ${okPct}/${n} percentuais iguais`, pass: okAbs===n && okPct===n, plan:'colunas D e E'});
+  });
+  add('Fábricas: R² da reta 2019–2023', '0,82', DOC.tviR2fabP2, 2, linreg('fab',2019,2023).r2, '—');
+  const pe=polyfit3('emp'), pfb=polyfit3('fab');
+  add('Empregados: coeficiente de t³ do polinômio', '−64,4', -64.4, 1, pe.c[3], '—');
+  add('Empregados: coeficiente de t² do polinômio', '1.187,8', 1187.8, 1, pe.c[2], '—');
+  add('Empregados: coeficiente de t do polinômio', '−5.583,1', -5583.1, 1, pe.c[1], '—');
+  add('Empregados: termo constante do polinômio', '63.459,2', 63459.2, 1, pe.c[0], '—');
+  add('Empregados: R² do polinômio', '0,75', 0.75, 2, pe.r2, '—');
+  add('Empregados: inflexão t = 2.375,6 ÷ 386,2', '≈ 6,2', 6.2, 1, pe.infl, '—');
+  add('Fábricas: R² do polinômio', '0,85', 0.85, 2, pfb.r2, '—');
+  add('Fábricas: inflexão do polinômio (≈ 2019)', '≈ 2019', 2019, 0, ANO0+pfb.infl, '—');
+  const rows = R.map(r=>`<tr><td>${r.item}</td><td>${r.docTxt}</td><td>${r.plan||'—'}</td><td>${r.calcTxt || N(r.calc, Math.min(Math.max(r.dec,1),3))}</td><td>${r.pass?ok:no}</td></tr>`).join('');
+  const nOk = R.filter(r=>r.pass).length;
+  document.getElementById('auditTable').innerHTML = `<caption class="sr-only">Auditoria dos cálculos</caption>
+    <thead><tr><th>Resultado</th><th>Documento</th><th>Planilha</th><th>Recálculo</th><th>Confere (${nOk}/${R.length})</th></tr></thead><tbody>${rows}</tbody>`;
+}
+function renderRefs(){
+  const refs = [
+    ['Dados · empregados 2013–2021','INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA (IBGE). Cadastro Central de Empresas: tabela 6450 – unidades locais, pessoal ocupado total e assalariado, salários e outras remunerações, por seção, divisão, grupo e classe da classificação de atividades (CNAE 2.0) – série encerrada em 2021. Rio de Janeiro: IBGE, 2023. Disponível em: ','https://sidra.ibge.gov.br/tabela/6450','. Acesso em: 21 out. 2026.'],
+    ['Dados · empregados 2022–2024','INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA (IBGE). Cadastro Central de Empresas: tabela 9529 – unidades locais, pessoal ocupado, salários e salário médio mensal, por seção, divisão e grupo da classificação de atividades (CNAE 2.0). Rio de Janeiro: IBGE, 2026b. Disponível em: ','https://sidra.ibge.gov.br/tabela/9529','. Acesso em: 21 out. 2026.'],
+    ['Dados · unidades industriais','INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA (IBGE). Pesquisa Industrial Anual – Empresa: tabela 1849 – dados gerais das unidades locais industriais de empresas industriais com 5 ou mais pessoas ocupadas, por Unidade da Federação, segundo as divisões de atividades (CNAE 2.0). Rio de Janeiro: IBGE, 2026a. Disponível em: ','https://sidra.ibge.gov.br/tabela/1849','. Acesso em: 21 out. 2026.'],
+    ['Contexto · produção 2024','FEDERAÇÃO DAS INDÚSTRIAS DO ESTADO DE SANTA CATARINA (FIESC). Indústria da moda de SC cresce acima da média nacional em 2024. Florianópolis: FIESC, 11 mar. 2025a. Disponível em: ','https://fiesc.com.br/pt-br/imprensa/industria-da-moda-de-sc-cresce-acima-da-media-nacional-em-2024','. Acesso em: 21 out. 2026.'],
+    ['Contexto · 2022–2023','MORAIS, C. de O. et al. Produção industrial mensal: janeiro de 2023. Florianópolis: Observatório FIESC, 12 abr. 2023. Boletim. Disponível em: ','https://observatorio.fiesc.com.br/sites/default/files/2023-04/%5BBOLETINS%5D%20Produ%C3%A7%C3%A3o%20Industrial%20-%20jan.23_2.pdf','. Acesso em: 21 out. 2026.'],
+    ['Contexto · mão de obra','LAPS, L. Uma indústria que nunca sai de moda. Revista Indústria & Competitividade, Florianópolis, [2022?]. Disponível em: ','https://fiesc.com.br/pt-br/imprensa/uma-industria-que-nunca-sai-de-moda','. Acesso em: 20 set. 2026.'],
+    ['Matemática · Cálculo','STEWART, J. Cálculo: volume 1. 6. ed. São Paulo: Cengage Learning, 2009.'],
+    ['Matemática · Cálculo aplicado','HOFFMANN, L. D.; BRADLEY, G. L. Cálculo: um curso moderno e suas aplicações. 10. ed. Rio de Janeiro: LTC, 2014.'],
+    ['Matemática · Funções','MORETTIN, P. A.; HAZZAN, S.; BUSSAB, W. O. Cálculo: funções de uma e várias variáveis. 3. ed. São Paulo: Saraiva, 2016.'],
+    ['Estatística · R²','BUSSAB, W. O.; MORETTIN, P. A. Estatística básica. 9. ed. São Paulo: Saraiva, 2017.']
+  ];
+  document.getElementById('refs').innerHTML = refs.map(r=>`<li><span class="use">${r[0]}</span>${esc(r[1])}${r[2]?`<a href="${r[2]}" target="_blank" rel="noopener noreferrer">${esc(r[2])}</a>${esc(r[3])}`:''}</li>`).join('');
+}
+
+/* =====================================================================
+   13. NAVEGAÇÃO, MENU, VOLTAR AO TOPO
+   ===================================================================== */
+function initNav(){
+  const btn=document.getElementById('menuBtn'), nav=document.getElementById('nav');
+  btn.addEventListener('click',()=>{ const o=!nav.classList.contains('open'); nav.classList.toggle('open',o); btn.setAttribute('aria-expanded',o); });
+  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ nav.classList.remove('open'); btn.setAttribute('aria-expanded',false); }));
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && nav.classList.contains('open')){ nav.classList.remove('open'); btn.setAttribute('aria-expanded',false); btn.focus(); } });
+  const links=[...nav.querySelectorAll('a')], secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  const setActive=()=>{ const y=window.scrollY + window.innerHeight*0.3; let cur=0; secs.forEach((s,i)=>{ if(s && s.offsetTop<=y) cur=i; }); links.forEach((a,i)=>a.classList.toggle('active',i===cur)); if(cur>=0) links[cur].setAttribute('aria-current','true'); links.forEach((a,i)=>{ if(i!==cur) a.removeAttribute('aria-current'); });
+    document.getElementById('toTop').classList.toggle('show', window.scrollY>600); };
+  window.addEventListener('scroll', setActive, {passive:true}); setActive();
+  document.getElementById('toTop').addEventListener('click',()=>{ window.scrollTo({top:0, behavior:reduce?'auto':'smooth'}); document.querySelector('.brand').focus({preventScroll:true}); });
+}
+
+/* =====================================================================
+   14. INICIALIZAÇÃO
+   ===================================================================== */
+renderKPIs();
+buildDash('emp'); buildDash('fab');
+buildVar(); updateVar();
+buildTmv();
+buildReg();
+buildTimeline(); buildTurn();
+buildCmp();
+renderConcepts(); renderTable(); renderAudit(); renderRefs();
+initNav();
+let lastNarrow = narrow();
+window.addEventListener('resize',()=>{ if(narrow()!==lastNarrow){ lastNarrow=narrow(); updateVar(); updateTmv(); updateDash('emp'); updateDash('fab'); } });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>charts.forEach(c=>c.update('none')));
+})();
+</script>
