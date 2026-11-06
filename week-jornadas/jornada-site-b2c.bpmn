@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs_WEEK2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0">
+<bpmn:collaboration id="Collab"><bpmn:participant id="Pool" name="WEEK Haircare: jornada do cliente dentro do site" processRef="Proc"/></bpmn:collaboration>
+<bpmn:process id="Proc" name="Jornada do cliente dentro do site" isExecutable="false"><bpmn:laneSet id="LS">
+<bpmn:lane id="L0" name="Cliente"><bpmn:flowNodeRef>s</bpmn:flowNodeRef><bpmn:flowNodeRef>S1</bpmn:flowNodeRef><bpmn:flowNodeRef>S3</bpmn:flowNodeRef><bpmn:flowNodeRef>D1</bpmn:flowNodeRef><bpmn:flowNodeRef>S6</bpmn:flowNodeRef><bpmn:flowNodeRef>D2</bpmn:flowNodeRef><bpmn:flowNodeRef>S9</bpmn:flowNodeRef><bpmn:flowNodeRef>S10</bpmn:flowNodeRef><bpmn:flowNodeRef>S12</bpmn:flowNodeRef><bpmn:flowNodeRef>E2</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="L1" name="Site e e-commerce"><bpmn:flowNodeRef>S2</bpmn:flowNodeRef><bpmn:flowNodeRef>S4</bpmn:flowNodeRef><bpmn:flowNodeRef>S7</bpmn:flowNodeRef><bpmn:flowNodeRef>S8</bpmn:flowNodeRef><bpmn:flowNodeRef>E1</bpmn:flowNodeRef><bpmn:flowNodeRef>S11</bpmn:flowNodeRef><bpmn:flowNodeRef>D3</bpmn:flowNodeRef><bpmn:flowNodeRef>S13</bpmn:flowNodeRef><bpmn:flowNodeRef>S16</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="L2" name="Sócia de Comercial e Marketing"><bpmn:flowNodeRef>S5</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="L3" name="Sócia de Operações e Financeiro"><bpmn:flowNodeRef>S14</bpmn:flowNodeRef><bpmn:flowNodeRef>S15</bpmn:flowNodeRef></bpmn:lane>
+</bpmn:laneSet>
+<bpmn:startEvent id="s" name="Chega ao site pelo Reels, Google ou link"><bpmn:outgoing>f0</bpmn:outgoing></bpmn:startEvent>
+<bpmn:task id="S1" name="J1: Acessar a página inicial"><bpmn:incoming>f0</bpmn:incoming><bpmn:outgoing>f1</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S2" name="J2: Exibir banners, kits e benefícios"><bpmn:incoming>f1</bpmn:incoming><bpmn:outgoing>f2</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S3" name="J3: Escolher um produto ou kit"><bpmn:incoming>f2</bpmn:incoming><bpmn:outgoing>f3</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S4" name="J4: Mostrar preço, ingredientes e avaliações"><bpmn:incoming>f3</bpmn:incoming><bpmn:outgoing>f4</bpmn:outgoing></bpmn:task>
+<bpmn:exclusiveGateway id="D1" name="D1: Tem dúvida sobre o produto?"><bpmn:incoming>f4</bpmn:incoming><bpmn:outgoing>f5</bpmn:outgoing><bpmn:outgoing>f6</bpmn:outgoing></bpmn:exclusiveGateway>
+<bpmn:task id="S5" name="J5: Tirar as dúvidas pelo chat ou WhatsApp"><bpmn:incoming>f6</bpmn:incoming><bpmn:outgoing>f7</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S6" name="J6: Adicionar o produto ao carrinho"><bpmn:incoming>f5</bpmn:incoming><bpmn:incoming>f7</bpmn:incoming><bpmn:outgoing>f8</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S7" name="J7: Mostrar o frete e sugerir kits"><bpmn:incoming>f8</bpmn:incoming><bpmn:outgoing>f9</bpmn:outgoing></bpmn:task>
+<bpmn:exclusiveGateway id="D2" name="D2: Segue para o checkout?"><bpmn:incoming>f9</bpmn:incoming><bpmn:outgoing>f10</bpmn:outgoing><bpmn:outgoing>f11</bpmn:outgoing></bpmn:exclusiveGateway>
+<bpmn:task id="S8" name="J8: Enviar e-mail de carrinho abandonado com cupom"><bpmn:incoming>f11</bpmn:incoming><bpmn:outgoing>f12</bpmn:outgoing></bpmn:task>
+<bpmn:endEvent id="E1" name="Cliente reimpactado pode voltar ao carrinho"><bpmn:incoming>f12</bpmn:incoming></bpmn:endEvent>
+<bpmn:task id="S9" name="J9: Fazer login ou cadastro e informar o endereço"><bpmn:incoming>f10</bpmn:incoming><bpmn:outgoing>f13</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S10" name="J10: Escolher frete, cupom e forma de pagamento"><bpmn:incoming>f13</bpmn:incoming><bpmn:incoming>f18</bpmn:incoming><bpmn:outgoing>f14</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S11" name="J11: Processar o pagamento"><bpmn:incoming>f14</bpmn:incoming><bpmn:outgoing>f15</bpmn:outgoing></bpmn:task>
+<bpmn:exclusiveGateway id="D3" name="D3: Pagamento aprovado?"><bpmn:incoming>f15</bpmn:incoming><bpmn:outgoing>f16</bpmn:outgoing><bpmn:outgoing>f17</bpmn:outgoing></bpmn:exclusiveGateway>
+<bpmn:task id="S12" name="J12: Tentar outra forma de pagamento"><bpmn:incoming>f17</bpmn:incoming><bpmn:outgoing>f18</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S13" name="J13: Confirmar o pedido e enviar e-mail ao cliente"><bpmn:incoming>f16</bpmn:incoming><bpmn:outgoing>f19</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S14" name="J14: Receber o pedido no painel e separar os produtos"><bpmn:incoming>f19</bpmn:incoming><bpmn:outgoing>f20</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S15" name="J15: Emitir a nota fiscal e enviar com rastreio"><bpmn:incoming>f20</bpmn:incoming><bpmn:outgoing>f21</bpmn:outgoing></bpmn:task>
+<bpmn:task id="S16" name="J16: Atualizar o status e enviar o rastreio"><bpmn:incoming>f21</bpmn:incoming><bpmn:outgoing>f22</bpmn:outgoing></bpmn:task>
+<bpmn:endEvent id="E2" name="Cliente recebe o pedido em casa"><bpmn:incoming>f22</bpmn:incoming></bpmn:endEvent>
+<bpmn:sequenceFlow id="f0" sourceRef="s" targetRef="S1"/>
+<bpmn:sequenceFlow id="f1" sourceRef="S1" targetRef="S2"/>
+<bpmn:sequenceFlow id="f2" sourceRef="S2" targetRef="S3"/>
+<bpmn:sequenceFlow id="f3" sourceRef="S3" targetRef="S4"/>
+<bpmn:sequenceFlow id="f4" sourceRef="S4" targetRef="D1"/>
+<bpmn:sequenceFlow id="f5" name="não" sourceRef="D1" targetRef="S6"/>
+<bpmn:sequenceFlow id="f6" name="sim" sourceRef="D1" targetRef="S5"/>
+<bpmn:sequenceFlow id="f7" sourceRef="S5" targetRef="S6"/>
+<bpmn:sequenceFlow id="f8" sourceRef="S6" targetRef="S7"/>
+<bpmn:sequenceFlow id="f9" sourceRef="S7" targetRef="D2"/>
+<bpmn:sequenceFlow id="f10" name="sim" sourceRef="D2" targetRef="S9"/>
+<bpmn:sequenceFlow id="f11" name="não" sourceRef="D2" targetRef="S8"/>
+<bpmn:sequenceFlow id="f12" sourceRef="S8" targetRef="E1"/>
+<bpmn:sequenceFlow id="f13" sourceRef="S9" targetRef="S10"/>
+<bpmn:sequenceFlow id="f14" sourceRef="S10" targetRef="S11"/>
+<bpmn:sequenceFlow id="f15" sourceRef="S11" targetRef="D3"/>
+<bpmn:sequenceFlow id="f16" name="sim" sourceRef="D3" targetRef="S13"/>
+<bpmn:sequenceFlow id="f17" name="não" sourceRef="D3" targetRef="S12"/>
+<bpmn:sequenceFlow id="f18" sourceRef="S12" targetRef="S10"/>
+<bpmn:sequenceFlow id="f19" sourceRef="S13" targetRef="S14"/>
+<bpmn:sequenceFlow id="f20" sourceRef="S14" targetRef="S15"/>
+<bpmn:sequenceFlow id="f21" sourceRef="S15" targetRef="S16"/>
+<bpmn:sequenceFlow id="f22" sourceRef="S16" targetRef="E2"/>
+</bpmn:process><bpmndi:BPMNDiagram id="D"><bpmndi:BPMNPlane id="P" bpmnElement="Collab">
+<bpmndi:BPMNShape id="Pool_di" bpmnElement="Pool" isHorizontal="true"><dc:Bounds x="0" y="150" width="4850" height="1200"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="L0_di" bpmnElement="L0" isHorizontal="true"><dc:Bounds x="30" y="150" width="4820" height="300"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="L1_di" bpmnElement="L1" isHorizontal="true"><dc:Bounds x="30" y="450" width="4820" height="300"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="L2_di" bpmnElement="L2" isHorizontal="true"><dc:Bounds x="30" y="750" width="4820" height="300"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="L3_di" bpmnElement="L3" isHorizontal="true"><dc:Bounds x="30" y="1050" width="4820" height="300"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="s_di" bpmnElement="s"><dc:Bounds x="172.0" y="282.0" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="112.0" y="323.0" width="156" height="40"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S1_di" bpmnElement="S1"><dc:Bounds x="340.0" y="255.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S2_di" bpmnElement="S2"><dc:Bounds x="590.0" y="555.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S3_di" bpmnElement="S3"><dc:Bounds x="840.0" y="255.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S4_di" bpmnElement="S4"><dc:Bounds x="1090.0" y="555.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="D1_di" bpmnElement="D1" isMarkerVisible="true"><dc:Bounds x="1415.0" y="275.0" width="50" height="50"/><bpmndi:BPMNLabel><dc:Bounds x="1355.0" y="330.0" width="170" height="40"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S5_di" bpmnElement="S5"><dc:Bounds x="1590.0" y="855.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S6_di" bpmnElement="S6"><dc:Bounds x="1840.0" y="255.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S7_di" bpmnElement="S7"><dc:Bounds x="2090.0" y="555.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="D2_di" bpmnElement="D2" isMarkerVisible="true"><dc:Bounds x="2415.0" y="275.0" width="50" height="50"/><bpmndi:BPMNLabel><dc:Bounds x="2355.0" y="330.0" width="170" height="40"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S8_di" bpmnElement="S8"><dc:Bounds x="2590.0" y="555.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="E1_di" bpmnElement="E1"><dc:Bounds x="2922.0" y="582.0" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="2862.0" y="623.0" width="156" height="40"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S9_di" bpmnElement="S9"><dc:Bounds x="2590.0" y="255.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S10_di" bpmnElement="S10"><dc:Bounds x="2840.0" y="255.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S11_di" bpmnElement="S11"><dc:Bounds x="3090.0" y="555.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="D3_di" bpmnElement="D3" isMarkerVisible="true"><dc:Bounds x="3415.0" y="575.0" width="50" height="50"/><bpmndi:BPMNLabel><dc:Bounds x="3355.0" y="630.0" width="170" height="40"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S12_di" bpmnElement="S12"><dc:Bounds x="3340.0" y="255.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S13_di" bpmnElement="S13"><dc:Bounds x="3590.0" y="555.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S14_di" bpmnElement="S14"><dc:Bounds x="3840.0" y="1155.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S15_di" bpmnElement="S15"><dc:Bounds x="4090.0" y="1155.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="S16_di" bpmnElement="S16"><dc:Bounds x="4340.0" y="555.0" width="200" height="90"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="E2_di" bpmnElement="E2"><dc:Bounds x="4672.0" y="282.0" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="4612.0" y="323.0" width="156" height="40"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNEdge id="f0_di" bpmnElement="f0"><di:waypoint x="208" y="300"/><di:waypoint x="340" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f1_di" bpmnElement="f1"><di:waypoint x="540" y="300"/><di:waypoint x="565" y="300"/><di:waypoint x="565" y="600"/><di:waypoint x="590" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f2_di" bpmnElement="f2"><di:waypoint x="790" y="600"/><di:waypoint x="815" y="600"/><di:waypoint x="815" y="300"/><di:waypoint x="840" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f3_di" bpmnElement="f3"><di:waypoint x="1040" y="300"/><di:waypoint x="1065" y="300"/><di:waypoint x="1065" y="600"/><di:waypoint x="1090" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f4_di" bpmnElement="f4"><di:waypoint x="1290" y="600"/><di:waypoint x="1352" y="600"/><di:waypoint x="1352" y="300"/><di:waypoint x="1415" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f5_di" bpmnElement="f5"><di:waypoint x="1465" y="300"/><di:waypoint x="1840" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f6_di" bpmnElement="f6"><di:waypoint x="1440" y="325"/><di:waypoint x="1440" y="900"/><di:waypoint x="1590" y="900"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f7_di" bpmnElement="f7"><di:waypoint x="1790" y="900"/><di:waypoint x="1815" y="900"/><di:waypoint x="1815" y="300"/><di:waypoint x="1840" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f8_di" bpmnElement="f8"><di:waypoint x="2040" y="300"/><di:waypoint x="2065" y="300"/><di:waypoint x="2065" y="600"/><di:waypoint x="2090" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f9_di" bpmnElement="f9"><di:waypoint x="2290" y="600"/><di:waypoint x="2352" y="600"/><di:waypoint x="2352" y="300"/><di:waypoint x="2415" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f10_di" bpmnElement="f10"><di:waypoint x="2465" y="300"/><di:waypoint x="2590" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f11_di" bpmnElement="f11"><di:waypoint x="2440" y="325"/><di:waypoint x="2440" y="600"/><di:waypoint x="2590" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f12_di" bpmnElement="f12"><di:waypoint x="2790" y="600"/><di:waypoint x="2922" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f13_di" bpmnElement="f13"><di:waypoint x="2790" y="300"/><di:waypoint x="2840" y="300"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f14_di" bpmnElement="f14"><di:waypoint x="3040" y="300"/><di:waypoint x="3065" y="300"/><di:waypoint x="3065" y="600"/><di:waypoint x="3090" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f15_di" bpmnElement="f15"><di:waypoint x="3290" y="600"/><di:waypoint x="3415" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f16_di" bpmnElement="f16"><di:waypoint x="3465" y="600"/><di:waypoint x="3590" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f17_di" bpmnElement="f17"><di:waypoint x="3440" y="575"/><di:waypoint x="3440" y="345"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f18_di" bpmnElement="f18"><di:waypoint x="3440" y="255"/><di:waypoint x="3440" y="215"/><di:waypoint x="2940" y="215"/><di:waypoint x="2940" y="255"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f19_di" bpmnElement="f19"><di:waypoint x="3790" y="600"/><di:waypoint x="3815" y="600"/><di:waypoint x="3815" y="1200"/><di:waypoint x="3840" y="1200"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f20_di" bpmnElement="f20"><di:waypoint x="4040" y="1200"/><di:waypoint x="4090" y="1200"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f21_di" bpmnElement="f21"><di:waypoint x="4290" y="1200"/><di:waypoint x="4315" y="1200"/><di:waypoint x="4315" y="600"/><di:waypoint x="4340" y="600"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f22_di" bpmnElement="f22"><di:waypoint x="4540" y="600"/><di:waypoint x="4606" y="600"/><di:waypoint x="4606" y="300"/><di:waypoint x="4672" y="300"/></bpmndi:BPMNEdge>
+</bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn:definitions>
