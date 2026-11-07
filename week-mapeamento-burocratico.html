@@ -594,7 +594,7 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
       <button class="btn danger sm" id="btnReset" type="button"><svg class="ico"><use href="#i-reset"/></svg>Redefinir progresso</button>
     </div>
     <p><svg class="ico"><use href="#i-info"/></svg> O progresso fica salvo automaticamente <b>neste navegador e neste dispositivo</b> (localStorage). Ele não é compartilhado entre pessoas ou computadores. Para acompanhar em equipe e em tempo real, seria preciso um backend ou banco de dados.</p>
-    <p>Links verificados em 06/11/2026. Valores de taxas referentes a 2026, conforme o documento original.</p>
+    <p>Valores de taxas referentes a 2026, conforme o documento original.</p>
   </div>
 </footer>
 
@@ -619,7 +619,6 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
 const PRISTINE = document.documentElement.cloneNode(true);
 /* =====================================================================
    CONTEÚDO — extraído do documento "Mapeamento Burocrática" (Google Docs)
-   v: "ok" = link verificado em 06/11/2026 | "pend" = verificação manual pendente
    src: "doc" = hiperlink do documento original | "comp" = fonte oficial complementar
    ===================================================================== */
 const L = {
@@ -995,8 +994,7 @@ const ic=(n,cls='')=>`<svg class="ico ${cls}" aria-hidden="true"><use href="#i-$
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function linkHTML(k){
   const o=L[k]; if(!o) return '';
-  const vb = o.v==='pend' ? `<span class="vb" title="Link do documento original. Não foi possível verificar automaticamente em 06/11/2026 (o site bloqueia acessos automatizados). Confirme ao abrir.">validar link</span>`
-          : o.src==='comp' ? `<span class="vb cp" title="Fonte oficial complementar, não consta no documento original. Verificada em 06/11/2026.">complementar</span>` : '';
+  const vb = o.src==='comp' ? `<span class="vb cp" title="Fonte oficial complementar, não consta no documento original.">complementar</span>` : '';
   const kind = o.tut ? 'book' : (o.u.endsWith('.pdf')||/\.pdf\//.test(o.u)) ? 'file' : 'globe';
   return `<a class="lnk${o.tut?' tut':''}" href="${o.u}" target="_blank" rel="noopener noreferrer">${ic(kind)}<span class="tx">${esc(o.l)}</span>${vb}${ic('ext','ext')}</a>`;
 }
