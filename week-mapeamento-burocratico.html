@@ -230,7 +230,7 @@ main section{padding-block:44px 8px}
 .search input{width:100%;min-height:44px;border-radius:10px;border:1px solid var(--line-strong);background:var(--bg);padding:0 40px 0 40px;font:inherit;color:var(--ink)}
 .search input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
 .search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:8px;border:0;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center}
-.sel{min-height:44px;border-radius:10px;border:1px solid var(--line-strong);background:var(--bg);color:var(--ink);padding:0 12px;font:inherit;max-width:100%}
+.sel{flex:1 1 240px;min-height:44px;border-radius:10px;border:1px solid var(--line-strong);background:var(--bg);color:var(--ink);padding:0 12px;font:inherit;max-width:100%}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{min-height:36px;padding:0 13px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink-2);display:inline-flex;align-items:center;gap:7px}
 .chip .c{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
@@ -580,17 +580,10 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
       <div class="sec-head">
         <div>
           <div class="k">Atividades e checklists</div>
-          <h2>Passo a passo de cada atividade</h2>
-          <p class="lede">Fase → atividade → subpontos. Abra uma atividade para ver o objetivo, o passo a passo, os links dos portais, os documentos, as telas anotadas e o checklist.</p>
         </div>
       </div>
-      <div class="card toolbar" role="search">
+      <div class="card toolbar">
         <div class="tb-row">
-          <label class="search" for="q">
-            <svg class="ico"><use href="#i-search"/></svg>
-            <input id="q" type="search" placeholder="Buscar atividade, subponto, órgão ou documento (ex.: DARE, GRU, IPTU)" autocomplete="off" aria-label="Buscar">
-            <button class="clr" id="qClr" type="button" aria-label="Limpar busca" hidden><svg class="ico"><use href="#i-x"/></svg></button>
-          </label>
           <select class="sel" id="fPhase" aria-label="Filtrar por fase"><option value="">Todas as fases</option></select>
           <button class="btn sec sm" id="btnExpand" type="button"><svg class="ico"><use href="#i-expand"/></svg>Expandir</button>
           <button class="btn sec sm" id="btnCollapse" type="button"><svg class="ico"><use href="#i-collapse"/></svg>Recolher</button>
@@ -601,7 +594,7 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
         </div>
       </div>
       <div id="phases"></div>
-      <div class="card empty" id="empty" hidden><b>Nenhuma atividade encontrada</b>Tente outro termo ou limpe os filtros.<div style="margin-top:14px"><button class="btn sec sm" id="btnClearF" type="button">Limpar filtros</button></div></div>
+      <div class="card empty" id="empty" hidden><b>Nenhuma atividade encontrada</b>Nenhuma atividade corresponde aos filtros escolhidos.<div style="margin-top:14px"><button class="btn sec sm" id="btnClearF" type="button">Limpar filtros</button></div></div>
     </div>
   </section>
 
@@ -1243,7 +1236,7 @@ function renderFilterUI(){
 }
 function renderChips(){
   const T=totals();
-  const ch=[['all','Todas',ACTS.length],['pend','Pendentes',T.cnt.pend],['prog','Em andamento',T.cnt.prog],['wait','Aguardando',T.cnt.wait],['done','Concluídas',T.cnt.done]];
+  const ch=[['all','Todas',ACTS.length],['pend','Pendentes',T.cnt.pend],['prog','Em andamento',T.cnt.prog],['done','Concluídas',T.cnt.done]];
   $('#fStatus').innerHTML=ch.map(([v,l,n])=>`<button class="chip" type="button" data-fst="${v}" aria-pressed="${F.st===v}">${v!=='all'?`<span style="width:8px;height:8px;border-radius:50%;background:${STC[v]}"></span>`:''}${l}<span class="c">${n}</span></button>`).join('');
 }
 const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
@@ -1282,7 +1275,7 @@ function setPhase(id,open){
   open?closedPh.delete(id):closedPh.add(id); saveUI();
 }
 function goTo(id,stepId){
-  F={st:'all',phase:'',q:''}; $('#q').value=''; $('#fPhase').value=''; $('#qClr').hidden=true; applyFilters();
+  F={st:'all',phase:'',q:''}; $('#fPhase').value=''; applyFilters();
   const a=ACT[id]; setPhase(a.phase.id,true); setOpen(id,true);
   const el=$('#act-'+id);
   const target=stepId?el.querySelector(`[data-step-id="${stepId}"]`):el;
@@ -1350,12 +1343,10 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{ const t=e.target.closest('[data-goto-phase].pb'); if(t&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); t.click(); }});
 function selectText(el){ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
 $$('dialog').forEach(d=>d.addEventListener('click',e=>{ if(e.target===d) d.close(); }));
-let qT; $('#q').addEventListener('input',e=>{ $('#qClr').hidden=!e.target.value; clearTimeout(qT); qT=setTimeout(()=>{F.q=e.target.value; applyFilters();},140); });
-$('#qClr').addEventListener('click',()=>{ $('#q').value=''; F.q=''; $('#qClr').hidden=true; applyFilters(); $('#q').focus(); });
 $('#fPhase').addEventListener('change',e=>{ F.phase=e.target.value; if(F.phase) setPhase(F.phase,true); applyFilters(); });
 $('#btnExpand').addEventListener('click',()=>{ PHASES.forEach(p=>setPhase(p.id,true)); ACTS.forEach(a=>{ if(!$('#act-'+a.id).hidden) setOpen(a.id,true); }); });
 $('#btnCollapse').addEventListener('click',()=>{ ACTS.forEach(a=>setOpen(a.id,false)); });
-$('#btnClearF').addEventListener('click',()=>{ F={st:'all',phase:'',q:''}; $('#q').value=''; $('#fPhase').value=''; $('#qClr').hidden=true; applyFilters(); });
+$('#btnClearF').addEventListener('click',()=>{ F={st:'all',phase:'',q:''}; $('#fPhase').value=''; applyFilters(); });
 $('#btnReset').addEventListener('click',()=>openDlg($('#dlgReset')));
 $('#btnResetOk').addEventListener('click',()=>{ state={checked:{},waiting:{},history:[]}; log('Progresso redefinido','un'); save(); $$('[data-step]').forEach(c=>{ if(c.type==='checkbox') c.checked=false; }); $$('[data-wait]').forEach(c=>c.checked=false); refreshAll(); $('#dlgReset').close(); toast('Progresso apagado'); });
 $('#btnHist').addEventListener('click',()=>{ renderHist(); openDlg($('#dlgHist')); });
