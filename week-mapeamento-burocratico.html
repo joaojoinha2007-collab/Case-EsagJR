@@ -1186,7 +1186,7 @@ function goTo(id,stepId){
 }
 
 /* ---------- Toast / dialogs ---------- */
-let tT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('on'),2200); }
+let tT; function toast(m,ms){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('on'),ms||2200); }
 function openDlg(d){ if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
 function renderHist(){
   const fmt=new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
@@ -1267,13 +1267,15 @@ async function buildExport(){
   const doc=PRISTINE.cloneNode(true);
   doc.removeAttribute('data-theme');
   // mantém só os scripts da própria página; tira metas de política do host
-  doc.querySelectorAll('script').forEach(sc=>{ if(sc.id!=='app'&&sc.id!=='seed') sc.remove(); });
+  const app=[...doc.querySelectorAll('script')].find(sc=>sc.textContent.includes('const PRISTINE ='));
+  if(!app) throw {code:'no_source'};
+  app.id='app'; app.removeAttribute('nonce'); app.removeAttribute('type');
+  doc.querySelectorAll('script').forEach(sc=>{ if(sc!==app) sc.remove(); });
   doc.querySelectorAll('meta[http-equiv]').forEach(m=>m.remove());
-  doc.querySelectorAll('#seed').forEach(x=>x.remove());
   // progresso atual embutido
   const seed=document.createElement('script'); seed.type='application/json'; seed.id='seed';
   seed.textContent=JSON.stringify({checked:state.checked,waiting:state.waiting,history:state.history,exportedAt:new Date().toISOString()}).replace(/</g,'\\u003c');
-  const app=doc.querySelector('#app'); app.parentNode.insertBefore(seed,app);
+  app.parentNode.insertBefore(seed,app);
   // imagens embutidas
   let missing=0; const cache={};
   for(const img of doc.querySelectorAll('img[src]')){
@@ -1288,6 +1290,15 @@ async function buildExport(){
   app.textContent=appTxt;
   return {html:'<!doctype html>\n'+doc.outerHTML, missing};
 }
+const EXPORT_MSG={
+  declined:'Exportação cancelada.',
+  rate_limited:'Já existe uma confirmação de download aberta. Responda a ela e tente de novo.',
+  extension_not_enabled:'Este aplicativo não permite salvar arquivos .html. Abra a página em claude.ai pelo navegador (computador ou Safari) e exporte de lá.',
+  rejected_extension:'Este aplicativo não permite salvar arquivos .html. Abra a página em claude.ai pelo navegador e exporte de lá.',
+  unavailable:'Downloads não estão disponíveis nesta visualização. Abra a página em claude.ai pelo navegador e exporte de lá.',
+  no_source:'Não foi possível montar o arquivo nesta visualização.',
+};
+function withTimeout(pr,ms){ return Promise.race([pr,new Promise(r=>setTimeout(()=>r(null),ms))]); }
 $('#btnExport').addEventListener('click',async()=>{
   const btn=$('#btnExport'), lbl=$('#exportLbl'); if(btn.disabled) return;
   btn.disabled=true; lbl.textContent='Gerando…';
@@ -1295,22 +1306,27 @@ $('#btnExport').addEventListener('click',async()=>{
     const {html,missing}=await buildExport();
     const d=new Date(), pad=n=>String(n).padStart(2,'0');
     const filename=`week-mapeamento-burocratico-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}.html`;
-    let saved=false;
-    if(window.claude&&typeof window.claude.use==='function'){
-      const dl=await window.claude.use('downloads');
-      if(dl){
-        try{ await dl.save({filename,data:new Blob([html],{type:'text/html'})}); saved=true; }
-        catch(e){ if(e&&e.code==='declined'){ toast('Exportação cancelada'); return; } if(e&&e.code==='rate_limited'){ toast('Já existe uma confirmação aberta'); return; } }
-      }
-    }
-    if(!saved){
-      const url=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+    const blob=new Blob([html],{type:'text/html'});
+    const inViewer=!!(window.claude&&typeof window.claude.use==='function');
+    if(inViewer){
+      // dentro do claude.ai: só o recurso de downloads consegue salvar arquivos
+      lbl.textContent='Aguardando…';
+      const dl=await withTimeout(window.claude.use('downloads'),10000);
+      if(!dl) throw {code:'unavailable'};
+      const r=await dl.save({filename,data:blob});
+      if(r&&r.status==='delivered'){ toast('Arquivo enviado'); }
+      else toast(missing?`HTML exportado (${missing} imagens ficaram como link)`:'HTML exportado com o progresso atual',3500);
+    }else{
+      const url=URL.createObjectURL(blob);
       const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
       setTimeout(()=>URL.revokeObjectURL(url),4000);
+      toast(missing?`HTML exportado (${missing} imagens ficaram como link)`:'HTML exportado com o progresso atual',3500);
     }
     log('Exportado em HTML: '+filename,'');save();
-    toast(missing?`HTML exportado (${missing} imagens ficaram como link)`:'HTML exportado com o progresso atual');
-  }catch(e){ toast('Não foi possível exportar o HTML'); }
+  }catch(e){
+    const code=e&&e.code;
+    toast(EXPORT_MSG[code]||('Não foi possível exportar o HTML'+(code?` (${code})`:'')+'.'), code==='declined'?2200:7000);
+  }
   finally{ btn.disabled=false; lbl.textContent='Exportar HTML'; }
 });
 
