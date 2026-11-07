@@ -367,7 +367,7 @@ main section{padding-block:44px 8px}
 .empty{padding:40px 20px;text-align:center;color:var(--muted)}
 .empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:6px}
 
-/* ========== CUSTOS / CSD / PENDÊNCIAS ========== */
+/* ========== CUSTOS ========== */
 .two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
 .sumcard{padding:20px;display:grid;gap:14px;align-content:start}
 .sumcard h3{font-size:18px;font-weight:700}
@@ -379,21 +379,6 @@ table.cost td.v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;whit
 table.cost .pnd{color:var(--st-wait);font-family:var(--f-body);font-weight:600;white-space:normal}
 .stp-chip{display:inline-flex;font-family:var(--f-mono);font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--ink-2);border:0;cursor:pointer;margin:2px 3px 2px 0}
 .stp-chip:hover{background:var(--brand);color:#fff}
-.csd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:14px}
-.csd{padding:18px;display:grid;gap:12px;align-content:start}
-.csd h3{font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
-.csd h3 .bdg{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px}
-.csd ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.csd li{font-size:14px;color:var(--ink-2);padding-top:12px;border-top:1px solid var(--line)}
-.csd li:first-child{border-top:0;padding-top:0}
-.csd q{display:block;font-weight:700;color:var(--ink);quotes:"“" "”";margin-bottom:4px}
-.pend-list{display:grid;gap:10px}
-.pend-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;padding:14px 16px;align-items:start}
-.pend-item .ico{font-size:20px;color:var(--st-wait);margin-top:2px}
-.pend-item.lk .ico{color:var(--warn)}
-.pend-item h4{font-size:15px;font-weight:700}
-.pend-item p{font-size:14px;color:var(--ink-2);margin-top:3px}
-@media (max-width:600px){.pend-item{grid-template-columns:auto minmax(0,1fr)}.pend-item>div:last-child{grid-column:2}}
 
 /* ========== DIALOGS ========== */
 dialog{border:0;border-radius:16px;padding:0;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-lg);max-width:min(560px,calc(100vw - 32px));width:100%}
@@ -500,8 +485,6 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
       <a href="#roadmap"><svg class="ico"><use href="#i-route"/></svg>Roadmap</a>
       <a href="#atividades"><svg class="ico"><use href="#i-list"/></svg>Atividades</a>
       <a href="#custos"><svg class="ico"><use href="#i-coin"/></svg>Prazos e custos</a>
-      <a href="#csd"><svg class="ico"><use href="#i-target"/></svg>Matriz CSD</a>
-      <a href="#pendencias"><svg class="ico"><use href="#i-help"/></svg>Pendências</a>
     </div>
     <div class="nav-mini"><span class="bar"><i id="nmBar"></i></span><b class="num" id="nmPct">0%</b></div>
   </div>
@@ -608,34 +591,6 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
     </div>
   </section>
 
-  <!-- ===== CSD ===== -->
-  <section id="csd">
-    <div class="wrap">
-      <div class="sec-head">
-        <div>
-          <div class="k">Cruzamento com a Matriz CSD</div>
-          <h2>O que o mapeamento respondeu</h2>
-          <p class="lede">As informações deste mapeamento foram comparadas com a Matriz CSD da WEEK (Certezas, Suposições e Dúvidas) para identificar o que foi respondido, o que foi respondido em parte e o que segue em aberto.</p>
-          <div class="step-links" id="csdLink"></div>
-        </div>
-      </div>
-      <div class="csd-grid" id="csdGrid"></div>
-    </div>
-  </section>
-
-  <!-- ===== PENDÊNCIAS ===== -->
-  <section id="pendencias">
-    <div class="wrap">
-      <div class="sec-head">
-        <div>
-          <div class="k">Pendências de validação</div>
-          <h2>O que ainda precisa ser confirmado</h2>
-          <p class="lede">Informações que o documento indica como dependentes de confirmação, procedimentos sem link direto e links que não puderam ser verificados automaticamente. Nada aqui foi preenchido por suposição.</p>
-        </div>
-      </div>
-      <div class="pend-list" id="pendList"></div>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -1000,26 +955,6 @@ const COSTS = [
   ['Responsável técnico','R$ 1.500 a R$ 4.000','Mensal (referência)','p15'],
   ['INPI, GRU 389 (classes 3 e 35, ME/EPP)','R$ 880','R$ 440 por classe','p16'],
 ];
-const CSD = [
-  {t:'Dúvidas respondidas', ic:'i-check', col:'var(--st-done)', items:[
-    ['Quais são as exigências, os prazos e os custos junto à Anvisa?','A WEEK precisa de licença sanitária, AFE própria, responsável técnico e notificação de cada produto, com a AFE levando de 30 a 60 dias e custos que incluem as taxas da Anvisa conforme o porte e o responsável técnico (R$ 1.500 a R$ 4.000 por mês como referência).',['p9','p12','p13','p14','p15']],
-    ['Qual formato jurídico e qual regime tributário são mais adequados para a empresa?','LTDA com as duas sócias, com opção pelo Simples Nacional em até 30 dias após o último deferimento das inscrições.',['p1','p10']],
-    ['O nome da marca já está registrado no INPI?','Não foi encontrado registro apenas com o nome WEEK na classe 3, mas existem marcas em vigor com a palavra Week (linhas capilares da Amaxxon Cosmetics), o que representa risco de indeferimento e exige análise de um especialista antes do registro.',['p16']]]},
-  {t:'Dúvidas respondidas em parte', ic:'i-hourglass', col:'var(--st-prog)', items:[
-    ['Já existem patentes ou produtos idênticos registrados?','A busca no INPI mostrou marcas semelhantes na classe 3, porém patentes e produtos idênticos notificados na Anvisa ainda não foram pesquisados.',['p16']],
-    ['Qual é o investimento inicial necessário e qual é o ponto de equilíbrio?','Foram levantados os custos de abertura e regularização (JUCESP R$ 218,99, certificado digital R$ 150 a R$ 250, INPI R$ 880 e responsável técnico). O investimento total e o ponto de equilíbrio serão calculados no plano financeiro.',['p5','p11','p15','p16']],
-    ['Quais são a validade e a resistência do sachê de papel kraft?','A notificação exige testes de estabilidade, que comprovam a validade do produto na embalagem final. A resposta virá dos testes feitos com o fabricante.',['p14']]]},
-  {t:'Certezas confirmadas e detalhadas', ic:'i-flag', col:'var(--brand)', items:[
-    ['Pretendem terceirizar a fabricação, o envase e a embalagem / Estão desenvolvendo uma fórmula própria','Confirmadas e detalhadas: a WEEK é titular dos produtos e dona da fórmula; o fabricante terceirizado tem a AFE dele; contrato com cláusulas de confidencialidade, exclusividade e qualidade.',['p12']],
-    ['Dividem a sociedade em partes iguais (50/50)','Essa divisão deve constar no contrato social, na definição das quotas e da administradora da empresa.',['p5']]]},
-  {t:'Suposições impactadas', ic:'i-alert', col:'var(--rose)', items:[
-    ['Academias, hotéis e empresas têm interesse em adquirir o kit (B2B)','O mapeamento não valida o interesse, que depende da pesquisa de mercado, mas mostra que a AFE própria permite à WEEK vender no atacado, deixando a empresa preparada para o B2B.',['p12','p13']],
-    ['É possível estruturar uma base de custos ainda durante o projeto','Reforçada: os custos regulatórios levantados podem entrar diretamente na base de custos do plano financeiro.',[]],
-    ['Não existe concorrente direto no Brasil','Merece atenção: a busca no INPI mostrou empresas de cosméticos capilares usando a palavra Week em suas marcas, o que pode gerar confusão, mesmo que não sejam concorrentes diretas no formato de sachê.',['p16']]]},
-  {t:'O que segue em aberto', ic:'i-help', col:'var(--st-wait)', items:[
-    ['Custo de produção, fornecedores de sachês biodegradáveis e investimento em marketing','Dependem de cotações com fabricantes e serão tratados no plano operacional e no plano financeiro.',[]],
-    ['Patentes, produtos idênticos na Anvisa e viabilidade final da marca WEEK','Devem ser confirmados com um especialista em propriedade industrial antes do lançamento.',['p16']]]},
-];
 
 /* =====================================================================
    ESTADO + PERSISTÊNCIA
@@ -1277,16 +1212,6 @@ function renderHist(){
 function renderStatic(){
   $('#sumCards').innerHTML=SUMMARY.map(s=>`<div class="card sumcard"><h3>${esc(s.t)}</h3>${s.items.map(([i,b,t])=>`<div class="fact">${ic(i)}<div><b>${b}</b>${esc(t)}</div></div>`).join('')}</div>`).join('');
   $('#costTbl').innerHTML=`<thead><tr><th>Item</th><th>Valor</th><th>Observação</th><th>Etapa</th></tr></thead><tbody>${COSTS.map(([i,v,o,p])=>`<tr><td>${esc(i)}</td><td class="v">${v?esc(v):'<span class="pnd">Pendente de validação</span>'}</td><td>${esc(o)}</td><td><button type="button" class="stp-chip" data-goto="${p}">P${ACT[p].n}</button></td></tr>`).join('')}</tbody>`;
-  $('#csdLink').innerHTML=linkHTML('csd');
-  $('#csdGrid').innerHTML=CSD.map(g=>`<div class="card csd"><h3><span class="bdg" style="background:${g.col}"><svg class="ico"><use href="#${g.ic}"/></svg></span>${esc(g.t)}</h3><ul>${g.items.map(([q,a,ps])=>`<li><q>${esc(q)}</q>${esc(a)}${ps.length?`<div style="margin-top:6px">${ps.map(p=>`<button type="button" class="stp-chip" data-goto="${p}">P${ACT[p].n}</button>`).join('')}</div>`:''}</li>`).join('')}</ul></div>`).join('');
-  // Pendências: geradas a partir do conteúdo
-  const items=[];
-  ACTS.forEach(a=>a.steps.forEach(s=>{ if(s.pend) items.push({ic:s.warn?'alert':'help',t:s.pend,d:`Passo ${a.n}.${s.i} · ${s.t}`,go:a.id,step:s.id}); }));
-  items.push({ic:'help',t:'Patentes e produtos idênticos notificados na Anvisa ainda não foram pesquisados.',d:'Cruzamento com a Matriz CSD · dúvida respondida em parte',go:'p16'});
-  ACTS.forEach(a=>a.steps.forEach(s=>{ if(s.nolink) items.push({ic:'unlink',t:s.nolink,d:`Passo ${a.n}.${s.i} · ${s.t}`,go:a.id,step:s.id,lk:1}); }));
-  const pendLinks=Object.values(L).filter(o=>o.v==='pend');
-  $('#pendList').innerHTML=items.map(it=>`<div class="card pend-item${it.lk?' lk':''}">${ic(it.ic)}<div><h4>${esc(it.t)}</h4><p>${esc(it.d)}</p></div><div><button type="button" class="btn sec sm" data-goto="${it.go}" data-step="${it.step||''}">Ver etapa ${ic('arrow')}</button></div></div>`).join('')+
-   `<div class="card pend-item lk">${ic('link')}<div><h4>${pendLinks.length} links do documento original não puderam ser verificados automaticamente</h4><p>Os sites da Redesim/JUCESP, Cadesp, consultas da Anvisa e busca do INPI bloqueiam acessos automatizados. Os links foram mantidos como estão no documento e aparecem com a etiqueta “validar link”. Confirme ao abrir:</p><div class="step-links">${pendLinks.map(o=>`<a class="lnk" href="${o.u}" target="_blank" rel="noopener noreferrer">${ic('globe')}<span class="tx">${esc(o.l)}</span>${ic('ext','ext')}</a>`).join('')}</div></div><div></div></div>`;
 }
 
 /* =====================================================================
@@ -1340,7 +1265,7 @@ $('#btnTheme').addEventListener('click',()=>{ const n=curTheme()==='dark'?'light
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',paintThemeBtn);
 
 /* scrollspy */
-const secs=['painel','roadmap','atividades','custos','csd','pendencias'];
+const secs=['painel','roadmap','atividades','custos'];
 const io=new IntersectionObserver(ents=>{ ents.forEach(en=>{ if(en.isIntersecting){ $$('#navLinks a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id)); } }); },{rootMargin:'-45% 0px -50% 0px'});
 secs.forEach(s=>io.observe(document.getElementById(s)));
 
