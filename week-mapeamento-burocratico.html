@@ -83,7 +83,7 @@ button{font:inherit;color:inherit}
 .btn-ghost:hover{background:rgba(255,255,255,.14)}
 .hero-main{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end;margin-top:30px}
 .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#F2C2C5;font-weight:600}
-.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(34px,5.4vw,58px);line-height:1.02;letter-spacing:.01em;margin-top:8px}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(34px,5.4vw,58px);line-height:1.02;letter-spacing:.01em}
 .hero .sub{max-width:62ch;margin-top:12px;color:rgba(255,255,255,.8);font-size:16px}
 .hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;font-size:13px;color:rgba(255,255,255,.7)}
 .hero-meta span{display:inline-flex;align-items:center;gap:6px}
@@ -458,7 +458,6 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
     </div>
     <div class="hero-main">
       <div>
-        <div class="eyebrow">Roadmap operacional · Campinas/SP</div>
         <h1>Mapeamento Burocrático</h1>
         <p class="sub">Tudo o que a WEEK precisa fazer para regularizar a empresa e iniciar suas operações de forma legal: exigências, órgãos responsáveis, custos e prazos de cada etapa, com o passo a passo e os links de cada portal.</p>
         <div class="hero-meta">
@@ -482,7 +481,6 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
   <div class="wrap">
     <div class="nav-links" id="navLinks">
       <a href="#painel"><svg class="ico"><use href="#i-grid"/></svg>Painel</a>
-      <a href="#roadmap"><svg class="ico"><use href="#i-route"/></svg>Roadmap</a>
       <a href="#atividades"><svg class="ico"><use href="#i-list"/></svg>Atividades</a>
       <a href="#custos"><svg class="ico"><use href="#i-coin"/></svg>Prazos e custos</a>
     </div>
@@ -542,18 +540,12 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
     </div>
   </section>
 
-  <!-- ===== ROADMAP ===== -->
-  <section id="roadmap">
-    <div class="wrap">
-      <div class="trail-scroll"><div class="trail" id="trail"><span class="tfill" id="tfill"></span></div></div>
-    </div>
-  </section>
-
   <!-- ===== ATIVIDADES ===== -->
   <section id="atividades">
     <div class="wrap">
       <div class="sec-head">
         <div>
+          <div class="k">Roadmap do mapeamento</div>
           <h2>Atividades e checklists</h2>
         </div>
       </div>
@@ -1059,15 +1051,6 @@ function renderNext(){
 }
 
 /* ---------- Roadmap ---------- */
-function renderRoadmap(){
-  const tr=$('#trail'); tr.querySelectorAll('.tnode').forEach(n=>n.remove());
-  let lastDone=-1;
-  PHASES.forEach((p,i)=>{const c=phaseCalc(p); if(c.st==='done') lastDone=i;
-    tr.insertAdjacentHTML('beforeend',`<button class="tnode" type="button" data-st="${c.st}" data-goto-phase="${p.id}"><span class="c">${c.st==='done'?ic('check'):c.pct+'%'}</span><span class="t">F${i+1} · ${esc(p.name)}</span><span class="p">${c.actsDone}/${c.acts} atividades</span></button>`);});
-  // a linha avança até a fase atual: fases concluídas em sequência + fração da próxima
-  let reach=0; for(const p of PHASES){ const c=phaseCalc(p); if(c.st==='done'){ reach++; continue; } reach+=c.pct/100; break; }
-  $('#tfill').style.width=`${Math.min(84,84/(PHASES.length-1)*reach)}%`;
-}
 
 /* ---------- Atividades ---------- */
 function renderActs(){
@@ -1143,7 +1126,7 @@ function refreshActs(){
   });
   PHASES.forEach(p=>{const c=phaseCalc(p); $(`[data-ph-meta="${p.id}"]`).textContent=`${c.actsDone}/${c.acts} atividades concluídas · ${c.pct}% dos subpontos · ${STL[c.st]}`;});
 }
-function refreshAll(){ renderDash(); renderRoadmap(); refreshActs(); applyFilters(); }
+function refreshAll(){ renderDash(); refreshActs(); applyFilters(); }
 
 /* ---------- Filtros e busca ---------- */
 let F={st:'all',phase:'',q:''};
@@ -1265,7 +1248,7 @@ $('#btnTheme').addEventListener('click',()=>{ const n=curTheme()==='dark'?'light
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',paintThemeBtn);
 
 /* scrollspy */
-const secs=['painel','roadmap','atividades','custos'];
+const secs=['painel','atividades','custos'];
 const io=new IntersectionObserver(ents=>{ ents.forEach(en=>{ if(en.isIntersecting){ $$('#navLinks a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id)); } }); },{rootMargin:'-45% 0px -50% 0px'});
 secs.forEach(s=>io.observe(document.getElementById(s)));
 
