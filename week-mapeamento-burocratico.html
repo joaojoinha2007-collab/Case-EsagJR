@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WEEK Mapeamento Burocrático</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Figtree:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: faixa institucional em verde WEEK → barra fixa de navegação → painel → trilha de fases → atividades em cards expansíveis (2 colunas no desktop, empilhadas no celular). */
+:root{
+  --brand:#457774;        /* verde-petróleo da logo WEEK */
+  --brand-deep:#1F3D3B;
+  --brand-ink:#FFFFFF;
+  --rose:#C9787E;         /* rosé da logo WEEK */
+  --rose-soft:#F6E4E5;
+  --bg:#F2F5F4;
+  --surface:#FFFFFF;
+  --surface-2:#E9EFED;
+  --ink:#162423;
+  --ink-2:#465957;
+  --muted:#6F8381;
+  --line:#D6E0DD;
+  --line-strong:#B8C8C4;
+  --st-pend:#7D8E8C;  --st-pend-bg:#E8EDEC;
+  --st-prog:#B07612;  --st-prog-bg:#FBF0DC;
+  --st-wait:#6E5BB8;  --st-wait-bg:#ECE8F8;
+  --st-done:#24804F;  --st-done-bg:#DDF1E5;
+  --warn:#A2561B;     --warn-bg:#FCEBDD;
+  --shadow:0 1px 2px rgba(22,36,35,.06),0 6px 18px -8px rgba(22,36,35,.16);
+  --shadow-lg:0 2px 4px rgba(22,36,35,.06),0 18px 40px -16px rgba(22,36,35,.28);
+  --f-display:'Belleza','Optima','Candara',sans-serif;
+  --f-body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  --r:14px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --brand:#5E9792;--brand-deep:#10221F;--brand-ink:#FFFFFF;--rose:#E09CA1;--rose-soft:#3A2629;
+  --bg:#0D1716;--surface:#14211F;--surface-2:#1B2B29;--ink:#E4EEEC;--ink-2:#AFC2BF;--muted:#869A97;--line:#263735;--line-strong:#3A4F4C;
+  --st-pend:#93A5A2;--st-pend-bg:#22302E;--st-prog:#E2A83F;--st-prog-bg:#33291A;--st-wait:#A897EC;--st-wait-bg:#2A2540;--st-done:#57C08A;--st-done-bg:#16301F;
+  --warn:#E89A5C;--warn-bg:#36261A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px -8px rgba(0,0,0,.5);--shadow-lg:0 18px 40px -16px rgba(0,0,0,.7);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --brand:#5E9792;--brand-deep:#10221F;--brand-ink:#FFFFFF;--rose:#E09CA1;--rose-soft:#3A2629;
+  --bg:#0D1716;--surface:#14211F;--surface-2:#1B2B29;--ink:#E4EEEC;--ink-2:#AFC2BF;--muted:#869A97;--line:#263735;--line-strong:#3A4F4C;
+  --st-pend:#93A5A2;--st-pend-bg:#22302E;--st-prog:#E2A83F;--st-prog-bg:#33291A;--st-wait:#A897EC;--st-wait-bg:#2A2540;--st-done:#57C08A;--st-done-bg:#16301F;
+  --warn:#E89A5C;--warn-bg:#36261A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px -8px rgba(0,0,0,.5);--shadow-lg:0 18px 40px -16px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--brand-deep)}
+img{max-width:100%}
+[hidden]{display:none!important}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
+a{color:var(--brand)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--rose);outline-offset:2px;border-radius:6px}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:720px){.wrap{padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}}
+.ico{width:1em;height:1em;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.14em}
+
+/* ========== HEADER ========== */
+.hero{background:var(--brand-deep);color:#fff;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(201,120,126,.28),transparent 65%);pointer-events:none}
+.hero .wrap{padding-block:26px 30px;position:relative;z-index:1}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brandline{display:flex;align-items:center;gap:16px}
+.brandline .week{height:46px;width:auto}
+.brandline .sep{width:1px;height:34px;background:rgba(255,255,255,.28)}
+.brandline .esag{height:26px;width:auto;opacity:.88}
+.hero-tools{display:flex;gap:8px;flex-wrap:wrap}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;font-size:14px;font-weight:600;transition:background .2s}
+.btn-ghost:hover{background:rgba(255,255,255,.14)}
+.hero-main{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end;margin-top:30px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#F2C2C5;font-weight:600}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(34px,5.4vw,58px);line-height:1.02;letter-spacing:.01em;margin-top:8px}
+.hero .sub{max-width:62ch;margin-top:12px;color:rgba(255,255,255,.8);font-size:16px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;font-size:13px;color:rgba(255,255,255,.7)}
+.hero-meta span{display:inline-flex;align-items:center;gap:6px}
+.hero-prog{min-width:250px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:16px 18px}
+.hero-prog .lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:600}
+.hero-prog .big{font-family:var(--f-mono);font-size:34px;font-weight:600;line-height:1.1;margin-top:4px}
+.hero-prog .bar{height:8px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;margin-top:10px}
+.hero-prog .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#F2C2C5,#fff);border-radius:inherit;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.hero-prog .det{font-size:12.5px;color:rgba(255,255,255,.72);margin-top:8px}
+@media (max-width:760px){.hero-main{grid-template-columns:1fr}.hero-prog{min-width:0}.brandline .week{height:38px}.brandline .esag{height:22px}}
+
+/* ========== NAV ========== */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:14px;min-height:58px}
+.nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{white-space:nowrap;text-decoration:none;color:var(--ink-2);font-weight:600;font-size:14px;padding:9px 12px;border-radius:9px;display:inline-flex;align-items:center;gap:7px;transition:background .2s,color .2s}
+.nav-links a:hover{background:var(--surface-2);color:var(--ink)}
+.nav-links a.on{background:var(--brand);color:#fff}
+.nav-mini{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);white-space:nowrap}
+.nav-mini .bar{width:90px;height:6px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.nav-mini .bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .5s}
+@media (max-width:640px){.nav-mini{display:none}}
+
+/* ========== SECTIONS ========== */
+main section{padding-block:44px 8px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-family:var(--f-display);font-weight:400;font-size:clamp(26px,3.4vw,36px);line-height:1.08;letter-spacing:.01em}
+.sec-head .k{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);font-weight:600;margin-bottom:6px}
+.sec-head p.lede{color:var(--ink-2);max-width:68ch;margin-top:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+/* ========== DASHBOARD ========== */
+.dash{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.6fr);gap:16px}
+@media (max-width:980px){.dash{grid-template-columns:1fr}}
+.overall{padding:22px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.ring{position:relative;width:148px;height:148px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .trk{stroke:var(--surface-2)}
+.ring .val{stroke:var(--brand);transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)}
+.ring .val2{stroke:var(--rose);opacity:.9;transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)}
+.ring .ctr{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .ctr b{font-family:var(--f-mono);font-size:30px;font-weight:600;line-height:1}
+.ring .ctr small{display:block;font-size:11.5px;color:var(--muted);margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+.overall h3{font-size:18px;font-weight:700}
+.overall .two{display:grid;gap:10px;margin-top:12px}
+.lvl{display:grid;gap:5px}
+.lvl .row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2);gap:8px}
+.lvl .row b{color:var(--ink)}
+.lvl .bar{height:8px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.lvl .bar i{display:block;height:100%;width:0;border-radius:inherit;transition:width .6s}
+@media (max-width:520px){.overall{grid-template-columns:1fr;justify-items:center;text-align:center}.overall .two{width:100%;text-align:left}}
+
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{padding:14px 16px;display:flex;flex-direction:column;gap:4px;position:relative;cursor:pointer;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.kpi .lb{font-size:12.5px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:7px}
+.kpi .lb .dot{width:9px;height:9px;border-radius:50%}
+.kpi .v{font-family:var(--f-mono);font-size:28px;font-weight:600;line-height:1.15}
+.kpi .h{font-size:12px;color:var(--muted)}
+.dash-right,.dash-left{display:grid;gap:12px;align-content:start}
+.dash-right .kpis{height:100%;grid-auto-rows:1fr}
+.statusbar{padding:16px 18px}
+.statusbar h4,.phasebars h4,.nextcard h4{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.stack{display:flex;height:14px;border-radius:99px;overflow:hidden;background:var(--surface-2);margin-top:12px}
+.stack i{display:block;height:100%;transition:width .6s}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:13px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend .sw{width:10px;height:10px;border-radius:3px}
+
+.dash-lower{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;margin-top:16px}
+@media (max-width:980px){.dash-lower{grid-template-columns:1fr}}
+.phasebars{padding:18px}
+.pb{display:grid;grid-template-columns:minmax(0,1fr) 56px;gap:4px 12px;align-items:center;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
+.pb:first-of-type{border-top:0}
+.pb .nm{font-size:14px;font-weight:600;display:flex;gap:8px;align-items:baseline;min-width:0}
+.pb .nm .n{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.pb .pct{font-family:var(--f-mono);font-weight:600;text-align:right;font-size:14px}
+.pb .bar{grid-column:1/-1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.pb .bar i{display:block;height:100%;width:0;background:var(--brand);border-radius:inherit;transition:width .6s}
+.pb .meta{grid-column:1/-1;font-size:12px;color:var(--muted)}
+.nextcard{padding:18px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(160deg,var(--surface) 55%,var(--rose-soft));}
+.nextcard .nact{font-size:13px;color:var(--muted);font-weight:600}
+.nextcard .stp{font-size:18px;font-weight:700;line-height:1.3}
+.nextcard .why{font-size:13.5px;color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 16px;border-radius:10px;border:1px solid transparent;background:var(--brand);color:#fff;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;transition:filter .2s,transform .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn.sec{background:var(--surface);color:var(--ink);border-color:var(--line-strong)}
+.btn.sec:hover{background:var(--surface-2);filter:none}
+.btn.danger{background:#B4473F}
+.btn.sm{min-height:36px;padding:0 12px;font-size:13px}
+
+/* ========== ROADMAP ========== */
+.trail-scroll{overflow-x:auto;padding-bottom:6px;margin-bottom:18px}
+.trail{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));min-width:780px;position:relative}
+.trail::before{content:"";position:absolute;left:8%;right:8%;top:27px;height:3px;background:var(--line);border-radius:3px}
+.trail .tfill{position:absolute;left:8%;top:27px;height:3px;background:var(--brand);border-radius:3px;transition:width .7s}
+.tnode{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;position:relative;cursor:pointer;background:none;border:0;padding:0 6px}
+.tnode .c{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:3px solid var(--line-strong);font-family:var(--f-mono);font-weight:600;font-size:14px;box-shadow:var(--shadow);transition:transform .2s,border-color .3s,background .3s}
+.tnode:hover .c{transform:scale(1.06)}
+.tnode[data-st="prog"] .c{border-color:var(--st-prog)}
+.tnode[data-st="wait"] .c{border-color:var(--st-wait)}
+.tnode[data-st="done"] .c{border-color:var(--st-done);background:var(--st-done);color:#fff}
+.tnode .t{font-size:13px;font-weight:700;line-height:1.25}
+.tnode .p{font-size:12px;color:var(--muted)}
+.parts{display:grid;gap:22px}
+.part-h{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px}
+.part-h::after{content:"";flex:1;height:1px;background:var(--line)}
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
+.pcard{padding:18px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.pcard::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--st-pend)}
+.pcard[data-st="prog"]::before{background:var(--st-prog)}
+.pcard[data-st="wait"]::before{background:var(--st-wait)}
+.pcard[data-st="done"]::before{background:var(--st-done)}
+.pcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.pcard .fx{font-family:var(--f-mono);font-size:12px;color:var(--rose);font-weight:600;letter-spacing:.1em}
+.pcard h3{font-size:18px;font-weight:700;line-height:1.25;margin-top:2px}
+.pcard .d{font-size:14px;color:var(--ink-2)}
+.pcard .stats{display:flex;gap:16px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.pcard .stats b{color:var(--ink);font-family:var(--f-mono)}
+.pcard .bar{height:7px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.pcard .bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .6s}
+.pacts{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.pacts button{width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:0;padding:8px 8px;border-radius:8px;cursor:pointer;font-size:14px}
+.pacts button:hover{background:var(--surface-2)}
+.pacts .sn{font-family:var(--f-mono);font-size:12px;color:var(--muted);width:28px;flex:none}
+.pacts .tt{flex:1;min-width:0}
+.pacts .mini{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+
+/* ========== STATUS PILL ========== */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap;background:var(--st-pend-bg);color:var(--st-pend)}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill[data-st="prog"]{background:var(--st-prog-bg);color:var(--st-prog)}
+.pill[data-st="wait"]{background:var(--st-wait-bg);color:var(--st-wait)}
+.pill[data-st="done"]{background:var(--st-done-bg);color:var(--st-done)}
+
+/* ========== TOOLBAR ========== */
+.toolbar{display:grid;gap:12px;padding:14px;margin-bottom:18px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 59px);z-index:20;border-top-left-radius:0;border-top-right-radius:0}
+.tb-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search{flex:1 1 280px;position:relative;min-width:0}
+.search .ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:17px}
+.search input{width:100%;min-height:44px;border-radius:10px;border:1px solid var(--line-strong);background:var(--bg);padding:0 40px 0 40px;font:inherit;color:var(--ink)}
+.search input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
+.search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:8px;border:0;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center}
+.sel{min-height:44px;border-radius:10px;border:1px solid var(--line-strong);background:var(--bg);color:var(--ink);padding:0 12px;font:inherit;max-width:100%}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{min-height:36px;padding:0 13px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink-2);display:inline-flex;align-items:center;gap:7px}
+.chip .c{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] .c{color:inherit;opacity:.75}
+.tb-info{font-size:13px;color:var(--muted);margin-left:auto}
+@media (max-width:720px){.toolbar{position:static}.tb-info{margin-left:0}}
+
+/* ========== PHASE BLOCKS & ACTIVITIES ========== */
+.phase{margin-bottom:22px}
+.phase-hd{width:100%;display:flex;align-items:center;gap:14px;background:none;border:0;padding:10px 4px;cursor:pointer;text-align:left}
+.phase-hd .fx{font-family:var(--f-mono);font-size:12px;font-weight:600;color:#fff;background:var(--brand);border-radius:8px;padding:5px 9px;letter-spacing:.06em;flex:none}
+.phase-hd .h3{display:block;font-size:20px;font-weight:700;line-height:1.2}
+.phase-hd .sm{display:block;font-size:13px;color:var(--muted)}
+.phase-hd .grow{flex:1;min-width:0}
+.phase-hd .chev{transition:transform .25s;font-size:20px;color:var(--muted)}
+.phase.closed .phase-hd .chev{transform:rotate(-90deg)}
+.phase-body{display:grid;gap:12px;padding-top:6px}
+.phase.closed .phase-body{display:none}
+
+.act{overflow:hidden;transition:box-shadow .2s,border-color .2s}
+.act{scroll-margin-top:210px}.step{scroll-margin-top:220px}
+@media (max-width:720px){.act{scroll-margin-top:80px}.step{scroll-margin-top:90px}}
+.act.open{box-shadow:var(--shadow-lg);border-color:var(--line-strong)}
+.act.flash{animation:flash 1.4s ease}
+@keyframes flash{0%,100%{box-shadow:var(--shadow)}30%{box-shadow:0 0 0 4px color-mix(in srgb,var(--rose) 55%,transparent)}}
+.act-hd{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 18px;background:none;border:0;cursor:pointer;text-align:left}
+.act-hd .num{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--surface-2);font-weight:600;font-size:15px;position:relative}
+.act[data-st="done"] .act-hd .num{background:var(--st-done);color:#fff}
+.act[data-st="prog"] .act-hd .num{background:var(--st-prog-bg);color:var(--st-prog)}
+.act[data-st="wait"] .act-hd .num{background:var(--st-wait-bg);color:var(--st-wait)}
+.act-hd .h4{display:block;font-size:16.5px;font-weight:700;line-height:1.3;text-wrap:balance}
+.act-hd .d{font-size:13.5px;color:var(--ink-2);margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.act.open .act-hd .d{-webkit-line-clamp:unset;display:block}
+.act-hd .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.act-hd .mini{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.act-hd .mini .bar{width:84px;height:6px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.act-hd .mini .bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .5s}
+.act[data-st="done"] .act-hd .mini .bar i{background:var(--st-done)}
+.act-hd .chev{font-size:18px;color:var(--muted);transition:transform .25s}
+.act.open .act-hd .chev{transform:rotate(180deg)}
+@media (max-width:640px){
+  .act-hd{grid-template-columns:auto minmax(0,1fr);gap:12px;padding:14px}
+  .act-hd .right{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}
+  .act-hd .num{width:40px;height:40px}
+}
+.act-body{display:none;border-top:1px solid var(--line)}
+.act.open .act-body{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.ab-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:0}
+@media (max-width:900px){.ab-grid{grid-template-columns:1fr}}
+.ab-main{padding:20px 22px 22px;display:grid;gap:18px;align-content:start;min-width:0}
+.ab-side{padding:20px 20px 22px;background:var(--surface-2);display:grid;gap:16px;align-content:start;min-width:0;border-left:1px solid var(--line)}
+@media (max-width:900px){.ab-side{border-left:0;border-top:1px solid var(--line)}.ab-main{padding:16px}.ab-side{padding:16px}}
+.lab{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.goal{display:flex;gap:12px;padding:12px 14px;border-radius:10px;background:var(--surface-2);font-size:14.5px}
+.goal .ico{color:var(--brand);font-size:18px;margin-top:2px}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
+.step{border:1px solid var(--line);border-radius:12px;background:var(--surface);transition:border-color .2s,background .2s}
+.step.done{background:color-mix(in srgb,var(--st-done-bg) 55%,var(--surface));border-color:color-mix(in srgb,var(--st-done) 35%,var(--line))}
+.step.hit{border-color:var(--rose);box-shadow:0 0 0 2px color-mix(in srgb,var(--rose) 30%,transparent)}
+.step-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding:13px 14px;align-items:start}
+.cb{position:relative;width:26px;height:26px;flex:none;margin-top:1px}
+.cb input{position:absolute;inset:-8px;width:42px;height:42px;opacity:0;cursor:pointer;margin:0;z-index:1}
+.cb .box{width:26px;height:26px;border-radius:8px;border:2px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;transition:all .18s}
+.cb .box .ico{color:#fff;font-size:15px;stroke-width:3;opacity:0;transform:scale(.5);transition:all .18s}
+.cb input:checked + .box{background:var(--st-done);border-color:var(--st-done)}
+.cb input:checked + .box .ico{opacity:1;transform:none}
+.cb input:focus-visible + .box{outline:2.5px solid var(--rose);outline-offset:2px}
+.step-t{font-weight:700;font-size:15px;line-height:1.35;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.step-t .sn{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-weight:600}
+.step.done .step-t .tx{text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--ink) 35%,transparent)}
+.tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--ink-2)}
+.tag.cond{background:var(--st-wait-bg);color:var(--st-wait)}
+.step-d{font-size:14.5px;color:var(--ink-2);margin-top:6px}
+.step-d p+p{margin-top:6px}
+.step-d ul{margin:6px 0 0;padding-left:18px;display:grid;gap:4px}
+.step-d b{color:var(--ink)}
+.step-d code,.code{font-family:var(--f-mono);font-size:.9em;background:var(--surface-2);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.step-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+.lnk{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);text-decoration:none;color:var(--ink);font-size:13.5px;font-weight:600;line-height:1.3;max-width:100%;transition:border-color .2s,background .2s,transform .15s}
+.lnk:hover{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 8%,var(--surface));transform:translateY(-1px)}
+.lnk .ico{color:var(--brand);font-size:15px}
+.lnk .ext{color:var(--muted);font-size:13px}
+.lnk .tx{min-width:0;overflow-wrap:break-word;flex:1 1 auto}
+.lnk.tut .ico:first-child{color:var(--rose)}
+.lnk .vb{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:5px;background:var(--warn-bg);color:var(--warn);white-space:nowrap}
+.lnk .vb.cp{background:var(--surface-2);color:var(--ink-2)}
+@media (max-width:640px){.lnk{width:100%;flex-wrap:wrap;row-gap:6px}.lnk .tx{flex-basis:calc(100% - 50px)}.lnk .vb{order:3;margin-left:23px}.step-row{gap:10px;padding:12px}}
+.nolink{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px dashed var(--line-strong);font-size:13px;color:var(--muted)}
+.contact{display:inline-flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);font-size:13.5px;font-weight:600}
+.contact span{user-select:all}
+.contact button{border:0;background:var(--surface-2);border-radius:7px;height:30px;padding:0 10px;cursor:pointer;font-size:12px;font-weight:700}
+
+.callout{display:flex;gap:12px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.5}
+.callout .ico{font-size:18px;margin-top:1px}
+.callout.warn{background:var(--warn-bg);color:color-mix(in srgb,var(--warn) 70%,var(--ink))}
+.callout.warn .ico{color:var(--warn)}
+.callout.info{background:var(--surface-2);color:var(--ink-2)}
+.callout.info .ico{color:var(--brand)}
+.callout.pend{background:var(--st-wait-bg);color:color-mix(in srgb,var(--st-wait) 60%,var(--ink))}
+.callout.pend .ico{color:var(--st-wait)}
+.callout b{color:inherit}
+
+.facts{display:grid;gap:8px}
+.fact{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;font-size:14px}
+.fact .ico{color:var(--brand);font-size:17px;margin-top:2px}
+.fact b{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.side-list{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:14px}
+.side-list li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px}
+.side-list .ico{color:var(--brand);margin-top:3px}
+.deps{display:flex;flex-wrap:wrap;gap:6px}
+.dep{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:var(--surface);border-radius:99px;padding:4px 10px;font-size:12.5px;font-weight:600;cursor:pointer}
+.dep[data-st="done"]{border-color:var(--st-done);color:var(--st-done)}
+.result{padding:12px 14px;border-radius:10px;background:var(--st-done-bg);color:color-mix(in srgb,var(--st-done) 55%,var(--ink));font-size:14px;display:flex;gap:10px}
+.result .ico{color:var(--st-done);font-size:18px;margin-top:2px}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.shot{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface);cursor:zoom-in;padding:0;display:flex;flex-direction:column;text-align:left}
+.shot img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top;display:block}
+.shot span{font-size:11.5px;padding:6px 8px;color:var(--ink-2);line-height:1.3}
+.wait-tg{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:10px;border:1px dashed var(--line-strong);background:var(--surface)}
+.wait-tg p{font-size:13px;color:var(--ink-2)}
+.wait-tg p b{display:block;color:var(--ink);font-size:14px}
+.sw{position:relative;width:46px;height:26px;flex:none}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.sw .tr{position:absolute;inset:0;border-radius:99px;background:var(--line-strong);transition:background .2s}
+.sw .tr::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.sw input:checked + .tr{background:var(--st-wait)}
+.sw input:checked + .tr::after{transform:translateX(20px)}
+.sw input:focus-visible + .tr{outline:2.5px solid var(--rose);outline-offset:2px}
+.act-foot{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:12px 22px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.empty{padding:40px 20px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:6px}
+
+/* ========== CUSTOS / CSD / PENDÊNCIAS ========== */
+.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.sumcard{padding:20px;display:grid;gap:14px;align-content:start}
+.sumcard h3{font-size:18px;font-weight:700}
+.tbl-wrap{overflow-x:auto}
+table.cost{width:100%;border-collapse:collapse;font-size:14px;min-width:460px}
+table.cost th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line-strong)}
+table.cost td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.cost td.v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+table.cost .pnd{color:var(--st-wait);font-family:var(--f-body);font-weight:600;white-space:normal}
+.stp-chip{display:inline-flex;font-family:var(--f-mono);font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--ink-2);border:0;cursor:pointer;margin:2px 3px 2px 0}
+.stp-chip:hover{background:var(--brand);color:#fff}
+.csd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:14px}
+.csd{padding:18px;display:grid;gap:12px;align-content:start}
+.csd h3{font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+.csd h3 .bdg{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px}
+.csd ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.csd li{font-size:14px;color:var(--ink-2);padding-top:12px;border-top:1px solid var(--line)}
+.csd li:first-child{border-top:0;padding-top:0}
+.csd q{display:block;font-weight:700;color:var(--ink);quotes:"“" "”";margin-bottom:4px}
+.pend-list{display:grid;gap:10px}
+.pend-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;padding:14px 16px;align-items:start}
+.pend-item .ico{font-size:20px;color:var(--st-wait);margin-top:2px}
+.pend-item.lk .ico{color:var(--warn)}
+.pend-item h4{font-size:15px;font-weight:700}
+.pend-item p{font-size:14px;color:var(--ink-2);margin-top:3px}
+@media (max-width:600px){.pend-item{grid-template-columns:auto minmax(0,1fr)}.pend-item>div:last-child{grid-column:2}}
+
+/* ========== DIALOGS ========== */
+dialog{border:0;border-radius:16px;padding:0;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-lg);max-width:min(560px,calc(100vw - 32px));width:100%}
+dialog::backdrop{background:rgba(10,20,19,.55);backdrop-filter:blur(3px)}
+.dlg-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.dlg-h h3{font-size:17px;font-weight:700}
+.dlg-b{padding:18px;display:grid;gap:12px;max-height:65vh;overflow:auto}
+.dlg-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.xbtn{width:38px;height:38px;border-radius:10px;border:0;background:var(--surface-2);cursor:pointer;display:grid;place-items:center;font-size:18px}
+dialog.lightbox{max-width:min(1100px,calc(100vw - 24px))}
+dialog.lightbox img{display:block;width:100%;height:auto;background:#fff}
+dialog.lightbox .cap{padding:12px 18px;font-size:14px;color:var(--ink-2)}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.hist li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.hist li:first-child{border-top:0}
+.hist time{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap;padding-top:2px}
+.hist .ok{color:var(--st-done)} .hist .un{color:var(--warn)}
+
+footer{margin-top:56px;border-top:1px solid var(--line);background:var(--surface)}
+footer .wrap{padding-block:26px;display:grid;gap:14px;font-size:13.5px;color:var(--ink-2)}
+footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:var(--shadow-lg);transition:all .3s;z-index:90;pointer-events:none;max-width:calc(100vw - 32px)}
+.toast.on{transform:translate(-50%,0);opacity:1}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5v-2z"/><path d="M8 7h8"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 7h14"/><path d="m5 7-3 7a4 4 0 0 0 6 0z"/><path d="m19 7-3 7a4 4 0 0 0 6 0z"/><path d="M8 21h8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m10.3 3.9-8.1 14a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3l-8.1-14a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.4-.9-1.4-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1.1 0-2.1-.6-2.5-1.5M12 6.5V8M12 16v1.5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 22V4a1 1 0 0 1 .4-.8C5.4 2.5 6.6 2 8 2c3 0 5 2 8 2 1.2 0 2.3-.3 3.2-.8a.5.5 0 0 1 .8.4V14a1 1 0 0 1-.4.8c-1 .7-2.2 1.2-3.6 1.2-3 0-5-2-8-2-1.4 0-2.6.5-3.6 1.2"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+  <symbol id="i-unlink" viewBox="0 0 24 24"><path d="m18.8 13.4 1.7-1.7a5 5 0 0 0-7-7l-1.7 1.7"/><path d="m5.2 10.6-1.7 1.7a5 5 0 0 0 7 7l1.7-1.7"/><path d="M8 2v3M2 8h3M16 22v-3M22 16h-3"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></symbol>
+  <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14M5 2h14M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol>
+  <symbol id="i-collapse" viewBox="0 0 24 24"><path d="m7 20 5-5 5 5M7 4l5 5 5-5"/></symbol>
+</svg>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="brandline">
+        <img class="week" src="week-mapeamento/week-logo-white.png" alt="WEEK haircare">
+        <span class="sep" aria-hidden="true"></span>
+        <img class="esag" src="week-mapeamento/esagjr-logo-white.png" alt="ESAG Jr">
+      </div>
+      <div class="hero-tools">
+        <button class="btn-ghost" id="btnHist" type="button"><svg class="ico"><use href="#i-history"/></svg>Histórico</button>
+        <button class="btn-ghost" id="btnTheme" type="button" aria-label="Alternar tema claro/escuro"><svg class="ico" id="themeIco"><use href="#i-moon"/></svg><span id="themeLbl">Tema</span></button>
+      </div>
+    </div>
+    <div class="hero-main">
+      <div>
+        <div class="eyebrow">Roadmap operacional · Campinas/SP</div>
+        <h1>Mapeamento Burocrático</h1>
+        <p class="sub">Tudo o que a WEEK precisa fazer para regularizar a empresa e iniciar suas operações de forma legal: exigências, órgãos responsáveis, custos e prazos de cada etapa, com o passo a passo e os links de cada portal.</p>
+        <div class="hero-meta">
+          <span><svg class="ico"><use href="#i-layers"/></svg><b id="hmPhases">6</b>&nbsp;fases</span>
+          <span><svg class="ico"><use href="#i-list"/></svg><b id="hmActs">16</b>&nbsp;atividades</span>
+          <span><svg class="ico"><use href="#i-check"/></svg><b id="hmSteps">0</b>&nbsp;subpontos</span>
+          <span><svg class="ico"><use href="#i-file"/></svg>Fonte: documento “Mapeamento Burocrática” (Google Docs)</span>
+        </div>
+      </div>
+      <div class="hero-prog" aria-live="polite">
+        <div class="lbl">Andamento geral</div>
+        <div class="big"><span id="hpPct">0</span>%</div>
+        <div class="bar"><i id="hpBar"></i></div>
+        <div class="det" id="hpDet">0 de 0 subpontos concluídos</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Seções">
+  <div class="wrap">
+    <div class="nav-links" id="navLinks">
+      <a href="#painel"><svg class="ico"><use href="#i-grid"/></svg>Painel</a>
+      <a href="#roadmap"><svg class="ico"><use href="#i-route"/></svg>Roadmap</a>
+      <a href="#atividades"><svg class="ico"><use href="#i-list"/></svg>Atividades</a>
+      <a href="#custos"><svg class="ico"><use href="#i-coin"/></svg>Prazos e custos</a>
+      <a href="#csd"><svg class="ico"><use href="#i-target"/></svg>Matriz CSD</a>
+      <a href="#pendencias"><svg class="ico"><use href="#i-help"/></svg>Pendências</a>
+    </div>
+    <div class="nav-mini"><span class="bar"><i id="nmBar"></i></span><b class="num" id="nmPct">0%</b></div>
+  </div>
+</nav>
+
+<main>
+  <!-- ===== PAINEL ===== -->
+  <section id="painel">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="k">Painel de acompanhamento</div>
+          <h2>Onde a WEEK está agora</h2>
+          <p class="lede">Os números abaixo são calculados a partir dos checklists. Marque os subpontos nas atividades e o painel atualiza na hora.</p>
+        </div>
+      </div>
+      <div class="dash">
+        <div class="dash-left">
+        <div class="card overall">
+          <div class="ring" role="img" id="ringWrap" aria-label="Progresso geral">
+            <svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52" stroke-width="11" fill="none"/><circle class="val" id="ringVal" cx="60" cy="60" r="52" stroke-width="11" fill="none" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73"/><circle class="trk" cx="60" cy="60" r="38" stroke-width="6" fill="none"/><circle class="val2" id="ringVal2" cx="60" cy="60" r="38" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="238.76"/></svg>
+            <div class="ctr"><div><b id="ringPct">0%</b><small>subpontos</small></div></div>
+          </div>
+          <div>
+            <h3>Dois níveis de acompanhamento</h3>
+            <div class="two">
+              <div class="lvl">
+                <div class="row"><span><span style="color:var(--brand)">●</span> Subpontos concluídos</span><b class="num" id="lvSteps">0/0</b></div>
+                <div class="bar"><i id="lvStepsBar" style="background:var(--brand)"></i></div>
+              </div>
+              <div class="lvl">
+                <div class="row"><span><span style="color:var(--rose)">●</span> Atividades 100% concluídas</span><b class="num" id="lvActs">0/0</b></div>
+                <div class="bar"><i id="lvActsBar" style="background:var(--rose)"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="card statusbar">
+            <h4>Distribuição das atividades por status</h4>
+            <div class="stack" id="stack" role="img" aria-label="Distribuição por status"></div>
+            <div class="legend" id="legend"></div>
+          </div>
+        </div>
+        <div class="dash-right">
+          <div class="kpis" id="kpis"></div>
+        </div>
+      </div>
+      <div class="dash-lower">
+        <div class="card phasebars">
+          <h4>Progresso por fase</h4>
+          <div id="phaseBars" style="margin-top:8px"></div>
+        </div>
+        <div class="card nextcard" id="nextCard"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ROADMAP ===== -->
+  <section id="roadmap">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="k">Roadmap visual</div>
+          <h2>A trilha da regularização</h2>
+          <p class="lede">A sequência segue o documento original. Na abertura do CNPJ, cada etapa depende da aprovação da anterior; na regularização dos produtos, algumas etapas correm em paralelo e as dependências aparecem em cada atividade.</p>
+        </div>
+      </div>
+      <div class="trail-scroll"><div class="trail" id="trail"><span class="tfill" id="tfill"></span></div></div>
+      <div class="parts" id="parts"></div>
+    </div>
+  </section>
+
+  <!-- ===== ATIVIDADES ===== -->
+  <section id="atividades">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="k">Atividades e checklists</div>
+          <h2>Passo a passo de cada atividade</h2>
+          <p class="lede">Fase → atividade → subpontos. Abra uma atividade para ver o objetivo, o passo a passo, os links dos portais, os documentos, as telas anotadas e o checklist.</p>
+        </div>
+      </div>
+      <div class="card toolbar" role="search">
+        <div class="tb-row">
+          <label class="search" for="q">
+            <svg class="ico"><use href="#i-search"/></svg>
+            <input id="q" type="search" placeholder="Buscar atividade, subponto, órgão ou documento (ex.: DARE, GRU, IPTU)" autocomplete="off" aria-label="Buscar">
+            <button class="clr" id="qClr" type="button" aria-label="Limpar busca" hidden><svg class="ico"><use href="#i-x"/></svg></button>
+          </label>
+          <select class="sel" id="fPhase" aria-label="Filtrar por fase"><option value="">Todas as fases</option></select>
+          <button class="btn sec sm" id="btnExpand" type="button"><svg class="ico"><use href="#i-expand"/></svg>Expandir</button>
+          <button class="btn sec sm" id="btnCollapse" type="button"><svg class="ico"><use href="#i-collapse"/></svg>Recolher</button>
+        </div>
+        <div class="tb-row">
+          <div class="chips" id="fStatus" role="group" aria-label="Filtrar por status"></div>
+          <span class="tb-info" id="tbInfo"></span>
+        </div>
+      </div>
+      <div id="phases"></div>
+      <div class="card empty" id="empty" hidden><b>Nenhuma atividade encontrada</b>Tente outro termo ou limpe os filtros.<div style="margin-top:14px"><button class="btn sec sm" id="btnClearF" type="button">Limpar filtros</button></div></div>
+    </div>
+  </section>
+
+  <!-- ===== CUSTOS ===== -->
+  <section id="custos">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="k">Resumo de prazos e custos</div>
+          <h2>Quanto custa e quanto demora</h2>
+          <p class="lede">Valores e prazos do documento original. Itens que dependem de enquadramento aparecem como pendentes, sem estimativa inventada.</p>
+        </div>
+      </div>
+      <div class="two-col" id="sumCards"></div>
+      <div class="card sumcard" style="margin-top:16px">
+        <h3>Custos levantados por etapa</h3>
+        <div class="tbl-wrap"><table class="cost" id="costTbl"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CSD ===== -->
+  <section id="csd">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="k">Cruzamento com a Matriz CSD</div>
+          <h2>O que o mapeamento respondeu</h2>
+          <p class="lede">As informações deste mapeamento foram comparadas com a Matriz CSD da WEEK (Certezas, Suposições e Dúvidas) para identificar o que foi respondido, o que foi respondido em parte e o que segue em aberto.</p>
+          <div class="step-links" id="csdLink"></div>
+        </div>
+      </div>
+      <div class="csd-grid" id="csdGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== PENDÊNCIAS ===== -->
+  <section id="pendencias">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="k">Pendências de validação</div>
+          <h2>O que ainda precisa ser confirmado</h2>
+          <p class="lede">Informações que o documento indica como dependentes de confirmação, procedimentos sem link direto e links que não puderam ser verificados automaticamente. Nada aqui foi preenchido por suposição.</p>
+        </div>
+      </div>
+      <div class="pend-list" id="pendList"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <div><b>WEEK haircare</b> · Mapeamento Burocrático · Projeto de consultoria ESAG Jr</div>
+      <button class="btn danger sm" id="btnReset" type="button"><svg class="ico"><use href="#i-reset"/></svg>Redefinir progresso</button>
+    </div>
+    <p><svg class="ico"><use href="#i-info"/></svg> O progresso fica salvo automaticamente <b>neste navegador e neste dispositivo</b> (localStorage). Ele não é compartilhado entre pessoas ou computadores. Para acompanhar em equipe e em tempo real, seria preciso um backend ou banco de dados.</p>
+    <p>Links verificados em 06/11/2026. Valores de taxas referentes a 2026, conforme o documento original.</p>
+  </div>
+</footer>
+
+<dialog id="dlgReset" aria-labelledby="dlgResetT">
+  <div class="dlg-h"><h3 id="dlgResetT">Redefinir todo o progresso?</h3><button class="xbtn" data-close type="button" aria-label="Fechar"><svg class="ico"><use href="#i-x"/></svg></button></div>
+  <div class="dlg-b"><p>Todos os subpontos marcados, as atividades sinalizadas como “aguardando retorno” e o histórico serão apagados deste navegador. Essa ação não pode ser desfeita.</p></div>
+  <div class="dlg-f"><button class="btn sec" data-close type="button">Cancelar</button><button class="btn danger" id="btnResetOk" type="button">Apagar progresso</button></div>
+</dialog>
+<dialog id="dlgHist" aria-labelledby="dlgHistT">
+  <div class="dlg-h"><h3 id="dlgHistT">Histórico de alterações</h3><button class="xbtn" data-close type="button" aria-label="Fechar"><svg class="ico"><use href="#i-x"/></svg></button></div>
+  <div class="dlg-b"><ul class="hist" id="histList"></ul></div>
+  <div class="dlg-f"><button class="btn sec" data-close type="button">Fechar</button></div>
+</dialog>
+<dialog id="dlgImg" class="lightbox" aria-label="Tela anotada">
+  <div class="dlg-h"><h3 id="dlgImgT">Tela anotada</h3><button class="xbtn" data-close type="button" aria-label="Fechar"><svg class="ico"><use href="#i-x"/></svg></button></div>
+  <img id="dlgImgEl" alt="">
+  <div class="cap" id="dlgImgCap"></div>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   CONTEÚDO — extraído do documento "Mapeamento Burocrática" (Google Docs)
+   v: "ok" = link verificado em 06/11/2026 | "pend" = verificação manual pendente
+   src: "doc" = hiperlink do documento original | "comp" = fonte oficial complementar
+   ===================================================================== */
+const L = {
+  vre:        {l:'Via Rápida Empresa (VRE) — portal Redesim SP', u:'https://vreredesim.sp.gov.br/home', v:'pend', src:'doc'},
+  jucesp:     {l:'Junta Comercial do Estado de São Paulo (JUCESP)', u:'https://www.jucesp.sp.gov.br/', v:'pend', src:'doc'},
+  govbr:      {l:'Níveis da conta gov.br (prata e ouro)', u:'https://www.gov.br/governodigital/pt-br/identidade/conta-gov-br/niveis-da-conta-govbr', v:'ok', src:'doc'},
+  tutLogin:   {l:'Tutorial VRE: login via gov.br', u:'https://vreredesim.sp.gov.br/Documentacao/Manuais/PRD/02%20Apresenta%C3%A7%C3%A3o%20do%20Login%20via%20GovBr.pdf', v:'pend', src:'doc', tut:1},
+  tutViab:    {l:'Tutorial VRE: viabilidade de primeiro estabelecimento (evento 101)', u:'https://vreredesim.sp.gov.br/Documentacao/Manuais/PRD/05%20Viabilidade%20Inscri%C3%A7%C3%A3o%20de%20primeiro%20estabelecimento%20%28Evento%20101%29.pdf', v:'pend', src:'doc', tut:1},
+  tutDBE:     {l:'Tutorial VRE: preenchimento do Coletor Nacional, DBE de inscrição', u:'https://vreredesim.sp.gov.br/Documentacao/Manuais/PRD/16%20Preenchimento%20do%20Coletor%20Nacional%20-%20DBE%20de%20inscri%C3%A7%C3%A3o%20%28Eventos%20101%20e%20102%29.pdf', v:'pend', src:'doc', tut:1},
+  tutVreDig:  {l:'Tutorial VRE: VRE Digital, registro do contrato social na JUCESP', u:'https://vreredesim.sp.gov.br/Documentacao/Manuais/PRD/20%20Apresenta%C3%A7%C3%A3o%20do%20VRE-DIGITAL.pdf', v:'pend', src:'doc', tut:1},
+  cnpjComp:   {l:'Comprovante de Inscrição e de Situação Cadastral (Receita Federal)', u:'https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp', v:'ok', src:'doc'},
+  tutCNPJ:    {l:'Tutorial VRE: consulta do protocolo Redesim e do cartão CNPJ', u:'https://vreredesim.sp.gov.br/Documentacao/Manuais/PRD/19%20Consulta%20do%20protocolo%20REDESIM%20e%20do%20Cart%C3%A3o%20CNPJ.pdf', v:'pend', src:'doc', tut:1},
+  cadesp:     {l:'Cadesp — Secretaria da Fazenda de SP', u:'https://www.cadesp.fazenda.sp.gov.br/', v:'pend', src:'doc'},
+  tutLic:     {l:'Tutorial VRE: solicitação de licenciamento', u:'https://vreredesim.sp.gov.br/Documentacao/Manuais/PRD/24%20Solicita%C3%A7%C3%A3o%20de%20Licenciamento.pdf', v:'pend', src:'doc', tut:1},
+  devisa:     {l:'Vigilância Sanitária de Campinas (DEVISA) — Licença Inicial e Licenciamento Integrado', u:'https://portal-adm.campinas.sp.gov.br/servico/vig-sanitaria-licenca-inicial-e-licenciamento-integrado', v:'ok', src:'doc'},
+  simples:    {l:'Portal do Simples Nacional', u:'https://www8.receita.fazenda.gov.br/SimplesNacional/', v:'ok', src:'doc'},
+  rdc752:     {l:'RDC 752/2022 (Anvisa) — art. 37 e notificação de grau 1', u:'https://antigo.anvisa.gov.br/documents/10181/5738443/RDC_752_2022_COMP.pdf/439ec340-390a-4920-8e32-14863cffdaf4', v:'pend', src:'doc'},
+  rdc16:      {l:'RDC 16/2014 — art. 3º (distribuição exige AFE)', u:'https://goias.gov.br/saude/wp-content/uploads/sites/34/2014/07/rdc0016_01_04_2014-658.pdf', v:'ok', src:'doc'},
+  anvisaCons: {l:'Portal de consultas da Anvisa', u:'https://consultas.anvisa.gov.br', v:'pend', src:'doc'},
+  anvisa:     {l:'Portal da Anvisa (acesso ao Solicita)', u:'https://www.gov.br/anvisa/pt-br', v:'ok', src:'doc'},
+  afeServ:    {l:'Página oficial do serviço: Solicitar AFE — Cosméticos', u:'https://www.gov.br/pt-br/servicos/solicitar-autorizacao-de-funcionamento-2013-cosmeticos', v:'ok', src:'doc'},
+  inpiBusca:  {l:'Busca de marcas do INPI (pePI)', u:'https://busca.inpi.gov.br/pePI/', v:'pend', src:'doc'},
+  inpiTab:    {l:'Tabela de retribuições do INPI (marcas)', u:'https://www.gov.br/inpi/pt-br/servicos/custos-e-pagamento/NovaTabeladeRetribuiesINPI_MARCAS_Final_20_dez_25.pdf', v:'ok', src:'doc'},
+  inpiMarcas: {l:'Marcas no INPI — formulário eletrônico', u:'https://www.gov.br/inpi/pt-br/servicos/marcas', v:'ok', src:'doc'},
+  csd:        {l:'Matriz CSD da WEEK (Google Sheets)', u:'https://docs.google.com/spreadsheets/d/13ON20hc1oYMyPLA6KH1LbOFd4VDfKU1CH9lOBDYDD9o/edit', v:'int', src:'doc'},
+  crf:        {l:'CRF-SP — Conselho Regional de Farmácia', u:'https://www.crfsp.org.br/', v:'ok', src:'comp'},
+  crq:        {l:'CRQ-IV — Conselho Regional de Química', u:'https://www.crq4.org.br/', v:'ok', src:'comp'},
+  nfe:        {l:'Nota Fiscal Eletrônica — Secretaria da Fazenda de SP', u:'https://portal.fazenda.sp.gov.br/servicos/nfe', v:'ok', src:'comp'},
+  inpiGuia:   {l:'Guia básico de marcas do INPI', u:'https://www.gov.br/inpi/pt-br/servicos/marcas/guia-basico', v:'ok', src:'comp'},
+  rpi:        {l:'Revista da Propriedade Industrial (RPI)', u:'https://revistas.inpi.gov.br/rpi/', v:'ok', src:'comp'},
+};
+const IMG = 'week-jornadas/';
+const S = (f,c)=>({src:IMG+f,cap:c});
+
+const PHASES = [
+  {id:'f1', part:'A', name:'Preparação', desc:'Decisões e documentos que precisam estar prontos antes de abrir o processo no VRE.', acts:['p1','p2']},
+  {id:'f2', part:'A', name:'Abertura do CNPJ no VRE', desc:'Viabilidade, DBE, contrato social na JUCESP e emissão do CNPJ. Cada etapa depende da aprovação da anterior.', acts:['p3','p4','p5','p6']},
+  {id:'f3', part:'A', name:'Inscrições e licenças', desc:'Inscrição Estadual (ICMS), inscrição municipal, licenciamento na Prefeitura de Campinas e Licença Sanitária.', acts:['p7','p8','p9']},
+  {id:'f4', part:'A', name:'Tributação e estrutura', desc:'Opção pelo Simples Nacional dentro do prazo e estrutura básica: e-CNPJ, conta bancária e emissor de NF-e.', acts:['p10','p11']},
+  {id:'f5', part:'B', name:'Regularização na Anvisa', desc:'Modelo de operação com fórmula própria, AFE da WEEK, notificação dos produtos e responsável técnico.', acts:['p12','p13','p14','p15']},
+  {id:'f6', part:'B', name:'Registro da marca', desc:'Busca de anterioridade, pedido nas classes 3 e 35 e acompanhamento no INPI.', acts:['p16']},
+];
+const PARTS = {A:'Parte A · Como abrir o CNPJ (LTDA)', B:'Parte B · Como regularizar os produtos e a marca'};
+
+const ACTS = [
+/* ---------------- PASSO 1 ---------------- */
+{id:'p1', n:1, title:'Tomar as decisões antes de abrir o processo',
+ desc:'Definir tipo jurídico, nome, endereço, atividades (CNAE), capital e contador. São as informações pedidas logo na consulta de viabilidade.',
+ goal:'Chegar ao VRE com todas as escolhas feitas, evitando retrabalho e indeferimentos na viabilidade.',
+ steps:[
+  {t:'Definir o tipo jurídico', d:`<p><b>LTDA com as duas sócias</b> ou <b>SLU</b> (Sociedade Limitada Unipessoal, a limitada com uma única sócia), caso apenas uma delas seja a titular da empresa.</p><p>Na LTDA, o patrimônio pessoal das sócias fica protegido das dívidas da empresa. O cruzamento com a Matriz CSD indica a <b>LTDA com as duas sócias</b> como o formato adequado.</p>`},
+  {t:'Escolher o nome empresarial e o nome fantasia', d:`<p>Definir <b>duas ou três opções de razão social</b> (nome oficial da empresa nos documentos), para o caso de a primeira já estar registrada, além do nome fantasia <b>WEEK</b> (nome comercial pelo qual a marca é conhecida).</p>`},
+  {t:'Definir o endereço da sede e localizar a inscrição imobiliária do IPTU', d:`<p>Escolher o endereço que constará no CNPJ e ter em mãos o <b>número da inscrição imobiliária do IPTU</b>: o número de cadastro do imóvel na prefeitura, que aparece no carnê do imposto. A Prefeitura de Campinas usa esse número para aprovar a atividade no local.</p>`},
+  {t:'Confirmar as atividades (CNAE)', d:`<ul><li><code>4772-5/00</code> comércio varejista de cosméticos, como <b>atividade principal</b>;</li><li><code>4646-0/01</code> comércio atacadista de cosméticos, como <b>secundária</b>, para vender a academias e hotéis.</li></ul><p>O CNAE é o código oficial que define quais atividades a empresa pode exercer.</p>`},
+  {t:'Definir capital social, quotas e administradora', d:`<p>Definir o valor do capital (quanto as sócias investem para iniciar), a divisão das quotas entre as sócias e quem será a <b>administradora</b> (sócia que responde legalmente e assina em nome da empresa).</p><p>Pela Matriz CSD, as sócias dividem a sociedade em partes iguais (<b>50/50</b>); essa divisão deve constar no contrato social (Passo 5).</p>`},
+  {t:'Contratar um contador de Campinas', d:`<p>O contador costuma conduzir todo o processo no VRE e já cuida do enquadramento tributário. Honorários estimados no documento: <b class="num">R$ 800 a R$ 2.000</b>.</p>`},
+ ],
+ facts:[['coin','Custo','Honorários do contador: R$ 800 a R$ 2.000']],
+ result:'Decisões registradas: tipo jurídico, opções de razão social, endereço com inscrição do IPTU, CNAEs, capital, quotas, administradora e contador definido.',
+ links:[], shots:[]},
+
+/* ---------------- PASSO 2 ---------------- */
+{id:'p2', n:2, title:'Reunir os documentos e os acessos',
+ desc:'Separar documentos pessoais das sócias, documentos do imóvel da sede e garantir a assinatura digital de cada sócia.',
+ goal:'Ter em mãos tudo o que o VRE e a JUCESP vão pedir, incluindo o acesso gov.br que assina o contrato social.',
+ deps:['p1'],
+ steps:[
+  {t:'Separar os documentos pessoais de cada sócia', d:`<p><b>RG ou CNH</b>, <b>CPF</b> e <b>comprovante de residência</b> de cada sócia.</p>`},
+  {t:'Separar os documentos do imóvel da sede', d:`<p>Comprovante do endereço da sede: <b>contrato de locação ou escritura</b> do imóvel e <b>carnê do IPTU</b>.</p>`},
+  {t:'Elevar a conta gov.br de cada sócia para prata ou ouro', d:`<p>Os níveis prata e ouro são obtidos pela <b>validação facial no aplicativo gov.br</b> ou pelo <b>login de um banco</b> credenciado. Alternativa: certificado digital <b>e-CPF</b> (assinatura eletrônica da pessoa física com validade jurídica).</p><p>Essa conta é usada para <b>assinar o contrato social</b>, documento que cria a empresa e define as regras entre as sócias.</p>`, links:['govbr']},
+  {t:'Testar o login via gov.br no VRE', d:`<p>No portal do VRE, clicar em <b>Login via gov.br</b> (canto superior direito) e entrar com a conta de cada sócia, seguindo o tutorial oficial.</p>`, links:['vre','tutLogin']},
+ ],
+ docs:['RG ou CNH de cada sócia','CPF de cada sócia','Comprovante de residência de cada sócia','Contrato de locação ou escritura da sede','Carnê do IPTU (inscrição imobiliária)','Conta gov.br prata/ouro ou e-CPF de cada sócia'],
+ result:'Documentos digitalizados e as duas sócias conseguindo entrar no VRE com conta gov.br prata ou ouro.',
+ links:['govbr','tutLogin'],
+ shots:[S('cnpj/01_govbr.jpg','gov.br: para subir de bronze para prata, use o reconhecimento facial ou a validação por banco.')]},
+
+/* ---------------- PASSO 3 ---------------- */
+{id:'p3', n:3, title:'Fazer a consulta de viabilidade no VRE',
+ desc:'Primeira etapa do VRE: a JUCESP confirma se o nome está livre e a Prefeitura de Campinas confirma se a atividade é permitida no endereço.',
+ goal:'Obter a viabilidade aprovada (nome livre e atividade permitida no endereço), que libera o pedido de CNPJ.',
+ deps:['p1','p2'],
+ steps:[
+  {t:'Acessar o VRE e entrar com gov.br', d:`<p>Abrir o portal <b>redesim.sp.gov.br</b> e clicar em <b>Login via gov.br</b>.</p>`, links:['vre']},
+  {t:'Abrir uma nova viabilidade', d:`<p>No <b>Painel de Serviços</b>, clicar no botão <b>Viabilidade</b> e, na tela seguinte, em <b>Nova Viabilidade</b>.</p>`},
+  {t:'Selecionar o evento 101 — Inscrição de primeiro estabelecimento', d:`<p>Na lista de eventos, marcar <code>101</code> (código que o sistema usa para a abertura de uma nova empresa) e clicar em <b>Avançar</b>.</p>`, links:['tutViab']},
+  {t:'Preencher os dados da viabilidade', d:`<p>Informar o <b>nome empresarial</b>, o <b>endereço com a inscrição do IPTU</b>, os <b>CNAEs</b> e o <b>tipo jurídico</b> definidos no Passo 1.</p>`},
+  {t:'Acompanhar a resposta da JUCESP e da Prefeitura', d:`<p>A <b>JUCESP</b> confirma se o nome está livre e a <b>Prefeitura de Campinas</b> confirma se a atividade é permitida naquele endereço.</p><p>Resposta em <b>1 a 5 dias úteis</b>, ou em até <b>15 dias úteis</b> se a prefeitura precisar analisar o local.</p>`},
+ ],
+ facts:[['coin','Custo','Consulta gratuita'],['clock','Prazo','1 a 5 dias úteis (até 15 dias úteis com análise do local)']],
+ result:'Viabilidade deferida pela JUCESP (nome) e pela Prefeitura de Campinas (atividade no endereço).',
+ links:['vre','tutViab','jucesp'],
+ shots:[S('cnpj/02_vre_login.jpg','Portal Via Rápida Empresa: botão “Login via gov.br”.'),S('cnpj/03_painel_viabilidade.jpg','Painel de Serviços: botão “Viabilidade”.'),S('cnpj/04a_nova_viabilidade.jpg','Tela de Viabilidade: “Nova Viabilidade”.'),S('cnpj/04b_evento101.jpg','Eventos: marcar 101 – Inscrição de primeiro estabelecimento e avançar.')]},
+
+/* ---------------- PASSO 4 ---------------- */
+{id:'p4', n:4, title:'Pedir o CNPJ à Receita Federal (DBE)',
+ desc:'Com a viabilidade aprovada, o pedido de CNPJ é feito pela Redesim, que gera o Documento Básico de Entrada (DBE).',
+ goal:'Gerar o DBE com os dados das sócias, endereço e CNAEs e guardar o número para o protocolo na JUCESP.',
+ deps:['p3'],
+ steps:[
+  {t:'Abrir a etapa DBE no Painel de Serviços', d:`<p>Com a viabilidade aprovada, voltar ao <b>Painel de Serviços</b> do VRE e clicar em <b>DBE</b>.</p>`, links:['vre']},
+  {t:'Preencher o Coletor Nacional (formulário online da Receita Federal)', d:`<p>Informar os <b>dados das sócias</b>, o <b>endereço</b> e os <b>CNAEs</b>. A Redesim (rede que conecta os órgãos de registro) gera o <b>Documento Básico de Entrada (DBE)</b>.</p>`, links:['tutDBE']},
+  {t:'Anotar o número do DBE', d:`<p>O número do DBE é usado no <b>protocolo da JUCESP</b>, no passo seguinte.</p>`},
+ ],
+ result:'DBE gerado e número anotado para o registro na JUCESP.',
+ links:['tutDBE'],
+ shots:[S('cnpj/05_painel_dbe.jpg','Painel de Serviços: botão “DBE”.')]},
+
+/* ---------------- PASSO 5 ---------------- */
+{id:'p5', n:5, title:'Elaborar o contrato social e registrar na JUCESP',
+ desc:'Redigir e assinar o contrato social, pagar a taxa por DARE e protocolar no VRE para registro na Junta Comercial.',
+ goal:'Ter o contrato social registrado na JUCESP, o que libera a emissão do CNPJ.',
+ deps:['p4'],
+ steps:[
+  {t:'Redigir o contrato social', d:`<p>Incluir a <b>qualificação das sócias</b>, a <b>razão social</b>, o <b>objeto</b> (que deve citar o comércio de cosméticos), o <b>endereço</b>, o <b>capital</b>, as <b>quotas</b> (50/50, conforme a Matriz CSD) e a <b>administração</b>.</p><p>Usar o <b>modelo padrão da JUCESP</b> permite o registro automático.</p>`},
+  {t:'Assinar o contrato digitalmente', d:`<p>Cada sócia assina pela <b>conta gov.br</b> (prata ou ouro) ou pelo <b>e-CPF</b>.</p>`},
+  {t:'Pagar a taxa da JUCESP por DARE', d:`<p>DARE é a guia de pagamento de taxas estaduais de São Paulo. Em 2026 a taxa é de <b class="num">R$ 218,99</b> para LTDA enquadrada como ME ou EPP (faturamento anual de até R$ 360 mil e até R$ 4,8 milhões, respectivamente).</p>`},
+  {t:'Protocolar o registro no VRE', d:`<p>No <b>Painel de Serviços</b>, clicar em <b>Registro</b> e enviar oficialmente o pedido pelo sistema (VRE Digital). A análise leva <b>até 2 dias úteis</b>.</p>`, links:['tutVreDig']},
+  {t:'Responder a exigências da Junta Comercial', cond:1, d:`<p>Se houver <b>exigência</b> (pedido de correção feito pela Junta Comercial), as sócias têm <b>30 dias</b> para corrigir.</p>`},
+ ],
+ facts:[['coin','Custo','Taxa JUCESP (DARE): R$ 218,99 em 2026 para LTDA ME/EPP'],['clock','Prazo','Análise em até 2 dias úteis; 30 dias para corrigir exigências']],
+ docs:['Contrato social (modelo padrão JUCESP)','Número do DBE','Comprovante de pagamento do DARE','Assinatura gov.br ou e-CPF das duas sócias'],
+ result:'Contrato social registrado na JUCESP.',
+ links:['tutVreDig','jucesp'],
+ shots:[S('cnpj/06_painel_registro.jpg','Painel de Serviços: botão “Registro”.')]},
+
+/* ---------------- PASSO 6 ---------------- */
+{id:'p6', n:6, title:'Receber e conferir o CNPJ',
+ desc:'Com o registro aprovado, a Receita Federal libera o CNPJ. Conferir todos os dados antes de seguir.',
+ goal:'Ter o cartão CNPJ emitido e com todos os dados corretos.',
+ deps:['p5'],
+ steps:[
+  {t:'Consultar o protocolo Redesim', d:`<p>Acompanhar no VRE a liberação do CNPJ pela Receita Federal, seguindo o tutorial de consulta do protocolo.</p>`, links:['tutCNPJ']},
+  {t:'Emitir o Comprovante de Inscrição e de Situação Cadastral', d:`<p>No site da Receita Federal, digitar o número do CNPJ, marcar a verificação “Sou humano” e clicar em <b>Consultar</b>.</p>`, links:['cnpjComp']},
+  {t:'Conferir todos os dados do cartão CNPJ', d:`<p>Conferir razão social, nome fantasia, endereço, CNAEs principal e secundário, natureza jurídica e situação cadastral antes de seguir para as inscrições.</p>`},
+ ],
+ result:'Cartão CNPJ emitido e conferido.',
+ links:['cnpjComp','tutCNPJ'],
+ shots:[S('cnpj/07_cartao_cnpj.jpg','Receita Federal: digitar o CNPJ e clicar em “Consultar”.')]},
+
+/* ---------------- PASSO 7 ---------------- */
+{id:'p7', n:7, title:'Obter a Inscrição Estadual na Secretaria da Fazenda de SP (Cadesp)',
+ desc:'Cadastro da empresa como contribuinte do ICMS no estado. Obrigatória para a WEEK e necessária para emitir nota fiscal de venda.',
+ goal:'Ter a Inscrição Estadual ativa para vender mercadorias, recolher ICMS e emitir NF-e.',
+ deps:['p6'],
+ steps:[
+  {t:'Entender por que a inscrição é obrigatória', d:`<p>A WEEK vende mercadorias e recolhe <b>ICMS</b> (imposto estadual sobre a circulação de mercadorias, cobrado nas vendas). Por isso a Inscrição Estadual é obrigatória e necessária para emitir nota fiscal de venda.</p>`},
+  {t:'Pedir a Inscrição Estadual pelo fluxo do VRE', d:`<p>O pedido segue pelo <b>próprio fluxo do VRE</b>, depois do registro na JUCESP.</p>`, links:['vre']},
+  {t:'Acompanhar o deferimento no Cadesp', d:`<p>O Cadesp é o cadastro de contribuintes do ICMS da Secretaria da Fazenda de SP, indicado no documento para esta etapa.</p>`, links:['cadesp']},
+ ],
+ result:'Inscrição Estadual deferida.',
+ links:['cadesp'],
+ shots:[]},
+
+/* ---------------- PASSO 8 ---------------- */
+{id:'p8', n:8, title:'Fazer a inscrição municipal e o licenciamento na Prefeitura de Campinas',
+ desc:'A prefeitura é comunicada automaticamente pelo VRE. Atendidos os requisitos, o VRE emite o Certificado de Licenciamento Integrado (CLI).',
+ goal:'Ter o cadastro municipal e o CLI, que vale como licença de funcionamento.',
+ deps:['p6'],
+ steps:[
+  {t:'Acompanhar a inscrição municipal', d:`<p>A prefeitura recebe a comunicação automática do VRE e faz o cadastro municipal. A etapa aparece no <b>Painel de Serviços</b>, botão <b>Inscrição Municipal</b>.</p>`, links:['vre']},
+  {t:'Solicitar o licenciamento no VRE', d:`<p>No <b>Painel de Serviços</b>, clicar em <b>Licenciamento</b> e seguir o tutorial oficial.</p>`, links:['tutLic']},
+  {t:'Receber o Certificado de Licenciamento Integrado (CLI)', d:`<p>Quando os requisitos são atendidos, o VRE emite o <b>CLI</b>, que vale como <b>licença de funcionamento</b>.</p>`},
+  {t:'Pedir o Alvará de Uso pelo SEI, se houver pendência', cond:1, d:`<p>Se houver pendência, o <b>Alvará de Uso</b> (autorização da prefeitura para usar o imóvel naquela atividade) deve ser pedido pelo <b>SEI</b> (Sistema Eletrônico de Informações) da prefeitura.</p>`, nolink:'O documento não traz o link do SEI de Campinas.'},
+  {t:'Pagar as taxas municipais', d:`<p>As taxas são calculadas em <b>UFIC</b> (Unidade Fiscal de Campinas), que vale <b class="num">R$ 5,0996</b> em 2026. O valor final depende do enquadramento da atividade.</p>`, pend:'Valor final das taxas municipais depende do enquadramento.'},
+ ],
+ facts:[['coin','Custo','Taxas em UFIC (R$ 5,0996 em 2026), conforme o enquadramento']],
+ result:'Inscrição municipal feita e CLI emitido (ou Alvará de Uso obtido pelo SEI).',
+ links:['tutLic'],
+ shots:[S('cnpj/08_painel_inscricao.jpg','Painel de Serviços: botão “Inscrição Municipal”.'),S('cnpj/09_painel_licenciamento.jpg','Painel de Serviços: botão “Licenciamento”.')]},
+
+/* ---------------- PASSO 9 ---------------- */
+{id:'p9', n:9, title:'Obter a Licença Sanitária na Vigilância Sanitária de Campinas (DEVISA)',
+ desc:'Cosmético é produto de interesse da saúde, então o comércio passa pela vigilância sanitária conforme o grau de risco da Portaria CVS 1/2024.',
+ goal:'Ter a Licença Sanitária emitida para as atividades da WEEK. Ela é pré-requisito da AFE (Passo 13).',
+ deps:['p8'],
+ steps:[
+  {t:'Confirmar o enquadramento dos CNAEs com a DEVISA', d:`<p>Antes de protocolar, confirmar com o <b>Departamento de Vigilância em Saúde de Campinas</b> o grau de risco dos CNAEs da WEEK.</p>`, contacts:[['phone','(19) 2515-7134'],['mail','devisa.sanitaria@campinas.sp.gov.br']], pend:'Grau de risco dos CNAEs da WEEK ainda não confirmado com a DEVISA.'},
+  {t:'Identificar o caminho conforme o grau de risco', d:`<ul><li><b>Risco médio:</b> o CLI emitido pelo VRE já vale como licença sanitária.</li><li><b>Risco alto:</b> o pedido é feito pelo SEI e a licença sai no sistema <b>Sivisa</b> (sistema estadual da vigilância sanitária) em até <b>60 dias</b>.</li></ul><p>A classificação segue a <b>Portaria CVS 1/2024</b>, norma do Centro de Vigilância Sanitária de São Paulo.</p>`, nolink:'O documento não traz link para a Portaria CVS 1/2024 nem para o Sivisa.'},
+  {t:'Abrir a página do serviço na prefeitura', d:`<p>Na página “Vig. Sanitária – Licença Inicial e Licenciamento Integrado”, clicar em <b>Visualizar serviço</b>. A página traz telefone, e-mail e o endereço do serviço no SEI.</p>`, links:['devisa']},
+  {t:'Protocolar pelo SEI e acompanhar no Sivisa (risco alto)', cond:1, d:`<p>Somente se a DEVISA enquadrar a atividade como risco alto. A licença sai no Sivisa em até <b>60 dias</b>.</p>`},
+  {t:'Guardar a Licença Sanitária emitida', d:`<p>A licença precisa cobrir as atividades que serão declaradas na AFE (armazenar, distribuir e expedir). Ela é pré-requisito do Passo 13.</p>`},
+ ],
+ facts:[['clock','Prazo','Risco alto: até 60 dias no Sivisa'],['coin','Custo','Taxas sanitárias conforme o enquadramento']],
+ result:'Licença Sanitária válida para as atividades da WEEK (via CLI ou via Sivisa).',
+ links:['devisa'],
+ shots:[S('cnpj/10_devisa.jpg','Prefeitura de Campinas: “Visualizar serviço”, telefone e e-mail da DEVISA.')]},
+
+/* ---------------- PASSO 10 ---------------- */
+{id:'p10', n:10, title:'Optar pelo Simples Nacional',
+ desc:'Regime simplificado para pequenas empresas que reúne vários tributos em uma única guia mensal. Tem prazo curto para a opção.',
+ goal:'Fazer a opção dentro do prazo. Quem perde o prazo só pode optar em janeiro do ano seguinte.',
+ deps:['p7','p8'],
+ steps:[
+  {t:'Anotar as datas que contam para o prazo', d:`<p>A opção deve ser feita em até <b>30 dias depois do último deferimento</b> (aprovação) das inscrições, desde que não tenham passado <b>60 dias da abertura do CNPJ</b>.</p>`},
+  {t:'Acessar o Portal do Simples Nacional', d:`<p>Em <b>Serviços em Destaque</b>, clicar em <b>Opção pelo Simples Nacional</b>.</p>`, links:['simples']},
+  {t:'Fazer a opção dentro do prazo', d:`<p>Concluir a solicitação de opção. Se o prazo for perdido, a opção só poderá ser feita em <b>janeiro do ano seguinte</b>.</p>`},
+  {t:'Acompanhar o resultado da opção', d:`<p>No mesmo portal, usar o serviço <b>Acompanhamento da Opção pelo Simples Nacional</b>.</p>`, links:['simples']},
+ ],
+ facts:[['clock','Prazo','Até 30 dias após o último deferimento, sem passar de 60 dias da abertura do CNPJ']],
+ result:'WEEK optante pelo Simples Nacional.',
+ links:['simples'],
+ shots:[S('cnpj/11_simples.jpg','Portal do Simples Nacional: “Opção pelo Simples Nacional”.')]},
+
+/* ---------------- PASSO 11 ---------------- */
+{id:'p11', n:11, title:'Concluir a estrutura da empresa',
+ desc:'Certificado digital da empresa, conta bancária própria e emissor de nota fiscal de venda.',
+ goal:'Deixar a WEEK pronta para emitir notas, entregar declarações e separar as finanças da empresa das finanças pessoais.',
+ deps:['p6','p7'],
+ steps:[
+  {t:'Emitir o certificado digital da empresa (e-CNPJ)', d:`<p>Custa de <b class="num">R$ 150 a R$ 250</b> e serve para emitir notas fiscais e entregar declarações.</p>`},
+  {t:'Abrir a conta bancária em nome da empresa', d:`<p>Separar as finanças da WEEK das finanças pessoais das sócias.</p>`},
+  {t:'Configurar o emissor de NF-e junto à Secretaria da Fazenda de SP', d:`<p>Configurar o emissor de nota fiscal eletrônica de venda (NF-e). Depende da Inscrição Estadual (Passo 7).</p>`, links:['nfe']},
+ ],
+ facts:[['coin','Custo','e-CNPJ: R$ 150 a R$ 250']],
+ result:'e-CNPJ emitido, conta PJ aberta e emissor de NF-e configurado.',
+ links:['nfe'],
+ shots:[]},
+
+/* ---------------- PASSO 12 ---------------- */
+{id:'p12', n:12, title:'Definir o modelo de operação: fórmula própria e produção terceirizada',
+ desc:'A fórmula é da WEEK e apenas a produção é terceirizada. A WEEK será a titular dos produtos na Anvisa, com AFE própria; o fabricante mantém a AFE dele.',
+ goal:'Formalizar o modelo mais seguro: controle total sobre os produtos e possibilidade de trocar de fornecedor sem perder a regularização.',
+ deps:['p6'],
+ steps:[
+  {t:'Formalizar a decisão: WEEK titular dos produtos com AFE própria', d:`<p>A WEEK será a <b>titular dos produtos na Anvisa</b> (empresa responsável legal pela regularização) e terá <b>AFE própria</b>. O fabricante terceirizado também precisa ter a AFE dele para fabricar, conforme o <b>art. 37 da RDC 752/2022</b>.</p><p><b>Por que é mais seguro:</b> com a notificação em nome da WEEK, a empresa pode trocar de fornecedor bastando atualizar o fabricante no processo. A AFE própria também permite vender no atacado a academias e hotéis, atividade de distribuição que exige AFE pelo <b>art. 3º da RDC 16/2014</b>.</p>`, links:['rdc752','rdc16']},
+  {t:'Conferir se o fabricante terceirizado tem AFE', d:`<p>No portal de consultas da Anvisa, clicar em <b>Funcionamento de Empresa</b> e pesquisar pelo <b>CNPJ do fabricante</b>.</p>`, links:['anvisaCons']},
+  {t:'Planejar os custos fixos que o modelo gera', d:`<p>Com AFE própria, a WEEK passa a precisar de:</p><ul><li><b>responsável técnico</b> (Passo 15);</li><li><b>licença sanitária compatível</b> com as atividades declaradas na AFE;</li><li><b>local adequado para armazenar</b> os produtos.</li></ul>`, pend:'Local de armazenamento ainda não definido no documento.'},
+  {t:'Fechar o contrato com o fabricante', d:`<p>O contrato deve deixar claro que <b>a fórmula é propriedade da WEEK</b>, com cláusulas de:</p><ul><li><b>Confidencialidade:</b> o fabricante não pode divulgar a fórmula;</li><li><b>Exclusividade:</b> não pode produzi-la para outros clientes;</li><li><b>Qualidade:</b> padrões de produção e entrega dos laudos de cada lote.</li></ul>`},
+ ],
+ result:'Modelo definido, AFE do fabricante confirmada e contrato com confidencialidade, exclusividade e qualidade assinado.',
+ links:['rdc752','rdc16','anvisaCons'],
+ shots:[S('regularizacao/18_anvisa_funcionamento.jpg','Consultas Anvisa: “Funcionamento de Empresa” para pesquisar o CNPJ do fabricante.')]},
+
+/* ---------------- PASSO 13 ---------------- */
+{id:'p13', n:13, title:'Obter a AFE da WEEK na Anvisa',
+ desc:'A Autorização de Funcionamento de Empresa é a permissão da Anvisa para exercer atividades com cosméticos, como fabricar, importar, armazenar e distribuir.',
+ goal:'Ter a AFE da WEEK publicada no Diário Oficial da União para a classe cosméticos.',
+ deps:['p9','p15','p12'],
+ steps:[
+  {t:'Confirmar os pré-requisitos', d:`<ul><li><b>Licença Sanitária</b> do Passo 9 emitida para as atividades pretendidas;</li><li><b>Relatório de Inspeção</b> da vigilância sanitária local (documento emitido após a vistoria do local);</li><li><b>Responsável técnico</b> já definido (Passo 15).</li></ul>`},
+  {t:'Cadastrar a empresa e o responsável técnico na Anvisa', d:`<p>O cadastro e a petição são feitos no <b>Solicita</b>, sistema online de pedidos da Anvisa, acessado pelo portal da Anvisa.</p>`, links:['anvisa'], nolink:'O documento não traz o link direto do Solicita.'},
+  {t:'Abrir a petição de AFE para a classe cosméticos', d:`<p>Declarar as atividades que a WEEK vai exercer, como <b>armazenar, distribuir e expedir</b>.</p>`},
+  {t:'Anexar os documentos pedidos', d:`<p>Anexar no Solicita os documentos exigidos pela petição (licença sanitária, relatório de inspeção e dados do responsável técnico).</p>`},
+  {t:'Emitir e pagar a GRU', d:`<p>GRU é a Guia de Recolhimento da União, boleto das taxas federais. A <b>TFVS</b> (Taxa de Fiscalização de Vigilância Sanitária) varia conforme o porte da empresa, com desconto para microempresas. O valor exato aparece na GRU gerada pelo sistema.</p>`, pend:'Valor da TFVS só aparece na GRU gerada.'},
+  {t:'Protocolar o pedido e acompanhar o prazo', d:`<p>A Anvisa estima cerca de <b>30 dias corridos</b>, com prazo máximo de <b>60 dias</b>, conforme a página oficial do serviço.</p>`, links:['afeServ']},
+  {t:'Confirmar a publicação no Diário Oficial da União', d:`<p>A AFE <b>só passa a valer depois de publicada</b> no Diário Oficial da União.</p>`},
+ ],
+ facts:[['clock','Prazo','Cerca de 30 dias corridos (máximo de 60 dias)'],['coin','Custo','TFVS conforme o porte, com desconto para ME (valor na GRU)']],
+ docs:['Licença Sanitária (Passo 9)','Relatório de Inspeção da vigilância sanitária local','Dados e vínculo do responsável técnico (Passo 15)','Comprovante de pagamento da GRU'],
+ result:'AFE da WEEK publicada no Diário Oficial da União.',
+ links:['anvisa','afeServ'],
+ shots:[]},
+
+/* ---------------- PASSO 14 ---------------- */
+{id:'p14', n:14, title:'Fazer a notificação dos produtos na Anvisa',
+ desc:'Cosméticos de grau 1 precisam apenas de notificação (comunicação prévia à Anvisa). Produtos de grau 2 exigem registro, um processo mais longo.',
+ goal:'Ter cada produto notificado e visível na consulta pública da Anvisa, com a WEEK como titular. Só então é possível vender.',
+ deps:['p13','p15'],
+ steps:[
+  {t:'Classificar cada produto como grau 1 ou grau 2', d:`<ul><li><b>Grau 1</b> (baixo risco, como xampu, condicionador e máscara capilar sem ação específica): só <b>notificação</b>, conforme a RDC 752/2022.</li><li><b>Grau 2</b> (com ação específica, como antiqueda, anticaspa ou alisante): exige <b>registro</b>.</li></ul>`, links:['rdc752'], pend:'O documento não define o grau de cada produto da WEEK.'},
+  {t:'Reunir a documentação técnica de cada produto', d:`<ul><li>Fórmula completa com os nomes <b>INCI</b> (nomenclatura internacional dos ingredientes);</li><li>Especificações de qualidade e finalidade do produto;</li><li>Arte do rótulo;</li><li>Resumo dos <b>testes de estabilidade</b> (comprovam que o produto se mantém adequado durante toda a validade);</li><li><b>Termo de Responsabilidade</b> assinado pelo responsável técnico e pelo representante legal.</li></ul>`},
+  {t:'Abrir a petição eletrônica de notificação no Solicita', d:`<p>A <b>WEEK, como titular</b>, faz a notificação depois de obter a AFE. Na notificação, o <b>fabricante terceirizado</b> é informado como responsável pela produção. Anexar os documentos.</p>`, links:['anvisa']},
+  {t:'Pagar a GRU, quando houver taxa', cond:1, d:`<p>Emitir e pagar a GRU se a petição gerar taxa.</p>`},
+  {t:'Conferir a notificação na consulta pública antes de vender', d:`<p>No portal de consultas, clicar em <b>Cosméticos</b> → <b>Produtos Regularizados</b> e pesquisar pela marca ou pelo nome do produto. Conferir se aparece a <b>WEEK como titular</b> e o <b>fabricante correto</b>. Só é possível vender depois que a notificação aparecer no portal.</p>`, links:['anvisaCons']},
+ ],
+ notes:['A notificação não precisa ser renovada, mas a titular deve declarar o interesse em continuar vendendo o produto a cada 10 anos.'],
+ docs:['Fórmula completa com nomes INCI','Especificações de qualidade','Finalidade do produto','Arte do rótulo','Resumo dos testes de estabilidade','Termo de Responsabilidade (RT + representante legal)'],
+ result:'Produtos notificados e visíveis na consulta da Anvisa, com a WEEK como titular e o fabricante correto.',
+ links:['rdc752','anvisaCons'],
+ shots:[S('regularizacao/16_anvisa_cosmeticos.jpg','Consultas Anvisa: clicar em “Cosméticos”.'),S('regularizacao/17_anvisa_regularizados.jpg','Em Cosméticos, escolher “Produtos Regularizados”.')]},
+
+/* ---------------- PASSO 15 ---------------- */
+{id:'p15', n:15, title:'Definir o responsável técnico',
+ desc:'Obrigatório porque a WEEK terá AFE própria. O RT assina a notificação dos produtos e responde pela qualidade perante a Anvisa e a vigilância sanitária.',
+ goal:'Ter um profissional habilitado formalmente vinculado à WEEK antes de pedir a AFE.',
+ deps:['p6'],
+ steps:[
+  {t:'Definir o perfil do profissional', d:`<p>Profissional de nível superior habilitado, normalmente <b>farmacêutico</b> registrado no <b>CRF-SP</b> ou <b>químico</b> registrado no <b>CRQ-IV</b> (que atende São Paulo). O fabricante mantém o responsável técnico dele.</p>`, links:['crf','crq']},
+  {t:'Pedir orçamento a pelo menos três profissionais', d:`<p>Não existe tabela única: o valor depende da carga horária. Como referência de mercado, meio período ou consultoria costuma ficar entre <b class="num">R$ 1.500 e R$ 4.000 por mês</b>.</p>`},
+  {t:'Contratar o profissional', d:`<p>Formalizar a contratação com a carga horária definida.</p>`},
+  {t:'Emitir a Certidão de Responsabilidade Técnica no conselho', d:`<p>Documento que <b>vincula oficialmente</b> o profissional à empresa, emitido pelo conselho (CRF-SP ou CRQ-IV).</p>`},
+  {t:'Informar o responsável técnico à vigilância sanitária e à Anvisa', d:`<p>Comunicar o RT à vigilância sanitária e cadastrá-lo na Anvisa (o cadastro do RT também faz parte do Passo 13).</p>`},
+ ],
+ facts:[['coin','Custo','R$ 1.500 a R$ 4.000 por mês (referência de mercado)']],
+ result:'Responsável técnico contratado, com Certidão de Responsabilidade Técnica e informado aos órgãos.',
+ links:['crf','crq'],
+ shots:[]},
+
+/* ---------------- PASSO 16 ---------------- */
+{id:'p16', n:16, title:'Registrar a marca WEEK no INPI',
+ desc:'Garante às sócias o direito exclusivo de uso da marca em todo o Brasil. Deve ser feito antes do lançamento, porque tem prioridade quem pede primeiro.',
+ goal:'Protocolar o pedido de marca nas classes 3 e 35 com desconto de microempresa e acompanhá-lo até a concessão.',
+ deps:['p6'],
+ steps:[
+  {t:'Fazer a busca de anterioridade', d:`<p>Na busca de marcas do INPI: clicar em <b>Continuar</b> sem preencher o login, escolher <b>Marca</b>, marcar a pesquisa <b>Radical</b>, digitar <code>WEEK</code>, informar a classe <code>03</code> e clicar em <b>pesquisar</b>.</p>`, links:['inpiBusca']},
+  {t:'Avaliar o risco do resultado com um especialista', d:`<p>Na pesquisa de 06/11/2026 aparecem <b>cinco registros em vigor da Amaxxon Cosmetics</b> com a palavra Week para linhas de tratamento capilar na classe 3, além de outras marcas em vigor como <b>B.WEEK</b> e <b>FASHION WEEK</b>.</p><p>Consultar um <b>especialista em propriedade industrial</b> antes de investir em embalagens e divulgação e, se necessário, avaliar um complemento que torne a marca mais distinta.</p>`, warn:1, pend:'Viabilidade final da marca WEEK depende de parecer de especialista.'},
+  {t:'Definir as classes do pedido', d:`<p><b>Classe 3</b> (cosméticos e produtos de higiene pessoal) e, de forma complementar, <b>classe 35</b> (comércio, incluindo a loja online). Cada classe exige um pedido e uma taxa.</p>`},
+  {t:'Criar o cadastro no e-INPI em nome da WEEK', d:`<p>Fazer o login no sistema do INPI em nome da empresa, <b>já com o CNPJ aberto</b>, para ter direito ao desconto de microempresa.</p>`, links:['inpiGuia'], nolink:'O documento não traz o link direto do e-INPI.'},
+  {t:'Emitir e pagar a GRU código 389', d:`<p>Código <code>389</code>: pedido com especificação pré-aprovada (descrição escolhida em uma lista pronta do INPI). Valor de <b class="num">R$ 440 por classe</b> para ME e EPP, ou <b class="num">R$ 880</b> sem desconto.</p>`, links:['inpiTab']},
+  {t:'Protocolar o pedido no formulário eletrônico', d:`<p>Preencher com o <b>nome</b>, o <b>logotipo</b> (no caso de marca mista, que combina nome e desenho) e as <b>classes</b> escolhidas.</p>`, links:['inpiMarcas']},
+  {t:'Acompanhar a publicação e o prazo de oposição', d:`<p>O pedido é publicado na <b>Revista da Propriedade Industrial</b> (publicação semanal do INPI) e qualquer interessado tem <b>60 dias</b> para apresentar oposição. Depois disso, o INPI analisa e decide.</p>`, links:['rpi']},
+  {t:'Receber o certificado de registro', d:`<p>Pela tabela atual, a concessão não tem custo adicional. O registro vale <b>10 anos</b>, podendo ser renovado.</p>`},
+ ],
+ facts:[['coin','Custo','R$ 440 por classe (ME/EPP) ou R$ 880 sem desconto; R$ 880 para classes 3 e 35 com desconto'],['clock','Prazo','60 dias de oposição; pode levar mais de um ano até a concessão'],['flag','Validade','10 anos, renovável']],
+ result:'Pedido protocolado nas classes 3 e 35; proteção conta a partir da data do pedido.',
+ links:['inpiBusca','inpiTab','inpiMarcas'],
+ shots:[S('regularizacao/12_inpi_continuar.jpg','pePI: clicar em “Continuar” sem preencher o login.'),S('regularizacao/13_inpi_marca.jpg','Escolher “Marca”.'),S('regularizacao/14_inpi_pesquisa.jpg','Pesquisa Radical, marca WEEK, classe 03, clicar em “pesquisar”.'),S('regularizacao/15_inpi_resultado.jpg','Resultado em 06/11/2026: registros em vigor da Amaxxon Cosmetics com a palavra Week na classe 3.')]},
+];
+
+const SUMMARY = [
+  {t:'Abertura do CNPJ', items:[
+    ['clock','Prazo estimado','De 3 a 6 semanas para ter o CNPJ, as inscrições e o licenciamento, podendo chegar a cerca de 2 meses se a licença sanitária exigir análise da vigilância.'],
+    ['coin','Custo estimado','R$ 218,99 da taxa da JUCESP, R$ 150 a R$ 250 do certificado digital, taxas municipais e sanitárias conforme o enquadramento e R$ 800 a R$ 2.000 de honorários do contador.']]},
+  {t:'Regularização dos produtos e da marca', items:[
+    ['clock','Prazo estimado','Soma da licença sanitária, da AFE (30 a 60 dias) e das notificações, o que pode levar alguns meses até a WEEK poder vender. O registro da marca corre em paralelo e pode levar mais de um ano até a concessão, mas a proteção conta a partir da data do pedido.'],
+    ['coin','Custo estimado','R$ 880 no INPI para as classes 3 e 35 com desconto, taxas da Anvisa conforme o porte e o responsável técnico, entre R$ 1.500 e R$ 4.000 por mês como referência de mercado.']]},
+];
+const COSTS = [
+  ['Honorários do contador','R$ 800 a R$ 2.000','Único','p1'],
+  ['Consulta de viabilidade','Gratuita','—','p3'],
+  ['Taxa da JUCESP (DARE), LTDA ME/EPP','R$ 218,99','Único (2026)','p5'],
+  ['Taxas municipais (UFIC a R$ 5,0996)',null,'Conforme enquadramento','p8'],
+  ['Taxas sanitárias',null,'Conforme enquadramento','p9'],
+  ['Certificado digital e-CNPJ','R$ 150 a R$ 250','Único','p11'],
+  ['TFVS da AFE (GRU Anvisa)',null,'Conforme porte; valor na GRU','p13'],
+  ['Notificação dos produtos (GRU)',null,'Quando houver taxa','p14'],
+  ['Responsável técnico','R$ 1.500 a R$ 4.000','Mensal (referência)','p15'],
+  ['INPI, GRU 389 (classes 3 e 35, ME/EPP)','R$ 880','R$ 440 por classe','p16'],
+];
+const CSD = [
+  {t:'Dúvidas respondidas', ic:'i-check', col:'var(--st-done)', items:[
+    ['Quais são as exigências, os prazos e os custos junto à Anvisa?','A WEEK precisa de licença sanitária, AFE própria, responsável técnico e notificação de cada produto, com a AFE levando de 30 a 60 dias e custos que incluem as taxas da Anvisa conforme o porte e o responsável técnico (R$ 1.500 a R$ 4.000 por mês como referência).',['p9','p12','p13','p14','p15']],
+    ['Qual formato jurídico e qual regime tributário são mais adequados para a empresa?','LTDA com as duas sócias, com opção pelo Simples Nacional em até 30 dias após o último deferimento das inscrições.',['p1','p10']],
+    ['O nome da marca já está registrado no INPI?','Não foi encontrado registro apenas com o nome WEEK na classe 3, mas existem marcas em vigor com a palavra Week (linhas capilares da Amaxxon Cosmetics), o que representa risco de indeferimento e exige análise de um especialista antes do registro.',['p16']]]},
+  {t:'Dúvidas respondidas em parte', ic:'i-hourglass', col:'var(--st-prog)', items:[
+    ['Já existem patentes ou produtos idênticos registrados?','A busca no INPI mostrou marcas semelhantes na classe 3, porém patentes e produtos idênticos notificados na Anvisa ainda não foram pesquisados.',['p16']],
+    ['Qual é o investimento inicial necessário e qual é o ponto de equilíbrio?','Foram levantados os custos de abertura e regularização (JUCESP R$ 218,99, certificado digital R$ 150 a R$ 250, INPI R$ 880 e responsável técnico). O investimento total e o ponto de equilíbrio serão calculados no plano financeiro.',['p5','p11','p15','p16']],
+    ['Quais são a validade e a resistência do sachê de papel kraft?','A notificação exige testes de estabilidade, que comprovam a validade do produto na embalagem final. A resposta virá dos testes feitos com o fabricante.',['p14']]]},
+  {t:'Certezas confirmadas e detalhadas', ic:'i-flag', col:'var(--brand)', items:[
+    ['Pretendem terceirizar a fabricação, o envase e a embalagem / Estão desenvolvendo uma fórmula própria','Confirmadas e detalhadas: a WEEK é titular dos produtos e dona da fórmula; o fabricante terceirizado tem a AFE dele; contrato com cláusulas de confidencialidade, exclusividade e qualidade.',['p12']],
+    ['Dividem a sociedade em partes iguais (50/50)','Essa divisão deve constar no contrato social, na definição das quotas e da administradora da empresa.',['p5']]]},
+  {t:'Suposições impactadas', ic:'i-alert', col:'var(--rose)', items:[
+    ['Academias, hotéis e empresas têm interesse em adquirir o kit (B2B)','O mapeamento não valida o interesse, que depende da pesquisa de mercado, mas mostra que a AFE própria permite à WEEK vender no atacado, deixando a empresa preparada para o B2B.',['p12','p13']],
+    ['É possível estruturar uma base de custos ainda durante o projeto','Reforçada: os custos regulatórios levantados podem entrar diretamente na base de custos do plano financeiro.',[]],
+    ['Não existe concorrente direto no Brasil','Merece atenção: a busca no INPI mostrou empresas de cosméticos capilares usando a palavra Week em suas marcas, o que pode gerar confusão, mesmo que não sejam concorrentes diretas no formato de sachê.',['p16']]]},
+  {t:'O que segue em aberto', ic:'i-help', col:'var(--st-wait)', items:[
+    ['Custo de produção, fornecedores de sachês biodegradáveis e investimento em marketing','Dependem de cotações com fabricantes e serão tratados no plano operacional e no plano financeiro.',[]],
+    ['Patentes, produtos idênticos na Anvisa e viabilidade final da marca WEEK','Devem ser confirmados com um especialista em propriedade industrial antes do lançamento.',['p16']]]},
+];
+
+/* =====================================================================
+   ESTADO + PERSISTÊNCIA
+   ===================================================================== */
+const KEY='week-mapeamento-burocratico-v1';
+const ACT = Object.fromEntries(ACTS.map(a=>[a.id,a]));
+ACTS.forEach(a=>{ a.steps.forEach((s,i)=>{ s.id=a.id+'-s'+(i+1); s.i=i+1; }); a.phase=PHASES.find(p=>p.acts.includes(a.id)); a.deps=a.deps||[]; });
+let state={checked:{},waiting:{},history:[]};
+try{ const raw=localStorage.getItem(KEY); if(raw){ const s=JSON.parse(raw); state={checked:s.checked||{},waiting:s.waiting||{},history:s.history||[]}; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+function log(msg,kind){ state.history.unshift({ts:Date.now(),msg,kind}); state.history=state.history.slice(0,200); }
+
+/* =====================================================================
+   CÁLCULOS
+   ===================================================================== */
+const req = a => a.steps.filter(s=>!s.cond);
+function actCalc(a){
+  const r=req(a), done=r.filter(s=>state.checked[s.id]).length, any=a.steps.some(s=>state.checked[s.id]);
+  let st='pend';
+  if(done===r.length) st='done'; else if(state.waiting[a.id]) st='wait'; else if(any) st='prog';
+  return {done,total:r.length,pct:r.length?Math.round(done/r.length*100):0,st};
+}
+function phaseCalc(p){
+  const acts=p.acts.map(id=>ACT[id]); let d=0,t=0,ad=0; const sts=[];
+  acts.forEach(a=>{const c=actCalc(a); d+=c.done; t+=c.total; if(c.st==='done') ad++; sts.push(c.st);});
+  let st='pend'; if(ad===acts.length) st='done'; else if(sts.some(s=>s!=='pend')) st= sts.includes('wait')&&!sts.includes('prog')&&!sts.includes('done') ? 'wait':'prog';
+  return {done:d,total:t,pct:t?Math.round(d/t*100):0,acts:acts.length,actsDone:ad,st};
+}
+function totals(){
+  let d=0,t=0; const cnt={pend:0,prog:0,wait:0,done:0};
+  ACTS.forEach(a=>{const c=actCalc(a); d+=c.done; t+=c.total; cnt[c.st]++;});
+  return {d,t,pct:t?Math.round(d/t*100):0,cnt};
+}
+const STL={pend:'Pendente',prog:'Em andamento',wait:'Aguardando retorno',done:'Concluído'};
+const STC={pend:'var(--st-pend)',prog:'var(--st-prog)',wait:'var(--st-wait)',done:'var(--st-done)'};
+
+/* =====================================================================
+   HELPERS DE RENDER
+   ===================================================================== */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const ic=(n,cls='')=>`<svg class="ico ${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function linkHTML(k){
+  const o=L[k]; if(!o) return '';
+  const vb = o.v==='pend' ? `<span class="vb" title="Link do documento original. Não foi possível verificar automaticamente em 06/11/2026 (o site bloqueia acessos automatizados). Confirme ao abrir.">validar link</span>`
+          : o.src==='comp' ? `<span class="vb cp" title="Fonte oficial complementar, não consta no documento original. Verificada em 06/11/2026.">complementar</span>` : '';
+  const kind = o.tut ? 'book' : (o.u.endsWith('.pdf')||/\.pdf\//.test(o.u)) ? 'file' : 'globe';
+  return `<a class="lnk${o.tut?' tut':''}" href="${o.u}" target="_blank" rel="noopener noreferrer">${ic(kind)}<span class="tx">${esc(o.l)}</span>${vb}${ic('ext','ext')}</a>`;
+}
+function pill(st){ return `<span class="pill" data-st="${st}">${STL[st]}</span>`; }
+
+/* ---------- KPIs / painel ---------- */
+function renderDash(){
+  const T=totals(), A=ACTS.length;
+  const actsDone=T.cnt.done;
+  $('#hpPct').textContent=T.pct; $('#hpBar').style.width=T.pct+'%';
+  $('#hpDet').textContent=`${T.d} de ${T.t} subpontos · ${actsDone} de ${A} atividades concluídas`;
+  $('#nmBar').style.width=T.pct+'%'; $('#nmPct').textContent=T.pct+'%';
+  $('#hmSteps').textContent=T.t; $('#hmActs').textContent=A; $('#hmPhases').textContent=PHASES.length;
+  const C1=326.73,C2=238.76, ap=Math.round(actsDone/A*100);
+  $('#ringVal').style.strokeDashoffset=C1*(1-T.pct/100);
+  $('#ringVal2').style.strokeDashoffset=C2*(1-actsDone/A);
+  $('#ringPct').textContent=T.pct+'%';
+  $('#ringWrap').setAttribute('aria-label',`${T.pct}% dos subpontos e ${ap}% das atividades concluídos`);
+  $('#lvSteps').textContent=`${T.d}/${T.t}`; $('#lvStepsBar').style.width=T.pct+'%';
+  $('#lvActs').textContent=`${actsDone}/${A}`; $('#lvActsBar').style.width=ap+'%';
+  const k=[
+    ['Total de atividades',A,'','all','em '+PHASES.length+' fases','var(--ink-2)'],
+    ['Concluídas',T.cnt.done,'','done','100% dos subpontos',STC.done],
+    ['Em andamento',T.cnt.prog,'','prog','com subpontos marcados',STC.prog],
+    ['Pendentes',T.cnt.pend,'','pend','nenhum subponto marcado',STC.pend],
+    ['Aguardando retorno',T.cnt.wait,'','wait','sinalizadas manualmente',STC.wait],
+    ['Subpontos concluídos',T.d,'','', 'de '+T.t+' obrigatórios',STC.done],
+    ['Subpontos pendentes',T.t-T.d,'','','a executar',STC.pend],
+    ['Conclusão geral',T.pct+'%','','','dos subpontos','var(--brand)'],
+  ];
+  $('#kpis').innerHTML=k.map(([lb,v,,f,h,c])=>`<button class="kpi" type="button" data-kf="${f}" title="${f?'Filtrar atividades: '+lb:'Ver atividades'}"><span class="lb"><span class="dot" style="background:${c}"></span>${lb}</span><span class="v">${v}</span><span class="h">${h}</span></button>`).join('');
+  const order=['done','prog','wait','pend'];
+  $('#stack').innerHTML=order.map(s=>`<i style="width:${T.cnt[s]/A*100}%;background:${STC[s]}" title="${STL[s]}: ${T.cnt[s]}"></i>`).join('');
+  $('#legend').innerHTML=order.map(s=>`<span><span class="sw" style="background:${STC[s]}"></span>${STL[s]} <b class="num">${T.cnt[s]}</b></span>`).join('');
+  $('#phaseBars').innerHTML=PHASES.map((p,i)=>{const c=phaseCalc(p);return `<div class="pb" data-goto-phase="${p.id}" role="button" tabindex="0"><div class="nm"><span class="n">F${i+1}</span><span>${esc(p.name)}</span></div><div class="pct">${c.pct}%</div><div class="bar"><i style="width:${c.pct}%;${c.st==='done'?'background:var(--st-done)':''}"></i></div><div class="meta">${c.done}/${c.total} subpontos · ${c.actsDone}/${c.acts} atividades · ${STL[c.st]}</div></div>`}).join('');
+  renderNext();
+}
+function nextAction(){
+  const depsOk=a=>a.deps.every(d=>actCalc(ACT[d]).st==='done');
+  const open=ACTS.filter(a=>actCalc(a).st!=='done');
+  if(!open.length) return null;
+  const ready=open.filter(a=>!state.waiting[a.id]&&depsOk(a));
+  const a=ready[0]||open.find(a=>!state.waiting[a.id])||open[0];
+  const s=req(a).find(s=>!state.checked[s.id]);
+  return {a,s,ready:depsOk(a)};
+}
+function renderNext(){
+  const n=nextAction(), el=$('#nextCard');
+  if(!n){ el.innerHTML=`<h4>Próxima ação</h4><div class="stp">Todas as atividades foram concluídas.</div><p class="why">A WEEK cumpriu todos os subpontos obrigatórios do mapeamento.</p>`; return; }
+  const pend=n.a.deps.filter(d=>actCalc(ACT[d]).st!=='done');
+  el.innerHTML=`<h4>Próxima ação</h4>
+   <div class="nact">Passo ${n.a.n} · ${esc(n.a.title)}</div>
+   <div class="stp">${n.s?esc(n.s.t):'Concluir a atividade'}</div>
+   <p class="why">${n.ready?'Todas as dependências desta atividade estão concluídas.':'Atenção: ainda depende de '+pend.map(d=>'Passo '+ACT[d].n).join(', ')+'.'}</p>
+   <div><button class="btn" type="button" data-goto="${n.a.id}" data-step="${n.s?n.s.id:''}">Abrir atividade ${ic('arrow')}</button></div>`;
+}
+
+/* ---------- Roadmap ---------- */
+function renderRoadmap(){
+  const tr=$('#trail'); tr.querySelectorAll('.tnode').forEach(n=>n.remove());
+  let lastDone=-1;
+  PHASES.forEach((p,i)=>{const c=phaseCalc(p); if(c.st==='done') lastDone=i;
+    tr.insertAdjacentHTML('beforeend',`<button class="tnode" type="button" data-st="${c.st}" data-goto-phase="${p.id}"><span class="c">${c.st==='done'?ic('check'):c.pct+'%'}</span><span class="t">F${i+1} · ${esc(p.name)}</span><span class="p">${c.actsDone}/${c.acts} atividades</span></button>`);});
+  // a linha avança até a fase atual: fases concluídas em sequência + fração da próxima
+  let reach=0; for(const p of PHASES){ const c=phaseCalc(p); if(c.st==='done'){ reach++; continue; } reach+=c.pct/100; break; }
+  $('#tfill').style.width=`${Math.min(84,84/(PHASES.length-1)*reach)}%`;
+  const parts={};
+  PHASES.forEach((p,i)=>{(parts[p.part]=parts[p.part]||[]).push([p,i]);});
+  $('#parts').innerHTML=Object.entries(parts).map(([k,arr])=>`<div><div class="part-h">${PARTS[k]}</div><div class="phase-grid">${arr.map(([p,i])=>{const c=phaseCalc(p);return `
+    <article class="card pcard" data-st="${c.st}">
+      <div class="top"><div><div class="fx">FASE ${i+1}</div><h3>${esc(p.name)}</h3></div>${pill(c.st)}</div>
+      <p class="d">${esc(p.desc)}</p>
+      <div class="stats"><span><b>${c.acts}</b> atividades</span><span><b>${c.actsDone}</b> concluídas</span><span><b>${c.pct}%</b> dos subpontos</span></div>
+      <div class="bar"><i style="width:${c.pct}%"></i></div>
+      <ul class="pacts">${p.acts.map(id=>{const a=ACT[id],ac=actCalc(a);return `<li><button type="button" data-goto="${a.id}"><span class="sn">P${a.n}</span><span class="tt">${esc(a.title)}</span><span class="mini">${ac.done}/${ac.total}</span><span class="pill" data-st="${ac.st}" style="padding:3px 8px" title="${STL[ac.st]}"></span></button></li>`}).join('')}</ul>
+    </article>`}).join('')}</div></div>`).join('');
+  $$('.pacts .pill').forEach(p=>{p.textContent='';p.style.gap='0';});
+}
+
+/* ---------- Atividades ---------- */
+function renderActs(){
+  $('#phases').innerHTML=PHASES.map((p,i)=>`
+   <div class="phase" id="ph-${p.id}" data-phase="${p.id}">
+     <button class="phase-hd" type="button" aria-expanded="true" data-toggle-phase="${p.id}">
+       <span class="fx">F${i+1}</span>
+       <span class="grow"><span class="h3">${esc(p.name)}</span><span class="sm" data-ph-meta="${p.id}"></span></span>
+       ${ic('chev','chev')}
+     </button>
+     <div class="phase-body">${p.acts.map(id=>actHTML(ACT[id])).join('')}</div>
+   </div>`).join('');
+}
+function actHTML(a){
+  const deps=a.deps.length?`<div><div class="lab">${ic('route')}Depende de</div><div class="deps">${a.deps.map(d=>`<button type="button" class="dep" data-goto="${d}" data-dep="${d}">${ic('check')}Passo ${ACT[d].n}</button>`).join('')}</div></div>`:'';
+  const facts=(a.facts||[]).length?`<div><div class="lab">${ic('clock')}Prazos e custos</div><div class="facts">${a.facts.map(([i,b,t])=>`<div class="fact">${ic(i)}<div><b>${b}</b>${esc(t)}</div></div>`).join('')}</div></div>`:'';
+  const docs=(a.docs||[]).length?`<div><div class="lab">${ic('file')}Documentos e informações</div><ul class="side-list">${a.docs.map(d=>`<li>${ic('file')}<span>${esc(d)}</span></li>`).join('')}</ul></div>`:'';
+  const links=(a.links||[]).length?`<div><div class="lab">${ic('link')}Links da atividade</div><div class="step-links" style="margin-top:0">${a.links.map(linkHTML).join('')}</div></div>`:'';
+  const notes=(a.notes||[]).map(n=>`<div class="callout info">${ic('info')}<div>${esc(n)}</div></div>`).join('');
+  const shots=a.shots.length?`<div><div class="lab">${ic('image')}Telas anotadas (${a.shots.length})</div><div class="shots">${a.shots.map((s,i)=>`<button class="shot" type="button" data-shot="${a.id}:${i}"><img src="${s.src}" alt="${esc(s.cap)}" loading="lazy"><span>${esc(s.cap)}</span></button>`).join('')}</div></div>`:'';
+  const steps=a.steps.map(s=>`
+   <li class="step" data-step-id="${s.id}">
+     <div class="step-row">
+       <span class="cb"><input type="checkbox" id="${s.id}" data-step="${s.id}" ${state.checked[s.id]?'checked':''} aria-label="Marcar como concluído: ${esc(s.t)}"><span class="box">${ic('check')}</span></span>
+       <div style="min-width:0">
+         <label class="step-t" for="${s.id}"><span class="sn">${a.n}.${s.i}</span><span class="tx">${esc(s.t)}</span>${s.cond?'<span class="tag cond" title="Não conta para a conclusão da atividade">Se aplicável</span>':''}</label>
+         <div class="step-d">${s.d}</div>
+         ${s.contacts?`<div class="step-links">${s.contacts.map(([i,v])=>`<span class="contact">${ic(i)}<span>${esc(v)}</span><button type="button" data-copy="${esc(v)}">Copiar</button></span>`).join('')}</div>`:''}
+         ${(s.links||[]).length||s.nolink?`<div class="step-links">${(s.links||[]).map(linkHTML).join('')}${s.nolink?`<span class="nolink">${ic('unlink')}${esc(s.nolink)}</span>`:''}</div>`:''}
+         ${s.pend?`<div class="callout ${s.warn?'warn':'pend'}" style="margin-top:10px">${ic(s.warn?'alert':'help')}<div><b>${s.warn?'Atenção':'Pendente de validação'}:</b> ${esc(s.pend)}</div></div>`:''}
+       </div>
+     </div>
+   </li>`).join('');
+  return `
+  <article class="card act" id="act-${a.id}" data-act="${a.id}">
+    <button class="act-hd" type="button" aria-expanded="false" aria-controls="body-${a.id}" data-toggle-act="${a.id}">
+      <span class="num mono">${a.n}</span>
+      <span style="min-width:0"><span class="h4">${esc(a.title)}</span><span class="d">${esc(a.desc)}</span></span>
+      <span class="right"><span data-pill></span><span class="mini"><span class="bar"><i data-bar></i></span><span data-cnt></span></span></span>
+    </button>
+    <div class="act-body" id="body-${a.id}">
+      <div class="ab-grid">
+        <div class="ab-main">
+          <div class="goal">${ic('target')}<div><b>Objetivo.</b> ${esc(a.goal)}</div></div>
+          <div><div class="lab">${ic('list')}Passo a passo e checklist</div><ol class="steps">${steps}</ol></div>
+          ${notes}
+          <div class="result">${ic('flag')}<div><b>Resultado esperado.</b> ${esc(a.result)}</div></div>
+        </div>
+        <aside class="ab-side">
+          <div class="wait-tg">
+            <p><b>Aguardando retorno ou documentação</b>Sinalize quando a atividade depende de resposta de um órgão ou de terceiros.</p>
+            <span class="sw"><input type="checkbox" data-wait="${a.id}" ${state.waiting[a.id]?'checked':''} aria-label="Aguardando retorno: Passo ${a.n}"><span class="tr"></span></span>
+          </div>
+          ${deps}${facts}${docs}${links}${shots}
+        </aside>
+      </div>
+      <div class="act-foot"><span>Fonte: Passo ${a.n} do documento “Mapeamento Burocrática”</span><span data-foot></span></div>
+    </div>
+  </article>`;
+}
+function refreshActs(){
+  ACTS.forEach(a=>{
+    const c=actCalc(a), el=$('#act-'+a.id); if(!el) return;
+    el.dataset.st=c.st;
+    el.querySelector('[data-pill]').outerHTML=`<span data-pill>${pill(c.st)}</span>`;
+    el.querySelector('[data-bar]').style.width=c.pct+'%';
+    el.querySelector('[data-cnt]').textContent=`${c.done}/${c.total}`;
+    el.querySelector('.act-hd .num').innerHTML=c.st==='done'?ic('check'):a.n;
+    const opt=a.steps.filter(s=>s.cond).length;
+    el.querySelector('[data-foot]').textContent=`${c.done} de ${c.total} subpontos obrigatórios${opt?` · ${opt} se aplicável`:''}`;
+    a.steps.forEach(s=>{const li=el.querySelector(`[data-step-id="${s.id}"]`); li.classList.toggle('done',!!state.checked[s.id]);});
+    el.querySelectorAll('[data-dep]').forEach(b=>b.dataset.st=actCalc(ACT[b.dataset.dep]).st);
+  });
+  PHASES.forEach(p=>{const c=phaseCalc(p); $(`[data-ph-meta="${p.id}"]`).textContent=`${c.actsDone}/${c.acts} atividades concluídas · ${c.pct}% dos subpontos · ${STL[c.st]}`;});
+}
+function refreshAll(){ renderDash(); renderRoadmap(); refreshActs(); applyFilters(); }
+
+/* ---------- Filtros e busca ---------- */
+let F={st:'all',phase:'',q:''};
+function renderFilterUI(){
+  $('#fPhase').innerHTML='<option value="">Todas as fases</option>'+PHASES.map((p,i)=>`<option value="${p.id}">F${i+1} · ${esc(p.name)}</option>`).join('');
+}
+function renderChips(){
+  const T=totals();
+  const ch=[['all','Todas',ACTS.length],['pend','Pendentes',T.cnt.pend],['prog','Em andamento',T.cnt.prog],['wait','Aguardando',T.cnt.wait],['done','Concluídas',T.cnt.done]];
+  $('#fStatus').innerHTML=ch.map(([v,l,n])=>`<button class="chip" type="button" data-fst="${v}" aria-pressed="${F.st===v}">${v!=='all'?`<span style="width:8px;height:8px;border-radius:50%;background:${STC[v]}"></span>`:''}${l}<span class="c">${n}</span></button>`).join('');
+}
+const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const strip=h=>h.replace(/<[^>]+>/g,' ');
+ACTS.forEach(a=>{ a._txt=norm([a.title,a.desc,a.goal,a.result,...(a.docs||[]),...(a.notes||[]),...(a.facts||[]).map(f=>f[2]),...(a.links||[]).map(k=>L[k].l)].join(' ')); a.steps.forEach(s=>s._txt=norm(s.t+' '+strip(s.d)+' '+(s.links||[]).map(k=>L[k].l).join(' ')+' '+(s.pend||'')+' '+(s.contacts||[]).map(c=>c[1]).join(' '))); });
+function applyFilters(){
+  renderChips();
+  const q=norm(F.q.trim()); let shown=0, hitSteps=0;
+  ACTS.forEach(a=>{
+    const el=$('#act-'+a.id), c=actCalc(a);
+    let ok=(F.st==='all'||c.st===F.st)&&(!F.phase||a.phase.id===F.phase);
+    let hits=[];
+    if(q){ const terms=q.split(/\s+/); const m=t=>terms.every(w=>t.includes(w)); hits=a.steps.filter(s=>m(s._txt)); ok=ok&&(m(a._txt)||hits.length>0); }
+    el.hidden=!ok; if(ok) shown++;
+    a.steps.forEach(s=>el.querySelector(`[data-step-id="${s.id}"]`).classList.toggle('hit',!!q&&hits.includes(s)));
+    if(q&&ok&&hits.length){ setOpen(a.id,true,false); hitSteps+=hits.length; }
+  });
+  PHASES.forEach(p=>{ const vis=p.acts.some(id=>!$('#act-'+id).hidden); $('#ph-'+p.id).hidden=!vis; });
+  $('#empty').hidden=shown>0;
+  const filtered=F.st!=='all'||F.phase||q;
+  $('#tbInfo').textContent=filtered?`${shown} de ${ACTS.length} atividades${q?` · ${hitSteps} subpontos encontrados`:''}`:`${ACTS.length} atividades em ${PHASES.length} fases`;
+}
+
+/* ---------- Abrir / fechar ---------- */
+const UIKEY=KEY+'-ui';
+let openSet=new Set(), closedPh=new Set();
+try{ const u=JSON.parse(localStorage.getItem(UIKEY)||'{}'); (u.open||[]).forEach(x=>openSet.add(x)); (u.closed||[]).forEach(x=>closedPh.add(x)); }catch(e){}
+function saveUI(){ try{ localStorage.setItem(UIKEY,JSON.stringify({open:[...openSet],closed:[...closedPh]})); }catch(e){} }
+function setOpen(id,open,persist=true){
+  const el=$('#act-'+id); if(!el) return;
+  el.classList.toggle('open',open); el.querySelector('.act-hd').setAttribute('aria-expanded',open);
+  open?openSet.add(id):openSet.delete(id); if(persist) saveUI();
+}
+function setPhase(id,open){
+  const el=$('#ph-'+id); el.classList.toggle('closed',!open); el.querySelector('.phase-hd').setAttribute('aria-expanded',open);
+  open?closedPh.delete(id):closedPh.add(id); saveUI();
+}
+function goTo(id,stepId){
+  F={st:'all',phase:'',q:''}; $('#q').value=''; $('#fPhase').value=''; $('#qClr').hidden=true; applyFilters();
+  const a=ACT[id]; setPhase(a.phase.id,true); setOpen(id,true);
+  const el=$('#act-'+id);
+  const target=stepId?el.querySelector(`[data-step-id="${stepId}"]`):el;
+  (target||el).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:stepId?'center':'start'});
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  if(target&&stepId){ const cb=target.querySelector('input'); setTimeout(()=>cb&&cb.focus({preventScroll:true}),500); }
+}
+
+/* ---------- Toast / dialogs ---------- */
+let tT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('on'),2200); }
+function openDlg(d){ if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
+function renderHist(){
+  const fmt=new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  $('#histList').innerHTML=state.history.length?state.history.map(h=>`<li><time>${fmt.format(new Date(h.ts))}</time><span class="${h.kind||''}">${esc(h.msg)}</span></li>`).join(''):'<li><span></span><span style="color:var(--muted)">Nenhuma alteração registrada ainda. Marque um subponto para começar.</span></li>';
+}
+
+/* ---------- Seções estáticas ---------- */
+function renderStatic(){
+  $('#sumCards').innerHTML=SUMMARY.map(s=>`<div class="card sumcard"><h3>${esc(s.t)}</h3>${s.items.map(([i,b,t])=>`<div class="fact">${ic(i)}<div><b>${b}</b>${esc(t)}</div></div>`).join('')}</div>`).join('');
+  $('#costTbl').innerHTML=`<thead><tr><th>Item</th><th>Valor</th><th>Observação</th><th>Etapa</th></tr></thead><tbody>${COSTS.map(([i,v,o,p])=>`<tr><td>${esc(i)}</td><td class="v">${v?esc(v):'<span class="pnd">Pendente de validação</span>'}</td><td>${esc(o)}</td><td><button type="button" class="stp-chip" data-goto="${p}">P${ACT[p].n}</button></td></tr>`).join('')}</tbody>`;
+  $('#csdLink').innerHTML=linkHTML('csd');
+  $('#csdGrid').innerHTML=CSD.map(g=>`<div class="card csd"><h3><span class="bdg" style="background:${g.col}"><svg class="ico"><use href="#${g.ic}"/></svg></span>${esc(g.t)}</h3><ul>${g.items.map(([q,a,ps])=>`<li><q>${esc(q)}</q>${esc(a)}${ps.length?`<div style="margin-top:6px">${ps.map(p=>`<button type="button" class="stp-chip" data-goto="${p}">P${ACT[p].n}</button>`).join('')}</div>`:''}</li>`).join('')}</ul></div>`).join('');
+  // Pendências: geradas a partir do conteúdo
+  const items=[];
+  ACTS.forEach(a=>a.steps.forEach(s=>{ if(s.pend) items.push({ic:s.warn?'alert':'help',t:s.pend,d:`Passo ${a.n}.${s.i} · ${s.t}`,go:a.id,step:s.id}); }));
+  items.push({ic:'help',t:'Patentes e produtos idênticos notificados na Anvisa ainda não foram pesquisados.',d:'Cruzamento com a Matriz CSD · dúvida respondida em parte',go:'p16'});
+  ACTS.forEach(a=>a.steps.forEach(s=>{ if(s.nolink) items.push({ic:'unlink',t:s.nolink,d:`Passo ${a.n}.${s.i} · ${s.t}`,go:a.id,step:s.id,lk:1}); }));
+  const pendLinks=Object.values(L).filter(o=>o.v==='pend');
+  $('#pendList').innerHTML=items.map(it=>`<div class="card pend-item${it.lk?' lk':''}">${ic(it.ic)}<div><h4>${esc(it.t)}</h4><p>${esc(it.d)}</p></div><div><button type="button" class="btn sec sm" data-goto="${it.go}" data-step="${it.step||''}">Ver etapa ${ic('arrow')}</button></div></div>`).join('')+
+   `<div class="card pend-item lk">${ic('link')}<div><h4>${pendLinks.length} links do documento original não puderam ser verificados automaticamente</h4><p>Os sites da Redesim/JUCESP, Cadesp, consultas da Anvisa e busca do INPI bloqueiam acessos automatizados. Os links foram mantidos como estão no documento e aparecem com a etiqueta “validar link”. Confirme ao abrir:</p><div class="step-links">${pendLinks.map(o=>`<a class="lnk" href="${o.u}" target="_blank" rel="noopener noreferrer">${ic('globe')}<span class="tx">${esc(o.l)}</span>${ic('ext','ext')}</a>`).join('')}</div></div><div></div></div>`;
+}
+
+/* =====================================================================
+   EVENTOS
+   ===================================================================== */
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.step){
+    const s=t.dataset.step, a=ACT[s.split('-')[0]], st=a.steps.find(x=>x.id===s);
+    const before=actCalc(a).st;
+    if(t.checked) state.checked[s]=true; else delete state.checked[s];
+    log(`${t.checked?'Concluído':'Desmarcado'}: ${a.n}.${st.i} ${st.t}`, t.checked?'ok':'un');
+    const after=actCalc(a).st;
+    if(after==='done'&&before!=='done'){ log(`Atividade concluída: Passo ${a.n} · ${a.title}`,'ok'); toast(`Passo ${a.n} concluído`); }
+    save(); refreshAll();
+  } else if(t.dataset.wait){
+    const a=ACT[t.dataset.wait];
+    if(t.checked) state.waiting[a.id]=true; else delete state.waiting[a.id];
+    log(`${t.checked?'Aguardando retorno':'Retorno recebido'}: Passo ${a.n} · ${a.title}`, t.checked?'':'ok');
+    save(); refreshAll(); toast(t.checked?'Sinalizada como aguardando retorno':'Sinalização removida');
+  }
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button,[data-goto-phase]'); if(!b) return;
+  if(b.dataset.toggleAct){ const id=b.dataset.toggleAct; setOpen(id,!$('#act-'+id).classList.contains('open')); return; }
+  if(b.dataset.togglePhase){ const id=b.dataset.togglePhase; setPhase(id,$('#ph-'+id).classList.contains('closed')); return; }
+  if(b.dataset.goto){ goTo(b.dataset.goto,b.dataset.step||''); return; }
+  if(b.dataset.gotoPhase){ const id=b.dataset.gotoPhase; F.phase=id; F.st='all'; $('#fPhase').value=id; setPhase(id,true); applyFilters(); $('#atividades').scrollIntoView({behavior:'smooth'}); return; }
+  if(b.dataset.kf!==undefined){ F.st=b.dataset.kf||'all'; F.phase=''; $('#fPhase').value=''; applyFilters(); $('#atividades').scrollIntoView({behavior:'smooth'}); return; }
+  if(b.dataset.fst){ F.st=b.dataset.fst; applyFilters(); return; }
+  if(b.dataset.shot){ const [id,i]=b.dataset.shot.split(':'); const s=ACT[id].shots[+i]; $('#dlgImgEl').src=s.src; $('#dlgImgEl').alt=s.cap; $('#dlgImgCap').textContent=s.cap; $('#dlgImgT').textContent=`Passo ${ACT[id].n} · tela ${+i+1} de ${ACT[id].shots.length}`; openDlg($('#dlgImg')); return; }
+  if(b.dataset.copy!==undefined){ const v=b.dataset.copy; const done=()=>toast('Copiado: '+v); try{ navigator.clipboard.writeText(v).then(done,()=>{selectText(b.previousElementSibling);toast('Selecionado. Use Ctrl+C para copiar');}); }catch(_){ selectText(b.previousElementSibling); toast('Selecionado. Use Ctrl+C para copiar'); } return; }
+  if(b.hasAttribute('data-close')){ b.closest('dialog').close(); return; }
+});
+document.addEventListener('keydown',e=>{ const t=e.target.closest('[data-goto-phase].pb'); if(t&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); t.click(); }});
+function selectText(el){ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+$$('dialog').forEach(d=>d.addEventListener('click',e=>{ if(e.target===d) d.close(); }));
+let qT; $('#q').addEventListener('input',e=>{ $('#qClr').hidden=!e.target.value; clearTimeout(qT); qT=setTimeout(()=>{F.q=e.target.value; applyFilters();},140); });
+$('#qClr').addEventListener('click',()=>{ $('#q').value=''; F.q=''; $('#qClr').hidden=true; applyFilters(); $('#q').focus(); });
+$('#fPhase').addEventListener('change',e=>{ F.phase=e.target.value; if(F.phase) setPhase(F.phase,true); applyFilters(); });
+$('#btnExpand').addEventListener('click',()=>{ PHASES.forEach(p=>setPhase(p.id,true)); ACTS.forEach(a=>{ if(!$('#act-'+a.id).hidden) setOpen(a.id,true); }); });
+$('#btnCollapse').addEventListener('click',()=>{ ACTS.forEach(a=>setOpen(a.id,false)); });
+$('#btnClearF').addEventListener('click',()=>{ F={st:'all',phase:'',q:''}; $('#q').value=''; $('#fPhase').value=''; $('#qClr').hidden=true; applyFilters(); });
+$('#btnReset').addEventListener('click',()=>openDlg($('#dlgReset')));
+$('#btnResetOk').addEventListener('click',()=>{ state={checked:{},waiting:{},history:[]}; log('Progresso redefinido','un'); save(); $$('[data-step]').forEach(c=>{ if(c.type==='checkbox') c.checked=false; }); $$('[data-wait]').forEach(c=>c.checked=false); refreshAll(); $('#dlgReset').close(); toast('Progresso apagado'); });
+$('#btnHist').addEventListener('click',()=>{ renderHist(); openDlg($('#dlgHist')); });
+
+/* tema */
+function curTheme(){ const a=document.documentElement.dataset.theme; return a||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); }
+function paintThemeBtn(){ const t=curTheme(); $('#themeIco').innerHTML=`<use href="#i-${t==='dark'?'sun':'moon'}"/>`; $('#themeLbl').textContent=t==='dark'?'Tema claro':'Tema escuro'; }
+try{ const t=localStorage.getItem(KEY+'-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){}
+$('#btnTheme').addEventListener('click',()=>{ const n=curTheme()==='dark'?'light':'dark'; document.documentElement.dataset.theme=n; try{localStorage.setItem(KEY+'-theme',n);}catch(e){} paintThemeBtn(); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',paintThemeBtn);
+
+/* scrollspy */
+const secs=['painel','roadmap','atividades','custos','csd','pendencias'];
+const io=new IntersectionObserver(ents=>{ ents.forEach(en=>{ if(en.isIntersecting){ $$('#navLinks a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id)); } }); },{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>io.observe(document.getElementById(s)));
+
+/* ===== INIT ===== */
+renderFilterUI(); renderActs(); renderStatic();
+openSet.forEach(id=>ACT[id]&&setOpen(id,true,false));
+closedPh.forEach(id=>{ const el=$('#ph-'+id); if(el){ el.classList.add('closed'); el.querySelector('.phase-hd').setAttribute('aria-expanded','false'); } });
+refreshAll(); paintThemeBtn();
+</script>
+</body>
+</html>
