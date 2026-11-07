@@ -179,7 +179,7 @@ main section{padding-block:44px 8px}
 .btn.sm{min-height:36px;padding:0 12px;font-size:13px}
 
 /* ========== ROADMAP ========== */
-.trail-scroll{overflow-x:auto;padding-bottom:6px;margin-bottom:18px}
+.trail-scroll{overflow-x:auto;padding-block:8px 6px}
 .trail{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));min-width:780px;position:relative}
 .trail::before{content:"";position:absolute;left:8%;right:8%;top:27px;height:3px;background:var(--line);border-radius:3px}
 .trail .tfill{position:absolute;left:8%;top:27px;height:3px;background:var(--brand);border-radius:3px;transition:width .7s}
@@ -562,15 +562,7 @@ footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-cont
   <!-- ===== ROADMAP ===== -->
   <section id="roadmap">
     <div class="wrap">
-      <div class="sec-head">
-        <div>
-          <div class="k">Roadmap visual</div>
-          <h2>A trilha da regularização</h2>
-          <p class="lede">A sequência segue o documento original. Na abertura do CNPJ, cada etapa depende da aprovação da anterior; na regularização dos produtos, algumas etapas correm em paralelo e as dependências aparecem em cada atividade.</p>
-        </div>
-      </div>
       <div class="trail-scroll"><div class="trail" id="trail"><span class="tfill" id="tfill"></span></div></div>
-      <div class="parts" id="parts"></div>
     </div>
   </section>
 
@@ -1140,17 +1132,6 @@ function renderRoadmap(){
   // a linha avança até a fase atual: fases concluídas em sequência + fração da próxima
   let reach=0; for(const p of PHASES){ const c=phaseCalc(p); if(c.st==='done'){ reach++; continue; } reach+=c.pct/100; break; }
   $('#tfill').style.width=`${Math.min(84,84/(PHASES.length-1)*reach)}%`;
-  const parts={};
-  PHASES.forEach((p,i)=>{(parts[p.part]=parts[p.part]||[]).push([p,i]);});
-  $('#parts').innerHTML=Object.entries(parts).map(([k,arr])=>`<div><div class="part-h">${PARTS[k]}</div><div class="phase-grid">${arr.map(([p,i])=>{const c=phaseCalc(p);return `
-    <article class="card pcard" data-st="${c.st}">
-      <div class="top"><div><div class="fx">FASE ${i+1}</div><h3>${esc(p.name)}</h3></div>${pill(c.st)}</div>
-      <p class="d">${esc(p.desc)}</p>
-      <div class="stats"><span><b>${c.acts}</b> atividades</span><span><b>${c.actsDone}</b> concluídas</span><span><b>${c.pct}%</b> dos subpontos</span></div>
-      <div class="bar"><i style="width:${c.pct}%"></i></div>
-      <ul class="pacts">${p.acts.map(id=>{const a=ACT[id],ac=actCalc(a);return `<li><button type="button" data-goto="${a.id}"><span class="sn">P${a.n}</span><span class="tt">${esc(a.title)}</span><span class="mini">${ac.done}/${ac.total}</span><span class="pill" data-st="${ac.st}" style="padding:3px 8px" title="${STL[ac.st]}"></span></button></li>`}).join('')}</ul>
-    </article>`}).join('')}</div></div>`).join('');
-  $$('.pacts .pill').forEach(p=>{p.textContent='';p.style.gap='0';});
 }
 
 /* ---------- Atividades ---------- */
