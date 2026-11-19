@@ -156,6 +156,10 @@ tr.auto td.rot { background: var(--verde-claro); }
 tr.total .fonte { color: #d7f1ea; }
 .fonte.alinhar { color: var(--amarelo); font-weight: 600; }
 .sr { position: absolute; left: -9999px; }
+.como-conta { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.como-conta li { background: var(--cinza); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; color: var(--texto-2); line-height: 1.4; min-width: 0; }
+.como-conta b { display: block; color: var(--marinho); font-size: 13px; }
+@media (max-width: 720px) { .como-conta { grid-template-columns: 1fr 1fr; } }
 
 /* Campos */
 .campo {
@@ -414,20 +418,26 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-1">
       <div class="faixa"><span class="num">1</span><h2>Estruturação dos custos do produto</h2></div>
       <div class="corpo">
-        <p class="explica">Liste tudo que é gasto para <b>um kit</b> chegar à casa do cliente: um sachê de shampoo, um de condicionador, a embalagem e o frete. Essa lista é a <b>ficha técnica</b> do kit. Em cada linha, o custo é a quantidade vezes o custo de uma unidade. A coluna <b>Entra em</b> diz como o item se comporta nos produtos: o que é <b>por banho</b> se multiplica nas caixas de 5 e 10, o que é <b>por pedido</b> é pago uma vez por compra, e as embalagens valem só para o kit avulso ou só para as caixas.</p>
+        <p class="explica">A <b>ficha técnica</b> lista tudo que um kit gasta até chegar ao cliente. Custo de cada item = quantidade × custo por unidade.</p>
         <div class="tabela-wrap">
           <table class="resp">
-            <thead><tr><th>Item e fonte</th><th>Entra em</th><th class="num">Quantidade</th><th class="num">Custo por unidade</th><th class="num">Custo</th><th><span class="sr">Remover</span></th></tr></thead>
+            <thead><tr><th>Item e fonte</th><th>Como conta</th><th class="num">Quantidade</th><th class="num">Custo por unidade</th><th class="num">Custo</th><th><span class="sr">Remover</span></th></tr></thead>
             <tbody id="tb-ficha"></tbody>
             <tbody>
               <tr class="total">
-                <td class="rot">Custo variável do kit avulso<span class="fonte">Itens por banho + por pedido + só no kit avulso</span></td>
+                <td class="rot">Custo variável do kit avulso<span class="fonte">Por banho + por pedido + só kit avulso</span></td>
                 <td class="vazia"></td><td class="vazia"></td><td class="vazia"></td>
                 <td class="num" data-r="Total" data-out="custoKit">–</td><td class="vazia"></td>
               </tr>
             </tbody>
           </table>
         </div>
+        <ul class="como-conta" aria-label="O que significa cada opção de Como conta">
+          <li><b>Por banho</b>multiplica pelo número de kits da caixa</li>
+          <li><b>Por pedido</b>cobrado uma vez por compra</li>
+          <li><b>Só kit avulso</b>embalagem do kit vendido sozinho</li>
+          <li><b>Só caixas</b>embalagem das caixas de 5 e 10</li>
+        </ul>
         <button class="btn-add" type="button" data-add="ficha"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar item de custo</button>
         <div class="falta" data-falta="custo" hidden></div>
       </div>
@@ -437,7 +447,7 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-2">
       <div class="faixa"><span class="num">2</span><h2>Rateio dos custos indiretos</h2></div>
       <div class="corpo">
-        <p class="explica">Custos indiretos são gastos que não pertencem a um produto específico, como contador, sistema e site. Eles existem mesmo que nenhum kit seja vendido. Para cada venda ajudar a pagá-los, some os gastos fixos do mês e divida pela quantidade de banhos vendidos no mês. Esse é o <b>rateio</b>.</p>
+        <p class="explica">Gastos fixos existem mesmo sem vendas, como contador e sistema. O <b>rateio</b> divide esses gastos do mês pelos banhos vendidos no mês.</p>
         <div class="exemplo"><b>Exemplo do treinamento</b> (só para entender a conta, não é número da WEEK): R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>.</div>
 
         <h3 class="subtitulo">Gastos fixos por mês</h3>
@@ -460,7 +470,7 @@ footer strong { color: #fff; font-weight: 700; }
         <button class="btn-add" type="button" data-add="fixos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar gasto fixo</button>
 
         <h3 class="subtitulo">Investimentos que viram depreciação</h3>
-        <p class="explica" style="margin-bottom:12px">Investimentos saem do caixa uma vez, mas se desgastam ao longo da vida útil. A parte de cada mês é o valor dividido pelos meses de vida útil, e ela entra nos gastos fixos.</p>
+        <p class="explica" style="margin-bottom:12px">Pagos uma vez e divididos pela vida útil. A parte de cada mês entra nos gastos fixos.</p>
         <div class="tabela-wrap">
           <table class="resp">
             <thead><tr><th>Investimento e fonte</th><th class="num">Valor</th><th class="num">Vida útil</th><th class="num">Por mês</th><th><span class="sr">Remover</span></th></tr></thead>
@@ -506,7 +516,7 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-3">
       <div class="faixa"><span class="num">3</span><h2>Custo total unitário</h2></div>
       <div class="corpo">
-        <p class="explica">O custo total unitário soma o custo variável do kit com a parte dos custos indiretos que cabe a ele. É o <b>piso do preço</b>: vender um kit avulso abaixo desse valor dá prejuízo antes mesmo de pagar impostos e taxas.</p>
+        <p class="explica">Custo do kit + rateio por banho. É o <b>piso do preço</b>: abaixo dele, a venda dá prejuízo.</p>
         <div class="equacao">
           <div class="res"><span>Custo variável do kit</span><b data-out="custoKit">–</b><small>Etapa 1</small></div>
           <div class="op" aria-hidden="true">+</div>
@@ -522,7 +532,7 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-4">
       <div class="faixa"><span class="num">4</span><h2>Levantamento tributário e taxas</h2></div>
       <div class="corpo">
-        <p class="explica">São os valores descontados de <b>cada venda</b>, em porcentagem do preço. A WEEK vende produto, então fica no Simples Nacional, Anexo I (comércio). As taxas dependem do gateway de pagamento que o programador vai integrar ao site, e como cartão e Pix cobram diferente, a conta usa a média ponderada pela forma de pagamento.</p>
+        <p class="explica">Porcentagens descontadas de <b>cada venda</b>: o Simples Nacional e as taxas do meio de pagamento do site.</p>
         <div class="grade">
           <div class="grupo">
             <label for="k-simples">Simples Nacional, Anexo I</label>
@@ -589,7 +599,7 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-5">
       <div class="faixa"><span class="num">5</span><h2>Cálculo do markup</h2></div>
       <div class="corpo">
-        <p class="explica">O <b>markup</b> é o número que multiplica o custo variável do kit para chegar ao preço de venda. Ele junta tudo que é cobrado em porcentagem da venda (o rateio, os impostos e taxas e a margem de lucro que a WEEK quer ter) e garante que, depois de pagar tudo isso, sobre exatamente a margem escolhida. A margem é uma decisão de vocês.</p>
+        <p class="explica">O <b>markup</b> multiplica o custo do kit para chegar ao preço, cobrindo o rateio, os impostos e a margem de lucro que vocês escolherem.</p>
         <div class="margem-linha">
           <div>
             <label for="k-margem">Margem de lucro desejada</label>
@@ -638,7 +648,7 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="produtos">
       <div class="faixa final"><span class="num">✓</span><h2>Aplicando nos produtos da WEEK</h2></div>
       <div class="corpo">
-        <p class="explica">O mesmo markup vale para os três produtos. Nas caixas, os itens por banho se multiplicam pela quantidade de kits, a caixa personalizada substitui a embalagem de envio e os itens por pedido são pagos uma vez só. Preencham o <b>preço de venda</b> de cada produto e acompanhem a margem: <b style="color:var(--petroleo)">verde</b> a partir de 10%, <b style="color:var(--amarelo)">amarela</b> entre 0 e 10% e <b style="color:var(--vermelho)">vermelha</b> quando a venda dá prejuízo.</p>
+        <p class="explica">O mesmo markup vale para os três produtos. Preencham o <b>preço de venda</b> e vejam a margem: <b style="color:var(--petroleo)">verde</b> a partir de 10%, <b style="color:var(--amarelo)">amarela</b> entre 0 e 10% e <b style="color:var(--vermelho)">vermelha</b> com prejuízo.</p>
         <div class="produtos" id="cards-produtos"></div>
 
         <div class="faixa-justa">
@@ -709,8 +719,8 @@ footer strong { color: #fff; font-weight: 700; }
   var APL = [
     { v: "banho", t: "Por banho" },
     { v: "pedido", t: "Por pedido" },
-    { v: "avulso", t: "Só no kit avulso" },
-    { v: "caixa", t: "Só nas caixas" }
+    { v: "avulso", t: "Só kit avulso" },
+    { v: "caixa", t: "Só caixas" }
   ];
   var NOVO = {
     ficha: function () { return { nome: "", fonte: "", unid: "un", apl: "banho", q: 1, c: null, novo: true }; },
@@ -887,7 +897,7 @@ footer strong { color: #fff; font-weight: 700; }
     document.getElementById("tb-ficha").innerHTML = s.ficha.map(function (it, i) {
       var n = nomeDe(it, "item"), unid = it.unid || "un";
       return '<tr>' + celulaNome("ficha", i, it, "Nome do item") +
-        '<td data-r="Entra em"><select class="apl" id="ficha-' + i + '-apl" data-list="ficha" data-i="' + i + '" data-f="apl" aria-label="Onde ' + esc(n) + ' entra">' +
+        '<td data-r="Como conta"><select class="apl" id="ficha-' + i + '-apl" data-list="ficha" data-i="' + i + '" data-f="apl" aria-label="Como ' + esc(n) + ' conta no custo">' +
           APL.map(function (a) { return '<option value="' + a.v + '"' + (a.v === it.apl ? " selected" : "") + '>' + a.t + '</option>'; }).join("") +
         '</select></td>' +
         '<td class="num" data-r="Quantidade">' + campoNum("ficha", i, "q", it.q, "qtd", "", unid, "curto", "Quantidade de " + n) + '</td>' +
@@ -1007,8 +1017,8 @@ footer strong { color: #fff; font-weight: 700; }
       var parcial = faltaProd.length > 0;
       setOut("custo" + id, brl(x.custo), f.custo.length > 0 || (x.p.banhos > 1 && f.caixa.length > 0));
       setOut("comp" + id, x.p.banhos === 1
-        ? "Por banho " + brl(r.soma.banho) + " + por pedido " + brl(r.soma.pedido) + " + só no avulso " + brl(r.soma.avulso)
-        : x.p.banhos + " × " + brl(r.soma.banho) + " por banho + por pedido " + brl(r.soma.pedido) + " + só nas caixas " + brl(r.soma.caixa));
+        ? "Por banho " + brl(r.soma.banho) + " + por pedido " + brl(r.soma.pedido) + " + só kit avulso " + brl(r.soma.avulso)
+        : x.p.banhos + " × " + brl(r.soma.banho) + " por banho + por pedido " + brl(r.soma.pedido) + " + só caixas " + brl(r.soma.caixa));
       setOut("sug" + id, r.markupOk ? brl(x.sugerido) : "–", parcial || f.margem.length > 0);
       setOut("banho" + id, brl(x.porBanho));
       setOut("lucro" + id, brl(x.lucro), parcial);
