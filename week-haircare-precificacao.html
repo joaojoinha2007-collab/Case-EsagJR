@@ -819,9 +819,9 @@ footer strong { color: #fff; font-weight: 700; }
      --------------------------------------------------------------- */
   var PADRAO = {
     ficha: [
-      { nome: "Fórmula do shampoo", fonte: "Preencher com o orçamento da fabricante: custo por ml.", unid: "ml", apl: "banho", q: 10, c: null },
-      { nome: "Fórmula do condicionador", fonte: "Preencher com o orçamento da fabricante: custo por ml.", unid: "ml", apl: "banho", q: 10, c: null },
-      { nome: "Sachês com rótulo impresso", fonte: "Preencher com o orçamento da fabricante. Um sachê de cada produto.", unid: "un", apl: "banho", q: 2, c: null },
+      { nome: "Fórmula do shampoo (sachê de 30 ml)", fonte: "Preencher com o orçamento da fabricante: custo da fórmula para um sachê de 30 ml, dose única.", unid: "sachê", apl: "banho", q: 1, c: null },
+      { nome: "Fórmula do condicionador (sachê de 30 ml)", fonte: "Preencher com o orçamento da fabricante: custo da fórmula para um sachê de 30 ml, dose única.", unid: "sachê", apl: "banho", q: 1, c: null },
+      { nome: "Sachês de 30 ml com rótulo impresso", fonte: "Preencher com o orçamento da fabricante. Um sachê de shampoo e um de condicionador.", unid: "un", apl: "banho", q: 2, c: null },
       { nome: "Envase pela fabricante", fonte: "Preencher com o orçamento da fabricante. Encher e selar cada sachê.", unid: "un", apl: "banho", q: 2, c: null },
       { nome: "Embalagem de envio (envelope plástico)", fonte: "Orçamentos: Rua CEP, Yampi e Melhor Envio.", unid: "un", apl: "avulso", q: 1, c: 0.60 },
       { nome: "Caixa personalizada 15x15x6 cm", fonte: "Orçamentos: Mag Embalagens, lote de 500.", unid: "un", apl: "caixa", q: 1, c: 4.13 },
@@ -873,7 +873,7 @@ footer strong { color: #fff; font-weight: 700; }
   ];
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
   var MESES = ["jan./27", "fev./27", "mar./27", "abr./27", "mai./27", "jun./27", "jul./27", "ago./27", "set./27", "out./27", "nov./27", "dez./27"];
-  var CHAVE = "week-precificacao-v6";
+  var CHAVE = "week-precificacao-v7";
 
   var s;
 
@@ -1091,7 +1091,7 @@ footer strong { color: #fff; font-weight: 700; }
           APL.map(function (a) { return '<option value="' + a.v + '"' + (a.v === it.apl ? " selected" : "") + '>' + a.t + '</option>'; }).join("") +
         '</select></td>' +
         '<td class="num" data-r="Quantidade">' + campoNum("ficha", i, "q", it.q, "qtd", "", unid, "curto", "Quantidade de " + n) + '</td>' +
-        '<td class="num" data-r="Custo por ' + (unid === "ml" ? "ml" : "unidade") + '">' + campoNum("ficha", i, "c", it.c, "dinheiro", "R$", "", "", "Custo por unidade de " + n) + '</td>' +
+        '<td class="num" data-r="Custo por ' + (unid === "ml" ? "ml" : unid === "sachê" ? "sachê" : "unidade") + '">' + campoNum("ficha", i, "c", it.c, "dinheiro", "R$", "", "", "Custo por unidade de " + n) + '</td>' +
         '<td class="num calc" data-r="Custo" data-linha="ficha-' + i + '">–</td>' +
         botaoRem("ficha", i, n) + '</tr>';
     }).join("");
