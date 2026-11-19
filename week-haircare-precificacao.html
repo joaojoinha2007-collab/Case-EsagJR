@@ -436,6 +436,8 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 .meta-bloco.lucro tr.total td { background: var(--verde-claro); color: var(--petroleo); }
 .meta-bloco td.parcial::after { content: " *"; color: var(--amarelo); }
 .meta-bloco .sep { border-left: 2px solid var(--linha); }
+.valor-calc { font-size: 22px; font-weight: 800; color: var(--petroleo); font-variant-numeric: tabular-nums; line-height: 38px; }
+.valor-calc.parcial::after { content: " *"; color: var(--amarelo); }
 </style>
 
 </head>
@@ -452,7 +454,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   <div class="wrap">
     <p class="rotulo">Plano Financeiro · WEEK Haircare</p>
     <h1>Calculadora de precificação</h1>
-    <p>Esta página ensina a WEEK a precificar os kits em cinco etapas, na lógica da aba Precificação da planilha. Ela já traz os valores cotados nas abas Orçamentos e Classificação de gastos. Em branco ficam o pedido de compra, as taxas do site, a margem e os preços, para vocês preencherem. Com eles, a página calcula o markup, o ponto de equilíbrio e a meta de lucro de 2027, por mês e no ano.</p>
+    <p>Esta página ensina a WEEK a precificar os kits em cinco etapas, na lógica da aba Precificação da planilha. Ela já traz os valores cotados nas abas Orçamentos e Classificação de gastos. Em branco ficam o pedido de compra, as taxas do site e a margem, para vocês preencherem. Com eles, a página calcula o preço de cada produto, o markup, o ponto de equilíbrio e a meta de lucro de 2027, por mês e no ano.</p>
     <div class="acoes">
       <a class="btn btn-claro" href="https://docs.google.com/spreadsheets/d/1zo8Lva5f4SlrNYH3nNRK90IznOyByUuP53c9IejrO7I/edit" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
@@ -478,9 +480,9 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
 <div class="resumo" aria-label="Resumo dos resultados">
   <div class="wrap resumo-in">
-    <div class="kpi"><span>Custo do kit avulso</span><b data-out="custoKit">–</b></div>
-    <div class="kpi opt"><span>Gastos fixos por mês</span><b data-out="gastos">–</b></div>
-    <div class="kpi opt"><span>Impostos e taxas</span><b data-out="impostosPct">–</b></div>
+    <div class="kpi"><span>Custo do kit avulso</span><b data-out="custo1">–</b></div>
+    <div class="kpi opt"><span>Rateio por kit</span><b data-out="rateioKit">–</b></div>
+    <div class="kpi opt"><span>Preço do kit avulso</span><b data-out="preco1">–</b></div>
     <div class="kpi"><span>Equilíbrio por mês</span><b data-out="eqKitsMes">–</b></div>
     <div class="kpi destaque"><span>Meta de lucro por mês</span><b data-out="mtFatMes">–</b></div>
   </div>
@@ -523,7 +525,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="etapa-2">
       <div class="faixa"><span class="num">2</span><h2>Rateio dos custos indiretos</h2></div>
       <div class="corpo">
-        <p class="explica">Gastos fixos existem mesmo sem vendas. Investimentos entram como amortização: valor ÷ vida útil. Cada produto paga uma parte desse total, proporcional ao seu custo variável.</p>
+        <p class="explica">Gastos fixos existem mesmo sem vendas. Investimentos entram como amortização: valor ÷ vida útil. O <b>rateio</b> divide esse total pelos kits vendidos no mês, que saem do pedido de compra.</p>
         <div class="exemplo"><b>Exemplo do treinamento</b> (só para entender a conta, não é número da WEEK): R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>.</div>
 
         <h3 class="subtitulo">Gastos fixos por mês</h3>
@@ -561,14 +563,33 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         </div>
         <button class="btn-add" type="button" data-add="invest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar investimento</button>
 
-        <h3 class="subtitulo">Quanto cada produto paga dos gastos fixos</h3>
+        <h3 class="subtitulo">Kits vendidos por mês e rateio</h3>
+        <div class="grade">
+          <div class="grupo">
+            <label>Kits que o pedido de compra rende</label>
+            <b class="valor-calc" data-out="kitsLote">–</b>
+            <small>Menor quantidade comprada entre fórmulas, sachês e envase, dividida pelo uso por kit (etapa 1).</small>
+          </div>
+          <div class="grupo">
+            <label for="k-meses">Em quantos meses vocês vendem esse pedido?</label>
+            <span class="campo"><input id="k-meses" data-k="meses" data-fmt="qtd" inputmode="decimal" placeholder="Preencher"><span class="ad">meses</span></span>
+            <small>Se compram todo mês, coloquem 1.</small>
+          </div>
+        </div>
+        <div class="resultados">
+          <div class="res"><span>Gastos fixos por mês</span><b data-out="gastos">–</b><small>Gastos fixos + amortização</small></div>
+          <div class="res"><span>Kits vendidos por mês</span><b data-out="kitsMes">–</b><small>Kits do pedido ÷ meses</small></div>
+          <div class="res forte"><span>Rateio por kit</span><b data-out="rateioKit">–</b><small>Gastos fixos ÷ kits vendidos por mês</small></div>
+        </div>
+
+        <h3 class="subtitulo">Quanto cada produto paga dos gastos fixos nas metas</h3>
         <div class="tabela-larga">
           <table>
             <thead><tr><th>Produto</th><th class="num">Custo variável por pedido</th><th class="num">Parte dos gastos fixos</th><th class="num">Gastos fixos por mês</th></tr></thead>
             <tbody id="tb-pesos"></tbody>
           </table>
         </div>
-        <p class="fonte" style="margin-top:8px">Parte = custo variável do produto ÷ soma dos custos variáveis. Produtos sem preço de venda (etapa 5) ficam fora da divisão.</p>
+        <p class="fonte" style="margin-top:8px">Usado nas metas de vendas para dividir as vendas entre os produtos. Parte = custo variável do produto ÷ soma dos custos variáveis.</p>
         <div class="falta" data-falta="fixos" hidden></div>
       </div>
     </section>
@@ -577,7 +598,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="etapa-3">
       <div class="faixa"><span class="num">3</span><h2>Custo total unitário</h2></div>
       <div class="corpo">
-        <p class="explica">Custo variável + rateio de cada kit, vendendo a meta de lucro. É o <b>piso do preço</b>: abaixo dele, a venda dá prejuízo.</p>
+        <p class="explica">Custo variável + rateio de cada kit. É o <b>piso do preço</b>: abaixo dele, a venda dá prejuízo.</p>
         <div class="tabela-larga">
           <table>
             <thead><tr><th>Produto</th><th class="num">Custo variável por kit</th><th class="num">Rateio por kit</th><th class="num">Custo total por kit</th></tr></thead>
@@ -623,7 +644,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="etapa-5">
       <div class="faixa"><span class="num">5</span><h2>Cálculo do markup</h2></div>
       <div class="corpo">
-        <p class="explica">O <b>markup</b> é quantas vezes o preço cobre o custo variável. Preencham a margem desejada e o preço de cada produto: a página mostra o markup e se o preço alcança a margem.</p>
+        <p class="explica">Preencham a margem desejada e o <b>preço sai automático</b>: preço = custo total ÷ (1 − impostos − margem). O <b>markup</b> é quantas vezes esse preço cobre o custo variável.</p>
         <div class="margem-linha">
           <div>
             <label for="k-margem">Margem de lucro desejada</label>
@@ -637,14 +658,14 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
         <div class="tabela-larga">
           <table>
-            <thead><tr><th>Produto</th><th class="num">Custo variável do pedido</th><th class="num">Preço de venda</th><th class="num">Preço por kit</th><th class="num">Markup</th><th>Situação</th></tr></thead>
+            <thead><tr><th>Produto</th><th class="num">Custo variável</th><th class="num">Rateio</th><th class="num">Custo total</th><th class="num">Preço de venda</th><th class="num">Preço por kit</th><th class="num">Markup</th></tr></thead>
             <tbody id="tb-markup"></tbody>
           </table>
         </div>
-        <p class="fonte" style="margin-top:8px">Markup = preço ÷ custo variável. Margem de contribuição = o que sobra do preço depois do custo variável e das taxas, para pagar os gastos fixos e dar lucro.</p>
+        <p class="fonte" style="margin-top:8px">Valores por pedido. Rateio = rateio por kit × kits do produto. Preço = custo total ÷ (1 − impostos − margem). Markup = preço ÷ custo variável.</p>
 
         <div class="formula" style="margin-top:18px" aria-live="polite">
-          <div class="titulo">Conferência do markup do kit avulso, vendendo a meta de lucro</div>
+          <div class="titulo">Conferência do markup do kit avulso</div>
           <div class="f-linha">
             <span class="f-nome">Markup</span><span class="f-igual">=</span>
             <span class="frac"><span class="n">1</span>
@@ -659,7 +680,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
             <span class="f-igual">=</span>
             <span class="f-res" data-out="markupForm1">–</span>
           </div>
-          <p class="fonte" style="text-align:center;margin-top:12px">O resultado é o mesmo markup da tabela: na meta de lucro, o preço paga o custo, o rateio, as taxas e a margem.</p>
+          <p class="fonte" style="text-align:center;margin-top:12px">O resultado é o mesmo markup da tabela: o preço paga o custo, o rateio, as taxas e a margem.</p>
         </div>
 
         <div class="faixa-justa">
@@ -682,7 +703,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         <p class="explica">Quantos kits a WEEK precisa vender para não ter prejuízo e para lucrar, por mês e no ano.</p>
         <ul class="duas-metas">
           <li><b>Ponto de equilíbrio</b>Paga todos os custos, taxas, gastos fixos e a amortização, mas não lucra. Abaixo disso, prejuízo.</li>
-          <li><b>Meta de lucro</b>Paga tudo isso e ainda sobra a margem de lucro desejada.</li>
+          <li><b>Meta de lucro</b>Paga tudo isso e ainda sobra a margem desejada. Com o preço calculado, é vender os kits por mês previstos na etapa 2.</li>
         </ul>
 
         <div class="formula">
@@ -797,7 +818,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     ],
     taxaFixa: null,
     margem: null,
-    preco1: null, preco5: null, preco10: null,
+    meses: null,
     extras: [null, null, null, null, null, null, null, null, null, null, null, null]
   };
   var APL = [
@@ -814,7 +835,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   };
   var ROTULOS = {
     taxaFixa: "Taxa fixa por venda no cartão", margem: "Margem de lucro desejada",
-    preco1: "Preço do kit avulso", preco5: "Preço da caixa com 5", preco10: "Preço da caixa com 10"
+    meses: "Meses para vender o pedido de compra"
   };
   var PRODUTOS = [
     { id: "1", nome: "Kit avulso", n: 1 },
@@ -823,7 +844,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   ];
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
   var MESES = ["jan./27", "fev./27", "mar./27", "abr./27", "mai./27", "jun./27", "jul./27", "ago./27", "set./27", "out./27", "nov./27", "dez./27"];
-  var CHAVE = "week-precificacao-v9";
+  var CHAVE = "week-precificacao-v10";
 
   var s, vista = "mt";
 
@@ -872,7 +893,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
   /* ---------- Cálculos ---------- */
   function calcular() {
-    var r = { falta: { custo: [], fixos: [], taxas: [], margem: [], precos: [] }, pend: [] };
+    var r = { falta: { custo: [], fixos: [], taxas: [], margem: [], volume: [] }, pend: [] };
     function pend(t, etapa, id) { r.pend.push({ t: t, etapa: etapa, id: id }); }
 
     /* Etapa 1: pedido de compra e custo por kit */
@@ -927,11 +948,30 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     if (s.margem == null) { r.falta.margem.push(ROTULOS.margem); pend(ROTULOS.margem, "Etapa 5", "k-margem"); }
     r.margemPct = z(s.margem) / 100;
 
+    /* Etapa 2: kits vendidos por mês, a partir do pedido de compra */
+    var kitsLote = null;
+    s.ficha.forEach(function (it, i) {
+      if (it.apl !== "banho" || it.servico) return;
+      if (it.compra == null) {
+        var n = nomeDe(it, "Item de custo " + (i + 1)) + " (quantidade comprada)";
+        r.falta.volume.push(n); pend(n, "Etapa 1", "ficha-" + i + "-compra");
+      } else if (it.uso > 0) {
+        var k = Math.floor(it.compra / it.uso + 1e-9);
+        kitsLote = kitsLote == null ? k : Math.min(kitsLote, k);
+      }
+    });
+    if (s.meses == null) { r.falta.volume.push(ROTULOS.meses); pend(ROTULOS.meses, "Etapa 2", "k-meses"); }
+    r.kitsLote = kitsLote;
+    r.kitsMes = kitsLote > 0 && s.meses > 0 ? kitsLote / s.meses : NaN;
+    r.R = r.kitsMes > 0 ? r.gastos / r.kitsMes : NaN;
+    r.divPreco = 1 - r.impostosPct - r.margemPct;
+
+    /* Preço = (custo variável + rateio) ÷ (1 − impostos − margem) */
     r.prods = PRODUTOS.map(function (p) {
       var C = p.n * soma.banho + soma.pedido + (p.n === 1 ? soma.avulso : soma.caixa) + r.taxaFixaPedido;
-      var P = s["preco" + p.id];
-      if (P == null) { r.falta.precos.push(ROTULOS["preco" + p.id]); pend(ROTULOS["preco" + p.id], "Etapa 5", "k-preco" + p.id); }
-      return { id: p.id, nome: p.nome, n: p.n, C: C, P: P, part: P != null && P > 0 };
+      var rat = p.n * r.R;
+      var P = r.divPreco > 0 && isFinite(rat) ? (C + rat) / r.divPreco : NaN;
+      return { id: p.id, nome: p.nome, n: p.n, C: C, rat: rat, P: P, part: isFinite(P) && P > 0 };
     });
 
     /* Divisão dos gastos fixos pelo custo variável de cada produto */
@@ -947,8 +987,8 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       x.denMt = x.P * (1 - r.impostosPct - r.margemPct) - x.C;
       x.markup = x.C > 0 ? x.P / x.C : NaN;
       x.qExato = x.denMt > 0 ? x.F / x.denMt : NaN;
-      x.rateioPct = x.denMt > 0 ? x.denMt / x.P : NaN;             /* gastos fixos ÷ faturamento na meta */
-      x.rateioKit = x.qExato > 0 ? (x.F / x.qExato) / x.n : (x.F === 0 && x.denMt > 0 ? 0 : NaN);
+      x.rateioPct = x.rat / x.P;                                   /* rateio ÷ preço */
+      x.rateioKit = r.R;
       x.custoKit = x.C / x.n;
       x.custoTotalKit = x.custoKit + x.rateioKit;
       x.markupForm = isFinite(x.rateioPct) ? 1 / (1 - x.rateioPct - r.impostosPct - r.margemPct) : NaN;
@@ -1026,7 +1066,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         '<td class="num" data-r="Uso ' + porQue + '">' + campoNum("ficha", i, "uso", it.uso, "qtd", "", unid, "curto", "Uso de " + n + " " + porQue) + '</td>' +
         (it.servico
           ? '<td class="servico" data-r="Quantidade comprada">pago a cada pedido</td>'
-          : '<td class="num" data-r="Quantidade comprada">' + campoNum("ficha", i, "compra", it.compra, "inteiro", "", unid, "opcional", "Quantidade comprada de " + n) + '</td>') +
+          : '<td class="num" data-r="Quantidade comprada">' + campoNum("ficha", i, "compra", it.compra, "inteiro", "", unid, it.apl === "banho" ? "" : "opcional", "Quantidade comprada de " + n, it.apl === "banho" ? "Preencher" : "Opcional") + '</td>') +
         '<td class="num" data-r="Valor unitário">' + campoNum("ficha", i, "c", it.c, "dinheiro", "R$", "", "", "Valor unitário de " + n) + '</td>' +
         '<td class="num calc" data-r="Valor total do pedido" data-linha="ficha-total-' + i + '">–</td>' +
         '<td class="num calc" data-r="Custo no kit" data-linha="ficha-kit-' + i + '">–</td>' +
@@ -1065,10 +1105,11 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     document.getElementById("tb-markup").innerHTML = PRODUTOS.map(function (p) {
       return '<tr data-prod="' + p.id + '"><td><b>' + p.nome + '</b><small class="sub">' + p.n + (p.n === 1 ? " kit" : " kits") + '</small></td>' +
         '<td class="num calc" data-out="custo' + p.id + '">–</td>' +
-        '<td class="num"><span class="campo"><span class="ad">R$</span><input id="k-preco' + p.id + '" data-k="preco' + p.id + '" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher" aria-label="Preço de venda: ' + p.nome + '"></span></td>' +
+        '<td class="num calc" data-out="rat' + p.id + '">–</td>' +
+        '<td class="num calc" data-out="custoTot' + p.id + '">–</td>' +
+        '<td class="num"><b class="valor-calc" style="font-size:18px" data-out="preco' + p.id + '">–</b></td>' +
         '<td class="num calc" data-out="precoKit' + p.id + '">–</td>' +
-        '<td class="num calc" data-out="markup' + p.id + '">–</td>' +
-        '<td><span class="situacao neutro" data-sit="' + p.id + '">–</span></td></tr>';
+        '<td class="num calc" data-out="markup' + p.id + '">–</td></tr>';
     }).join("");
   }
 
@@ -1129,7 +1170,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     ["eq", "mt"].forEach(function (k) {
       var b = r.base[k], a = r.ano[k];
       var linhas = r.prods.map(function (x) {
-        if (!x.part) return '<tr class="fora"><td>' + x.nome + '<small class="sub">sem preço de venda, fora da conta</small></td>' + '<td class="num">–</td>'.repeat(4) + '<td class="num sep">–</td>' + '<td class="num">–</td>'.repeat(3) + '</tr>';
+        if (!x.part) return '<tr class="fora"><td>' + x.nome + '<small class="sub">preço ainda não calculado</small></td>' + '<td class="num">–</td>'.repeat(4) + '<td class="num sep">–</td>' + '<td class="num">–</td>'.repeat(3) + '</tr>';
         var pm = b.ok ? b.prods[x.id] : null, pa = a.ok ? a.prods[x.id] : null;
         var c = function (v, f, extra) { return '<td class="num' + (extra || "") + (parcial ? " parcial" : "") + '">' + (v == null ? "–" : f(v)) + '</td>'; };
         return '<tr><td>' + x.nome + '</td>' +
@@ -1162,7 +1203,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
   function render() {
     var r = calcular(), f = r.falta;
-    var faltaTudo = unir(f.custo, f.fixos, f.taxas, f.margem);
+    var faltaTudo = unir(f.custo, f.fixos, f.taxas, f.margem, f.volume);
     var parcial = faltaTudo.length > 0;
 
     /* Etapa 1 */
@@ -1176,15 +1217,17 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     setOut("depreciacao", brl(r.depreciacao));
     setOut("gastos", brl(r.gastos), f.fixos.length > 0);
     document.getElementById("tb-pesos").innerHTML = r.prods.map(function (x) {
-      return '<tr class="' + (x.part ? "" : "fora") + '"><td>' + x.nome + (x.part ? "" : '<small class="sub">sem preço de venda, fora da divisão</small>') + '</td>' +
+      return '<tr class="' + (x.part ? "" : "fora") + '"><td>' + x.nome + (x.part ? "" : '<small class="sub">preço ainda não calculado</small>') + '</td>' +
         '<td class="num">' + brl(x.C) + '</td><td class="num">' + (x.part ? pct(x.w, 1) : "–") + '</td><td class="num">' + (x.part ? brl(x.F) : "–") + '</td></tr>';
     }).join("") + '<tr class="total"><td>Total</td><td class="num"></td><td class="num">' + (r.part.length ? "100%" : "–") + '</td><td class="num">' + brl(r.gastos) + '</td></tr>';
-    setFalta("fixos", unir(f.fixos, f.custo), "Divisão provisória. Falta preencher: ");
+    setFalta("fixos", unir(f.fixos, f.volume, f.custo), "Rateio provisório. Falta preencher: ");
+    setOut("kitsLote", r.kitsLote == null ? "–" : inteiro(r.kitsLote) + " kits", f.volume.length > 0);
+    setOut("kitsMes", isFinite(r.kitsMes) ? num(r.kitsMes, r.kitsMes % 1 ? 1 : 0) + " kits" : "–", f.volume.length > 0);
+    setOut("rateioKit", brl(r.R), f.fixos.length + f.volume.length > 0);
 
     /* Etapa 3 */
     document.getElementById("tb-custo-total").innerHTML = r.prods.map(function (x) {
-      if (!x.part) return '<tr class="fora"><td>' + x.nome + '<small class="sub">sem preço de venda</small></td><td class="num">' + brl(x.C / x.n) + '</td><td class="num">–</td><td class="num">–</td></tr>';
-      return '<tr><td>' + x.nome + '</td><td class="num">' + brl(x.custoKit) + '</td><td class="num">' + brl(x.rateioKit) + '</td><td class="num"><b>' + brl(x.custoTotalKit) + '</b></td></tr>';
+      return '<tr><td>' + x.nome + '</td><td class="num">' + brl(x.C / x.n) + '</td><td class="num">' + brl(r.R) + '</td><td class="num"><b>' + brl(x.C / x.n + r.R) + '</b></td></tr>';
     }).join("");
     setFalta("tudo", faltaTudo);
 
@@ -1198,21 +1241,16 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     setOut("margemPct", s.margem == null ? "?" : pct(r.margemPct));
     r.prods.forEach(function (x) {
       setOut("custo" + x.id, brl(x.C), f.custo.length + f.taxas.length > 0);
-      setOut("precoKit" + x.id, x.part ? brl(x.P / x.n) : "–");
+      setOut("rat" + x.id, brl(x.rat), f.fixos.length + f.volume.length > 0);
+      setOut("custoTot" + x.id, brl(x.C + x.rat), parcial);
+      setOut("preco" + x.id, x.part ? brl(x.P) : "–", parcial);
+      setOut("precoKit" + x.id, x.part ? brl(x.P / x.n) : "–", parcial);
       setOut("markup" + x.id, x.part && isFinite(x.markup) ? num(x.markup, 3) : "–", parcial);
-      var el = document.querySelector('[data-sit="' + x.id + '"]');
-      var cls = "neutro", txt = "Preencham o preço";
-      if (x.part) {
-        if (x.contribPct < 0) { cls = "vermelho"; txt = "Prejuízo em cada venda (" + pct(x.contribPct, 1) + ")"; }
-        else if (x.denMt <= 0) { cls = "amarelo"; txt = "Não alcança a margem (sobra " + pct(x.contribPct, 1) + ")"; }
-        else { cls = "verde"; txt = "Alcança a margem (sobra " + pct(x.contribPct, 1) + ")"; }
-      }
-      el.className = "situacao " + cls; el.textContent = txt;
     });
     var a1 = r.prods[0];
     setOut("rateioPct1", a1.part ? pct(a1.rateioPct) : "?");
     setOut("markupForm1", a1.part && isFinite(a1.markupForm) ? num(a1.markupForm, 3) : "–", parcial);
-    setFalta("markup", unir(faltaTudo, f.precos));
+    setFalta("markup", faltaTudo, "Preço provisório. Falta preencher: ");
     renderRegua(r);
 
     /* Metas */
@@ -1223,11 +1261,10 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     renderMetas(r, parcial);
     setOut("eqKitsMes", r.base.eq.ok ? inteiro(r.base.eq.kits) + " kits" : "–", parcial);
     setOut("mtFatMes", r.base.mt.ok ? brl(r.base.mt.fat) : "–", parcial);
-    setFalta("metas", unir(faltaTudo, f.precos), "Metas provisórias. Falta preencher: ");
-    var semMargem = r.part.filter(function (x) { return !(x.denMt > 0); }).map(function (x) { return x.nome; });
+    setFalta("metas", faltaTudo, "Metas provisórias. Falta preencher: ");
     var alerta = document.getElementById("alerta-meta");
-    alerta.hidden = semMargem.length === 0;
-    if (semMargem.length) setOut("alertaMeta", "Com o preço atual, " + semMargem.join(" e ") + (semMargem.length > 1 ? " não alcançam" : " não alcança") + " a margem desejada, então a meta de lucro não fecha. Aumentem o preço ou reduzam a margem.");
+    alerta.hidden = !(r.divPreco <= 0);
+    if (r.divPreco <= 0) setOut("alertaMeta", "Impostos e taxas mais a margem somam " + pct(1 - r.divPreco) + ", ou seja, 100% ou mais do preço. O preço não fecha: reduzam a margem desejada.");
     renderMensal(r);
 
     renderPendencias(r.pend);
