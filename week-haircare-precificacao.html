@@ -22,13 +22,15 @@
   --linha: #dde3ee;
   --fundo: #f7f9fc;
   --branco: #ffffff;
-  --amarelo: #b7791f;
+  --amarelo: #a86a12;
   --amarelo-bg: #fdf3dc;
+  --amarelo-borda: #f1d39a;
   --vermelho: #c53030;
   --vermelho-bg: #fde8e8;
   --week: #457875;
   --r: 12px;
   --sombra: 0 1px 2px rgba(31,42,68,.06), 0 6px 20px rgba(31,42,68,.06);
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -40,18 +42,18 @@ body {
   font-size: 15px;
   line-height: 1.6;
 }
-button, input { font-family: inherit; }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+button, input, select { font-family: inherit; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
 
 /* ---------- Cabeçalho ---------- */
 header.topo { background: var(--branco); border-bottom: 1px solid var(--linha); }
-.topo-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; }
+.topo-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
 .logo-esag { height: 40px; width: auto; display: block; }
-.logo-week { height: 44px; width: calc(44px * 2.4796); fill: var(--week); display: block; }
-.hero { background: var(--azul); color: #fff; padding: 40px 0 44px; }
+.logo-week { height: 44px; width: calc(44px * 2.4796); fill: var(--week); display: block; flex: none; }
+.hero { background: var(--azul); color: #fff; padding-block: 40px 44px; }
 .hero .rotulo { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--menta); margin: 0 0 8px; }
 .hero h1 { margin: 0 0 12px; font-size: clamp(26px, 4.4vw, 38px); line-height: 1.15; font-weight: 800; letter-spacing: -.01em; }
-.hero p { margin: 0; max-width: 720px; color: #dbe5f8; font-size: 15.5px; }
+.hero p { margin: 0; max-width: 740px; color: #dbe5f8; font-size: 15.5px; }
 .acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
@@ -64,34 +66,54 @@ header.topo { background: var(--branco); border-bottom: 1px solid var(--linha); 
 .btn-claro:hover { box-shadow: 0 4px 14px rgba(0,0,0,.18); transform: translateY(-1px); }
 .btn-contorno { background: transparent; color: #fff; box-shadow: inset 0 0 0 2px rgba(255,255,255,.55); }
 .btn-contorno:hover { background: rgba(255,255,255,.1); }
+.btn-contorno.confirmar { background: #fff; color: var(--vermelho); box-shadow: none; }
 .btn-azul { background: var(--azul); color: #fff; }
 .btn-azul:hover { background: #003a99; }
-.btn:focus-visible { outline: 3px solid var(--menta); outline-offset: 2px; }
+.btn:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--menta); outline-offset: 2px; }
 
-/* ---------- Legenda e resumo ---------- */
+/* ---------- Legenda e pendências ---------- */
 .legenda {
   display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px;
   background: var(--branco); border: 1px solid var(--linha); border-radius: var(--r);
-  padding: 14px 18px; margin: -22px 0 0; position: relative; box-shadow: var(--sombra); font-size: 13.5px; color: var(--texto-2);
+  padding: 14px 18px; margin-top: -22px; position: relative; box-shadow: var(--sombra); font-size: 13.5px; color: var(--texto-2);
 }
 .legenda .item { display: inline-flex; align-items: center; gap: 8px; }
 .amostra { width: 30px; height: 18px; border-radius: 5px; flex: none; }
 .amostra.edit { background: var(--azul-claro); box-shadow: inset 0 0 0 1.5px #b9cbef; }
+.amostra.pend { background: var(--amarelo-bg); box-shadow: inset 0 0 0 1.5px var(--amarelo-borda); }
 .amostra.res { background: var(--verde-claro); box-shadow: inset 0 0 0 1.5px var(--menta); }
 
-.resumo {
-  position: sticky; top: 0; z-index: 20;
-  background: rgba(247,249,252,.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--linha); margin-top: 22px;
+.pendencias {
+  margin-top: 14px; background: var(--amarelo-bg); border: 1px solid var(--amarelo-borda); border-radius: var(--r);
+  padding: 14px 18px; color: #6b4a10;
 }
-.resumo-in { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 10px 20px; }
+.pendencias.ok { background: var(--verde-claro); border-color: var(--menta); color: var(--petroleo); }
+.pendencias h2 { margin: 0 0 4px; font-size: 15px; font-weight: 800; }
+.pendencias p { margin: 0 0 10px; font-size: 13.5px; }
+.pendencias.ok p { margin: 0; }
+.pend-lista { display: flex; flex-wrap: wrap; gap: 8px; }
+.pend-lista button {
+  border: 1px solid var(--amarelo-borda); background: #fff; color: #6b4a10; border-radius: 999px;
+  padding: 5px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+}
+.pend-lista button:hover { background: #fff8ea; }
+.pend-lista button small { color: var(--texto-2); font-weight: 500; }
+
+.resumo {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: rgba(247,249,252,.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--linha); margin-top: 18px;
+}
+.resumo-in { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding-block: 10px; }
 .resumo .kpi { min-width: 0; }
 .resumo .kpi span { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--texto-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .resumo .kpi b { display: block; font-size: 17px; font-weight: 800; color: var(--marinho); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .resumo .kpi.destaque b { color: var(--petroleo); }
+.parcial::after { content: " *"; color: var(--amarelo); }
+.res.forte .parcial::after { color: #ffe3a8; }
 
 /* ---------- Etapas ---------- */
-main { padding: 28px 0 40px; }
+main { padding-block: 28px 40px; }
 .etapa { background: var(--branco); border-radius: var(--r); box-shadow: var(--sombra); margin: 0 0 28px; overflow: hidden; }
 .faixa { display: flex; align-items: center; gap: 14px; background: var(--azul); color: #fff; padding: 14px 22px; }
 .faixa .num {
@@ -103,37 +125,43 @@ main { padding: 28px 0 40px; }
 .faixa.final { background: var(--petroleo); }
 .faixa.final .num { color: var(--petroleo); }
 .corpo { padding: 22px 22px 24px; }
-.explica { margin: 0 0 20px; color: var(--texto-2); max-width: 780px; }
+.explica { margin: 0 0 18px; color: var(--texto-2); max-width: 800px; }
 .explica b { color: var(--marinho); }
+.subtitulo { margin: 26px 0 10px; font-size: 14px; font-weight: 800; color: var(--marinho); text-transform: uppercase; letter-spacing: .05em; }
 .exemplo {
   background: var(--cinza); border-left: 4px solid var(--menta); border-radius: 8px;
-  padding: 12px 16px; margin: 0 0 20px; font-size: 14px; color: var(--texto-2);
+  padding: 12px 16px; margin: 0 0 4px; font-size: 14px; color: var(--texto-2);
 }
 .exemplo b { color: var(--marinho); }
 
 /* Tabelas */
 .tabela-wrap { border: 1px solid var(--linha); border-radius: 10px; overflow: hidden; }
+.tabela-wrap[hidden] { display: none; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 thead th {
-  background: var(--marinho); color: #fff; font-weight: 600; font-size: 12.5px;
-  text-transform: uppercase; letter-spacing: .05em; text-align: left; padding: 11px 14px;
+  background: var(--marinho); color: #fff; font-weight: 600; font-size: 12px;
+  text-transform: uppercase; letter-spacing: .05em; text-align: left; padding: 11px 12px;
 }
 thead th.num, td.num { text-align: right; }
-tbody td { padding: 9px 14px; border-top: 1px solid var(--linha); vertical-align: middle; }
-tbody td.rot { background: var(--cinza); font-weight: 600; color: var(--marinho); }
-tbody td.unid { color: var(--texto-2); font-size: 13px; }
-td.calc { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--marinho); }
+tbody td { padding: 9px 12px; border-top: 1px solid var(--linha); vertical-align: middle; }
+tbody td.rot { background: var(--cinza); font-weight: 600; color: var(--marinho); min-width: 200px; }
+td.calc { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--marinho); white-space: nowrap; }
+td.acao { width: 44px; text-align: center; padding-left: 4px; padding-right: 8px; }
 tr.total td { background: var(--petroleo); color: #fff; font-weight: 800; border-top: 0; }
 tr.total td.rot { background: var(--petroleo); color: #fff; }
-tr.extra td { border-top: 2px dashed var(--menta); }
-.nota { font-size: 12.5px; color: var(--texto-2); font-weight: 500; display: block; }
-tr.total .nota { color: #d7f1ea; }
+tr.total td.num { white-space: nowrap; }
+tr.auto td.rot { background: var(--verde-claro); }
+.fonte { font-size: 12px; color: var(--texto-2); font-weight: 500; display: block; line-height: 1.4; margin-top: 2px; }
+.fonte[hidden] { display: none; }
+tr.total .fonte { color: #d7f1ea; }
+.fonte.alinhar { color: var(--amarelo); font-weight: 600; }
+.sr { position: absolute; left: -9999px; }
 
 /* Campos */
 .campo {
   display: inline-flex; align-items: center; gap: 4px;
   background: var(--azul-claro); border: 1.5px solid #b9cbef; border-radius: 8px;
-  padding: 0 10px; height: 38px; min-width: 0; transition: border-color .12s, box-shadow .12s;
+  padding: 0 10px; height: 38px; min-width: 0; transition: border-color .12s, box-shadow .12s, background-color .12s;
 }
 .campo:focus-within { border-color: var(--azul); box-shadow: 0 0 0 3px rgba(0,71,187,.15); }
 .campo .ad { color: var(--texto-2); font-size: 13px; font-weight: 600; flex: none; }
@@ -142,61 +170,90 @@ tr.total .nota { color: #d7f1ea; }
   font-size: 15px; font-weight: 700; color: var(--marinho); text-align: right; font-variant-numeric: tabular-nums;
   padding: 0;
 }
-td .campo { width: 130px; }
+.campo input::placeholder { color: var(--amarelo); font-weight: 600; font-size: 13px; opacity: 1; }
+.campo.vazio { background: var(--amarelo-bg); border-color: var(--amarelo-borda); }
 .campo.invalido { border-color: var(--vermelho); background: var(--vermelho-bg); }
+.campo.realce { animation: pisca 1.2s ease 2; }
+@keyframes pisca { 50% { box-shadow: 0 0 0 5px rgba(168,106,18,.35); } }
+td .campo { width: 128px; }
+td .campo.curto { width: 104px; }
+.nome-input {
+  width: 100%; border: 1.5px solid #b9cbef; background: var(--azul-claro); border-radius: 8px;
+  height: 36px; padding: 0 10px; font-size: 14px; font-weight: 700; color: var(--marinho);
+}
+.nome-input.fonte-input { height: 30px; font-size: 12px; font-weight: 500; margin-top: 4px; background: #fff; }
+.nome-input:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgba(0,71,187,.15); }
+select.apl {
+  height: 38px; border: 1.5px solid #b9cbef; background: var(--azul-claro); border-radius: 8px;
+  padding: 0 8px; font-size: 13px; font-weight: 600; color: var(--marinho); max-width: 190px; cursor: pointer;
+}
+.btn-rem {
+  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--linha); background: #fff; color: var(--texto-2);
+  cursor: pointer; display: grid; place-items: center; padding: 0;
+}
+.btn-rem:hover { border-color: var(--vermelho); color: var(--vermelho); background: var(--vermelho-bg); }
+.btn-rem svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.btn-add {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+  border: 1.5px dashed var(--azul); background: #fff; color: var(--azul); border-radius: 10px;
+  padding: 9px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer;
+}
+.btn-add:hover { background: var(--azul-claro); }
+.btn-add svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
 
-/* Grade de campos (etapas 2, 4, 5) */
-.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
-.grupo { background: var(--cinza); border-radius: 10px; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+/* Grade de campos */
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.grupo { background: var(--cinza); border-radius: 10px; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .grupo label { font-weight: 700; font-size: 13.5px; color: var(--marinho); line-height: 1.35; }
 .grupo .campo { width: 100%; }
 .grupo small { font-size: 12.5px; color: var(--texto-2); line-height: 1.45; }
 
 /* Resultados */
 .resultados { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-.res {
-  background: var(--verde-claro); border: 1.5px solid var(--menta); border-radius: 10px; padding: 14px 16px;
-}
-.res span { display: block; font-size: 12.5px; font-weight: 600; color: var(--texto-2); text-transform: uppercase; letter-spacing: .05em; }
+.res { background: var(--verde-claro); border: 1.5px solid var(--menta); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.res > span { display: block; font-size: 12.5px; font-weight: 600; color: var(--texto-2); text-transform: uppercase; letter-spacing: .05em; }
 .res b { display: block; font-size: 26px; font-weight: 800; color: var(--petroleo); font-variant-numeric: tabular-nums; line-height: 1.25; margin-top: 2px; }
 .res small { display: block; font-size: 12.5px; color: var(--texto-2); margin-top: 4px; }
 .res.forte { background: var(--petroleo); border-color: var(--petroleo); }
-.res.forte span, .res.forte small { color: #d7f1ea; }
+.res.forte > span, .res.forte small { color: #d7f1ea; }
 .res.forte b { color: #fff; }
+.falta {
+  display: block; margin-top: 12px; font-size: 12.5px; font-weight: 600; line-height: 1.45;
+  color: #6b4a10; background: var(--amarelo-bg); border: 1px solid var(--amarelo-borda); border-radius: 8px; padding: 7px 10px;
+}
+.falta[hidden] { display: none; }
 
 /* Alertas */
 .alerta {
-  display: none; align-items: flex-start; gap: 10px; margin-top: 16px;
+  align-items: flex-start; gap: 10px; margin-top: 16px; display: flex;
   border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600;
 }
-.alerta.on { display: flex; }
+.alerta[hidden] { display: none; }
 .alerta svg { width: 20px; height: 20px; flex: none; margin-top: 1px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.alerta.amarelo { background: var(--amarelo-bg); color: #7a4f0f; border: 1px solid #f1d39a; }
+.alerta.amarelo { background: var(--amarelo-bg); color: #7a4f0f; border: 1px solid var(--amarelo-borda); }
 .alerta.vermelho { background: var(--vermelho-bg); color: #8f1d1d; border: 1px solid #f5b8b8; }
 
-/* Etapa 3: equação */
+/* Etapa 3 */
 .equacao { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; }
 .equacao .res { flex: 1 1 180px; }
 .op { display: grid; place-items: center; font-size: 26px; font-weight: 800; color: var(--azul); padding: 0 2px; }
 
-/* Etapa 4: composição */
-.comp { margin: 0 0 18px; font-size: 13.5px; color: var(--texto-2); }
-.barra { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--cinza); margin: 8px 0 8px; }
+/* Etapa 4 */
+.comp { margin: 22px 0 18px; font-size: 13.5px; color: var(--texto-2); }
+.barra { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--cinza); margin: 8px 0; }
 .barra i { display: block; height: 100%; transition: width .25s; }
 .leg-barra { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--texto-2); }
 .leg-barra span { display: inline-flex; align-items: center; gap: 6px; }
 .leg-barra span::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
 
-/* Etapa 5: margem e fórmula */
+/* Etapa 5 */
 .margem-linha { display: grid; grid-template-columns: 220px 1fr; gap: 18px; align-items: center; background: var(--cinza); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; }
 .margem-linha label { font-weight: 700; font-size: 13.5px; color: var(--marinho); display: block; margin-bottom: 8px; }
 input[type=range] { width: 100%; accent-color: var(--azul); height: 28px; cursor: pointer; }
 .escala { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--texto-2); font-weight: 600; }
-
 .formula {
   border: 1.5px solid var(--menta); border-radius: 12px; padding: 18px 16px; margin-bottom: 20px;
-  background: linear-gradient(180deg, #fff, var(--verde-claro));
-  overflow-x: auto;
+  background: linear-gradient(180deg, #fff, var(--verde-claro)); overflow-x: auto;
 }
 .formula .titulo { font-size: 12.5px; font-weight: 700; color: var(--texto-2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
 .f-linha { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: nowrap; min-width: max-content; margin: 0 auto; }
@@ -209,6 +266,7 @@ input[type=range] { width: 100%; accent-color: var(--azul); height: 28px; cursor
 .chip.c2 { background: #d9e4fb; color: #0b3a8c; }
 .chip.c3 { background: #cdeee5; color: #1d6b5d; }
 .chip.um { background: transparent; color: var(--marinho); font-size: 15px; padding: 2px 0; }
+.chip.parcial::after { content: ""; }
 .f-igual { font-size: 20px; font-weight: 800; color: var(--azul); }
 .f-nome { font-weight: 800; font-size: 17px; color: var(--marinho); }
 .f-res { font-weight: 800; font-size: 24px; color: var(--petroleo); font-variant-numeric: tabular-nums; }
@@ -216,25 +274,27 @@ input[type=range] { width: 100%; accent-color: var(--azul); height: 28px; cursor
 
 /* Produtos */
 .produtos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.prod { border: 1.5px solid var(--linha); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #fff; }
+.prod { border: 1.5px solid var(--linha); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #fff; min-width: 0; }
 .prod-cab { background: var(--marinho); color: #fff; padding: 14px 16px; }
 .prod-cab h3 { margin: 0; font-size: 16px; font-weight: 700; }
 .prod-cab p { margin: 2px 0 0; font-size: 12.5px; color: #c5cde0; }
 .prod-corpo { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .linha { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; }
 .linha > span { color: var(--texto-2); font-weight: 500; }
-.linha > b { font-variant-numeric: tabular-nums; color: var(--marinho); }
+.linha > b { font-variant-numeric: tabular-nums; color: var(--marinho); white-space: nowrap; }
 .linha.preco { background: var(--cinza); border-radius: 8px; padding: 8px 10px; margin: 4px 0; }
-.linha.preco > span { color: var(--marinho); font-weight: 700; }
-.linha.preco .campo { width: 130px; }
+.linha.preco label { color: var(--marinho); font-weight: 700; }
+.linha.preco .campo { width: 128px; }
 .composicao { font-size: 12px; color: var(--texto-2); line-height: 1.45; margin: -2px 0 2px; }
 .margem-box { margin-top: auto; border-radius: 10px; padding: 12px 14px; text-align: center; }
-.margem-box span { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.margem-box > span { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
 .margem-box b { display: block; font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .margem-box small { display: block; font-size: 12.5px; font-weight: 600; }
+.margem-box .falta { text-align: left; }
 .margem-box.verde { background: var(--verde-claro); color: var(--petroleo); box-shadow: inset 0 0 0 1.5px var(--menta); }
-.margem-box.amarelo { background: var(--amarelo-bg); color: var(--amarelo); box-shadow: inset 0 0 0 1.5px #f1d39a; }
+.margem-box.amarelo { background: var(--amarelo-bg); color: var(--amarelo); box-shadow: inset 0 0 0 1.5px var(--amarelo-borda); }
 .margem-box.vermelho { background: var(--vermelho-bg); color: var(--vermelho); box-shadow: inset 0 0 0 1.5px #f5b8b8; }
+.margem-box.neutro { background: var(--cinza); color: var(--texto-2); box-shadow: inset 0 0 0 1.5px var(--linha); }
 
 /* Faixa de preço justo */
 .faixa-justa { margin-top: 22px; background: var(--cinza); border-radius: 12px; padding: 16px 18px 18px; }
@@ -245,16 +305,18 @@ input[type=range] { width: 100%; accent-color: var(--azul); height: 28px; cursor
 .regua .justa { position: absolute; top: 18px; height: 10px; background: var(--menta); border-radius: 5px; }
 .regua .marca { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; transition: left .25s; }
 .regua .marca i { width: 14px; height: 14px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 1.5px var(--c); background: var(--c); margin-top: 16px; }
-.regua .marca em { position: absolute; top: -22px; font-style: normal; font-size: 11.5px; font-weight: 700; color: var(--c); white-space: nowrap; }
+.regua .marca em { position: absolute; font-style: normal; font-size: 11.5px; font-weight: 700; color: var(--c); white-space: nowrap; }
 .regua .eixo { position: absolute; top: 34px; font-size: 11.5px; color: var(--texto-2); font-weight: 600; transform: translateX(-50%); white-space: nowrap; }
 .chips-banho { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .chips-banho span { font-size: 12.5px; font-weight: 600; border-radius: 999px; padding: 4px 10px; background: #fff; border: 1px solid var(--linha); }
 .chips-banho span b { font-variant-numeric: tabular-nums; }
 
 /* Rodapé */
-footer { background: var(--marinho); color: #c5cde0; padding: 26px 0; font-size: 13.5px; }
+footer { background: var(--marinho); color: #c5cde0; padding-block: 26px; font-size: 13.5px; }
 .rodape-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
 footer strong { color: #fff; font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
 /* ---------- Responsivo ---------- */
 @media (max-width: 900px) {
@@ -262,38 +324,38 @@ footer strong { color: #fff; font-weight: 700; }
   .resumo-in { grid-template-columns: repeat(3, 1fr); }
   .resumo .kpi.opt { display: none; }
 }
-@media (max-width: 680px) {
+@media (max-width: 720px) {
   body { font-size: 14.5px; }
-  .wrap { padding: 0 16px; }
-  .topo-in { padding: 14px 16px; }
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .topo-in { padding-block: 14px; }
   .logo-esag { height: 30px; }
   .logo-week { height: 32px; width: calc(32px * 2.4796); }
-  .hero { padding: 30px 0 40px; }
-  .resumo-in { padding: 8px 16px; gap: 6px; }
+  .hero { padding-block: 30px 40px; }
+  .resumo-in { gap: 6px; padding-block: 8px; }
   .resumo .kpi b { font-size: 15px; }
   .resumo .kpi span { font-size: 10px; }
   .corpo { padding: 18px 16px 20px; }
   .faixa { padding: 12px 16px; }
   .faixa h2 { font-size: 15.5px; }
   .margem-linha { grid-template-columns: 1fr; }
-
-  /* tabela da etapa 1 vira cartões */
-  .tabela-wrap { border: 0; border-radius: 0; }
-  table.ficha thead { display: none; }
-  table.ficha, table.ficha tbody, table.ficha tr, table.ficha td { display: block; width: 100%; }
-  table.ficha tr { border: 1px solid var(--linha); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
-  table.ficha td { border-top: 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 12px; text-align: right; }
-  table.ficha td.rot { display: block; text-align: left; }
-  table.ficha td.unid { display: none; }
-  table.ficha td[data-r]::before { content: attr(data-r); font-size: 12.5px; color: var(--texto-2); font-weight: 600; text-align: left; }
-  tr.total td[data-r]::before { color: #d7f1ea; }
-  tr.extra td { border-top: 0; }
-  tr.extra { border: 2px dashed var(--menta) !important; }
   .op { width: 100%; font-size: 20px; padding: 0; }
   .equacao { flex-direction: column; }
+
+  /* tabelas viram cartões */
+  .tabela-wrap { border: 0; border-radius: 0; overflow: visible; }
+  table.resp thead { display: none; }
+  table.resp, table.resp tbody, table.resp tr, table.resp td { display: block; width: 100%; }
+  table.resp tr { border: 1px solid var(--linha); border-radius: 10px; margin-bottom: 10px; overflow: hidden; position: relative; }
+  table.resp td { border-top: 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 12px; text-align: right; }
+  table.resp td.rot { display: block; text-align: left; min-width: 0; padding-right: 52px; }
+  table.resp td.vazia { display: none; }
+  table.resp td.acao { position: absolute; top: 6px; right: 6px; width: auto; padding: 0; background: transparent; display: block; }
+  table.resp td[data-r]::before { content: attr(data-r); font-size: 12.5px; color: var(--texto-2); font-weight: 600; text-align: left; }
+  table.resp tr.total td[data-r]::before { color: #d7f1ea; }
+  select.apl { max-width: 60%; }
 }
 @media print {
-  .resumo, .acoes, .btn { display: none !important; }
+  .resumo, .acoes, .btn, .btn-add, .btn-rem { display: none !important; }
   .etapa { break-inside: avoid; box-shadow: none; border: 1px solid var(--linha); }
 }
 </style>
@@ -311,15 +373,15 @@ footer strong { color: #fff; font-weight: 700; }
   <div class="wrap">
     <p class="rotulo">Plano Financeiro · WEEK Haircare</p>
     <h1>Calculadora de precificação</h1>
-    <p>Esta página ensina a WEEK a chegar ao preço de venda dos seus kits em cinco etapas, na mesma lógica da aba Precificação da planilha. Os orçamentos reais ainda não existem, então todos os valores iniciais são exemplos. Troquem cada um pelo valor real quando ele chegar e acompanhem as contas mudarem na hora.</p>
+    <p>Esta página ensina a WEEK a chegar ao preço de venda dos kits em cinco etapas, na mesma lógica da aba Precificação da planilha. Ela já traz os valores que foram cotados na aba Orçamentos e na Classificação de gastos. Todo o resto está em branco, em amarelo, para vocês preencherem com os números reais: o orçamento da fabricante, as taxas do site, a meta de vendas, a margem e o preço. Cada tabela aceita novas linhas.</p>
     <div class="acoes">
       <a class="btn btn-claro" href="https://docs.google.com/spreadsheets/d/1zo8Lva5f4SlrNYH3nNRK90IznOyByUuP53c9IejrO7I/edit" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
         Abrir planilha completa
       </a>
-      <button class="btn btn-contorno" type="button" data-restaurar>
+      <button class="btn btn-contorno" type="button" id="btn-restaurar">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-        Restaurar exemplo
+        <span>Restaurar valores da planilha</span>
       </button>
     </div>
   </div>
@@ -327,14 +389,16 @@ footer strong { color: #fff; font-weight: 700; }
 
 <div class="wrap">
   <div class="legenda" role="note">
-    <span class="item"><span class="amostra edit" aria-hidden="true"></span>Campos em azul claro são editáveis. Os valores iniciais são exemplos.</span>
-    <span class="item"><span class="amostra res" aria-hidden="true"></span>Cartões em verde mostram resultados calculados.</span>
-    <span class="item">Use vírgula para os centavos, por exemplo 0,04.</span>
+    <span class="item"><span class="amostra edit" aria-hidden="true"></span>Azul claro: valor cotado, editável.</span>
+    <span class="item"><span class="amostra pend" aria-hidden="true"></span>Amarelo: em branco, para vocês preencherem.</span>
+    <span class="item"><span class="amostra res" aria-hidden="true"></span>Verde: resultado calculado.</span>
+    <span class="item">Use vírgula nos centavos, por exemplo 0,04. O que for digitado fica salvo neste navegador.</span>
   </div>
+  <div class="pendencias" id="pendencias" aria-live="polite"></div>
 </div>
 
 <div class="resumo" aria-label="Resumo dos resultados">
-  <div class="wrap resumo-in" style="padding-left:20px;padding-right:20px">
+  <div class="wrap resumo-in">
     <div class="kpi"><span>Custo do kit</span><b data-out="custoKit">–</b></div>
     <div class="kpi opt"><span>Custo total unitário</span><b data-out="custoTotal">–</b></div>
     <div class="kpi opt"><span>Impostos e taxas</span><b data-out="impostosPct">–</b></div>
@@ -350,70 +414,22 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-1">
       <div class="faixa"><span class="num">1</span><h2>Estruturação dos custos do produto</h2></div>
       <div class="corpo">
-        <p class="explica">Liste tudo que é gasto para <b>um kit</b> chegar à casa do cliente: um sachê de shampoo, um de condicionador, a embalagem e o frete. Essa lista é a <b>ficha técnica</b> do kit. Em cada linha, o custo é a quantidade usada no kit vezes o custo de uma unidade. A soma é o <b>custo variável do kit</b>, que só existe quando um kit é vendido.</p>
+        <p class="explica">Liste tudo que é gasto para <b>um kit</b> chegar à casa do cliente: um sachê de shampoo, um de condicionador, a embalagem e o frete. Essa lista é a <b>ficha técnica</b> do kit. Em cada linha, o custo é a quantidade vezes o custo de uma unidade. A coluna <b>Entra em</b> diz como o item se comporta nos produtos: o que é <b>por banho</b> se multiplica nas caixas de 5 e 10, o que é <b>por pedido</b> é pago uma vez por compra, e as embalagens valem só para o kit avulso ou só para as caixas.</p>
         <div class="tabela-wrap">
-          <table class="ficha">
-            <thead>
-              <tr><th>Item</th><th>Unidade</th><th class="num">Quantidade por kit</th><th class="num">Custo por unidade</th><th class="num">Custo por kit</th></tr>
-            </thead>
+          <table class="resp">
+            <thead><tr><th>Item e fonte</th><th>Entra em</th><th class="num">Quantidade</th><th class="num">Custo por unidade</th><th class="num">Custo</th><th><span class="sr">Remover</span></th></tr></thead>
+            <tbody id="tb-ficha"></tbody>
             <tbody>
-              <tr>
-                <td class="rot">Fórmula do shampoo<span class="nota">Matérias-primas, custo por ml no orçamento da fabricante</span></td>
-                <td class="unid">ml</td>
-                <td class="num" data-r="Quantidade (ml)"><span class="campo"><input data-k="qShampoo" inputmode="decimal" aria-label="Quantidade de shampoo por kit em ml"><span class="ad">ml</span></span></td>
-                <td class="num" data-r="Custo por ml"><span class="campo"><span class="ad">R$</span><input data-k="cShampoo" data-fmt="dinheiro" inputmode="decimal" aria-label="Custo por ml do shampoo"></span></td>
-                <td class="num calc" data-r="Custo por kit" data-out="lShampoo">–</td>
-              </tr>
-              <tr>
-                <td class="rot">Fórmula do condicionador<span class="nota">Matérias-primas, custo por ml no orçamento da fabricante</span></td>
-                <td class="unid">ml</td>
-                <td class="num" data-r="Quantidade (ml)"><span class="campo"><input data-k="qCond" inputmode="decimal" aria-label="Quantidade de condicionador por kit em ml"><span class="ad">ml</span></span></td>
-                <td class="num" data-r="Custo por ml"><span class="campo"><span class="ad">R$</span><input data-k="cCond" data-fmt="dinheiro" inputmode="decimal" aria-label="Custo por ml do condicionador"></span></td>
-                <td class="num calc" data-r="Custo por kit" data-out="lCond">–</td>
-              </tr>
-              <tr>
-                <td class="rot">Sachês com rótulo impresso<span class="nota">Embalagem primária dos dois sachês</span></td>
-                <td class="unid">unidade</td>
-                <td class="num" data-r="Quantidade"><span class="campo"><input data-k="qSache" inputmode="decimal" aria-label="Quantidade de sachês por kit"><span class="ad">un</span></span></td>
-                <td class="num" data-r="Custo por unidade"><span class="campo"><span class="ad">R$</span><input data-k="cSache" data-fmt="dinheiro" inputmode="decimal" aria-label="Custo por sachê"></span></td>
-                <td class="num calc" data-r="Custo por kit" data-out="lSache">–</td>
-              </tr>
-              <tr>
-                <td class="rot">Envase pela fabricante<span class="nota">Serviço de encher e selar cada sachê</span></td>
-                <td class="unid">unidade</td>
-                <td class="num" data-r="Quantidade"><span class="campo"><input data-k="qEnvase" inputmode="decimal" aria-label="Quantidade de envases por kit"><span class="ad">un</span></span></td>
-                <td class="num" data-r="Custo por unidade"><span class="campo"><span class="ad">R$</span><input data-k="cEnvase" data-fmt="dinheiro" inputmode="decimal" aria-label="Custo por envase"></span></td>
-                <td class="num calc" data-r="Custo por kit" data-out="lEnvase">–</td>
-              </tr>
-              <tr>
-                <td class="rot">Embalagem de envio do kit avulso<span class="nota">Usada só quando o kit vai sozinho</span></td>
-                <td class="unid">pedido</td>
-                <td class="num" data-r="Quantidade"><span class="campo"><input data-k="qEmb" inputmode="decimal" aria-label="Quantidade de embalagens de envio"><span class="ad">un</span></span></td>
-                <td class="num" data-r="Custo por unidade"><span class="campo"><span class="ad">R$</span><input data-k="cEmb" data-fmt="dinheiro" inputmode="decimal" aria-label="Custo da embalagem de envio"></span></td>
-                <td class="num calc" data-r="Custo por kit" data-out="lEmb">–</td>
-              </tr>
-              <tr>
-                <td class="rot">Frete<span class="nota">Custo médio de envio por pedido</span></td>
-                <td class="unid">pedido</td>
-                <td class="num" data-r="Quantidade"><span class="campo"><input data-k="qFrete" inputmode="decimal" aria-label="Quantidade de fretes por kit"><span class="ad">un</span></span></td>
-                <td class="num" data-r="Custo por unidade"><span class="campo"><span class="ad">R$</span><input data-k="cFrete" data-fmt="dinheiro" inputmode="decimal" aria-label="Custo do frete por pedido"></span></td>
-                <td class="num calc" data-r="Custo por kit" data-out="lFrete">–</td>
-              </tr>
               <tr class="total">
-                <td class="rot">Custo variável do kit<span class="nota">Custo direto de um kit avulso entregue ao cliente</span></td>
-                <td class="unid"></td><td></td><td></td>
-                <td class="num" data-r="Total" data-out="custoKit">–</td>
-              </tr>
-              <tr class="extra">
-                <td class="rot">Caixa personalizada<span class="nota">Usada só nas caixas com 5 e 10 kits, no lugar da embalagem de envio</span></td>
-                <td class="unid">caixa</td>
-                <td></td>
-                <td class="num" data-r="Custo por caixa"><span class="campo"><span class="ad">R$</span><input data-k="cCaixa" data-fmt="dinheiro" inputmode="decimal" aria-label="Custo da caixa personalizada"></span></td>
-                <td class="num calc" data-r="Entra no bloco final">–</td>
+                <td class="rot">Custo variável do kit avulso<span class="fonte">Itens por banho + por pedido + só no kit avulso</span></td>
+                <td class="vazia"></td><td class="vazia"></td><td class="vazia"></td>
+                <td class="num" data-r="Total" data-out="custoKit">–</td><td class="vazia"></td>
               </tr>
             </tbody>
           </table>
         </div>
+        <button class="btn-add" type="button" data-add="ficha"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar item de custo</button>
+        <div class="falta" data-falta="custo" hidden></div>
       </div>
     </section>
 
@@ -421,30 +437,65 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-2">
       <div class="faixa"><span class="num">2</span><h2>Rateio dos custos indiretos</h2></div>
       <div class="corpo">
-        <p class="explica">Custos indiretos são gastos que não pertencem a um produto específico, como contador, sistema do site e marketing. Eles existem mesmo que nenhum kit seja vendido. Para que cada venda ajude a pagá-los, divida o total do mês pela quantidade de banhos vendidos no mês. Esse é o <b>rateio</b>.</p>
-        <div class="exemplo"><b>Exemplo do treinamento:</b> R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>. Cada produto vendido precisa carregar R$ 6 desse gasto.</div>
+        <p class="explica">Custos indiretos são gastos que não pertencem a um produto específico, como contador, sistema e site. Eles existem mesmo que nenhum kit seja vendido. Para cada venda ajudar a pagá-los, some os gastos fixos do mês e divida pela quantidade de banhos vendidos no mês. Esse é o <b>rateio</b>.</p>
+        <div class="exemplo"><b>Exemplo do treinamento</b> (só para entender a conta, não é número da WEEK): R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>.</div>
+
+        <h3 class="subtitulo">Gastos fixos por mês</h3>
+        <div class="tabela-wrap">
+          <table class="resp">
+            <thead><tr><th>Gasto e fonte</th><th class="num">Valor por mês</th><th><span class="sr">Remover</span></th></tr></thead>
+            <tbody id="tb-fixos"></tbody>
+            <tbody>
+              <tr class="auto">
+                <td class="rot">Depreciação e amortização dos investimentos<span class="fonte">Calculada na tabela de investimentos logo abaixo</span></td>
+                <td class="num calc" data-r="Valor por mês" data-out="depreciacao">–</td><td class="vazia"></td>
+              </tr>
+              <tr class="total">
+                <td class="rot">Total de gastos fixos por mês</td>
+                <td class="num" data-r="Total" data-out="gastos">–</td><td class="vazia"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn-add" type="button" data-add="fixos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar gasto fixo</button>
+
+        <h3 class="subtitulo">Investimentos que viram depreciação</h3>
+        <p class="explica" style="margin-bottom:12px">Investimentos saem do caixa uma vez, mas se desgastam ao longo da vida útil. A parte de cada mês é o valor dividido pelos meses de vida útil, e ela entra nos gastos fixos.</p>
+        <div class="tabela-wrap">
+          <table class="resp">
+            <thead><tr><th>Investimento e fonte</th><th class="num">Valor</th><th class="num">Vida útil</th><th class="num">Por mês</th><th><span class="sr">Remover</span></th></tr></thead>
+            <tbody id="tb-invest"></tbody>
+            <tbody>
+              <tr class="total">
+                <td class="rot">Depreciação e amortização por mês</td>
+                <td class="vazia"></td><td class="vazia"></td>
+                <td class="num" data-r="Total" data-out="depreciacao">–</td><td class="vazia"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn-add" type="button" data-add="invest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar investimento</button>
+
+        <h3 class="subtitulo">Volume do mês</h3>
         <div class="grade">
           <div class="grupo">
-            <label for="f-gastos">Gastos fixos por mês</label>
-            <span class="campo"><span class="ad">R$</span><input id="f-gastos" data-k="gastos" data-fmt="dinheiro" inputmode="decimal"></span>
-            <small>Total de despesas fixas e com as sócias, da aba Classificação de gastos.</small>
+            <label for="k-banhos">Banhos vendidos por mês</label>
+            <span class="campo"><input id="k-banhos" data-k="banhos" data-fmt="inteiro" inputmode="numeric" placeholder="Preencher"><span class="ad">banhos</span></span>
+            <small>Meta de vendas de vocês, ou a média da Projeção de Vendas.</small>
           </div>
           <div class="grupo">
-            <label for="f-banhos">Banhos vendidos por mês</label>
-            <span class="campo"><input id="f-banhos" data-k="banhos" data-fmt="inteiro" inputmode="numeric"><span class="ad">banhos</span></span>
-            <small>Média do cenário escolhido na Projeção de Vendas, ou uma meta de vendas.</small>
-          </div>
-          <div class="grupo">
-            <label for="f-fat">Faturamento por mês</label>
-            <span class="campo"><span class="ad">R$</span><input id="f-fat" data-k="faturamento" data-fmt="dinheiro" inputmode="decimal"></span>
-            <small>Média do cenário escolhido na Projeção de Vendas.</small>
+            <label for="k-faturamento">Faturamento por mês</label>
+            <span class="campo"><span class="ad">R$</span><input id="k-faturamento" data-k="faturamento" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher"></span>
+            <small>Quanto vocês esperam vender em reais por mês, com essa meta de banhos.</small>
           </div>
         </div>
         <div class="resultados">
+          <div class="res"><span>Gastos fixos por mês</span><b data-out="gastos">–</b><small>Soma da tabela acima</small></div>
           <div class="res"><span>Rateio por banho</span><b data-out="rateioBanho">–</b><small>Gastos fixos ÷ banhos vendidos</small></div>
           <div class="res"><span>Rateio em % do faturamento</span><b data-out="rateioPct">–</b><small>Gastos fixos ÷ faturamento. É assim que o rateio entra no markup.</small></div>
         </div>
-        <div class="alerta amarelo" data-alerta="rateio" role="status">
+        <div class="falta" data-falta="rateio" hidden></div>
+        <div class="alerta amarelo" id="alerta-rateio" role="status" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
           <span>O rateio passou de 35% do faturamento. Os gastos fixos estão pesados para o volume de vendas: revejam os gastos ou a meta de banhos antes de definir o preço.</span>
         </div>
@@ -463,6 +514,7 @@ footer strong { color: #fff; font-weight: 700; }
           <div class="op" aria-hidden="true">=</div>
           <div class="res forte"><span>Custo total unitário</span><b data-out="custoTotal">–</b><small>Piso para o preço de um kit avulso</small></div>
         </div>
+        <div class="falta" data-falta="custoTotal" hidden></div>
       </div>
     </section>
 
@@ -470,34 +522,45 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-4">
       <div class="faixa"><span class="num">4</span><h2>Levantamento tributário e taxas</h2></div>
       <div class="corpo">
-        <p class="explica">São os valores descontados de <b>cada venda</b>, sempre em porcentagem do preço. A WEEK vende produto, então fica no Simples Nacional, Anexo I (comércio). As taxas dependem do meio de pagamento do site, e como cartão e Pix cobram diferente, a conta usa a média ponderada pela forma de pagamento.</p>
+        <p class="explica">São os valores descontados de <b>cada venda</b>, em porcentagem do preço. A WEEK vende produto, então fica no Simples Nacional, Anexo I (comércio). As taxas dependem do gateway de pagamento que o programador vai integrar ao site, e como cartão e Pix cobram diferente, a conta usa a média ponderada pela forma de pagamento.</p>
         <div class="grade">
           <div class="grupo">
-            <label for="f-simples">Simples Nacional, Anexo I</label>
-            <span class="campo"><input id="f-simples" data-k="simples" data-fmt="pct" inputmode="decimal"><span class="ad">%</span></span>
-            <small>Primeira faixa, para faturamento de até R$ 180 mil nos últimos 12 meses. Acima disso, a alíquota nominal passa para 7,3%.</small>
+            <label for="k-simples">Simples Nacional, Anexo I</label>
+            <span class="campo"><input id="k-simples" data-k="simples" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>Agilize. Primeira faixa, até R$ 180 mil de faturamento em 12 meses. Acima disso, a alíquota nominal passa para 7,3%.</small>
           </div>
           <div class="grupo">
-            <label for="f-cartao">Taxa do cartão</label>
-            <span class="campo"><input id="f-cartao" data-k="taxaCartao" data-fmt="pct" inputmode="decimal"><span class="ad">%</span></span>
-            <small>Exemplo. Troquem pela taxa do gateway que o site vai usar.</small>
+            <label for="k-taxaCartao">Taxa do cartão</label>
+            <span class="campo"><input id="k-taxaCartao" data-k="taxaCartao" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>Do gateway de pagamento que o site vai usar.</small>
           </div>
           <div class="grupo">
-            <label for="f-pix">Taxa do Pix</label>
-            <span class="campo"><input id="f-pix" data-k="taxaPix" data-fmt="pct" inputmode="decimal"><span class="ad">%</span></span>
-            <small>Exemplo. Troquem pela taxa do gateway que o site vai usar.</small>
+            <label for="k-taxaPix">Taxa do Pix</label>
+            <span class="campo"><input id="k-taxaPix" data-k="taxaPix" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>Do gateway de pagamento que o site vai usar.</small>
           </div>
           <div class="grupo">
-            <label for="f-parc">Parcela das vendas no cartão</label>
-            <span class="campo"><input id="f-parc" data-k="parcCartao" data-fmt="pct" inputmode="decimal"><span class="ad">%</span></span>
-            <small>Exemplo. O restante (<span data-out="parcPix">–</span>) é pago no Pix.</small>
+            <label for="k-parcCartao">Parcela das vendas no cartão</label>
+            <span class="campo"><input id="k-parcCartao" data-k="parcCartao" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>O restante é pago no Pix. Usem o histórico de vendas quando a loja abrir.</small>
           </div>
           <div class="grupo">
-            <label for="f-mkt">Comissão de marketplace</label>
-            <span class="campo"><input id="f-mkt" data-k="marketplace" data-fmt="pct" inputmode="decimal"><span class="ad">%</span></span>
-            <small>Zero nas vendas pela loja própria. Preencham se venderem por um marketplace.</small>
+            <label for="k-marketplace">Comissão de marketplace</label>
+            <span class="campo"><input id="k-marketplace" data-k="marketplace" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>Zero na loja própria. Ao vender por marketplace, a Classificação de gastos considera 9%.</small>
           </div>
         </div>
+
+        <h3 class="subtitulo">Outras taxas sobre a venda</h3>
+        <div class="tabela-wrap" id="wrap-taxas">
+          <table class="resp">
+            <thead><tr><th>Taxa e fonte</th><th class="num">% da venda</th><th><span class="sr">Remover</span></th></tr></thead>
+            <tbody id="tb-taxas"></tbody>
+          </table>
+        </div>
+        <p class="fonte" id="taxas-vazio" style="margin:0">Nenhuma outra taxa por enquanto. Se surgir alguma, como a comissão de um representante, adicionem aqui.</p>
+        <button class="btn-add" type="button" data-add="taxas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar taxa</button>
+
         <div class="comp">
           <b style="color:var(--marinho)">Composição do total</b>
           <div class="barra" aria-hidden="true">
@@ -505,17 +568,20 @@ footer strong { color: #fff; font-weight: 700; }
             <i data-bar="cartao" style="background:#2f8f7e"></i>
             <i data-bar="pix" style="background:#8fd3c3"></i>
             <i data-bar="mkt" style="background:#1f2a44"></i>
+            <i data-bar="outras" style="background:#b7791f"></i>
           </div>
           <div class="leg-barra">
             <span style="--c:#0047bb">Simples <b data-out="cSimples">–</b></span>
             <span style="--c:#2f8f7e">Cartão <b data-out="cCartao">–</b></span>
             <span style="--c:#8fd3c3">Pix <b data-out="cPix">–</b></span>
             <span style="--c:#1f2a44">Marketplace <b data-out="cMkt">–</b></span>
+            <span style="--c:#b7791f">Outras <b data-out="cOutras">–</b></span>
           </div>
         </div>
         <div class="resultados">
           <div class="res forte"><span>Total de impostos e taxas</span><b data-out="impostosPct">–</b><small data-out="impostosConta">–</small></div>
         </div>
+        <div class="falta" data-falta="impostos" hidden></div>
       </div>
     </section>
 
@@ -523,14 +589,14 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-5">
       <div class="faixa"><span class="num">5</span><h2>Cálculo do markup</h2></div>
       <div class="corpo">
-        <p class="explica">O <b>markup</b> é o número que multiplica o custo variável do kit para chegar ao preço de venda. Ele junta tudo que é cobrado em porcentagem da venda (o rateio, os impostos e taxas e a margem de lucro que a WEEK quer ter) e garante que, depois de pagar tudo isso, sobre exatamente a margem escolhida.</p>
+        <p class="explica">O <b>markup</b> é o número que multiplica o custo variável do kit para chegar ao preço de venda. Ele junta tudo que é cobrado em porcentagem da venda (o rateio, os impostos e taxas e a margem de lucro que a WEEK quer ter) e garante que, depois de pagar tudo isso, sobre exatamente a margem escolhida. A margem é uma decisão de vocês.</p>
         <div class="margem-linha">
           <div>
-            <label for="f-margem">Margem de lucro desejada</label>
-            <span class="campo" style="width:100%"><input id="f-margem" data-k="margem" data-fmt="pct" inputmode="decimal"><span class="ad">%</span></span>
+            <label for="k-margem">Margem de lucro desejada</label>
+            <span class="campo" style="width:100%"><input id="k-margem" data-k="margem" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
           </div>
           <div>
-            <input type="range" id="slider-margem" min="0" max="60" step="0.5" aria-label="Ajustar margem de lucro desejada">
+            <input type="range" id="slider-margem" min="0" max="60" step="0.5" value="0" aria-label="Ajustar margem de lucro desejada">
             <div class="escala"><span>0%</span><span>15%</span><span>30%</span><span>45%</span><span>60%</span></div>
           </div>
         </div>
@@ -560,7 +626,8 @@ footer strong { color: #fff; font-weight: 700; }
           <div class="res forte"><span>Preço sugerido do kit avulso</span><b data-out="precoSug">–</b><small>Custo variável do kit × markup</small></div>
           <div class="res"><span>Lucro por kit a esse preço</span><b data-out="lucroKit">–</b><small>Preço − custo − preço × (rateio % + impostos %)</small></div>
         </div>
-        <div class="alerta vermelho" data-alerta="markup" role="status">
+        <div class="falta" data-falta="markup" hidden></div>
+        <div class="alerta vermelho" id="alerta-markup" role="status" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/></svg>
           <span>A soma de rateio, impostos e taxas e margem chegou a <b data-out="somaPct">–</b>, ou seja, 100% ou mais do preço. O markup não fecha e o preço precisa ser revisto: reduzam a margem desejada ou os custos em porcentagem.</span>
         </div>
@@ -571,12 +638,12 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="produtos">
       <div class="faixa final"><span class="num">✓</span><h2>Aplicando nos produtos da WEEK</h2></div>
       <div class="corpo">
-        <p class="explica">O mesmo markup vale para os três produtos. Nas caixas, a <b>caixa personalizada</b> substitui a embalagem de envio e o frete é cobrado uma vez por pedido, por isso o custo por banho cai. Troquem o <b>preço de venda</b> nos campos azuis e acompanhem a margem: <b style="color:var(--petroleo)">verde</b> a partir de 10%, <b style="color:var(--amarelo)">amarela</b> entre 0 e 10% e <b style="color:var(--vermelho)">vermelha</b> quando a venda dá prejuízo.</p>
+        <p class="explica">O mesmo markup vale para os três produtos. Nas caixas, os itens por banho se multiplicam pela quantidade de kits, a caixa personalizada substitui a embalagem de envio e os itens por pedido são pagos uma vez só. Preencham o <b>preço de venda</b> de cada produto e acompanhem a margem: <b style="color:var(--petroleo)">verde</b> a partir de 10%, <b style="color:var(--amarelo)">amarela</b> entre 0 e 10% e <b style="color:var(--vermelho)">vermelha</b> quando a venda dá prejuízo.</p>
         <div class="produtos" id="cards-produtos"></div>
 
         <div class="faixa-justa">
           <h3>Referência da pesquisa: preço justo por banho</h3>
-          <p>Na pesquisa com o público, o preço considerado justo ficou entre <b>R$ 9,00 e R$ 10,99 por banho</b>. Compare o preço por banho de cada produto com essa faixa.</p>
+          <p>Na pesquisa com o público, o preço considerado justo ficou entre <b>R$ 9,00 e R$ 10,99 por banho</b>. Comparem o preço por banho de cada produto com essa faixa.</p>
           <div class="regua" id="regua">
             <div class="trilho"></div>
             <div class="justa" id="regua-justa"></div>
@@ -603,19 +670,60 @@ footer strong { color: #fff; font-weight: 700; }
 (function () {
   "use strict";
 
-  /* ---------- Valores de exemplo (iguais à planilha) ---------- */
+  /* ---------------------------------------------------------------
+     Valores cotados na planilha (abas Orçamentos e Classificação de
+     gastos). null = em branco, para as sócias preencherem.
+     --------------------------------------------------------------- */
   var PADRAO = {
-    qShampoo: 10, cShampoo: 0.04,
-    qCond: 10, cCond: 0.04,
-    qSache: 2, cSache: 0.15,
-    qEnvase: 2, cEnvase: 0.20,
-    qEmb: 1, cEmb: 0.60,
-    qFrete: 1, cFrete: 2.85,
-    cCaixa: 4.13,
-    gastos: 487.25, banhos: 798, faturamento: 7154.43,
-    simples: 4, taxaCartao: 4.99, taxaPix: 0.99, parcCartao: 70, marketplace: 0,
-    margem: 20,
-    preco1: 9.90, preco5: 44.90, preco10: 84.90
+    ficha: [
+      { nome: "Fórmula do shampoo", fonte: "Preencher com o orçamento da fabricante: custo por ml.", unid: "ml", apl: "banho", q: 10, c: null },
+      { nome: "Fórmula do condicionador", fonte: "Preencher com o orçamento da fabricante: custo por ml.", unid: "ml", apl: "banho", q: 10, c: null },
+      { nome: "Sachês com rótulo impresso", fonte: "Preencher com o orçamento da fabricante. Um sachê de cada produto.", unid: "un", apl: "banho", q: 2, c: null },
+      { nome: "Envase pela fabricante", fonte: "Preencher com o orçamento da fabricante. Encher e selar cada sachê.", unid: "un", apl: "banho", q: 2, c: null },
+      { nome: "Embalagem de envio (envelope plástico)", fonte: "Orçamentos: Rua CEP, Yampi e Melhor Envio.", unid: "un", apl: "avulso", q: 1, c: 0.60 },
+      { nome: "Caixa personalizada 15x15x6 cm", fonte: "Orçamentos: Mag Embalagens, lote de 500.", unid: "un", apl: "caixa", q: 1, c: 4.13 },
+      { nome: "Frete até 300 g", fonte: "Orçamentos: Loggi por agregador, de São Paulo ao Rio de Janeiro.", unid: "pedido", apl: "pedido", q: 1, c: 2.85 },
+      { nome: "Taxa fixa por transação no cartão", fonte: "Preencher com a taxa do gateway de pagamento do site.", unid: "pedido", apl: "pedido", q: 1, c: null }
+    ],
+    fixos: [
+      { nome: "Contador", fonte: "Meu Contador Online, plano Comércio.", v: 349.00 },
+      { nome: "Sistema de gestão e nota fiscal (Bling)", fonte: "Bling, plano Cobalto.", v: 60.00 },
+      { nome: "Certificado digital e-CNPJ A1", fonte: "Omie, certificado A1.", v: 18.33 },
+      { nome: "Domínio do site .com.br", fonte: "Registro.br.", v: 3.33 },
+      { nome: "Plano de celular da empresa", fonte: "TIM Controle.", v: 49.99 },
+      { nome: "Site e-commerce, hospedagem e manutenção", fonte: "Preencher com o valor do profissional contratado pelas sócias.", v: null },
+      { nome: "Pró-labore da Bruna", fonte: "Preencher com a retirada mensal.", v: null },
+      { nome: "Pró-labore da Giovanna", fonte: "Preencher com a retirada mensal.", v: null }
+    ],
+    invest: [
+      { nome: "Registro da marca WEEK no INPI", fonte: "INPI, taxa única para 1 classe.", v: 440.00, vida: 120 },
+      { nome: "Notificação do cosmético na Anvisa", fonte: "RAGB, taxas da Anvisa.", v: 175.72, vida: 60 },
+      { nome: "Site e-commerce, desenvolvimento", fonte: "Preencher com o valor do profissional contratado pelas sócias.", v: null, vida: 36 }
+    ],
+    taxas: [],
+    banhos: null, faturamento: null,
+    simples: 4, taxaCartao: null, taxaPix: null, parcCartao: null, marketplace: 0,
+    margem: null,
+    preco1: null, preco5: null, preco10: null
+  };
+  var APL = [
+    { v: "banho", t: "Por banho" },
+    { v: "pedido", t: "Por pedido" },
+    { v: "avulso", t: "Só no kit avulso" },
+    { v: "caixa", t: "Só nas caixas" }
+  ];
+  var NOVO = {
+    ficha: function () { return { nome: "", fonte: "", unid: "un", apl: "banho", q: 1, c: null, novo: true }; },
+    fixos: function () { return { nome: "", fonte: "", v: null, novo: true }; },
+    invest: function () { return { nome: "", fonte: "", v: null, vida: null, novo: true }; },
+    taxas: function () { return { nome: "", fonte: "", v: null, novo: true }; }
+  };
+  var ROTULOS = {
+    banhos: "Banhos vendidos por mês", faturamento: "Faturamento por mês",
+    simples: "Simples Nacional", taxaCartao: "Taxa do cartão", taxaPix: "Taxa do Pix",
+    parcCartao: "Parcela das vendas no cartão", marketplace: "Comissão de marketplace",
+    margem: "Margem de lucro desejada",
+    preco1: "Preço do kit avulso", preco5: "Preço da caixa com 5", preco10: "Preço da caixa com 10"
   };
   var PRODUTOS = [
     { id: "1", nome: "Kit avulso", banhos: 1, desc: "1 banho · embalagem de envio" },
@@ -623,68 +731,114 @@ footer strong { color: #fff; font-weight: 700; }
     { id: "10", nome: "Caixa com 10 kits", banhos: 10, desc: "10 banhos · caixa personalizada" }
   ];
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
+  var CHAVE = "week-precificacao-v3";
 
-  var v = {};
+  var s;
+
+  function copia(o) { return JSON.parse(JSON.stringify(o)); }
+  function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(s)); } catch (e) {} }
+  function carregar() {
+    try {
+      var t = localStorage.getItem(CHAVE);
+      if (t) { var o = JSON.parse(t); if (o && o.ficha && o.fixos && o.invest && o.taxas) return Object.assign(copia(PADRAO), o); }
+    } catch (e) {}
+    return copia(PADRAO);
+  }
 
   /* ---------- Formatação brasileira ---------- */
-  function num(x, casas) {
-    return x.toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas });
-  }
+  function num(x, casas) { return x.toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas }); }
   function brl(x) {
-    if (!isFinite(x)) return "–";
-    var s = "R$ " + num(Math.abs(x), 2);
-    return x < -0.004 ? "− " + s : s;
+    if (x == null || !isFinite(x)) return "–";
+    var t = "R$ " + num(Math.abs(x), 2);
+    return x < -0.004 ? "− " + t : t;
   }
-  function pct(fracao, casas) {
-    if (!isFinite(fracao)) return "–";
-    return num(fracao * 100, casas == null ? 2 : casas) + "%";
-  }
+  function pct(f, casas) { return (f == null || !isFinite(f)) ? "–" : num(f * 100, casas == null ? 2 : casas) + "%"; }
   function paraCampo(x, fmt) {
+    if (x == null || !isFinite(x)) return "";
     if (fmt === "dinheiro") return num(x, 2);
     if (fmt === "inteiro") return num(Math.round(x), 0);
-    // quantidades e porcentagens: até 2 casas, sem zeros sobrando
     return x.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
   }
-
-  /* Aceita "1.234,56", "0,04", "0.04", "R$ 9,90", "4,99%" */
+  /* Aceita "1.234,56", "0,04", "0.04", "R$ 9,90", "4,99%". Vazio = null. */
   function ler(texto, fmt) {
-    var s = String(texto).replace(/R\$|%|\s|banhos|ml|un/gi, "");
-    if (s === "" || s === "-" || s === ",") return NaN;
-    if (s.indexOf(",") >= 0) {
-      s = s.replace(/\./g, "").replace(",", ".");
-    } else if (fmt === "inteiro" || (s.match(/\./g) || []).length > 1 || (fmt === "dinheiro" && /^[1-9]\d{0,2}\.\d{3}$/.test(s))) {
-      // sem vírgula: ponto vira separador de milhar em inteiros, em "1.234.567" e em "7.154" (dinheiro)
-      s = s.replace(/\./g, "");
-    }
-    if (!/^-?\d*\.?\d*$/.test(s)) return NaN;
-    return parseFloat(s);
+    var t = String(texto).replace(/R\$|%|\s/gi, "");
+    if (t === "") return null;
+    if (t.indexOf(",") >= 0) t = t.replace(/\./g, "").replace(",", ".");
+    else if (fmt === "inteiro" || (t.match(/\./g) || []).length > 1 || (fmt === "dinheiro" && /^[1-9]\d{0,2}\.\d{3}$/.test(t))) t = t.replace(/\./g, "");
+    if (!/^\d*\.?\d*$/.test(t) || t === ".") return NaN;
+    return parseFloat(t);
   }
+  function z(x) { return (x == null || !isFinite(x)) ? 0 : x; }
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function nomeDe(item, padrao) { return (item.nome && item.nome.trim()) || padrao; }
+  function unir() { var a = []; for (var i = 0; i < arguments.length; i++) a = a.concat(arguments[i]); return a; }
 
-  /* ---------- Cálculos (replicam a aba Precificação) ---------- */
+  /* ---------- Cálculos (lógica da aba Precificação) ---------- */
   function calcular() {
-    var r = {};
-    r.lShampoo = v.qShampoo * v.cShampoo;
-    r.lCond = v.qCond * v.cCond;
-    r.lSache = v.qSache * v.cSache;
-    r.lEnvase = v.qEnvase * v.cEnvase;
-    r.lEmb = v.qEmb * v.cEmb;
-    r.lFrete = v.qFrete * v.cFrete;
-    r.fabricacao = r.lShampoo + r.lCond + r.lSache + r.lEnvase; // fórmulas + sachês + envase
-    r.custoKit = r.fabricacao + r.lEmb + r.lFrete;
+    var r = { falta: { custo: [], caixa: [], fixos: [], volume: [], impostos: [], margem: [] }, pend: [] };
+    var soma = { banho: 0, pedido: 0, avulso: 0, caixa: 0 };
 
-    r.rateioBanho = v.banhos > 0 ? v.gastos / v.banhos : NaN;
-    r.rateioPct = v.faturamento > 0 ? v.gastos / v.faturamento : NaN;
+    s.ficha.forEach(function (it, i) {
+      var linha = (it.q == null || it.c == null) ? null : it.q * it.c;
+      it._linha = linha;
+      soma[it.apl] += z(linha);
+      if (linha == null) {
+        var n = nomeDe(it, "Item de custo " + (i + 1));
+        (it.apl === "caixa" ? r.falta.caixa : r.falta.custo).push(n);
+        r.pend.push({ t: n, etapa: "Etapa 1", id: "ficha-" + i + "-" + (it.q == null ? "q" : "c") });
+      }
+    });
+    r.soma = soma;
+    r.custoKit = soma.banho + soma.pedido + soma.avulso;
+
+    r.gastos = 0;
+    s.fixos.forEach(function (it, i) {
+      r.gastos += z(it.v);
+      if (it.v == null) {
+        var n = nomeDe(it, "Gasto fixo " + (i + 1));
+        r.falta.fixos.push(n);
+        r.pend.push({ t: n, etapa: "Etapa 2", id: "fixos-" + i + "-v" });
+      }
+    });
+    r.depreciacao = 0;
+    s.invest.forEach(function (it, i) {
+      it._mes = (it.v == null || !it.vida) ? null : it.v / it.vida;
+      r.depreciacao += z(it._mes);
+      if (it._mes == null) {
+        var n = nomeDe(it, "Investimento " + (i + 1));
+        r.falta.fixos.push(n);
+        r.pend.push({ t: n, etapa: "Etapa 2", id: "invest-" + i + "-" + (it.v == null ? "v" : "vida") });
+      }
+    });
+    r.gastos += r.depreciacao;
+    ["banhos", "faturamento"].forEach(function (k) {
+      if (s[k] == null) { r.falta.volume.push(ROTULOS[k]); r.pend.push({ t: ROTULOS[k], etapa: "Etapa 2", id: "k-" + k }); }
+    });
+    r.rateioBanho = s.banhos > 0 ? r.gastos / s.banhos : NaN;
+    r.rateioPct = s.faturamento > 0 ? r.gastos / s.faturamento : NaN;
     r.custoTotal = r.custoKit + r.rateioBanho;
 
-    var parc = v.parcCartao / 100;
-    r.cSimples = v.simples / 100;
-    r.cCartao = parc * v.taxaCartao / 100;
-    r.cPix = (1 - parc) * v.taxaPix / 100;
-    r.cMkt = v.marketplace / 100;
-    r.impostosPct = r.cSimples + r.cCartao + r.cPix + r.cMkt;
-    r.parcPix = 1 - parc;
+    ["simples", "taxaCartao", "taxaPix", "parcCartao", "marketplace"].forEach(function (k) {
+      if (s[k] == null) { r.falta.impostos.push(ROTULOS[k]); r.pend.push({ t: ROTULOS[k], etapa: "Etapa 4", id: "k-" + k }); }
+    });
+    var parc = z(s.parcCartao) / 100;
+    r.cSimples = z(s.simples) / 100;
+    r.cCartao = parc * z(s.taxaCartao) / 100;
+    r.cPix = (s.parcCartao == null ? 0 : 1 - parc) * z(s.taxaPix) / 100;
+    r.cMkt = z(s.marketplace) / 100;
+    r.cOutras = 0;
+    s.taxas.forEach(function (it, i) {
+      r.cOutras += z(it.v) / 100;
+      if (it.v == null) {
+        var n = nomeDe(it, "Taxa " + (i + 1));
+        r.falta.impostos.push(n);
+        r.pend.push({ t: n, etapa: "Etapa 4", id: "taxas-" + i + "-v" });
+      }
+    });
+    r.impostosPct = r.cSimples + r.cCartao + r.cPix + r.cMkt + r.cOutras;
 
-    r.margemPct = v.margem / 100;
+    if (s.margem == null) { r.falta.margem.push(ROTULOS.margem); r.pend.push({ t: ROTULOS.margem, etapa: "Etapa 5", id: "k-margem" }); }
+    r.margemPct = z(s.margem) / 100;
     r.somaPct = r.rateioPct + r.impostosPct + r.margemPct;
     r.divisor = 1 - r.somaPct;
     r.markupOk = isFinite(r.divisor) && r.divisor > 0;
@@ -693,179 +847,343 @@ footer strong { color: #fff; font-weight: 700; }
     r.lucroKit = r.precoSug - r.custoKit - r.precoSug * (r.rateioPct + r.impostosPct);
 
     r.produtos = PRODUTOS.map(function (p) {
-      var custo = p.banhos === 1
-        ? r.custoKit
-        : p.banhos * r.fabricacao + v.cCaixa + r.lFrete;
-      var preco = v["preco" + p.id];
-      var lucro = preco - custo - preco * (r.rateioPct + r.impostosPct);
+      var custo = p.banhos === 1 ? r.custoKit : p.banhos * soma.banho + soma.pedido + soma.caixa;
+      var preco = s["preco" + p.id];
+      if (preco == null) r.pend.push({ t: ROTULOS["preco" + p.id], etapa: "Produtos", id: "k-preco" + p.id });
+      var lucro = preco == null ? NaN : preco - custo - preco * (z(r.rateioPct) + r.impostosPct);
       return {
         p: p, custo: custo, sugerido: custo * r.markup, preco: preco,
-        porBanho: preco / p.banhos, sugBanho: custo * r.markup / p.banhos,
+        porBanho: preco == null ? NaN : preco / p.banhos,
         lucro: lucro, margem: preco > 0 ? lucro / preco : NaN
       };
     });
     return r;
   }
 
-  /* ---------- Renderização ---------- */
-  function setOut(nome, texto) {
-    document.querySelectorAll('[data-out="' + nome + '"]').forEach(function (el) { el.textContent = texto; });
+  /* ---------- Listas editáveis ---------- */
+  var ICONE_REM = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+  function campoNum(lista, i, f, valor, fmt, pre, suf, cls, rotulo) {
+    var id = lista + "-" + i + "-" + f;
+    return '<span class="campo ' + (cls || "") + (valor == null ? " vazio" : "") + '">' +
+      (pre ? '<span class="ad">' + pre + '</span>' : "") +
+      '<input id="' + id + '" data-list="' + lista + '" data-i="' + i + '" data-f="' + f + '" data-fmt="' + fmt + '" inputmode="decimal" placeholder="Preencher" value="' + paraCampo(valor, fmt) + '" aria-label="' + esc(rotulo) + '">' +
+      (suf ? '<span class="ad">' + suf + '</span>' : "") + '</span>';
+  }
+  function celulaNome(lista, i, it, ph) {
+    if (it.novo) {
+      return '<td class="rot">' +
+        '<input class="nome-input" id="' + lista + '-' + i + '-nome" data-list="' + lista + '" data-i="' + i + '" data-f="nome" placeholder="' + ph + '" value="' + esc(it.nome) + '" aria-label="Nome do item">' +
+        '<input class="nome-input fonte-input" id="' + lista + '-' + i + '-fonte" data-list="' + lista + '" data-i="' + i + '" data-f="fonte" placeholder="Fonte ou observação" value="' + esc(it.fonte) + '" aria-label="Fonte do valor">' +
+        '</td>';
+    }
+    var alinhar = /^Preencher/.test(it.fonte);
+    return '<td class="rot">' + esc(it.nome) + '<span class="fonte' + (alinhar ? " alinhar" : "") + '">' + esc(it.fonte) + '</span></td>';
+  }
+  function botaoRem(lista, i, nome) {
+    return '<td class="acao"><button class="btn-rem" type="button" data-rem="' + lista + '" data-i="' + i + '" aria-label="Remover ' + esc(nome) + '" title="Remover linha">' + ICONE_REM + '</button></td>';
+  }
+
+  function montarListas() {
+    document.getElementById("tb-ficha").innerHTML = s.ficha.map(function (it, i) {
+      var n = nomeDe(it, "item"), unid = it.unid || "un";
+      return '<tr>' + celulaNome("ficha", i, it, "Nome do item") +
+        '<td data-r="Entra em"><select class="apl" id="ficha-' + i + '-apl" data-list="ficha" data-i="' + i + '" data-f="apl" aria-label="Onde ' + esc(n) + ' entra">' +
+          APL.map(function (a) { return '<option value="' + a.v + '"' + (a.v === it.apl ? " selected" : "") + '>' + a.t + '</option>'; }).join("") +
+        '</select></td>' +
+        '<td class="num" data-r="Quantidade">' + campoNum("ficha", i, "q", it.q, "qtd", "", unid, "curto", "Quantidade de " + n) + '</td>' +
+        '<td class="num" data-r="Custo por ' + (unid === "ml" ? "ml" : "unidade") + '">' + campoNum("ficha", i, "c", it.c, "dinheiro", "R$", "", "", "Custo por unidade de " + n) + '</td>' +
+        '<td class="num calc" data-r="Custo" data-linha="ficha-' + i + '">–</td>' +
+        botaoRem("ficha", i, n) + '</tr>';
+    }).join("");
+
+    document.getElementById("tb-fixos").innerHTML = s.fixos.map(function (it, i) {
+      var n = nomeDe(it, "gasto");
+      return '<tr>' + celulaNome("fixos", i, it, "Nome do gasto") +
+        '<td class="num" data-r="Valor por mês">' + campoNum("fixos", i, "v", it.v, "dinheiro", "R$", "", "", "Valor por mês de " + n) + '</td>' +
+        botaoRem("fixos", i, n) + '</tr>';
+    }).join("");
+
+    document.getElementById("tb-invest").innerHTML = s.invest.map(function (it, i) {
+      var n = nomeDe(it, "investimento");
+      return '<tr>' + celulaNome("invest", i, it, "Nome do investimento") +
+        '<td class="num" data-r="Valor">' + campoNum("invest", i, "v", it.v, "dinheiro", "R$", "", "", "Valor de " + n) + '</td>' +
+        '<td class="num" data-r="Vida útil">' + campoNum("invest", i, "vida", it.vida, "inteiro", "", "meses", "curto", "Vida útil em meses de " + n) + '</td>' +
+        '<td class="num calc" data-r="Por mês" data-linha="invest-' + i + '">–</td>' +
+        botaoRem("invest", i, n) + '</tr>';
+    }).join("");
+
+    document.getElementById("tb-taxas").innerHTML = s.taxas.map(function (it, i) {
+      var n = nomeDe(it, "taxa");
+      return '<tr>' + celulaNome("taxas", i, it, "Nome da taxa") +
+        '<td class="num" data-r="% da venda">' + campoNum("taxas", i, "v", it.v, "pct", "", "%", "curto", "Porcentagem de " + n) + '</td>' +
+        botaoRem("taxas", i, n) + '</tr>';
+    }).join("");
+    document.getElementById("wrap-taxas").hidden = s.taxas.length === 0;
+    document.getElementById("taxas-vazio").hidden = s.taxas.length > 0;
   }
 
   function montarProdutos() {
-    var box = document.getElementById("cards-produtos");
-    box.innerHTML = PRODUTOS.map(function (p) {
-      return '' +
-        '<article class="prod">' +
-          '<div class="prod-cab"><h3>' + p.nome + '</h3><p>' + p.desc + '</p></div>' +
-          '<div class="prod-corpo">' +
-            '<div class="linha"><span>Custo variável</span><b data-out="custo' + p.id + '">–</b></div>' +
-            '<div class="composicao" data-out="comp' + p.id + '">–</div>' +
-            '<div class="linha"><span>Preço sugerido</span><b data-out="sug' + p.id + '">–</b></div>' +
-            '<div class="linha preco"><span>Preço de venda</span>' +
-              '<span class="campo"><span class="ad">R$</span><input data-k="preco' + p.id + '" data-fmt="dinheiro" inputmode="decimal" aria-label="Preço de venda: ' + p.nome + '"></span></div>' +
-            '<div class="linha"><span>Preço por banho</span><b data-out="banho' + p.id + '">–</b></div>' +
-            '<div class="linha"><span>Lucro por venda</span><b data-out="lucro' + p.id + '">–</b></div>' +
-            '<div class="margem-box" data-margem="' + p.id + '"><span>Margem de lucro</span><b data-out="margem' + p.id + '">–</b><small data-out="status' + p.id + '">–</small></div>' +
-          '</div>' +
-        '</article>';
+    document.getElementById("cards-produtos").innerHTML = PRODUTOS.map(function (p) {
+      return '<article class="prod">' +
+        '<div class="prod-cab"><h3>' + p.nome + '</h3><p>' + p.desc + '</p></div>' +
+        '<div class="prod-corpo">' +
+          '<div class="linha"><span>Custo variável</span><b data-out="custo' + p.id + '">–</b></div>' +
+          '<div class="composicao" data-out="comp' + p.id + '">–</div>' +
+          '<div class="linha"><span>Preço sugerido</span><b data-out="sug' + p.id + '">–</b></div>' +
+          '<div class="linha preco"><label for="k-preco' + p.id + '">Preço de venda</label>' +
+            '<span class="campo"><span class="ad">R$</span><input id="k-preco' + p.id + '" data-k="preco' + p.id + '" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher"></span></div>' +
+          '<div class="linha"><span>Preço por banho</span><b data-out="banho' + p.id + '">–</b></div>' +
+          '<div class="linha"><span>Lucro por venda</span><b data-out="lucro' + p.id + '">–</b></div>' +
+          '<div class="margem-box neutro" data-margem="' + p.id + '"><span>Margem de lucro</span><b data-out="margem' + p.id + '">–</b><small data-out="status' + p.id + '">–</small>' +
+            '<span class="falta" data-falta="prod' + p.id + '" hidden></span></div>' +
+        '</div></article>';
     }).join("");
+  }
+
+  /* ---------- Renderização ---------- */
+  function setOut(nome, texto, parcial) {
+    document.querySelectorAll('[data-out="' + nome + '"]').forEach(function (el) {
+      el.textContent = texto;
+      el.classList.toggle("parcial", !!parcial && texto !== "–");
+    });
+  }
+  function setFalta(nome, itens, prefixo) {
+    document.querySelectorAll('[data-falta="' + nome + '"]').forEach(function (el) {
+      if (!itens.length) { el.hidden = true; return; }
+      el.hidden = false;
+      el.textContent = (prefixo || "Resultado parcial. Falta preencher: ") + itens.join(", ") + ".";
+    });
+  }
+
+  function render() {
+    var r = calcular(), f = r.falta;
+
+    s.ficha.forEach(function (it, i) { var el = document.querySelector('[data-linha="ficha-' + i + '"]'); if (el) el.textContent = brl(it._linha); });
+    s.invest.forEach(function (it, i) { var el = document.querySelector('[data-linha="invest-' + i + '"]'); if (el) el.textContent = brl(it._mes); });
+
+    var pCusto = f.custo.length > 0;
+    var pFixos = f.fixos.length > 0;
+    var pImp = f.impostos.length > 0;
+    var pMarkup = pFixos || pImp || f.margem.length > 0;
+
+    setOut("custoKit", brl(r.custoKit), pCusto);
+    setOut("depreciacao", brl(r.depreciacao));
+    setOut("gastos", brl(r.gastos), pFixos);
+    setOut("rateioBanho", brl(r.rateioBanho), pFixos);
+    setOut("rateioPct", pct(r.rateioPct), pFixos);
+    setOut("custoTotal", brl(r.custoTotal), pCusto || pFixos);
+    setOut("impostosPct", pct(r.impostosPct), pImp);
+    ["cSimples", "cCartao", "cPix", "cMkt", "cOutras"].forEach(function (k) { setOut(k, pct(r[k])); });
+    var q = function (v, fn) { return v == null ? "?" : fn(v); };
+    var conta = q(s.simples, function (v) { return pct(v / 100); }) +
+      " + " + q(s.parcCartao, function (v) { return num(v / 100, 2); }) + " × " + q(s.taxaCartao, function (v) { return pct(v / 100); }) +
+      " + " + q(s.parcCartao, function (v) { return num(1 - v / 100, 2); }) + " × " + q(s.taxaPix, function (v) { return pct(v / 100); }) +
+      " + " + q(s.marketplace, function (v) { return pct(v / 100); }) + (s.taxas.length ? " + " + pct(r.cOutras) : "");
+    setOut("impostosConta", "Simples + cartão + Pix + marketplace" + (s.taxas.length ? " + outras" : "") + " = " + conta);
+    setOut("margemPct", s.margem == null ? "?" : pct(r.margemPct));
+    setOut("somaPct", pct(r.somaPct));
+    setOut("divisor", isFinite(r.divisor) ? num(r.divisor, 4) : "?");
+    setOut("markup", r.markupOk ? num(r.markup, 3) : (isFinite(r.divisor) ? "não fecha" : "–"), pMarkup);
+    setOut("precoSug", r.markupOk ? brl(r.precoSug) : "–", pMarkup || pCusto);
+    setOut("lucroKit", r.markupOk ? brl(r.lucroKit) : "–", pMarkup || pCusto);
+
+    setFalta("custo", f.custo, "O custo do kit ainda está incompleto. Falta preencher: ");
+    setFalta("rateio", unir(f.fixos, f.volume), "Para o rateio ficar completo, falta preencher: ");
+    setFalta("custoTotal", unir(f.custo, f.fixos, f.volume));
+    setFalta("impostos", f.impostos, "O total ainda está incompleto. Falta preencher: ");
+    setFalta("markup", unir(f.custo, f.fixos, f.volume, f.impostos, f.margem));
+
+    var tot = r.impostosPct;
+    [["simples", r.cSimples], ["cartao", r.cCartao], ["pix", r.cPix], ["mkt", r.cMkt], ["outras", r.cOutras]].forEach(function (b) {
+      document.querySelector('[data-bar="' + b[0] + '"]').style.width = (tot > 0 ? Math.max(0, b[1] / tot * 100) : 0) + "%";
+    });
+
+    document.getElementById("alerta-rateio").hidden = !(r.rateioPct > 0.35);
+    document.getElementById("alerta-markup").hidden = !(isFinite(r.divisor) && r.divisor <= 0);
+
+    r.produtos.forEach(function (x) {
+      var id = x.p.id;
+      var faltaProd = unir(f.custo, x.p.banhos > 1 ? f.caixa : [], f.fixos, f.volume, f.impostos);
+      var parcial = faltaProd.length > 0;
+      setOut("custo" + id, brl(x.custo), f.custo.length > 0 || (x.p.banhos > 1 && f.caixa.length > 0));
+      setOut("comp" + id, x.p.banhos === 1
+        ? "Por banho " + brl(r.soma.banho) + " + por pedido " + brl(r.soma.pedido) + " + só no avulso " + brl(r.soma.avulso)
+        : x.p.banhos + " × " + brl(r.soma.banho) + " por banho + por pedido " + brl(r.soma.pedido) + " + só nas caixas " + brl(r.soma.caixa));
+      setOut("sug" + id, r.markupOk ? brl(x.sugerido) : "–", parcial || f.margem.length > 0);
+      setOut("banho" + id, brl(x.porBanho));
+      setOut("lucro" + id, brl(x.lucro), parcial);
+      setOut("margem" + id, pct(x.margem, 1), parcial);
+      var box = document.querySelector('[data-margem="' + id + '"]');
+      var cor = !isFinite(x.margem) ? "neutro" : x.margem >= 0.10 ? "verde" : x.margem >= 0 ? "amarelo" : "vermelho";
+      box.className = "margem-box " + cor;
+      setOut("status" + id, cor === "neutro" ? "Preencham o preço de venda" : cor === "verde" ? "Margem saudável" : cor === "amarelo" ? "Margem apertada" : "Venda com prejuízo");
+      setFalta("prod" + id, isFinite(x.margem) ? faltaProd : [], "Margem provisória: a real será menor até entrar ");
+    });
+
+    renderPendencias(r.pend);
+    renderRegua(r);
+    marcarVazios();
+  }
+
+  function marcarVazios() {
+    document.querySelectorAll(".campo input").forEach(function (el) {
+      var c = el.parentNode;
+      if (!c.classList.contains("invalido")) c.classList.toggle("vazio", el.value.trim() === "");
+    });
+  }
+
+  function renderPendencias(pend) {
+    var box = document.getElementById("pendencias");
+    if (!pend.length) {
+      box.className = "pendencias ok";
+      box.innerHTML = "<h2>Tudo preenchido</h2><p>Todos os valores foram informados, então os resultados abaixo já estão completos.</p>";
+      return;
+    }
+    box.className = "pendencias";
+    box.innerHTML = "<h2>" + pend.length + (pend.length === 1 ? " campo para preencher" : " campos para preencher") + "</h2>" +
+      "<p>Enquanto estes campos estiverem em branco, os resultados que dependem deles aparecem como parciais, marcados com *. Clique em um item para ir até o campo.</p>" +
+      '<div class="pend-lista">' + pend.map(function (p) {
+        return '<button type="button" data-ir="' + p.id + '">' + esc(p.t) + ' <small>· ' + p.etapa + '</small></button>';
+      }).join("") + "</div>";
   }
 
   function renderRegua(r) {
     var regua = document.getElementById("regua");
     regua.querySelectorAll(".marca, .eixo").forEach(function (el) { el.remove(); });
     var valores = r.produtos.map(function (x) { return x.porBanho; }).filter(isFinite);
-    var min = Math.min.apply(null, valores.concat([FAIXA_MIN])) - 1;
-    var max = Math.max.apply(null, valores.concat([FAIXA_MAX])) + 1;
-    min = Math.max(0, Math.floor(min)); max = Math.ceil(max);
+    var min = Math.max(0, Math.floor(Math.min.apply(null, valores.concat([FAIXA_MIN])) - 1));
+    var max = Math.ceil(Math.max.apply(null, valores.concat([FAIXA_MAX])) + 1);
     function pos(x) { return ((x - min) / (max - min)) * 100; }
     var justa = document.getElementById("regua-justa");
     justa.style.left = pos(FAIXA_MIN) + "%";
     justa.style.width = (pos(FAIXA_MAX) - pos(FAIXA_MIN)) + "%";
     [FAIXA_MIN, FAIXA_MAX].forEach(function (x) {
-      var e = document.createElement("span"); e.className = "eixo"; e.style.left = pos(x) + "%";
-      e.textContent = brl(x); regua.appendChild(e);
+      var e = document.createElement("span"); e.className = "eixo"; e.style.left = pos(x) + "%"; e.textContent = brl(x); regua.appendChild(e);
     });
-    var cores = ["#0047bb", "#1f2a44", "#2f8f7e"];
-    var curtos = ["Avulso", "Cx 5", "Cx 10"];
-    // evita sobreposição de rótulos quando os valores são próximos
-    var ordenados = r.produtos.map(function (x, i) { return { x: x, i: i }; })
+    var cores = ["#0047bb", "#1f2a44", "#2f8f7e"], curtos = ["Avulso", "Cx 5", "Cx 10"];
+    var ord = r.produtos.map(function (x, i) { return { x: x, i: i }; })
       .filter(function (o) { return isFinite(o.x.porBanho); })
       .sort(function (a, b) { return a.x.porBanho - b.x.porBanho; });
-    var ultimo = -99, nivel = 0;
-    ordenados.forEach(function (o) {
+    var ultimo = -99, nivel = 0, maxNivel = 0;
+    ord.forEach(function (o) {
       var left = Math.min(100, Math.max(0, pos(o.x.porBanho)));
-      nivel = (left - ultimo < 12) ? nivel + 1 : 0; ultimo = left;
+      nivel = (left - ultimo < 12) ? nivel + 1 : 0; ultimo = left; maxNivel = Math.max(maxNivel, nivel);
       var m = document.createElement("span"); m.className = "marca";
       m.style.left = left + "%"; m.style.setProperty("--c", cores[o.i]);
-      m.innerHTML = '<em style="top:' + (-22 - nivel * 15) + 'px">' + curtos[o.i] + '</em><i></i>';
+      m.innerHTML = '<em style="top:' + (-6 - nivel * 15) + 'px">' + curtos[o.i] + '</em><i></i>';
       m.title = o.x.p.nome + ": " + brl(o.x.porBanho) + " por banho";
       regua.appendChild(m);
     });
-    regua.style.marginTop = (26 + nivel * 15) + "px";
-
+    regua.style.marginTop = (26 + maxNivel * 15) + "px";
     document.getElementById("chips-banho").innerHTML = r.produtos.map(function (x, i) {
-      var st = !isFinite(x.porBanho) ? "–" : x.porBanho < FAIXA_MIN ? "abaixo da faixa" : x.porBanho > FAIXA_MAX ? "acima da faixa" : "dentro da faixa";
-      return '<span style="border-color:' + cores[i] + '"><b style="color:' + cores[i] + '">' + x.p.nome + '</b>: <b>' + brl(x.porBanho) + '</b> por banho, ' + st + '</span>';
+      var st = !isFinite(x.porBanho) ? "preço ainda não preenchido" : x.porBanho < FAIXA_MIN ? "abaixo da faixa" : x.porBanho > FAIXA_MAX ? "acima da faixa" : "dentro da faixa";
+      return '<span style="border-color:' + cores[i] + '"><b style="color:' + cores[i] + '">' + x.p.nome + '</b>: ' + (isFinite(x.porBanho) ? '<b>' + brl(x.porBanho) + '</b> por banho, ' : "") + st + '</span>';
     }).join("");
   }
 
-  function render() {
-    var r = calcular();
-    ["lShampoo", "lCond", "lSache", "lEnvase", "lEmb", "lFrete", "custoKit", "rateioBanho", "custoTotal"].forEach(function (k) { setOut(k, brl(r[k])); });
-    setOut("rateioPct", pct(r.rateioPct));
-    setOut("impostosPct", pct(r.impostosPct));
-    setOut("parcPix", pct(r.parcPix, 0));
-    setOut("cSimples", pct(r.cSimples));
-    setOut("cCartao", pct(r.cCartao));
-    setOut("cPix", pct(r.cPix));
-    setOut("cMkt", pct(r.cMkt));
-    setOut("impostosConta",
-      pct(r.cSimples) + " + " + num(v.parcCartao / 100, 2) + " × " + pct(v.taxaCartao / 100) +
-      " + " + num(r.parcPix, 2) + " × " + pct(v.taxaPix / 100) + " + " + pct(r.cMkt));
-    setOut("margemPct", pct(r.margemPct));
-    setOut("somaPct", pct(r.somaPct));
-    setOut("divisor", isFinite(r.divisor) ? num(r.divisor, 4) : "–");
-    setOut("markup", r.markupOk ? num(r.markup, 3) : "não fecha");
-    setOut("precoSug", r.markupOk ? brl(r.precoSug) : "–");
-    setOut("lucroKit", r.markupOk ? brl(r.lucroKit) : "–");
-
-    // barra de composição
-    var tot = r.impostosPct || 1;
-    [["simples", r.cSimples], ["cartao", r.cCartao], ["pix", r.cPix], ["mkt", r.cMkt]].forEach(function (b) {
-      var el = document.querySelector('[data-bar="' + b[0] + '"]');
-      el.style.width = (isFinite(b[1]) && tot > 0 ? Math.max(0, b[1] / tot * 100) : 0) + "%";
-    });
-
-    document.querySelector('[data-alerta="rateio"]').classList.toggle("on", r.rateioPct > 0.35);
-    document.querySelector('[data-alerta="markup"]').classList.toggle("on", !r.markupOk);
-
-    r.produtos.forEach(function (x) {
-      var id = x.p.id;
-      setOut("custo" + id, brl(x.custo));
-      setOut("comp" + id, x.p.banhos === 1
-        ? "Fórmulas, sachês e envase + embalagem de envio + frete"
-        : x.p.banhos + " × " + brl(r.fabricacao) + " (fórmulas, sachês e envase) + caixa " + brl(v.cCaixa) + " + frete " + brl(r.lFrete));
-      setOut("sug" + id, r.markupOk ? brl(x.sugerido) : "–");
-      setOut("banho" + id, brl(x.porBanho));
-      setOut("lucro" + id, brl(x.lucro));
-      setOut("margem" + id, pct(x.margem, 1));
-      var box = document.querySelector('[data-margem="' + id + '"]');
-      var cor = !isFinite(x.margem) ? "vermelho" : x.margem >= 0.10 ? "verde" : x.margem >= 0 ? "amarelo" : "vermelho";
-      box.className = "margem-box " + cor;
-      setOut("status" + id, cor === "verde" ? "Margem saudável" : cor === "amarelo" ? "Margem apertada" : "Venda com prejuízo");
-    });
-
-    renderRegua(r);
-  }
-
-  /* ---------- Campos ---------- */
-  function campos() { return document.querySelectorAll("input[data-k]"); }
+  /* ---------- Eventos ---------- */
   var slider = document.getElementById("slider-margem");
-
-  function preencher() {
-    campos().forEach(function (el) {
-      el.value = paraCampo(v[el.dataset.k], el.dataset.fmt);
+  function preencherFixos() {
+    document.querySelectorAll("input[data-k]").forEach(function (el) {
+      el.value = paraCampo(s[el.dataset.k], el.dataset.fmt);
       el.parentNode.classList.remove("invalido");
     });
-    slider.value = Math.min(60, Math.max(0, v.margem));
+    slider.value = Math.min(60, Math.max(0, z(s.margem)));
+  }
+  function valorDe(el) {
+    var x = ler(el.value, el.dataset.fmt);
+    var ok = x === null || (isFinite(x) && x >= 0);
+    el.parentNode.classList.toggle("invalido", !ok);
+    return ok ? { ok: true, v: x } : { ok: false };
   }
 
-  function ligar() {
-    campos().forEach(function (el) {
-      el.addEventListener("input", function () {
-        var x = ler(el.value, el.dataset.fmt);
-        var ok = isFinite(x) && x >= 0;
-        el.parentNode.classList.toggle("invalido", !ok);
-        if (!ok) return;
-        v[el.dataset.k] = x;
-        if (el.dataset.k === "margem") slider.value = Math.min(60, Math.max(0, x));
-        render();
-      });
-      el.addEventListener("blur", function () {
-        el.value = paraCampo(v[el.dataset.k], el.dataset.fmt);
-        el.parentNode.classList.remove("invalido");
-      });
-      el.addEventListener("focus", function () { el.select(); });
-    });
-    slider.addEventListener("input", function () {
-      v.margem = parseFloat(slider.value);
-      document.querySelector('input[data-k="margem"]').value = paraCampo(v.margem, "pct");
-      render();
-    });
-    document.querySelectorAll("[data-restaurar]").forEach(function (b) {
-      b.addEventListener("click", function () {
-        v = Object.assign({}, PADRAO);
-        preencher(); render();
-      });
-    });
-  }
+  document.addEventListener("input", function (e) {
+    var el = e.target;
+    if (el === slider) {
+      s.margem = parseFloat(slider.value);
+      document.getElementById("k-margem").value = paraCampo(s.margem, "pct");
+      salvar(); render(); return;
+    }
+    if (el.dataset.k) {
+      var a = valorDe(el); if (!a.ok) return;
+      s[el.dataset.k] = a.v;
+      if (el.dataset.k === "margem") slider.value = Math.min(60, Math.max(0, z(a.v)));
+      salvar(); render(); return;
+    }
+    if (el.dataset.list && el.dataset.f !== "apl") {
+      var it = s[el.dataset.list][+el.dataset.i];
+      if (el.dataset.f === "nome" || el.dataset.f === "fonte") { it[el.dataset.f] = el.value; salvar(); render(); return; }
+      var b = valorDe(el); if (!b.ok) return;
+      it[el.dataset.f] = b.v; salvar(); render();
+    }
+  });
+  document.addEventListener("change", function (e) {
+    var el = e.target;
+    if (el.dataset && el.dataset.list && el.dataset.f === "apl") {
+      s[el.dataset.list][+el.dataset.i].apl = el.value; salvar(); render();
+    }
+  });
+  document.addEventListener("focusout", function (e) {
+    var el = e.target;
+    if (!el.matches || !el.matches(".campo input")) return;
+    var v = el.dataset.k ? s[el.dataset.k] : (el.dataset.list ? s[el.dataset.list][+el.dataset.i][el.dataset.f] : null);
+    el.value = paraCampo(v, el.dataset.fmt);
+    el.parentNode.classList.remove("invalido");
+    marcarVazios();
+  });
+  document.addEventListener("focusin", function (e) {
+    if (e.target.matches && e.target.matches(".campo input")) e.target.select();
+  });
+  document.addEventListener("click", function (e) {
+    var add = e.target.closest("[data-add]");
+    if (add) {
+      var lista = add.dataset.add;
+      s[lista].push(NOVO[lista]());
+      salvar(); montarListas(); render();
+      var novo = document.getElementById(lista + "-" + (s[lista].length - 1) + "-nome");
+      if (novo) novo.focus();
+      return;
+    }
+    var rem = e.target.closest("[data-rem]");
+    if (rem) {
+      s[rem.dataset.rem].splice(+rem.dataset.i, 1);
+      salvar(); montarListas(); render();
+      return;
+    }
+    var ir = e.target.closest("[data-ir]");
+    if (ir) {
+      var alvo = document.getElementById(ir.dataset.ir);
+      if (alvo) {
+        alvo.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTimeout(function () { alvo.focus({ preventScroll: true }); }, 350);
+        var c = alvo.closest(".campo");
+        if (c) { c.classList.remove("realce"); void c.offsetWidth; c.classList.add("realce"); }
+      }
+    }
+  });
 
+  /* Restaurar com confirmação em dois cliques */
+  var btnR = document.getElementById("btn-restaurar"), tR = null;
+  btnR.addEventListener("click", function () {
+    var lbl = btnR.querySelector("span");
+    if (!btnR.classList.contains("confirmar")) {
+      btnR.classList.add("confirmar");
+      lbl.textContent = "Clique de novo para apagar o que foi digitado";
+      tR = setTimeout(function () { btnR.classList.remove("confirmar"); lbl.textContent = "Restaurar valores da planilha"; }, 4000);
+      return;
+    }
+    clearTimeout(tR);
+    btnR.classList.remove("confirmar");
+    lbl.textContent = "Valores da planilha restaurados";
+    setTimeout(function () { lbl.textContent = "Restaurar valores da planilha"; }, 2500);
+    s = copia(PADRAO);
+    salvar(); montarListas(); preencherFixos(); render();
+  });
+
+  s = carregar();
   montarProdutos();
-  v = Object.assign({}, PADRAO);
-  preencher();
-  ligar();
+  montarListas();
+  preencherFixos();
   render();
 })();
 </script>
