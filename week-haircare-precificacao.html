@@ -156,6 +156,21 @@ tr.auto td.rot { background: var(--verde-claro); }
 tr.total .fonte { color: #d7f1ea; }
 .fonte.alinhar { color: var(--amarelo); font-weight: 600; }
 .sr { position: absolute; left: -9999px; }
+.res small a, .explica a { color: var(--azul); font-weight: 700; }
+.mensal-wrap { overflow-x: auto; border: 1px solid var(--linha); border-radius: 10px; }
+table.mensal { min-width: 1240px; font-size: 13px; }
+table.mensal th, table.mensal td { white-space: nowrap; text-align: right; padding: 8px 10px; }
+table.mensal th:first-child, table.mensal td:first-child { position: sticky; left: 0; text-align: left; z-index: 1; background: var(--cinza); font-weight: 700; color: var(--marinho); }
+table.mensal thead th:first-child { background: var(--marinho); color: #fff; }
+table.mensal td { font-variant-numeric: tabular-nums; }
+table.mensal td.tot { font-weight: 800; background: #eef2f8; }
+table.mensal tr.forte td { font-weight: 700; color: var(--marinho); }
+table.mensal tr.destaque td { background: var(--verde-claro); font-weight: 800; color: var(--petroleo); }
+table.mensal tr.destaque td:first-child { background: var(--verde-claro); color: var(--petroleo); }
+table.mensal td.neg { color: var(--vermelho); }
+.campo.mini { width: 96px; height: 32px; padding: 0 8px; }
+.campo.mini input { font-size: 13px; }
+.campo.opcional input::placeholder { color: var(--texto-2); font-weight: 500; opacity: .7; }
 .como-conta { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .como-conta li { background: var(--cinza); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; color: var(--texto-2); line-height: 1.4; min-width: 0; }
 .como-conta b { display: block; color: var(--marinho); font-size: 13px; }
@@ -377,7 +392,7 @@ footer strong { color: #fff; font-weight: 700; }
   <div class="wrap">
     <p class="rotulo">Plano Financeiro · WEEK Haircare</p>
     <h1>Calculadora de precificação</h1>
-    <p>Esta página ensina a WEEK a chegar ao preço de venda dos kits em cinco etapas, na mesma lógica da aba Precificação da planilha. Ela já traz os valores que foram cotados na aba Orçamentos e na Classificação de gastos. Todo o resto está em branco, em amarelo, para vocês preencherem com os números reais: o orçamento da fabricante, as taxas do site, a meta de vendas, a margem e o preço. Cada tabela aceita novas linhas.</p>
+    <p>Esta página ensina a WEEK a chegar ao preço de venda dos kits em cinco etapas, na mesma lógica da aba Precificação da planilha. Ela já traz os valores que foram cotados na aba Orçamentos e na Classificação de gastos. Todo o resto está em branco, em amarelo, para vocês preencherem com os números reais: o orçamento da fabricante, as taxas do site, a margem e o preço. A meta de vendas é calculada a partir deles. Cada tabela aceita novas linhas.</p>
     <div class="acoes">
       <a class="btn btn-claro" href="https://docs.google.com/spreadsheets/d/1zo8Lva5f4SlrNYH3nNRK90IznOyByUuP53c9IejrO7I/edit" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
@@ -405,7 +420,7 @@ footer strong { color: #fff; font-weight: 700; }
   <div class="wrap resumo-in">
     <div class="kpi"><span>Custo do kit</span><b data-out="custoKit">–</b></div>
     <div class="kpi opt"><span>Custo total unitário</span><b data-out="custoTotal">–</b></div>
-    <div class="kpi opt"><span>Impostos e taxas</span><b data-out="impostosPct">–</b></div>
+    <div class="kpi opt"><span>Meta de faturamento</span><b data-out="fatMeta">–</b></div>
     <div class="kpi"><span>Markup</span><b data-out="markup">–</b></div>
     <div class="kpi destaque"><span>Preço sugerido</span><b data-out="precoSug">–</b></div>
   </div>
@@ -447,7 +462,7 @@ footer strong { color: #fff; font-weight: 700; }
     <section class="etapa" id="etapa-2">
       <div class="faixa"><span class="num">2</span><h2>Rateio dos custos indiretos</h2></div>
       <div class="corpo">
-        <p class="explica">Gastos fixos existem mesmo sem vendas, como contador e sistema. O <b>rateio</b> divide esses gastos do mês pelos banhos vendidos no mês.</p>
+        <p class="explica">Gastos fixos existem mesmo sem vendas, como contador e sistema. O <b>rateio</b> divide esses gastos do mês pelos banhos vendidos no mês, que vêm da <a href="#meta">meta de vendas</a>, calculada no fim da página.</p>
         <div class="exemplo"><b>Exemplo do treinamento</b> (só para entender a conta, não é número da WEEK): R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>.</div>
 
         <h3 class="subtitulo">Gastos fixos por mês</h3>
@@ -486,23 +501,13 @@ footer strong { color: #fff; font-weight: 700; }
         </div>
         <button class="btn-add" type="button" data-add="invest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar investimento</button>
 
-        <h3 class="subtitulo">Volume do mês</h3>
-        <div class="grade">
-          <div class="grupo">
-            <label for="k-banhos">Banhos vendidos por mês</label>
-            <span class="campo"><input id="k-banhos" data-k="banhos" data-fmt="inteiro" inputmode="numeric" placeholder="Preencher"><span class="ad">banhos</span></span>
-            <small>Meta de vendas de vocês, ou a média da Projeção de Vendas.</small>
-          </div>
-          <div class="grupo">
-            <label for="k-faturamento">Faturamento por mês</label>
-            <span class="campo"><span class="ad">R$</span><input id="k-faturamento" data-k="faturamento" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher"></span>
-            <small>Quanto vocês esperam vender em reais por mês, com essa meta de banhos.</small>
-          </div>
-        </div>
+        <h3 class="subtitulo">Rateio pela meta de vendas</h3>
         <div class="resultados">
-          <div class="res"><span>Gastos fixos por mês</span><b data-out="gastos">–</b><small>Soma da tabela acima</small></div>
-          <div class="res"><span>Rateio por banho</span><b data-out="rateioBanho">–</b><small>Gastos fixos ÷ banhos vendidos</small></div>
-          <div class="res"><span>Rateio em % do faturamento</span><b data-out="rateioPct">–</b><small>Gastos fixos ÷ faturamento. É assim que o rateio entra no markup.</small></div>
+          <div class="res"><span>Gastos fixos por mês</span><b data-out="gastos">–</b><small>Soma das tabelas acima</small></div>
+          <div class="res"><span>Meta de banhos por mês</span><b data-out="banhosMeta">–</b><small>Vem da <a href="#meta">meta de vendas</a></small></div>
+          <div class="res"><span>Meta de faturamento por mês</span><b data-out="fatMeta">–</b><small>Vem da <a href="#meta">meta de vendas</a></small></div>
+          <div class="res"><span>Rateio por banho</span><b data-out="rateioBanho">–</b><small>Gastos fixos ÷ banhos da meta</small></div>
+          <div class="res"><span>Rateio em % do faturamento</span><b data-out="rateioPct">–</b><small>Gastos fixos ÷ faturamento da meta. É assim que entra no markup.</small></div>
         </div>
         <div class="falta" data-falta="rateio" hidden></div>
         <div class="alerta amarelo" id="alerta-rateio" role="status" hidden>
@@ -663,6 +668,78 @@ footer strong { color: #fff; font-weight: 700; }
       </div>
     </section>
 
+    <!-- META DE VENDAS -->
+    <section class="etapa" id="meta">
+      <div class="faixa final"><span class="num"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></span><h2>Meta de vendas por mês</h2></div>
+      <div class="corpo">
+        <p class="explica">Quanto a WEEK precisa vender por mês para pagar todos os gastos e ainda ficar com a margem desejada. A conta usa os custos, os impostos, a margem e os preços preenchidos acima.</p>
+
+        <h3 class="subtitulo">Divisão dos pedidos</h3>
+        <div class="grade">
+          <div class="grupo">
+            <label for="k-mix1">Kit avulso</label>
+            <span class="campo"><input id="k-mix1" data-k="mix1" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>dos pedidos do mês</small>
+          </div>
+          <div class="grupo">
+            <label for="k-mix5">Caixa com 5 kits</label>
+            <span class="campo"><input id="k-mix5" data-k="mix5" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>dos pedidos do mês</small>
+          </div>
+          <div class="grupo">
+            <label for="k-mix10">Caixa com 10 kits</label>
+            <span class="campo"><input id="k-mix10" data-k="mix10" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
+            <small>dos pedidos do mês</small>
+          </div>
+        </div>
+        <p class="fonte" style="margin:-6px 0 18px">Na pesquisa, 56,7% preferiram o kit avulso e 35,1% a caixa. A soma precisa dar 100%. Agora está em <b data-out="mixSoma">–</b>.</p>
+
+        <div class="formula">
+          <div class="titulo">Fórmula da meta</div>
+          <div class="f-linha">
+            <span class="f-nome">Pedidos por mês</span><span class="f-igual">=</span>
+            <span class="frac"><span class="n">gastos fixos</span>
+              <span class="d"><span class="chip c2">preço médio</span><span class="f-menos">× (1 −</span><span class="chip c2">impostos %</span><span class="f-menos">−</span><span class="chip c3">margem %</span><span class="f-menos">) −</span><span class="chip c1">custo médio</span></span>
+            </span>
+          </div>
+          <div class="f-linha">
+            <span class="f-nome">Pedidos por mês</span><span class="f-igual">=</span>
+            <span class="frac"><span class="n" data-out="gastos">–</span>
+              <span class="d"><span class="chip c2" data-out="precoMedio">–</span><span class="f-menos">× (1 −</span><span class="chip c2" data-out="impostosPct">–</span><span class="f-menos">−</span><span class="chip c3" data-out="margemPct">–</span><span class="f-menos">) −</span><span class="chip c1" data-out="custoMedio">–</span></span>
+            </span>
+            <span class="f-igual">=</span>
+            <span class="f-res" data-out="pedidosMeta">–</span>
+          </div>
+          <p class="fonte" style="text-align:center;margin-top:12px">Preço médio e custo médio de um pedido, pesando cada produto pela divisão dos pedidos.</p>
+        </div>
+
+        <div class="resultados">
+          <div class="res forte"><span>Meta de pedidos por mês</span><b data-out="pedidosMeta">–</b><small data-out="pedidosMix">–</small></div>
+          <div class="res"><span>Meta de banhos por mês</span><b data-out="banhosMeta">–</b><small>Banhos dos pedidos da meta</small></div>
+          <div class="res"><span>Meta de faturamento por mês</span><b data-out="fatMeta">–</b><small>Pedidos da meta × preço médio</small></div>
+          <div class="res"><span>Ponto de equilíbrio</span><b data-out="eqBanhos">–</b><small>Faturamento de <span data-out="eqFat">–</span> por mês. Só paga os gastos, sem lucro.</small></div>
+        </div>
+        <div class="falta" data-falta="meta" hidden></div>
+        <div class="alerta amarelo" id="alerta-mix" role="status" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
+          <span>A divisão dos pedidos soma <b data-out="mixSoma">–</b>. Ajustem para 100% para a meta ser calculada.</span>
+        </div>
+        <div class="alerta vermelho" id="alerta-meta" role="status" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/></svg>
+          <span>Com esses preços, cada pedido não cobre o custo, os impostos e a margem desejada, então nenhuma meta fecha. Aumentem os preços ou reduzam a margem.</span>
+        </div>
+
+        <h3 class="subtitulo">Meta mês a mês</h3>
+        <p class="explica" style="margin-bottom:12px">Os gastos extras de um mês, como anúncios no lançamento, aumentam a meta só daquele mês. A quantidade de cada produto é arredondada para cima.</p>
+        <div class="mensal-wrap">
+          <table class="mensal">
+            <thead id="th-mensal"></thead>
+            <tbody id="tb-mensal"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
   </div>
 </main>
 
@@ -708,7 +785,8 @@ footer strong { color: #fff; font-weight: 700; }
       { nome: "Site e-commerce, desenvolvimento", fonte: "Preencher com o valor do profissional contratado pelas sócias.", v: null, vida: 36 }
     ],
     taxas: [],
-    banhos: null, faturamento: null,
+    mix1: null, mix5: null, mix10: null,
+    extras: [null, null, null, null, null, null, null, null, null, null, null, null],
     simples: 4, taxaCartao: null, taxaPix: null, parcCartao: null, marketplace: 0,
     margem: null,
     preco1: null, preco5: null, preco10: null
@@ -726,7 +804,7 @@ footer strong { color: #fff; font-weight: 700; }
     taxas: function () { return { nome: "", fonte: "", v: null, novo: true }; }
   };
   var ROTULOS = {
-    banhos: "Banhos vendidos por mês", faturamento: "Faturamento por mês",
+    mix1: "Pedidos de kit avulso", mix5: "Pedidos de caixa com 5", mix10: "Pedidos de caixa com 10",
     simples: "Simples Nacional", taxaCartao: "Taxa do cartão", taxaPix: "Taxa do Pix",
     parcCartao: "Parcela das vendas no cartão", marketplace: "Comissão de marketplace",
     margem: "Margem de lucro desejada",
@@ -738,7 +816,8 @@ footer strong { color: #fff; font-weight: 700; }
     { id: "10", nome: "Caixa com 10 kits", banhos: 10, desc: "10 banhos · caixa personalizada" }
   ];
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
-  var CHAVE = "week-precificacao-v5";
+  var MESES = ["jan./27", "fev./27", "mar./27", "abr./27", "mai./27", "jun./27", "jul./27", "ago./27", "set./27", "out./27", "nov./27", "dez./27"];
+  var CHAVE = "week-precificacao-v6";
 
   var s;
 
@@ -778,7 +857,11 @@ footer strong { color: #fff; font-weight: 700; }
   function z(x) { return (x == null || !isFinite(x)) ? 0 : x; }
   function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function nomeDe(item, padrao) { return (item.nome && item.nome.trim()) || padrao; }
-  function unir() { var a = []; for (var i = 0; i < arguments.length; i++) a = a.concat(arguments[i]); return a; }
+  function unir() {
+    var a = [];
+    for (var i = 0; i < arguments.length; i++) arguments[i].forEach(function (x) { if (a.indexOf(x) < 0) a.push(x); });
+    return a;
+  }
 
   /* ---------- Cálculos (lógica da aba Precificação) ---------- */
   function calcular() {
@@ -818,12 +901,6 @@ footer strong { color: #fff; font-weight: 700; }
       }
     });
     r.gastos += r.depreciacao;
-    ["banhos", "faturamento"].forEach(function (k) {
-      if (s[k] == null) { r.falta.volume.push(ROTULOS[k]); r.pend.push({ t: ROTULOS[k], etapa: "Etapa 2", id: "k-" + k }); }
-    });
-    r.rateioBanho = s.banhos > 0 ? r.gastos / s.banhos : NaN;
-    r.rateioPct = s.faturamento > 0 ? r.gastos / s.faturamento : NaN;
-    r.custoTotal = r.custoKit + r.rateioBanho;
 
     ["simples", "taxaCartao", "taxaPix", "parcCartao", "marketplace"].forEach(function (k) {
       if (s[k] == null) { r.falta.impostos.push(ROTULOS[k]); r.pend.push({ t: ROTULOS[k], etapa: "Etapa 4", id: "k-" + k }); }
@@ -846,6 +923,58 @@ footer strong { color: #fff; font-weight: 700; }
 
     if (s.margem == null) { r.falta.margem.push(ROTULOS.margem); r.pend.push({ t: ROTULOS.margem, etapa: "Etapa 5", id: "k-margem" }); }
     r.margemPct = z(s.margem) / 100;
+
+    /* Meta de vendas: pedidos que pagam os gastos fixos e deixam a margem desejada */
+    r.custos = {};
+    PRODUTOS.forEach(function (p) {
+      r.custos[p.id] = p.banhos === 1 ? r.custoKit : p.banhos * soma.banho + soma.pedido + soma.caixa;
+    });
+    var somaMix = 0, R = 0, C = 0, B = 0;
+    PRODUTOS.forEach(function (p) {
+      var sh = z(s["mix" + p.id]) / 100, P = s["preco" + p.id];
+      somaMix += z(s["mix" + p.id]);
+      if (sh > 0 && P == null) r.falta.volume.push(ROTULOS["preco" + p.id]);
+      if (sh > 0 && p.banhos > 1) r.falta.volume = r.falta.volume.concat(r.falta.caixa);
+      R += sh * z(P); C += sh * r.custos[p.id]; B += sh * p.banhos;
+    });
+    r.mixSoma = somaMix;
+    r.mixOk = Math.abs(somaMix - 100) < 0.01;
+    if (!r.mixOk) {
+      r.falta.volume.push("Divisão dos pedidos");
+      r.pend.push({ t: "Divisão dos pedidos entre os produtos", etapa: "Meta", id: "k-mix1" });
+    }
+    r.precoMedio = R; r.custoMedio = C;
+    r.den = R * (1 - r.impostosPct - r.margemPct) - C;
+    var denEq = R * (1 - r.impostosPct) - C;
+    r.metaOk = r.mixOk && R > 0 && r.den > 0;
+    r.pedidosMeta = r.metaOk ? r.gastos / r.den : NaN;
+    r.banhosMeta = r.pedidosMeta * B;
+    r.fatMeta = r.pedidosMeta * R;
+    var eqOk = r.mixOk && R > 0 && denEq > 0;
+    r.banhosEq = eqOk ? r.gastos / denEq * B : NaN;
+    r.fatEq = eqOk ? r.gastos / denEq * R : NaN;
+    r.metaImpossivel = r.mixOk && R > 0 && r.den <= 0;
+
+    r.rateioBanho = r.banhosMeta > 0 ? r.gastos / r.banhosMeta : NaN;
+    r.rateioPct = r.fatMeta > 0 ? r.gastos / r.fatMeta : NaN;
+    r.custoTotal = r.custoKit + r.rateioBanho;
+
+    r.meses = MESES.map(function (nome, j) {
+      var o = { extra: z(s.extras[j]), ok: r.metaOk };
+      if (!o.ok) return o;
+      var n = (r.gastos + o.extra) / r.den;
+      o.q = {}; o.banhos = 0; o.fat = 0; o.cv = 0;
+      PRODUTOS.forEach(function (p) {
+        var sh = z(s["mix" + p.id]) / 100;
+        var q = sh > 0 ? Math.ceil(n * sh - 1e-9) : 0;
+        o.q[p.id] = q; o.banhos += q * p.banhos; o.fat += q * z(s["preco" + p.id]); o.cv += q * r.custos[p.id];
+      });
+      o.fixos = r.gastos;
+      o.imp = o.fat * r.impostosPct;
+      o.lucro = o.fat - o.cv - o.imp - r.gastos - o.extra;
+      o.margem = o.fat > 0 ? o.lucro / o.fat : NaN;
+      return o;
+    });
     r.somaPct = r.rateioPct + r.impostosPct + r.margemPct;
     r.divisor = 1 - r.somaPct;
     r.markupOk = isFinite(r.divisor) && r.divisor > 0;
@@ -854,7 +983,7 @@ footer strong { color: #fff; font-weight: 700; }
     r.lucroKit = r.precoSug - r.custoKit - r.precoSug * (r.rateioPct + r.impostosPct);
 
     r.produtos = PRODUTOS.map(function (p) {
-      var custo = p.banhos === 1 ? r.custoKit : p.banhos * soma.banho + soma.pedido + soma.caixa;
+      var custo = r.custos[p.id];
       var preco = s["preco" + p.id];
       if (preco == null) r.pend.push({ t: ROTULOS["preco" + p.id], etapa: "Produtos", id: "k-preco" + p.id });
       var lucro = preco == null ? NaN : preco - custo - preco * (z(r.rateioPct) + r.impostosPct);
@@ -947,6 +1076,55 @@ footer strong { color: #fff; font-weight: 700; }
     }).join("");
   }
 
+  /* ---------- Tabela mês a mês ---------- */
+  var LINHAS_MES = [
+    { k: "fixos", t: "Gastos fixos", fmt: "brl" },
+    { k: "extra", t: "Gastos extras do mês", input: true },
+    { k: "q1", t: "Pedidos de kit avulso", fmt: "int" },
+    { k: "q5", t: "Pedidos de caixa com 5", fmt: "int" },
+    { k: "q10", t: "Pedidos de caixa com 10", fmt: "int" },
+    { k: "banhos", t: "Banhos vendidos", fmt: "int", cls: "forte" },
+    { k: "fat", t: "Faturamento", fmt: "brl", cls: "destaque" },
+    { k: "cv", t: "Custos variáveis", fmt: "brl" },
+    { k: "imp", t: "Impostos e taxas", fmt: "brl" },
+    { k: "lucro", t: "Lucro", fmt: "brl", cls: "destaque" },
+    { k: "margem", t: "Margem de lucro", fmt: "pct" }
+  ];
+  function montarMensal() {
+    document.getElementById("th-mensal").innerHTML = "<tr><th>Meta</th>" +
+      MESES.map(function (m) { return '<th class="num">' + m + "</th>"; }).join("") + '<th class="num">Total 2027</th></tr>';
+    document.getElementById("tb-mensal").innerHTML = LINHAS_MES.map(function (l) {
+      return '<tr class="' + (l.cls || "") + '"><td>' + l.t + "</td>" + MESES.map(function (m, j) {
+        if (l.input) return '<td class="num"><span class="campo mini opcional"><input id="extra-' + j + '" data-extra="' + j + '" data-fmt="dinheiro" inputmode="decimal" placeholder="0,00" aria-label="Gastos extras de ' + m + '"></span></td>';
+        return '<td class="num" data-m="' + l.k + "-" + j + '">–</td>';
+      }).join("") + '<td class="num tot" data-m="' + l.k + '-t">–</td></tr>';
+    }).join("");
+  }
+  function fmtM(v, fmt) {
+    if (v == null || !isFinite(v)) return "–";
+    return fmt === "brl" ? brl(v) : fmt === "int" ? num(v, 0) : pct(v, 1);
+  }
+  function renderMensal(r) {
+    var tot = { fixos: 0, extra: 0, q1: 0, q5: 0, q10: 0, banhos: 0, fat: 0, cv: 0, imp: 0, lucro: 0 };
+    r.meses.forEach(function (o, j) {
+      var v = o.ok ? { fixos: o.fixos, q1: o.q["1"], q5: o.q["5"], q10: o.q["10"], banhos: o.banhos, fat: o.fat, cv: o.cv, imp: o.imp, lucro: o.lucro, margem: o.margem } : {};
+      LINHAS_MES.forEach(function (l) {
+        if (l.input) return;
+        var el = document.querySelector('[data-m="' + l.k + "-" + j + '"]');
+        el.textContent = fmtM(v[l.k], l.fmt);
+        el.classList.toggle("neg", v[l.k] < 0);
+      });
+      tot.extra += o.extra;
+      if (o.ok) Object.keys(tot).forEach(function (k) { if (k !== "extra") tot[k] += v[k]; });
+    });
+    var ok = r.metaOk;
+    LINHAS_MES.forEach(function (l) {
+      var el = document.querySelector('[data-m="' + l.k + '-t"]');
+      var v = l.k === "margem" ? (tot.fat > 0 ? tot.lucro / tot.fat : NaN) : tot[l.k];
+      el.textContent = (ok || l.k === "extra") ? fmtM(v, l.fmt || "brl") : "–";
+    });
+  }
+
   /* ---------- Renderização ---------- */
   function setOut(nome, texto, parcial) {
     document.querySelectorAll('[data-out="' + nome + '"]').forEach(function (el) {
@@ -971,14 +1149,16 @@ footer strong { color: #fff; font-weight: 700; }
     var pCusto = f.custo.length > 0;
     var pFixos = f.fixos.length > 0;
     var pImp = f.impostos.length > 0;
-    var pMarkup = pFixos || pImp || f.margem.length > 0;
+    var faltaMeta = unir(f.custo, f.fixos, f.impostos, f.margem, f.volume);
+    var pMeta = faltaMeta.length > 0;
+    var pMarkup = pMeta;
 
     setOut("custoKit", brl(r.custoKit), pCusto);
     setOut("depreciacao", brl(r.depreciacao));
     setOut("gastos", brl(r.gastos), pFixos);
-    setOut("rateioBanho", brl(r.rateioBanho), pFixos);
-    setOut("rateioPct", pct(r.rateioPct), pFixos);
-    setOut("custoTotal", brl(r.custoTotal), pCusto || pFixos);
+    setOut("rateioBanho", brl(r.rateioBanho), pMeta);
+    setOut("rateioPct", pct(r.rateioPct), pMeta);
+    setOut("custoTotal", brl(r.custoTotal), pMeta);
     setOut("impostosPct", pct(r.impostosPct), pImp);
     ["cSimples", "cCartao", "cPix", "cMkt", "cOutras"].forEach(function (k) { setOut(k, pct(r[k])); });
     var q = function (v, fn) { return v == null ? "?" : fn(v); };
@@ -995,10 +1175,10 @@ footer strong { color: #fff; font-weight: 700; }
     setOut("lucroKit", r.markupOk ? brl(r.lucroKit) : "–", pMarkup || pCusto);
 
     setFalta("custo", f.custo, "O custo do kit ainda está incompleto. Falta preencher: ");
-    setFalta("rateio", unir(f.fixos, f.volume), "Para o rateio ficar completo, falta preencher: ");
-    setFalta("custoTotal", unir(f.custo, f.fixos, f.volume));
+    setFalta("rateio", faltaMeta, "O rateio vem da meta de vendas. Para ficar completo, falta preencher: ");
+    setFalta("custoTotal", faltaMeta);
     setFalta("impostos", f.impostos, "O total ainda está incompleto. Falta preencher: ");
-    setFalta("markup", unir(f.custo, f.fixos, f.volume, f.impostos, f.margem));
+    setFalta("markup", faltaMeta);
 
     var tot = r.impostosPct;
     [["simples", r.cSimples], ["cartao", r.cCartao], ["pix", r.cPix], ["mkt", r.cMkt], ["outras", r.cOutras]].forEach(function (b) {
@@ -1010,7 +1190,7 @@ footer strong { color: #fff; font-weight: 700; }
 
     r.produtos.forEach(function (x) {
       var id = x.p.id;
-      var faltaProd = unir(f.custo, x.p.banhos > 1 ? f.caixa : [], f.fixos, f.volume, f.impostos);
+      var faltaProd = faltaMeta;
       var parcial = faltaProd.length > 0;
       setOut("custo" + id, brl(x.custo), f.custo.length > 0 || (x.p.banhos > 1 && f.caixa.length > 0));
       setOut("comp" + id, x.p.banhos === 1
@@ -1027,6 +1207,26 @@ footer strong { color: #fff; font-weight: 700; }
       setFalta("prod" + id, isFinite(x.margem) ? faltaProd : [], "Margem provisória: a real será menor até entrar ");
     });
 
+    /* Meta de vendas */
+    var ceil = function (x) { return isFinite(x) ? Math.ceil(x - 1e-9) : NaN; };
+    setOut("mixSoma", num(r.mixSoma, 0) + "%");
+    setOut("precoMedio", r.mixOk ? brl(r.precoMedio) : "?");
+    setOut("custoMedio", r.mixOk ? brl(r.custoMedio) : "?");
+    setOut("pedidosMeta", isFinite(r.pedidosMeta) ? num(ceil(r.pedidosMeta), 0) + " pedidos" : "–", pMeta);
+    setOut("pedidosMix", isFinite(r.pedidosMeta)
+      ? PRODUTOS.filter(function (p) { return z(s["mix" + p.id]) > 0; }).map(function (p) {
+          return num(ceil(r.pedidosMeta * z(s["mix" + p.id]) / 100), 0) + " × " + p.nome.toLowerCase();
+        }).join(" · ")
+      : "Preencham os preços e a divisão dos pedidos");
+    setOut("banhosMeta", isFinite(r.banhosMeta) ? num(ceil(r.banhosMeta), 0) + " banhos" : "–", pMeta);
+    setOut("fatMeta", brl(r.fatMeta), pMeta);
+    setOut("eqBanhos", isFinite(r.banhosEq) ? num(ceil(r.banhosEq), 0) + " banhos" : "–", pMeta);
+    setOut("eqFat", brl(r.fatEq));
+    setFalta("meta", faltaMeta, "Meta provisória. Falta preencher: ");
+    document.getElementById("alerta-mix").hidden = r.mixOk || r.mixSoma === 0;
+    document.getElementById("alerta-meta").hidden = !r.metaImpossivel;
+    renderMensal(r);
+
     renderPendencias(r.pend);
     renderRegua(r);
     marcarVazios();
@@ -1035,7 +1235,7 @@ footer strong { color: #fff; font-weight: 700; }
   function marcarVazios() {
     document.querySelectorAll(".campo input").forEach(function (el) {
       var c = el.parentNode;
-      if (!c.classList.contains("invalido")) c.classList.toggle("vazio", el.value.trim() === "");
+      if (!c.classList.contains("invalido") && !c.classList.contains("opcional")) c.classList.toggle("vazio", el.value.trim() === "");
     });
   }
 
@@ -1096,6 +1296,10 @@ footer strong { color: #fff; font-weight: 700; }
       el.parentNode.classList.remove("invalido");
     });
     slider.value = Math.min(60, Math.max(0, z(s.margem)));
+    document.querySelectorAll("input[data-extra]").forEach(function (el) {
+      el.value = paraCampo(s.extras[+el.dataset.extra], "dinheiro");
+      el.parentNode.classList.remove("invalido");
+    });
   }
   function valorDe(el) {
     var x = ler(el.value, el.dataset.fmt);
@@ -1110,6 +1314,10 @@ footer strong { color: #fff; font-weight: 700; }
       s.margem = parseFloat(slider.value);
       document.getElementById("k-margem").value = paraCampo(s.margem, "pct");
       salvar(); render(); return;
+    }
+    if (el.dataset.extra != null) {
+      var x = valorDe(el); if (!x.ok) return;
+      s.extras[+el.dataset.extra] = x.v; salvar(); render(); return;
     }
     if (el.dataset.k) {
       var a = valorDe(el); if (!a.ok) return;
@@ -1133,7 +1341,7 @@ footer strong { color: #fff; font-weight: 700; }
   document.addEventListener("focusout", function (e) {
     var el = e.target;
     if (!el.matches || !el.matches(".campo input")) return;
-    var v = el.dataset.k ? s[el.dataset.k] : (el.dataset.list ? s[el.dataset.list][+el.dataset.i][el.dataset.f] : null);
+    var v = el.dataset.extra != null ? s.extras[+el.dataset.extra] : el.dataset.k ? s[el.dataset.k] : (el.dataset.list ? s[el.dataset.list][+el.dataset.i][el.dataset.f] : null);
     el.value = paraCampo(v, el.dataset.fmt);
     el.parentNode.classList.remove("invalido");
     marcarVazios();
@@ -1188,8 +1396,10 @@ footer strong { color: #fff; font-weight: 700; }
   });
 
   s = carregar();
+  if (!Array.isArray(s.extras) || s.extras.length !== 12) s.extras = copia(PADRAO.extras);
   montarProdutos();
   montarListas();
+  montarMensal();
   preencherFixos();
   render();
 })();
