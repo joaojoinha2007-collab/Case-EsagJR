@@ -192,7 +192,7 @@ table.mensal td.tot { font-weight: 800; background: #eef2f8; }
 table.mensal tr.forte td { font-weight: 700; color: var(--marinho); }
 table.mensal tr.destaque td { background: var(--verde-claro); font-weight: 800; color: var(--petroleo); }
 table.mensal tr.destaque td:first-child { background: var(--verde-claro); color: var(--petroleo); }
-table.mensal td.neg { color: var(--vermelho); }
+table.mensal td.neg, table.mensal tr.destaque td.neg { color: var(--vermelho); }
 .campo.mini { width: 96px; height: 32px; padding: 0 8px; }
 .campo.mini input { font-size: 13px; }
 .campo.opcional input::placeholder { color: var(--texto-2); font-weight: 500; opacity: .7; }
@@ -571,15 +571,21 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
             <small>Menor quantidade comprada entre fórmulas, sachês e envase, dividida pelo uso por kit (etapa 1).</small>
           </div>
           <div class="grupo">
-            <label for="k-meses">Em quantos meses vocês vendem esse pedido?</label>
-            <span class="campo"><input id="k-meses" data-k="meses" data-fmt="qtd" inputmode="decimal" placeholder="Preencher"><span class="ad">meses</span></span>
-            <small>Se compram todo mês, coloquem 1.</small>
+            <label>Prazo recomendado para vender o pedido</label>
+            <b class="valor-calc" data-out="mesesAuto">–</b>
+            <small>O prazo mais longo, até 12 meses, em que o kit avulso não passa de R$ 10,99, o teto do preço justo da pesquisa. É o ritmo de vendas mais leve com um preço que o público aceita.</small>
+            <label for="k-meses" style="margin-top:6px;font-size:12.5px">Outro prazo (opcional)</label>
+            <span class="campo opcional"><input id="k-meses" data-k="meses" data-fmt="qtd" inputmode="decimal" placeholder="Usar o recomendado"><span class="ad">meses</span></span>
           </div>
         </div>
         <div class="resultados">
           <div class="res"><span>Gastos fixos por mês</span><b data-out="gastos">–</b><small>Gastos fixos + amortização</small></div>
-          <div class="res"><span>Kits vendidos por mês</span><b data-out="kitsMes">–</b><small>Kits do pedido ÷ meses</small></div>
+          <div class="res"><span>Kits vendidos por mês</span><b data-out="kitsMes">–</b><small>Kits do pedido ÷ prazo. É o ritmo médio do ano.</small></div>
           <div class="res forte"><span>Rateio por kit</span><b data-out="rateioKit">–</b><small>Gastos fixos ÷ kits vendidos por mês</small></div>
+        </div>
+        <div class="alerta amarelo" id="alerta-prazo" role="status" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
+          <span data-out="alertaPrazo">–</span>
         </div>
 
         <h3 class="subtitulo">Quanto cada produto paga dos gastos fixos nas metas</h3>
@@ -745,19 +751,22 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
             <tbody id="tb-meta-mt"></tbody>
           </table></div>
         </div>
-        <p class="fonte">Por mês: um mês sem gastos extras. No ano: soma dos 12 meses da tabela abaixo, com os gastos extras. Como as quantidades são arredondadas para cima, o ponto de equilíbrio pode mostrar um lucro pequeno.</p>
+        <p class="fonte">Por mês: o ritmo médio, num mês sem gastos extras. No ano: soma dos 12 meses do plano abaixo, com as vendas crescendo mês a mês e os gastos extras. As quantidades são arredondadas para cima, por isso o ponto de equilíbrio pode mostrar um lucro pequeno.</p>
         <div class="falta" data-falta="metas" hidden></div>
         <div class="alerta vermelho" id="alerta-meta" role="status" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/></svg>
           <span data-out="alertaMeta">–</span>
         </div>
 
-        <h3 class="subtitulo">Mês a mês em 2027</h3>
-        <p class="explica" style="margin-bottom:12px">Escolham qual meta ver. Os gastos extras de um mês, como anúncios no lançamento, aumentam a meta só daquele mês.</p>
-        <div class="seg" role="group" aria-label="Meta exibida na tabela">
-          <button type="button" data-vista="mt" aria-pressed="true">Meta de lucro</button>
-          <button type="button" data-vista="eq" aria-pressed="false">Ponto de equilíbrio</button>
+        <h3 class="subtitulo">Plano mês a mês em 2027</h3>
+        <p class="explica" style="margin-bottom:12px">As vendas crescem um pouco a cada mês, como acontece numa marca nova: janeiro começa em 15% do ritmo médio e dezembro chega a 185%. No ano, somam o mesmo que o ritmo médio × 12. O <b>saldo dos investimentos</b> começa negativo, com tudo que foi investido, e sobe com o lucro de cada mês até os investimentos serem recuperados.</p>
+        <div class="resultados" style="margin-bottom:16px">
+          <div class="res"><span>Ponto de equilíbrio</span><b data-out="mesEq">–</b><small>Primeiro mês sem prejuízo: <span data-out="mesEqN">–</span></small></div>
+          <div class="res"><span>Investimentos recuperados</span><b data-out="mesPayback">–</b><small>Saldo volta a ficar positivo: <span data-out="mesPaybackN">–</span>. Investido: <span data-out="investTotal">–</span></small></div>
+          <div class="res"><span>Faturamento de 2027</span><b data-out="fatAno">–</b><small>Soma dos 12 meses</small></div>
+          <div class="res forte"><span>Lucro de 2027</span><b data-out="lucroAno">–</b><small data-out="margemAno">–</small></div>
         </div>
+        <p class="fonte" style="margin:-6px 0 12px">Gastos extras de um mês, como anúncios no lançamento, entram só naquele mês.</p>
         <div class="mensal-wrap">
           <table class="mensal">
             <thead id="th-mensal"></thead>
@@ -960,11 +969,21 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         kitsLote = kitsLote == null ? k : Math.min(kitsLote, k);
       }
     });
-    if (s.meses == null) { r.falta.volume.push(ROTULOS.meses); pend(ROTULOS.meses, "Etapa 2", "k-meses"); }
     r.kitsLote = kitsLote;
-    r.kitsMes = kitsLote > 0 && s.meses > 0 ? kitsLote / s.meses : NaN;
-    r.R = r.kitsMes > 0 ? r.gastos / r.kitsMes : NaN;
     r.divPreco = 1 - r.impostosPct - r.margemPct;
+    /* Prazo recomendado: o mais longo (até 12 meses) em que o kit avulso não passa do teto do preço justo */
+    var C1 = soma.banho + soma.pedido + soma.avulso + r.taxaFixaPedido;
+    var folga = FAIXA_MAX * r.divPreco - C1;
+    r.prazoAcima = false;
+    r.C1 = C1;
+    if (kitsLote > 0 && r.divPreco > 0) {
+      var mMax = r.gastos > 0 ? folga * kitsLote / r.gastos : 12;
+      if (mMax < 1) { r.mesesAuto = 1; r.prazoAcima = true; }
+      else r.mesesAuto = Math.min(12, Math.floor(mMax + 1e-9));
+    } else r.mesesAuto = NaN;
+    r.mesesUsados = s.meses > 0 ? s.meses : r.mesesAuto;
+    r.kitsMes = kitsLote > 0 && r.mesesUsados > 0 ? kitsLote / r.mesesUsados : NaN;
+    r.R = r.kitsMes > 0 ? r.gastos / r.kitsMes : NaN;
 
     /* Preço = (custo variável + rateio) ÷ (1 − impostos − margem) */
     r.prods = PRODUTOS.map(function (p) {
@@ -1023,12 +1042,33 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       });
       return a;
     }
-    r.meses = {
-      mt: MESES.map(function (m, j) { return plano("mt", z(s.extras[j])); }),
-      eq: MESES.map(function (m, j) { return plano("eq", z(s.extras[j])); })
-    };
+    /* Plano progressivo: o mês j vende 2j/13 do ritmo médio (soma 12 × ritmo no ano) */
+    r.investTotal = s.invest.reduce(function (a, it) { return a + z(it.v); }, 0);
+    var acum = 0, caixa = -r.investTotal;
+    r.mesEq = null; r.mesPayback = null;
+    r.plano = MESES.map(function (m, j) {
+      var extra = z(s.extras[j]);
+      var eq = plano("eq", extra);
+      var o = { extra: extra, fixos: r.gastos, ok: part.length > 0 && isFinite(r.kitsMes), prods: {}, pedidos: 0, kits: 0, fat: 0, cv: 0, imp: 0, lucro: 0, eqKits: eq.ok ? eq.kits : NaN };
+      if (!o.ok) return o;
+      var alvo = r.kitsMes * 2 * (j + 1) / 13;
+      part.forEach(function (x) {
+        var q = Math.ceil(alvo * x.w / x.n - 1e-9);
+        var fat = q * x.P, cv = q * x.C;
+        o.prods[x.id] = { q: q, kits: q * x.n, fat: fat, lucro: fat * (1 - r.impostosPct) - cv - (r.gastos + extra) * x.w };
+        o.pedidos += q; o.kits += q * x.n; o.fat += fat; o.cv += cv;
+      });
+      o.imp = o.fat * r.impostosPct;
+      o.lucro = o.fat - o.cv - o.imp - r.gastos - extra;
+      o.margem = o.fat > 0 ? o.lucro / o.fat : NaN;
+      acum += o.lucro; caixa += o.lucro + r.depreciacao;
+      o.lucroAcum = acum; o.caixa = caixa;
+      if (r.mesEq == null && o.lucro >= 0) r.mesEq = j + 1;
+      if (r.mesPayback == null && caixa >= 0) r.mesPayback = j + 1;
+      return o;
+    });
     r.base = { mt: plano("mt", 0), eq: plano("eq", 0) };
-    r.ano = { mt: ano(r.meses.mt), eq: ano(r.meses.eq) };
+    r.ano = { mt: ano(r.plano), eq: ano(MESES.map(function (m, j) { return plano("eq", z(s.extras[j])); })) };
     return r;
   }
 
@@ -1117,16 +1157,18 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   var LINHAS_MES = [
     { k: "fixos", t: "Gastos fixos e amortização", fmt: "brl" },
     { k: "extra", t: "Gastos extras do mês", input: true },
-    { k: "pedidos", t: "Pedidos no mês", fmt: "int", cls: "forte" },
+    { k: "kits", t: "Kits vendidos", fmt: "int", cls: "forte" },
     { k: "q1", t: "Pedidos de kit avulso", fmt: "int" },
     { k: "q5", t: "Pedidos de caixa com 5", fmt: "int" },
     { k: "q10", t: "Pedidos de caixa com 10", fmt: "int" },
-    { k: "kits", t: "Kits vendidos", fmt: "int", cls: "forte" },
     { k: "fat", t: "Faturamento", fmt: "brl", cls: "destaque" },
     { k: "cv", t: "Custos variáveis", fmt: "brl" },
     { k: "imp", t: "Impostos e taxas", fmt: "brl" },
-    { k: "lucro", t: "Lucro", fmt: "brl", cls: "destaque" },
-    { k: "margem", t: "Margem de lucro", fmt: "pct" }
+    { k: "lucro", t: "Lucro do mês", fmt: "brl", cls: "destaque" },
+    { k: "margem", t: "Margem de lucro", fmt: "pct" },
+    { k: "eqKits", t: "Kits no ponto de equilíbrio", fmt: "int" },
+    { k: "lucroAcum", t: "Lucro acumulado", fmt: "brl", ultimo: true, cls: "forte" },
+    { k: "caixa", t: "Saldo dos investimentos", fmt: "brl", ultimo: true, cls: "forte" }
   ];
   function montarMensal() {
     document.getElementById("th-mensal").innerHTML = "<tr><th>Mês</th>" +
@@ -1143,11 +1185,11 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     return fmt === "brl" ? brl(v) : fmt === "int" ? num(v, 0) : pct(v, 1);
   }
   function renderMensal(r) {
-    var lista = r.meses[vista];
-    var tot = { fixos: 0, extra: 0, pedidos: 0, q1: 0, q5: 0, q10: 0, kits: 0, fat: 0, cv: 0, imp: 0, lucro: 0 };
+    var lista = r.plano;
+    var tot = { fixos: 0, extra: 0, kits: 0, q1: 0, q5: 0, q10: 0, fat: 0, cv: 0, imp: 0, lucro: 0, eqKits: 0, lucroAcum: NaN, caixa: NaN };
     lista.forEach(function (o, j) {
       var q = function (id) { return o.prods[id] ? o.prods[id].q : 0; };
-      var v = o.ok ? { fixos: o.fixos, pedidos: o.pedidos, q1: q("1"), q5: q("5"), q10: q("10"), kits: o.kits, fat: o.fat, cv: o.cv, imp: o.imp, lucro: o.lucro, margem: o.margem } : {};
+      var v = o.ok ? { fixos: o.fixos, kits: o.kits, q1: q("1"), q5: q("5"), q10: q("10"), fat: o.fat, cv: o.cv, imp: o.imp, lucro: o.lucro, margem: o.margem, eqKits: o.eqKits, lucroAcum: o.lucroAcum, caixa: o.caixa } : {};
       LINHAS_MES.forEach(function (l) {
         if (l.input) return;
         var el = document.querySelector('[data-m="' + l.k + "-" + j + '"]');
@@ -1155,15 +1197,19 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         el.classList.toggle("neg", v[l.k] < -0.004);
       });
       tot.extra += o.extra;
-      if (o.ok) Object.keys(tot).forEach(function (k) { if (k !== "extra") tot[k] += v[k]; });
+      if (o.ok) Object.keys(tot).forEach(function (k) {
+        if (k === "extra") return;
+        var l = LINHAS_MES.filter(function (x) { return x.k === k; })[0];
+        if (l && l.ultimo) tot[k] = v[k]; else tot[k] += v[k];
+      });
     });
     var ok = lista.every(function (o) { return o.ok; });
     LINHAS_MES.forEach(function (l) {
       var el = document.querySelector('[data-m="' + l.k + '-t"]');
       var v = l.k === "margem" ? (tot.fat > 0 ? tot.lucro / tot.fat : NaN) : tot[l.k];
       el.textContent = (ok || l.k === "extra") ? fmtM(v, l.fmt || "brl") : "–";
+      el.classList.toggle("neg", ok && v < -0.004);
     });
-    document.querySelectorAll("[data-vista]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.vista === vista)); });
   }
 
   function renderMetas(r, parcial) {
@@ -1224,6 +1270,9 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     setOut("kitsLote", r.kitsLote == null ? "–" : inteiro(r.kitsLote) + " kits", f.volume.length > 0);
     setOut("kitsMes", isFinite(r.kitsMes) ? num(r.kitsMes, r.kitsMes % 1 ? 1 : 0) + " kits" : "–", f.volume.length > 0);
     setOut("rateioKit", brl(r.R), f.fixos.length + f.volume.length > 0);
+    setOut("mesesAuto", isFinite(r.mesesAuto) ? num(r.mesesAuto, 0) + (r.mesesAuto === 1 ? " mês" : " meses") : "–", faltaTudo.length > 0);
+    document.getElementById("alerta-prazo").hidden = !r.prazoAcima;
+    if (r.prazoAcima) setOut("alertaPrazo", "Mesmo vendendo o pedido em 1 mês, o kit avulso passa de R$ 10,99, o teto do preço justo. Só o custo variável do kit já é " + brl(r.C1) + ". Revejam os custos com a fabricante ou a margem desejada.");
 
     /* Etapa 3 */
     document.getElementById("tb-custo-total").innerHTML = r.prods.map(function (x) {
@@ -1265,6 +1314,15 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     var alerta = document.getElementById("alerta-meta");
     alerta.hidden = !(r.divPreco <= 0);
     if (r.divPreco <= 0) setOut("alertaMeta", "Impostos e taxas mais a margem somam " + pct(1 - r.divPreco) + ", ou seja, 100% ou mais do preço. O preço não fecha: reduzam a margem desejada.");
+    var okPlano = r.plano.every(function (o) { return o.ok; });
+    setOut("mesEq", okPlano ? (r.mesEq ? MESES[r.mesEq - 1] : "Após 2027") : "–", parcial);
+    setOut("mesEqN", okPlano && r.mesEq ? "mês " + r.mesEq : "–");
+    setOut("mesPayback", okPlano ? (r.mesPayback ? MESES[r.mesPayback - 1] : "Após 2027") : "–", parcial);
+    setOut("mesPaybackN", okPlano && r.mesPayback ? "mês " + r.mesPayback : "–");
+    setOut("investTotal", brl(r.investTotal), f.fixos.length > 0);
+    setOut("fatAno", okPlano ? brl(r.ano.mt.fat) : "–", parcial);
+    setOut("lucroAno", okPlano ? brl(r.ano.mt.lucro) : "–", parcial);
+    setOut("margemAno", okPlano && r.ano.mt.fat > 0 ? "Margem de " + pct(r.ano.mt.lucro / r.ano.mt.fat, 1) + " no ano" : "–");
     renderMensal(r);
 
     renderPendencias(r.pend);
@@ -1404,8 +1462,6 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       salvar(); montarListas(); render();
       return;
     }
-    var vb = e.target.closest("[data-vista]");
-    if (vb) { vista = vb.dataset.vista; render(); return; }
     var ir = e.target.closest("[data-ir]");
     if (ir) {
       var alvo = document.getElementById(ir.dataset.ir);
