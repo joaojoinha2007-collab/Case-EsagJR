@@ -662,7 +662,7 @@ table.calc td.out small { white-space: nowrap; }
 html.escalado table.calc tbody th, html.escalado table.calc thead tr:last-child th:first-child { position: static; }
 html.escalado .rolagem { overflow-x: visible; }
 html.escalado table.calc { min-width: 0; }
-html.escalado .wrap-l { max-width: 1400px; }
+html.escalado .wrap-l { max-width: none; }
 
 /* v20: cabeçalho compacto para caber tudo na altura da tela */
 .topo-in { padding-block: 6px; }
@@ -680,6 +680,16 @@ main.wrap-l { padding-block: 10px 22px; gap: 10px; }
 .bloco { padding: 10px 14px 10px; }
 .bloco h2 { margin-bottom: 8px; font-size: 15px; }
 .nota { margin-top: 4px; }
+
+/* v21: escala por transform */
+#escala-wrap { overflow: hidden; }
+#escala { transform-origin: 0 0; }
+html.escalado body { overflow-x: hidden; }
+@media (max-width: 699px) {
+  table.mini .campo { width: 104px; }
+  table.mini .campo.q, table.mini .campo.p { width: 76px; }
+  table.mini td:first-child { min-width: 110px; }
+}
 </style>
 
 </head>
@@ -1067,12 +1077,12 @@ main.wrap-l { padding-block: 10px 22px; gap: 10px; }
         taxas: { nome: "", v: null, uso: null, novo: true }
       };
       var l = add.dataset.add; s[l].push(copia(NOVOS[l]));
-      salvar(); montar(); render(); ajustarEscala();
+      salvar(); montar(); render(); atualizarAltura();
       var n = document.querySelector('[data-path="' + l + "." + (s[l].length - 1) + '.nome"]'); if (n) n.focus();
       return;
     }
     var rem = e.target.closest("[data-rem]");
-    if (rem) { s[rem.dataset.rem].splice(+rem.dataset.i, 1); salvar(); montar(); render(); ajustarEscala(); return; }
+    if (rem) { s[rem.dataset.rem].splice(+rem.dataset.i, 1); salvar(); montar(); render(); atualizarAltura(); return; }
     if (e.target.closest("#aplicar-var")) {
       var v = Math.round(calcular().varTot * 100) / 100;
       s.produtos.forEach(function (p) { p.imp = v; }); s.caixas.forEach(function (c) { c.imp = v; });
@@ -1093,21 +1103,41 @@ main.wrap-l { padding-block: 10px 22px; gap: 10px; }
 
   /* Escala: a página é montada com 1400 px de largura e reduzida para caber
      inteira na tela (iPad, notebook, monitor). No celular, fica no tamanho normal. */
-  var LARGURA = 1400;
+  var LARGURA = 1400, zAtual = 1;
+  /* Reduz a página inteira com transform: scale, que se comporta igual em
+     todos os navegadores (inclusive Safari no iPad). Tudo fica dentro de
+     #escala; #escala-wrap guarda a altura reduzida para não sobrar espaço. */
+  var wrap = document.createElement("div"); wrap.id = "escala-wrap";
+  var cont = document.createElement("div"); cont.id = "escala";
+  wrap.appendChild(cont);
+  Array.prototype.slice.call(document.body.children).forEach(function (el) { if (el.tagName !== "SCRIPT") cont.appendChild(el); });
+  document.body.insertBefore(wrap, document.body.firstChild);
+
+  function atualizarAltura() {
+    wrap.style.height = zAtual === 1 ? "" : Math.ceil(cont.offsetHeight * zAtual) + "px";
+  }
   function ajustarEscala() {
     var w = document.documentElement.clientWidth, h = window.innerHeight;
-    document.body.style.zoom = "";
-    if (w < 700) { document.documentElement.classList.remove("escalado"); return; }
+    cont.style.transform = ""; cont.style.marginLeft = ""; wrap.style.height = "";
+    if (w < 700) { document.documentElement.classList.remove("escalado"); cont.style.width = ""; zAtual = 1; return; }
     document.documentElement.classList.add("escalado");
-    /* altura da página até o fim da tabela das caixas, no tamanho real */
+    cont.style.width = LARGURA + "px";
+    /* altura até o fim da tabela das caixas, com os painéis fechados */
+    var abertos = Array.prototype.filter.call(document.querySelectorAll("details.painel"), function (d) { return d.open; });
+    abertos.forEach(function (d) { d.open = false; });
     var alvo = document.querySelector("#caixas .sob-tabela") || document.getElementById("caixas");
-    var altura = alvo.getBoundingClientRect().bottom + window.scrollY + 8;
-    var z = Math.min(1, w / LARGURA, h / altura);
-    z = Math.max(z, 0.5);
-    document.body.style.zoom = z === 1 ? "" : String(z);
+    var altura = alvo.getBoundingClientRect().bottom - cont.getBoundingClientRect().top + 8;
+    abertos.forEach(function (d) { d.open = true; });
+    var z = Math.max(0.5, Math.min(1, w / LARGURA, h / altura));
+    if (z === 1 && w >= LARGURA) { cont.style.width = ""; zAtual = 1; return; }
+    zAtual = z;
+    cont.style.transform = "scale(" + z + ")";
+    cont.style.marginLeft = Math.max(0, (w - LARGURA * z) / 2) + "px";
+    atualizarAltura();
   }
-  window.addEventListener("resize", ajustarEscala);
-  document.addEventListener("toggle", function () { ajustarEscala(); }, true);
+  var tRes = null;
+  window.addEventListener("resize", function () { clearTimeout(tRes); tRes = setTimeout(ajustarEscala, 80); });
+  document.addEventListener("toggle", function () { atualizarAltura(); }, true);
 
   s = carregar();
   montar();
