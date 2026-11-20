@@ -560,7 +560,7 @@ td.acao:empty { padding: 0; width: 0; }
     <section class="etapa" id="etapa-1">
       <div class="faixa"><span class="num">1</span><h2>Shampoo e condicionador: custo e preço</h2></div>
       <div class="corpo">
-        <p class="explica">Em cada componente: <b>unidades × preço unitário = valor total</b>. <b>Custo unitário</b> = soma dos preços unitários + imposto. <b>Markup</b> = 1 ÷ (1 − imposto − margem). <b>Preço</b> = custo × markup.</p>
+        <p class="explica">Em cada componente: <b>unidades × preço unitário = valor total</b>. <b>Custo de produção</b> = soma dos preços unitários. <b>Markup</b> = 1 ÷ (1 − despesas fixas − despesas variáveis − margem). <b>Preço</b> = custo × markup.</p>
         <div class="produtos dois" id="cards-produtos"></div>
         <div class="falta" data-falta="produtos" hidden></div>
       </div>
@@ -570,7 +570,7 @@ td.acao:empty { padding: 0; width: 0; }
     <section class="etapa" id="etapa-2">
       <div class="faixa"><span class="num">2</span><h2>Caixas: montagem e preço</h2></div>
       <div class="corpo">
-        <p class="explica">Escolham o que vai em cada caixa. <b>Preço</b> = custo total × markup, com o markup da margem da caixa.</p>
+        <p class="explica">Escolham o que vai em cada caixa. <b>Preço</b> = custo da caixa × markup, com as despesas fixas, as variáveis e a margem da caixa.</p>
         <div class="produtos caixas" id="cards-caixas"></div>
         <button class="btn-add" type="button" data-add="caixas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar caixa</button>
         <div class="faixa-justa">
@@ -619,7 +619,7 @@ td.acao:empty { padding: 0; width: 0; }
     <section class="etapa" id="etapa-4">
       <div class="faixa"><span class="num">4</span><h2>Gastos fixos e investimentos</h2></div>
       <div class="corpo">
-        <p class="explica">Gastos que existem mesmo sem vendas. Investimentos entram divididos pela vida útil.</p>
+        <p class="explica">Gastos que existem mesmo sem vendas. Investimentos entram divididos pela vida útil. O rateio por produto entra no markup como despesa fixa.</p>
         <h3 class="subtitulo">Gastos fixos por mês</h3>
         <div class="tabela-wrap">
           <table class="resp">
@@ -653,6 +653,19 @@ td.acao:empty { padding: 0; width: 0; }
           </table>
         </div>
         <button class="btn-add" type="button" data-add="invest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar investimento</button>
+        <h3 class="subtitulo">Rateio</h3>
+        <div class="grade">
+          <div class="grupo">
+            <label for="produtosMes">Produtos vendidos por mês</label>
+            <span class="campo"><input id="produtosMes" data-path="produtosMes" data-fmt="inteiro" inputmode="numeric" placeholder="Preencher"><span class="ad">un</span></span>
+            <small>Projeção de Vendas da planilha: 238 banhos por mês × 2 (shampoo e condicionador).</small>
+          </div>
+          <div class="grupo">
+            <label>Rateio por produto</label>
+            <b class="valor-calc" data-out="rateioProd">–</b>
+            <small>Gastos fixos ÷ produtos vendidos. Entra no markup como despesa fixa.</small>
+          </div>
+        </div>
         <div class="falta" data-falta="fixos" hidden></div>
       </div>
     </section>
@@ -734,6 +747,7 @@ td.acao:empty { padding: 0; width: 0; }
       { id: "mkt", nome: "Comissão de marketplace", fonte: "0% de uso se for só a loja própria", v: 9, uso: null }
     ],
     taxaFixa: null,
+    produtosMes: 476,
     fixos: [
       { nome: "Contador", fonte: "Meu Contador Online", v: 349.00 },
       { nome: "Sistema de gestão e nota fiscal (Bling)", fonte: "Bling", v: 60.00 },
@@ -758,7 +772,7 @@ td.acao:empty { padding: 0; width: 0; }
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
   var MESES = ["jan./27", "fev./27", "mar./27", "abr./27", "mai./27", "jun./27", "jul./27", "ago./27", "set./27", "out./27", "nov./27", "dez./27"];
   var CORES = ["#0047bb", "#1f2a44", "#2f8f7e", "#b7791f", "#6b46c1", "#c53030"];
-  var CHAVE = "week-precificacao-v14";
+  var CHAVE = "week-precificacao-v15";
 
   var s;
 
@@ -835,45 +849,6 @@ td.acao:empty { padding: 0; width: 0; }
     r.taxaFixaPedido = z(s.taxaFixa) * usoCartao;
     var I = r.impostosPct;
 
-    /* Etapa 1: shampoo e condicionador */
-    r.prods = s.produtos.map(function (p, pi) {
-      var base = 0, pedido = 0, temPedido = false;
-      p.itens.forEach(function (it, ii) {
-        base += z(it.v);
-        it._total = (it.q == null || it.v == null) ? null : it.q * it.v;
-        if (it._total != null) { pedido += it._total; temPedido = true; }
-        var n = p.nome + ": " + nomeDe(it, "custo " + (ii + 1)).replace(/:.*$/, "").toLowerCase();
-        if (it.q == null) { pend(n + " (unidades)", "Etapa 1", "produtos." + pi + ".itens." + ii + ".q"); }
-        if (it.v == null) { r.falta.produtos.push(n); pend(n + " (preço)", "Etapa 1", "produtos." + pi + ".itens." + ii + ".v"); }
-      });
-      base = base * (1 + z(p.perda) / 100);
-      if (p.margem == null) { r.falta.produtos.push("margem do " + p.nome.toLowerCase()); pend("Margem do " + p.nome.toLowerCase(), "Etapa 1", "produtos." + pi + ".margem"); }
-      var m = z(p.margem) / 100, div = 1 - I - m;
-      var completo = p.itens.every(function (it) { return it.v != null; });
-      var P = completo && p.margem != null && base > 0 && div > 0 ? base / div : NaN;
-      return { completo: completo, base: base, m: m, P: P, mk: isFinite(P) ? 1 / div : NaN, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: temPedido ? pedido : NaN };
-    });
-    var sh = r.prods[0], co = r.prods[1];
-
-    /* Etapa 2: caixas */
-    r.caixas = s.caixas.map(function (c, ci) {
-      var nome = nomeDe(c, "Caixa " + (ci + 1));
-      [["qSh", "shampoos"], ["qCo", "condicionadores"], ["caixa", "custo da caixa"], ["log", "logística"], ["margem", "margem"]].forEach(function (f) {
-        if (c[f[0]] == null) { r.falta.caixas.push(nome + ": " + f[1]); pend(nome + ": " + f[1], "Etapa 2", "caixas." + ci + "." + f[0]); }
-      });
-      var prodOk = sh.completo && co.completo;
-      var prod = prodOk ? z(c.qSh) * sh.base + z(c.qCo) * co.base : NaN;
-      var base = prodOk ? prod + z(c.caixa) + z(c.log) + r.taxaFixaPedido : NaN;
-      var m = z(c.margem) / 100, div = 1 - I - m;
-      var P = base > 0 && c.margem != null && div > 0 ? base / div : NaN;
-      var kits = (z(c.qSh) + z(c.qCo)) / 2;
-      return {
-        nome: nome, prod: prod, base: base, m: m, P: P, mk: isFinite(P) ? 1 / div : NaN, imp: P * I, lucro: P * m, kits: kits,
-        porKit: kits > 0 ? P / kits : NaN, markup: P / base,
-        separado: z(c.qSh) * sh.P + z(c.qCo) * co.P
-      };
-    });
-
     /* Etapa 4: gastos fixos e investimentos */
     r.gastos = 0;
     s.fixos.forEach(function (it, i) {
@@ -889,13 +864,61 @@ td.acao:empty { padding: 0; width: 0; }
     });
     r.gastos += r.depreciacao;
 
+    if (s.produtosMes == null) pend("Produtos vendidos por mês", "Etapa 4", "produtosMes");
+    r.rateioProd = s.produtosMes > 0 ? r.gastos / s.produtosMes : NaN;
+    var R = z(r.rateioProd);
+
+    /* Etapa 1: shampoo e condicionador */
+    r.prods = s.produtos.map(function (p, pi) {
+      var base = 0, pedido = 0, temPedido = false;
+      p.itens.forEach(function (it, ii) {
+        base += z(it.v);
+        it._total = (it.q == null || it.v == null) ? null : it.q * it.v;
+        if (it._total != null) { pedido += it._total; temPedido = true; }
+        var n = p.nome + ": " + nomeDe(it, "custo " + (ii + 1)).replace(/:.*$/, "").toLowerCase();
+        if (it.q == null) { pend(n + " (unidades)", "Etapa 1", "produtos." + pi + ".itens." + ii + ".q"); }
+        if (it.v == null) { r.falta.produtos.push(n); pend(n + " (preço)", "Etapa 1", "produtos." + pi + ".itens." + ii + ".v"); }
+      });
+      base = base * (1 + z(p.perda) / 100);
+      if (p.margem == null) { r.falta.produtos.push("margem do " + p.nome.toLowerCase()); pend("Margem do " + p.nome.toLowerCase(), "Etapa 1", "produtos." + pi + ".margem"); }
+      var m = z(p.margem) / 100;
+      var completo = p.itens.every(function (it) { return it.v != null; });
+      var DF = completo && p.margem != null && base + R > 0 ? R * (1 - I - m) / (base + R) : NaN;
+      var mk = (1 - DF - I - m) > 0 ? 1 / (1 - DF - I - m) : NaN;
+      var P = base > 0 ? base * mk : NaN;
+      return { completo: completo, base: base, m: m, DF: DF, P: P, mk: mk, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: temPedido ? pedido : NaN };
+    });
+    var sh = r.prods[0], co = r.prods[1];
+
+    /* Etapa 2: caixas */
+    r.caixas = s.caixas.map(function (c, ci) {
+      var nome = nomeDe(c, "Caixa " + (ci + 1));
+      [["qSh", "shampoos"], ["qCo", "condicionadores"], ["caixa", "custo da caixa"], ["log", "logística"], ["margem", "margem"]].forEach(function (f) {
+        if (c[f[0]] == null) { r.falta.caixas.push(nome + ": " + f[1]); pend(nome + ": " + f[1], "Etapa 2", "caixas." + ci + "." + f[0]); }
+      });
+      var prodOk = sh.completo && co.completo;
+      var prod = prodOk ? z(c.qSh) * sh.base + z(c.qCo) * co.base : NaN;
+      var base = prodOk ? prod + z(c.caixa) + z(c.log) + r.taxaFixaPedido : NaN;
+      var m = z(c.margem) / 100;
+      var Rc = R * (z(c.qSh) + z(c.qCo));
+      var DF = base > 0 && c.margem != null ? Rc * (1 - I - m) / (base + Rc) : NaN;
+      var mk = (1 - DF - I - m) > 0 ? 1 / (1 - DF - I - m) : NaN;
+      var P = base > 0 ? base * mk : NaN;
+      var kits = (z(c.qSh) + z(c.qCo)) / 2;
+      return {
+        nome: nome, prod: prod, base: base, m: m, DF: DF, P: P, mk: mk, imp: P * I, lucro: P * m, contrib: P * (1 - I) - base, kits: kits,
+        porKit: kits > 0 ? P / kits : NaN, markup: P / base,
+        separado: z(c.qSh) * sh.P + z(c.qCo) * co.P
+      };
+    });
+
     /* Etapa 5: metas. As vendas se dividem entre as caixas pelo custo de cada uma. */
-    var validas = r.caixas.filter(function (c) { return isFinite(c.P) && c.lucro > 0; });
+    var validas = r.caixas.filter(function (c) { return isFinite(c.P) && c.contrib > 0; });
     var somaBase = validas.reduce(function (acc, c) { return acc + c.base; }, 0);
     r.caixas.forEach(function (c) {
-      c.ok = isFinite(c.P) && c.lucro > 0;
+      c.ok = isFinite(c.P) && c.contrib > 0;
       c.w = c.ok && somaBase > 0 ? c.base / somaBase : 0;
-      c.eqSo = c.ok ? Math.ceil(r.gastos / c.lucro - 1e-9) : NaN;
+      c.eqSo = c.ok ? Math.ceil(r.gastos / c.contrib - 1e-9) : NaN;
       c.ano = 0;
     });
     r.metaOk = validas.length > 0;
@@ -911,7 +934,7 @@ td.acao:empty { padding: 0; width: 0; }
       if (!o.ok) return o;
       var alvo = r.lucroNecessario * 2 * (j + 1) / 13 + extra;
       r.caixas.forEach(function (c, ci) {
-        var u = c.ok ? Math.ceil(c.w * alvo / c.lucro - 1e-9) : 0;
+        var u = c.ok ? Math.ceil(c.w * alvo / c.contrib - 1e-9) : 0;
         o.u[ci] = u; c.ano += u;
         o.kits += u * c.kits; o.fat += u * z(c.P); o.custos += u * c.base;
       });
@@ -972,10 +995,9 @@ td.acao:empty { padding: 0; width: 0; }
           '<button class="btn-add" type="button" data-add="' + cam + '.itens">' + ICONE_ADD + 'Adicionar componente</button>' +
           '<div class="linha-campo"><label for="' + idDe(cam + ".perda") + '">Perda na produção<small>Opcional</small></label>' + campo(cam + ".perda", "pct", "", "%", "opcional", "Perda na produção do " + p.nome.toLowerCase(), "0") + '</div>' +
           '<div class="linha sutil"><span>Total do pedido de compra</span><b data-out="p' + pi + '-pedido">–</b></div>' +
-          '<div class="linha"><span>Imposto (<span data-out="impostosPct">–</span>)</span><b data-out="p' + pi + '-imp">–</b></div>' +
-          '<div class="linha total-linha"><span>Custo unitário (um sachê)</span><b data-out="p' + pi + '-custo">–</b></div>' +
+          '<div class="linha total-linha"><span>Custo de produção (um sachê)</span><b data-out="p' + pi + '-custo">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada do " + p.nome.toLowerCase()) + '</div>' +
-          '<div class="linha mk-linha"><span>Markup <small>1 ÷ (1 − imposto − margem)</small></span><b data-out="p' + pi + '-mk">–</b></div>' +
+          '<div class="linha mk-linha"><span>Markup <small data-out="p' + pi + '-mkTxt">1 ÷ (1 − fixas − variáveis − margem)</small></span><b data-out="p' + pi + '-mk">–</b></div>' +
           '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Custo × markup · lucro de <span data-out="p' + pi + '-lucro">–</span></small></div>' +
         '</div></article>';
     }).join("");
@@ -998,8 +1020,8 @@ td.acao:empty { padding: 0; width: 0; }
           linhaCampo("log", "Logística", c.logFonte, "dinheiro", "R$", "") +
           '<div class="linha total-linha"><span>Custo total</span><b data-out="c' + ci + '-base">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada da " + n) + '</div>' +
-          '<div class="linha mk-linha"><span>Markup <small>1 ÷ (1 − imposto − margem)</small></span><b data-out="c' + ci + '-mk">–</b></div>' +
-          '<div class="linha"><span>Imposto (<span data-out="impostosPct">–</span>)</span><b data-out="c' + ci + '-imp">–</b></div>' +
+          '<div class="linha mk-linha"><span>Markup <small data-out="c' + ci + '-mkTxt">1 ÷ (1 − fixas − variáveis − margem)</small></span><b data-out="c' + ci + '-mk">–</b></div>' +
+          
           '<div class="margem-box verde preco-box"><span>Preço da caixa</span><b data-out="c' + ci + '-preco">–</b><small><span data-out="c' + ci + '-porKit">–</span> por kit · lucro de <span data-out="c' + ci + '-lucro">–</span></small></div>' +
         '</div></article>';
     }).join("");
@@ -1054,6 +1076,7 @@ td.acao:empty { padding: 0; width: 0; }
   function montar() {
     montarProdutos(); montarCaixas(); montarTabelas(); montarMensal();
     document.getElementById("taxaFixa").value = paraCampo(s.taxaFixa, "dinheiro");
+    document.getElementById("produtosMes").value = paraCampo(s.produtosMes, "inteiro");
   }
 
   /* ---------- Renderização ---------- */
@@ -1092,12 +1115,13 @@ td.acao:empty { padding: 0; width: 0; }
     /* Etapa 1 */
     r.prods.forEach(function (x, pi) {
       setOut("p" + pi + "-imp", brl(x.imp), pProd);
-      setOut("p" + pi + "-custo", x.completo ? brl(isFinite(x.P) ? x.custo : x.base) : "–", pProd);
+      setOut("p" + pi + "-custo", x.completo ? brl(x.base) : "–", f.produtos.length > 0);
       setOut("p" + pi + "-preco", brl(x.P), pProd);
       setOut("p" + pi + "-lucro", brl(x.lucro));
       setOut("p" + pi + "-markup", isFinite(x.markup) ? num(x.markup, 3) : "–");
       setOut("p" + pi + "-pedido", brl(x.pedido));
       setOut("p" + pi + "-mk", isFinite(x.mk) ? num(x.mk, 3) : "–", pProd);
+      setOut("p" + pi + "-mkTxt", isFinite(x.mk) ? "1 ÷ (1 − " + pct(x.DF, 1) + " fixas − " + pct(r.impostosPct, 1) + " variáveis − " + pct(x.m, 0) + " margem)" : "1 ÷ (1 − fixas − variáveis − margem)");
       s.produtos[pi].itens.forEach(function (it, ii) { setOut("p" + pi + "-t" + ii, brl(it._total)); });
     });
     setFalta("produtos", unir(f.produtos, f.taxas), "Preço provisório. Falta preencher: ");
@@ -1110,6 +1134,7 @@ td.acao:empty { padding: 0; width: 0; }
       setOut("c" + ci + "-imp", brl(c.imp), pCx);
       setOut("c" + ci + "-preco", brl(c.P), pCx);
       setOut("c" + ci + "-mk", isFinite(c.mk) ? num(c.mk, 3) : "–", pCx);
+      setOut("c" + ci + "-mkTxt", isFinite(c.mk) ? "1 ÷ (1 − " + pct(c.DF, 1) + " fixas − " + pct(r.impostosPct, 1) + " variáveis − " + pct(c.m, 0) + " margem)" : "1 ÷ (1 − fixas − variáveis − margem)");
       setOut("c" + ci + "-porKit", brl(c.porKit));
       setOut("c" + ci + "-lucro", brl(c.lucro));
       var sep = isFinite(c.separado) && isFinite(c.P) && c.separado > 0
@@ -1125,6 +1150,7 @@ td.acao:empty { padding: 0; width: 0; }
     setOut("depreciacao", brl(r.depreciacao));
     setOut("investTotal", brl(r.investTotal), f.fixos.length > 0);
     setOut("gastos", brl(r.gastos), f.fixos.length > 0);
+    setOut("rateioProd", brl(r.rateioProd), f.fixos.length > 0);
     setFalta("fixos", f.fixos, "Total provisório. Falta preencher: ");
 
     /* Etapa 5 */
