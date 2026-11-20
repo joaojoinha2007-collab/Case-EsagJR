@@ -657,6 +657,12 @@ footer { padding-block: 16px; font-size: 12.5px; }
 .th-sub { display: block; font-size: 9px; font-weight: 600; text-transform: none; letter-spacing: 0; opacity: .8; margin-top: 1px; }
 table.calc td.out small { white-space: nowrap; }
 .hero p { max-width: none; }
+
+/* v19: com a escala, as tabelas cabem inteiras: sem coluna fixa */
+html.escalado table.calc tbody th, html.escalado table.calc thead tr:last-child th:first-child { position: static; }
+html.escalado .rolagem { overflow-x: visible; }
+html.escalado table.calc { min-width: 0; }
+html.escalado .wrap-l { max-width: 1400px; }
 </style>
 
 </head>
@@ -953,7 +959,7 @@ table.calc td.out small { white-space: nowrap; }
         ? '<input class="nome-input" id="' + idDe(c + "nome") + '" data-path="' + c + 'nome" data-texto="1" placeholder="Nome da caixa" value="' + esc(x.nome) + '" aria-label="Nome da caixa">' +
           '<button class="btn-rem" type="button" data-rem="caixas" data-i="' + i + '" aria-label="Remover caixa" title="Remover">×</button>'
         : esc(x.nome);
-      return '<tr><th scope="row"><div class="nome-cx">' + nome + '</div><small data-out="c' + i + '-kits"></small></th>' +
+      return '<tr><th scope="row">' + (x.novo ? '<div class="nome-cx">' + nome + '</div>' : nome) + '<small data-out="c' + i + '-kits"></small></th>' +
         '<td>' + campo(c + "qSh", "inteiro", "", "", "Shampoos na " + x.nome) + '</td>' +
         '<td>' + campo(c + "qCo", "inteiro", "", "", "Condicionadores na " + x.nome) + '</td>' +
         saida("c" + i + "-prod") +
@@ -1067,6 +1073,18 @@ table.calc td.out small { white-space: nowrap; }
     clearTimeout(tR); btnR.classList.remove("confirmar"); lbl.textContent = "Limpar campos";
     s = copia(PADRAO); salvar(); montar(); render();
   });
+
+  /* Escala: a página é montada com 1400 px de largura e reduzida para caber
+     inteira na tela (iPad, notebook, monitor). No celular, fica no tamanho normal. */
+  var LARGURA = 1400;
+  function ajustarEscala() {
+    var w = document.documentElement.clientWidth;
+    var z = w >= 700 && w < LARGURA ? w / LARGURA : 1;
+    document.body.style.zoom = z === 1 ? "" : String(z);
+    document.documentElement.classList.toggle("escalado", z !== 1 || w >= 700);
+  }
+  window.addEventListener("resize", ajustarEscala);
+  ajustarEscala();
 
   s = carregar();
   montar();
