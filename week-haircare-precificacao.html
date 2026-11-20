@@ -603,6 +603,60 @@ table.calc td .kit { white-space: nowrap; font-size: 14px; }
 table.calc { min-width: 1180px; }
 table.calc { min-width: 1100px; width: 100%; } .rolagem { overflow-x: auto; }
 table.calc tbody th { width: auto; min-width: 0; white-space: normal; }
+
+/* v18: visão do todo, tudo em escala menor */
+body { font-size: 13px; }
+.topo-in { padding-block: 10px; }
+.logo-esag { height: 28px; }
+.logo-week { height: 32px; width: calc(32px * 2.4796); }
+.hero { padding-block: 16px 18px; }
+.hero .rotulo { font-size: 10.5px; margin-bottom: 4px; }
+.hero h1 { font-size: clamp(22px, 2.4vw, 28px); margin-bottom: 4px; }
+.hero p { font-size: 13.5px; }
+.btn { padding: 8px 14px; font-size: 13px; }
+main.wrap-l { padding-block: 14px 26px; gap: 14px; }
+.faixa-fixa { padding: 10px 14px; }
+.ff-tit { font-size: 13px; }
+.ff-campo, .ff-res { font-size: 11px; }
+.ff-campo .campo { width: 130px; height: 32px; }
+.ff-res b { font-size: 17px; line-height: 32px; }
+.ff-op { font-size: 18px; padding-bottom: 4px; }
+.paineis { margin-top: 8px; gap: 10px; }
+.painel summary { padding: 7px 12px; font-size: 13px; }
+.bloco { padding: 14px 14px 12px; }
+.bloco h2 { font-size: 15.5px; margin-bottom: 10px; }
+.bloco h2 .num { width: 24px; height: 24px; font-size: 13px; }
+table.calc { font-size: 12.5px; min-width: 960px; }
+table.calc th, table.calc td { padding: 5px 6px; }
+table.calc thead tr.grupos th { font-size: 10.5px; padding: 6px; }
+table.calc thead tr:last-child th { font-size: 10.5px; padding: 7px 4px; }
+table.calc tbody th { font-size: 13px; }
+table.calc tbody th small { font-size: 10px; }
+table.calc td .campo, table.calc td .campo.q, table.calc td .campo.p { height: 30px; padding: 0 6px; }
+table.calc td .campo input { font-size: 13px; }
+table.calc td .campo .ad { font-size: 11px; }
+table.calc td.out { font-size: 13px; }
+table.calc td.mk b { font-size: 14px; }
+table.calc td.t-preco b { font-size: 15.5px; }
+table.calc td.out small { font-size: 9.5px; }
+table.calc td .kit { font-size: 12.5px; padding: 2px 7px; }
+.sob-tabela { margin-top: 8px; }
+.sob-tabela .btn-add { padding: 6px 12px; font-size: 12.5px; }
+.mercado, .nota { font-size: 11.5px; }
+.mk-intro { font-size: 13px; margin-bottom: 10px; }
+.defs { gap: 10px; margin-bottom: 10px; }
+.def { padding: 9px 12px; }
+.def b { font-size: 13px; }
+.def p { font-size: 12px; }
+.legenda-mk .formula { padding: 12px; }
+.legenda-mk .frac .n { font-size: 15px; }
+.legenda-mk .chip { font-size: 12.5px; }
+.legenda-mk .f-nome { font-size: 15px; }
+footer { padding-block: 16px; font-size: 12.5px; }
+
+.th-sub { display: block; font-size: 9px; font-weight: 600; text-transform: none; letter-spacing: 0; opacity: .8; margin-top: 1px; }
+table.calc td.out small { white-space: nowrap; }
+.hero p { max-width: none; }
 </style>
 
 </head>
@@ -620,7 +674,7 @@ table.calc tbody th { width: auto; min-width: 0; white-space: normal; }
     <div>
       <p class="rotulo">Precificação · WEEK Haircare</p>
       <h1>Quanto cobrar por cada kit da WEEK?</h1>
-      <p>Preencham o custo, o imposto e a margem de cada produto e de cada caixa. A calculadora monta o preço pelo método do markup, da esquerda para a direita.</p>
+      <p>Preencham custo, imposto e margem de cada produto e caixa: o preço sai pelo markup, da esquerda para a direita.</p>
     </div>
     <div class="acoes">
       <a class="btn btn-claro" href="https://docs.google.com/spreadsheets/d/1zo8Lva5f4SlrNYH3nNRK90IznOyByUuP53c9IejrO7I/edit" target="_blank" rel="noopener">
@@ -689,7 +743,7 @@ table.calc tbody th { width: auto; min-width: 0; white-space: normal; }
             <th>Produto</th>
             <th class="num">Fórmula</th><th class="num">Embalagem</th><th class="num">Envase</th><th class="num t-custo">Custo</th>
             <th class="num">Imposto</th><th class="num">Margem</th>
-            <th class="num">Markup</th><th class="num t-preco">Preço de venda</th>
+            <th class="num">Markup<small class="th-sub">fixas + var. + margem</small></th><th class="num t-preco">Preço de venda</th>
           </tr>
         </thead>
         <tbody id="tb-produtos"></tbody>
@@ -716,7 +770,7 @@ table.calc tbody th { width: auto; min-width: 0; white-space: normal; }
             <th class="num">Shampoos</th><th class="num">Condicion.</th><th class="num">Custo</th>
             <th class="num">Caixa</th><th class="num">Logística</th><th class="num t-custo">Custo total</th>
             <th class="num">Imposto e taxas</th><th class="num">Margem</th>
-            <th class="num">Markup</th><th class="num t-preco">Preço da caixa</th><th class="num">Por kit</th><th class="num">Equilíbrio</th>
+            <th class="num">Markup<small class="th-sub">fixas + var. + margem</small></th><th class="num t-preco">Preço da caixa</th><th class="num">Por kit</th><th class="num">Equilíbrio</th>
           </tr>
         </thead>
         <tbody id="tb-caixas"></tbody>
@@ -943,18 +997,18 @@ table.calc tbody th { width: auto; min-width: 0; white-space: normal; }
     r.prods.forEach(function (o, i) {
       out("p" + i + "-custo", brl(o.custo));
       out("p" + i + "-mk", o.mk ? num(o.mk, 3) : o.erro ? "não fecha" : "–");
-      out("p" + i + "-mkc", o.mk ? pct(o.DF) + " fixas · " + pct(o.I) + " var. · " + pct(o.M, 0) + " margem" : "");
+      out("p" + i + "-mkc", o.mk ? pct(o.DF, 0) + " + " + pct(o.I, 0) + " + " + pct(o.M, 0) : "");
       out("p" + i + "-preco", brl(o.P));
-      out("p" + i + "-det", o.P ? "imposto " + brl(o.impR) + " · lucro " + brl(o.lucro) : "");
+      out("p" + i + "-det", o.P ? "lucro " + brl(o.lucro) : "");
     });
     r.caixas.forEach(function (o, i) {
       out("c" + i + "-kits", o.kits > 0 ? num(o.kits, o.kits % 1 ? 1 : 0) + (o.kits === 1 ? " kit" : " kits") : "");
       out("c" + i + "-prod", brl(o.prod));
       out("c" + i + "-custo", brl(o.custo));
       out("c" + i + "-mk", o.mk ? num(o.mk, 3) : o.erro ? "não fecha" : "–");
-      out("c" + i + "-mkc", o.mk ? pct(o.DF) + " fixas · " + pct(o.I) + " var. · " + pct(o.M, 0) + " margem" : "");
+      out("c" + i + "-mkc", o.mk ? pct(o.DF, 0) + " + " + pct(o.I, 0) + " + " + pct(o.M, 0) : "");
       out("c" + i + "-preco", brl(o.P));
-      out("c" + i + "-det", o.P ? "imposto " + brl(o.impR) + " · lucro " + brl(o.lucro) : "");
+      out("c" + i + "-det", o.P ? "lucro " + brl(o.lucro) : "");
       out("c" + i + "-eq", isFinite(o.eq) ? num(o.eq, 0) + " /mês" : "–");
       var k = document.querySelector('[data-kit="' + i + '"]');
       k.textContent = brl(o.porKit);
