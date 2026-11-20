@@ -541,6 +541,68 @@ table.calc td.mk { min-width: 88px; max-width: 104px; }
 table.calc td.t-preco { min-width: 118px; }
 table.calc tbody th { min-width: 118px; }
 .nome-cx .nome-input { width: 110px; }
+
+/* v17: tabelas enquadradas e maiores, painéis de despesas */
+.wrap-l { max-width: 1520px; }
+.ff-linha { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 18px; width: 100%; }
+.faixa-fixa { flex-direction: column; align-items: stretch; }
+.paineis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; align-items: start; }
+.painel { border: 1px solid var(--linha); border-radius: 10px; background: var(--cinza); }
+.painel summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 14px; font-weight: 700; color: var(--marinho); font-size: 14px; }
+.painel summary::-webkit-details-marker { display: none; }
+.painel summary::before { content: "▸"; color: var(--azul); margin-right: 2px; transition: transform .15s; }
+.painel[open] summary::before { transform: rotate(90deg); }
+.painel summary span { flex: 1; }
+.painel summary b { color: var(--petroleo); font-variant-numeric: tabular-nums; }
+.painel[open] { background: #fff; }
+.painel .btn-add { margin: 8px 12px 10px; padding: 6px 12px; font-size: 12.5px; }
+.btn-aplicar { margin: 0 12px 10px; border: 0; background: var(--azul); color: #fff; border-radius: 8px; padding: 7px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.mini-nota { margin: 0 12px 10px; font-size: 11.5px; color: var(--texto-2); }
+table.mini { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.mini th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--texto-2); padding: 4px 12px; border-bottom: 1px solid var(--linha); }
+table.mini td { padding: 5px 12px; border-bottom: 1px solid var(--linha); vertical-align: middle; }
+table.mini td small { display: block; font-size: 11px; color: var(--texto-2); }
+table.mini td.num { text-align: right; font-weight: 700; color: var(--marinho); white-space: nowrap; }
+table.mini .campo { width: 100px; height: 32px; }
+table.mini .campo.q, table.mini .campo.p { width: 70px; }
+table.mini .nome-input { height: 30px; font-size: 12.5px; }
+.cem { font-size: 12px; color: var(--texto-2); }
+
+/* Tabelas enquadradas: grade, títulos centralizados e campos do tamanho da coluna */
+.rolagem { border: 2px solid var(--marinho); border-radius: 12px; }
+table.calc { table-layout: fixed; min-width: 1060px; font-size: 14.5px; }
+table.calc th, table.calc td { border-right: 1px solid var(--linha); padding: 10px 10px; }
+table.calc th:last-child, table.calc td:last-child { border-right: 0; }
+table.calc thead th, table.calc thead th.num { text-align: center; vertical-align: middle; }
+table.calc thead tr:last-child th { border-right: 1px solid rgba(255,255,255,.18); font-size: 12px; padding: 10px 6px; }
+table.calc thead tr.grupos th { font-size: 12px; padding: 9px 8px; }
+table.calc tbody th { width: 170px; font-size: 15px; }
+table.calc td { text-align: center; }
+table.calc td .campo, table.calc td .campo.q, table.calc td .campo.p { width: 100%; height: 40px; }
+table.calc td .campo input { font-size: 15px; }
+table.calc td.out { text-align: center; font-size: 15px; }
+table.calc td.mk, table.calc td.t-preco { max-width: none; min-width: 0; }
+table.calc td.t-preco b { font-size: 19px; }
+table.calc td.mk b { font-size: 17px; }
+table.calc tbody tr:nth-child(even) td:not(.t-preco):not(.t-custo) { background: #fbfcfe; }
+.bloco { padding: 22px 22px 18px; }
+.bloco h2 { font-size: 19px; justify-content: flex-start; }
+@media (max-width: 1100px) { .paineis { grid-template-columns: 1fr; } }
+.paineis > .painel { min-width: 0; overflow-x: auto; }
+.ff-linha > * { min-width: 0; }
+@media (max-width: 560px) {
+  table.mini th, table.mini td { padding: 4px 6px; }
+  table.mini .campo { width: 84px; }
+  table.mini .campo.q, table.mini .campo.p { width: 60px; }
+  .ff-tit { flex-basis: 100%; }
+}
+
+table.mini .campo.q, table.mini .campo.p { width: 82px; }
+table.calc td.t-preco b { white-space: nowrap; }
+table.calc td .kit { white-space: nowrap; font-size: 14px; }
+table.calc { min-width: 1180px; }
+table.calc { min-width: 1100px; width: 100%; } .rolagem { overflow-x: auto; }
+table.calc tbody th { width: auto; min-width: 0; white-space: normal; }
 </style>
 
 </head>
@@ -576,18 +638,38 @@ table.calc tbody th { min-width: 118px; }
 <main class="wrap-l">
 
   <!-- DESPESAS FIXAS -->
-  <section class="faixa-fixa" aria-label="Despesas fixas que entram no preço">
-    <span class="ff-tit">Despesas fixas que entram no preço</span>
-    <label class="ff-campo">Gastos fixos por mês
-      <span class="campo"><span class="ad">R$</span><input id="gastos" data-path="gastos" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher"></span>
-    </label>
-    <span class="ff-op">÷</span>
-    <label class="ff-campo">Produtos vendidos por mês
-      <span class="campo"><input id="produtosMes" data-path="produtosMes" data-fmt="inteiro" inputmode="numeric" placeholder="Preencher"><span class="ad">un</span></span>
-    </label>
-    <span class="ff-op">=</span>
-    <span class="ff-res">Rateio por produto<b data-out="rateio">–</b></span>
-    <small class="ff-nota">Gastos fixos e produtos vendidos vêm da planilha (Classificação de gastos e Projeção de Vendas). Cada sachê carrega essa parte no markup.</small>
+  <section class="faixa-fixa" aria-label="Despesas que entram no preço">
+    <div class="ff-linha">
+      <span class="ff-tit">Despesas fixas que entram no preço</span>
+      <span class="ff-res">Gastos fixos por mês<b data-out="gastos">–</b></span>
+      <span class="ff-op">÷</span>
+      <label class="ff-campo">Produtos vendidos por mês
+        <span class="campo"><input id="produtosMes" data-path="produtosMes" data-fmt="inteiro" inputmode="numeric" placeholder="—"><span class="ad">un</span></span>
+      </label>
+      <span class="ff-op">=</span>
+      <span class="ff-res">Rateio por produto<b data-out="rateio">–</b></span>
+    </div>
+    <div class="paineis">
+      <details class="painel">
+        <summary><span>Gastos fixos</span><b data-out="somaFixos">–</b></summary>
+        <table class="mini"><thead><tr><th>Gasto</th><th>Valor por mês</th><th></th></tr></thead><tbody id="lista-fixos"></tbody></table>
+        <button class="btn-add" type="button" data-add="fixos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar gasto fixo</button>
+      </details>
+      <details class="painel">
+        <summary><span>Investimentos e amortização</span><b data-out="amort">–</b></summary>
+        <table class="mini"><thead><tr><th>Investimento</th><th>Valor</th><th>Vida útil</th><th>Por mês</th><th></th></tr></thead><tbody id="lista-invest"></tbody></table>
+        <button class="btn-add" type="button" data-add="invest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar investimento</button>
+        <p class="mini-nota">A amortização (valor ÷ vida útil) entra nos gastos fixos do mês.</p>
+      </details>
+      <details class="painel">
+        <summary><span>Despesas variáveis</span><b data-out="varTot">–</b></summary>
+        <table class="mini"><thead><tr><th>Imposto ou taxa</th><th>Taxa</th><th>Usada em</th><th>Peso</th><th></th></tr></thead><tbody id="lista-taxas"></tbody></table>
+        <button class="btn-add" type="button" data-add="taxas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar taxa</button>
+        <button class="btn-aplicar" type="button" id="aplicar-var">Usar <span data-out="varTot">–</span> em todas as linhas</button>
+        <p class="mini-nota">Peso = taxa × parte das vendas que usa. É o "imposto" das tabelas.</p>
+      </details>
+    </div>
+    <small class="ff-nota">Valores da planilha (Classificação de gastos e Projeção de Vendas). Abram cada item para ver, editar ou adicionar.</small>
   </section>
 
   <!-- 1. PRODUTOS -->
@@ -595,6 +677,7 @@ table.calc tbody th { min-width: 118px; }
     <h2><span class="num">1</span>Produtos: custo e preço de cada sachê</h2>
     <div class="rolagem">
       <table class="calc">
+        <colgroup><col style="width:13%"><col style="width:10%"><col style="width:10%"><col style="width:10%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:13%"><col style="width:17%"></colgroup>
         <thead>
           <tr class="grupos">
             <th></th>
@@ -619,6 +702,7 @@ table.calc tbody th { min-width: 118px; }
     <h2><span class="num">2</span>Caixas: o que vai dentro e o preço de cada uma</h2>
     <div class="rolagem">
       <table class="calc">
+        <colgroup><col style="width:11%"><col style="width:6.5%"><col style="width:6.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:7.5%"><col style="width:7%"><col style="width:6.5%"><col style="width:8.5%"><col style="width:11%"><col style="width:6.5%"><col style="width:6.5%"></colgroup>
         <thead>
           <tr class="grupos">
             <th></th>
@@ -682,7 +766,25 @@ table.calc tbody th { min-width: 118px; }
 
   /* Só valores cotados na planilha. O resto fica em branco para as sócias. */
   var PADRAO = {
-    gastos: 437.26, produtosMes: 476,
+    produtosMes: 476,
+    fixos: [
+      { nome: "Contador", fonte: "Meu Contador Online", v: 349.00 },
+      { nome: "Sistema de gestão (Bling)", fonte: "Bling", v: 60.00 },
+      { nome: "Certificado digital A1", fonte: "Omie", v: 18.33 },
+      { nome: "Domínio do site", fonte: "Registro.br", v: 3.33 },
+      { nome: "Site: hospedagem e manutenção", fonte: "A preencher", v: null }
+    ],
+    invest: [
+      { nome: "Registro da marca no INPI", v: 440.00, vida: 120 },
+      { nome: "Notificação na Anvisa", v: 175.72, vida: 60 },
+      { nome: "Site: desenvolvimento", v: null, vida: 36 }
+    ],
+    taxas: [
+      { nome: "Simples Nacional, Anexo I", v: 4, uso: 100, travado: true },
+      { nome: "Taxa do cartão", v: null, uso: null },
+      { nome: "Taxa do Pix", v: null, uso: null },
+      { nome: "Comissão de marketplace", v: 9, uso: null }
+    ],
     produtos: [
       { nome: "Shampoo", form: null, emb: null, env: null, imp: 4, margem: null },
       { nome: "Condicionador", form: null, emb: null, env: null, imp: 4, margem: null }
@@ -694,7 +796,7 @@ table.calc tbody th { min-width: 118px; }
     ]
   };
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
-  var CHAVE = "week-precificacao-v16";
+  var CHAVE = "week-precificacao-v17";
   var s;
 
   function copia(o) { return JSON.parse(JSON.stringify(o)); }
@@ -747,7 +849,11 @@ table.calc tbody th { min-width: 118px; }
   }
   function calcular() {
     var r = {};
-    r.R = s.gastos > 0 && s.produtosMes > 0 ? s.gastos / s.produtosMes : 0;
+    r.somaFixos = s.fixos.reduce(function (t, x) { return t + z(x.v); }, 0);
+    r.amort = s.invest.reduce(function (t, x) { return t + (x.v != null && x.vida > 0 ? x.v / x.vida : 0); }, 0);
+    r.gastos = r.somaFixos + r.amort;
+    r.varTot = s.taxas.reduce(function (t, x) { var u = x.travado ? 100 : x.uso; return t + (x.v != null && u != null ? x.v * u / 100 : 0); }, 0);
+    r.R = r.gastos > 0 && s.produtosMes > 0 ? r.gastos / s.produtosMes : 0;
     r.prods = s.produtos.map(function (p) {
       var ok = p.form != null && p.emb != null && p.env != null;
       return precificar(ok ? p.form + p.emb + p.env : NaN, r.R, p.imp, p.margem);
@@ -760,7 +866,7 @@ table.calc tbody th { min-width: 118px; }
       var o = precificar(total, r.R * n, c.imp, c.margem);
       o.prod = prod; o.kits = n / 2;
       o.porKit = o.P / o.kits;
-      o.eq = o.contrib > 0 ? Math.ceil(z(s.gastos) / o.contrib - 1e-9) : NaN;
+      o.eq = o.contrib > 0 ? Math.ceil(r.gastos / o.contrib - 1e-9) : NaN;
       return o;
     });
     return r;
@@ -791,7 +897,7 @@ table.calc tbody th { min-width: 118px; }
       var c = "caixas." + i + ".";
       var nome = x.novo
         ? '<input class="nome-input" id="' + idDe(c + "nome") + '" data-path="' + c + 'nome" data-texto="1" placeholder="Nome da caixa" value="' + esc(x.nome) + '" aria-label="Nome da caixa">' +
-          '<button class="btn-rem" type="button" data-rem="' + i + '" aria-label="Remover caixa" title="Remover">×</button>'
+          '<button class="btn-rem" type="button" data-rem="caixas" data-i="' + i + '" aria-label="Remover caixa" title="Remover">×</button>'
         : esc(x.nome);
       return '<tr><th scope="row"><div class="nome-cx">' + nome + '</div><small data-out="c' + i + '-kits"></small></th>' +
         '<td>' + campo(c + "qSh", "inteiro", "", "", "Shampoos na " + x.nome) + '</td>' +
@@ -807,9 +913,22 @@ table.calc tbody th { min-width: 118px; }
         '<td class="num out"><span class="kit" data-kit="' + i + '">–</span></td>' +
         saida("c" + i + "-eq") + '</tr>';
     }).join("");
-    ["gastos", "produtosMes"].forEach(function (k) {
-      var el = document.getElementById(k); el.value = paraCampo(s[k], el.dataset.fmt);
-    });
+    var el = document.getElementById("produtosMes"); el.value = paraCampo(s.produtosMes, "inteiro");
+    function nomeCel(lista, i, x) {
+      return x.novo ? '<input class="nome-input" data-path="' + lista + '.' + i + '.nome" data-texto="1" placeholder="Nome" value="' + esc(x.nome) + '" aria-label="Nome">'
+        : esc(x.nome) + (x.fonte ? '<small>' + esc(x.fonte) + '</small>' : "");
+    }
+    function rem(lista, i, x) { return x.novo ? '<button class="btn-rem" type="button" data-rem="' + lista + '" data-i="' + i + '" aria-label="Remover">×</button>' : ""; }
+    document.getElementById("lista-fixos").innerHTML = s.fixos.map(function (x, i) {
+      return '<tr><td>' + nomeCel("fixos", i, x) + '</td><td>' + campo("fixos." + i + ".v", "dinheiro", "R$", "", "Valor de " + x.nome) + '</td><td>' + rem("fixos", i, x) + '</td></tr>';
+    }).join("");
+    document.getElementById("lista-invest").innerHTML = s.invest.map(function (x, i) {
+      return '<tr><td>' + nomeCel("invest", i, x) + '</td><td>' + campo("invest." + i + ".v", "dinheiro", "R$", "", "Valor de " + x.nome) + '</td><td>' + campo("invest." + i + ".vida", "inteiro", "", "m", "Vida útil de " + x.nome) + '</td><td class="num" data-out="inv' + i + '">–</td><td>' + rem("invest", i, x) + '</td></tr>';
+    }).join("");
+    document.getElementById("lista-taxas").innerHTML = s.taxas.map(function (x, i) {
+      return '<tr><td>' + nomeCel("taxas", i, x) + '</td><td>' + campo("taxas." + i + ".v", "pct", "", "%", "Taxa de " + x.nome) + '</td><td>' +
+        (x.travado ? '<span class="cem">100%</span>' : campo("taxas." + i + ".uso", "pct", "", "%", "Uso de " + x.nome)) + '</td><td class="num" data-out="tx' + i + '">–</td><td>' + rem("taxas", i, x) + '</td></tr>';
+    }).join("");
   }
 
   /* ---------- Renderização ---------- */
@@ -817,6 +936,10 @@ table.calc tbody th { min-width: 118px; }
   function render() {
     var r = calcular();
     out("rateio", r.R > 0 ? brl(r.R) : "–");
+    out("gastos", brl(r.gastos)); out("somaFixos", brl(r.somaFixos)); out("amort", brl(r.amort) + " /mês");
+    out("varTot", pct(r.varTot / 100, 2));
+    s.invest.forEach(function (x, i) { out("inv" + i, x.v != null && x.vida > 0 ? brl(x.v / x.vida) : "–"); });
+    s.taxas.forEach(function (x, i) { var u = x.travado ? 100 : x.uso; out("tx" + i, x.v != null && u != null ? pct(x.v * u / 10000, 2) : "–"); });
     r.prods.forEach(function (o, i) {
       out("p" + i + "-custo", brl(o.custo));
       out("p" + i + "-mk", o.mk ? num(o.mk, 3) : o.erro ? "não fecha" : "–");
@@ -858,14 +981,26 @@ table.calc tbody th { min-width: 118px; }
   });
   document.addEventListener("focusin", function (e) { if (e.target.matches && e.target.matches(".campo input")) e.target.select(); });
   document.addEventListener("click", function (e) {
-    if (e.target.closest("[data-add]")) {
-      s.caixas.push({ nome: "", qSh: null, qCo: null, caixa: null, log: 2.85, imp: 4, margem: null, novo: true });
+    var add = e.target.closest("[data-add]");
+    if (add) {
+      var NOVOS = {
+        caixas: { nome: "", qSh: null, qCo: null, caixa: null, log: 2.85, imp: 4, margem: null, novo: true },
+        fixos: { nome: "", v: null, novo: true },
+        invest: { nome: "", v: null, vida: null, novo: true },
+        taxas: { nome: "", v: null, uso: null, novo: true }
+      };
+      var l = add.dataset.add; s[l].push(copia(NOVOS[l]));
       salvar(); montar(); render();
-      var n = document.getElementById("caixas-" + (s.caixas.length - 1) + "-nome"); if (n) n.focus();
+      var n = document.querySelector('[data-path="' + l + "." + (s[l].length - 1) + '.nome"]'); if (n) n.focus();
       return;
     }
     var rem = e.target.closest("[data-rem]");
-    if (rem) { s.caixas.splice(+rem.dataset.rem, 1); salvar(); montar(); render(); }
+    if (rem) { s[rem.dataset.rem].splice(+rem.dataset.i, 1); salvar(); montar(); render(); return; }
+    if (e.target.closest("#aplicar-var")) {
+      var v = Math.round(calcular().varTot * 100) / 100;
+      s.produtos.forEach(function (p) { p.imp = v; }); s.caixas.forEach(function (c) { c.imp = v; });
+      salvar(); montar(); render();
+    }
   });
   var btnR = document.getElementById("btn-restaurar"), tR = null;
   btnR.addEventListener("click", function () {
