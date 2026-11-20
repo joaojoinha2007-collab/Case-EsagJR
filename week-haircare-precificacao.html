@@ -491,6 +491,17 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 .item-linha { grid-template-columns: 1fr auto; }
 .item-linha:has(.btn-rem) { grid-template-columns: 1fr auto auto; }
 td.acao:empty { padding: 0; width: 0; }
+
+/* v14: componentes com unidades, preço unitário e valor total */
+.item-comp { padding: 8px 0 10px; border-bottom: 1px solid var(--linha); display: flex; flex-direction: column; gap: 6px; }
+.item-comp .nome { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; font-size: 13.5px; font-weight: 700; color: var(--marinho); line-height: 1.35; }
+.item-comp .nome .fonte { display: block; }
+.item-comp .tres { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 8px; align-items: end; }
+.item-comp .tres label { display: flex; flex-direction: column; gap: 3px; font-size: 11.5px; font-weight: 600; color: var(--texto-2); }
+.item-comp .tres .campo { width: 100%; height: 34px; }
+.item-comp .vt { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; font-size: 11.5px; font-weight: 600; color: var(--texto-2); }
+.item-comp .vt b { height: 34px; display: flex; align-items: center; font-size: 14px; color: var(--marinho); font-variant-numeric: tabular-nums; }
+.item-comp .nome-input { margin-bottom: 4px; }
 </style>
 
 </head>
@@ -547,7 +558,7 @@ td.acao:empty { padding: 0; width: 0; }
     <section class="etapa" id="etapa-1">
       <div class="faixa"><span class="num">1</span><h2>Shampoo e condicionador: custo e preço</h2></div>
       <div class="corpo">
-        <p class="explica"><b>Custo unitário</b> = produto + embalagem + imposto. <b>Preço</b> = (produto + embalagem) ÷ (1 − imposto − margem).</p>
+        <p class="explica">Em cada componente: <b>unidades × preço unitário = valor total</b>. <b>Custo unitário</b> = soma dos preços unitários + imposto. <b>Preço</b> = custo sem imposto ÷ (1 − imposto − margem).</p>
         <div class="produtos dois" id="cards-produtos"></div>
         <div class="falta" data-falta="produtos" hidden></div>
       </div>
@@ -698,13 +709,15 @@ td.acao:empty { padding: 0; width: 0; }
      --------------------------------------------------------------- */
   var PADRAO = {
     produtos: [
-      { nome: "Shampoo", desc: "Sachê de 30 ml, dose única", margem: null, compra: null, itens: [
-        { nome: "Produto: fórmula e envase", fonte: "Orçamento da fabricante", v: null },
-        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Orçamento da fabricante", v: null }
+      { nome: "Shampoo", desc: "Sachê de 30 ml, dose única", margem: null, perda: null, itens: [
+        { nome: "Produto: fórmula de um sachê de 30 ml", fonte: "Orçamento da fabricante", q: null, v: null },
+        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Fabricante ou gráfica", q: null, v: null },
+        { nome: "Envase pela fabricante", fonte: "Encher e selar um sachê", q: null, v: null }
       ] },
-      { nome: "Condicionador", desc: "Sachê de 30 ml, dose única", margem: null, compra: null, itens: [
-        { nome: "Produto: fórmula e envase", fonte: "Orçamento da fabricante", v: null },
-        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Orçamento da fabricante", v: null }
+      { nome: "Condicionador", desc: "Sachê de 30 ml, dose única", margem: null, perda: null, itens: [
+        { nome: "Produto: fórmula de um sachê de 30 ml", fonte: "Orçamento da fabricante", q: null, v: null },
+        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Fabricante ou gráfica", q: null, v: null },
+        { nome: "Envase pela fabricante", fonte: "Encher e selar um sachê", q: null, v: null }
       ] }
     ],
     caixas: [
@@ -738,12 +751,12 @@ td.acao:empty { padding: 0; width: 0; }
     "fixos": function () { return { nome: "", fonte: "", v: null, novo: true }; },
     "invest": function () { return { nome: "", fonte: "", v: null, vida: null, novo: true }; },
     "caixas": function () { return { nome: "", qSh: null, qCo: null, caixa: null, caixaFonte: "", log: 2.85, logFonte: "Frete Loggi", margem: null, novo: true }; },
-    "itens": function () { return { nome: "", fonte: "", v: null, novo: true }; }
+    "itens": function () { return { nome: "", fonte: "", q: null, v: null, novo: true }; }
   };
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
   var MESES = ["jan./27", "fev./27", "mar./27", "abr./27", "mai./27", "jun./27", "jul./27", "ago./27", "set./27", "out./27", "nov./27", "dez./27"];
   var CORES = ["#0047bb", "#1f2a44", "#2f8f7e", "#b7791f", "#6b46c1", "#c53030"];
-  var CHAVE = "week-precificacao-v13";
+  var CHAVE = "week-precificacao-v14";
 
   var s;
 
@@ -822,19 +835,21 @@ td.acao:empty { padding: 0; width: 0; }
 
     /* Etapa 1: shampoo e condicionador */
     r.prods = s.produtos.map(function (p, pi) {
-      var base = 0;
+      var base = 0, pedido = 0, temPedido = false;
       p.itens.forEach(function (it, ii) {
         base += z(it.v);
-        if (it.v == null) {
-          var n = p.nome + ": " + nomeDe(it, "custo " + (ii + 1)).replace(/:.*$/, "").toLowerCase();
-          r.falta.produtos.push(n); pend(n, "Etapa 1", "produtos." + pi + ".itens." + ii + ".v");
-        }
+        it._total = (it.q == null || it.v == null) ? null : it.q * it.v;
+        if (it._total != null) { pedido += it._total; temPedido = true; }
+        var n = p.nome + ": " + nomeDe(it, "custo " + (ii + 1)).replace(/:.*$/, "").toLowerCase();
+        if (it.q == null) { pend(n + " (unidades)", "Etapa 1", "produtos." + pi + ".itens." + ii + ".q"); }
+        if (it.v == null) { r.falta.produtos.push(n); pend(n + " (preço)", "Etapa 1", "produtos." + pi + ".itens." + ii + ".v"); }
       });
+      base = base * (1 + z(p.perda) / 100);
       if (p.margem == null) { r.falta.produtos.push("margem do " + p.nome.toLowerCase()); pend("Margem do " + p.nome.toLowerCase(), "Etapa 1", "produtos." + pi + ".margem"); }
       var m = z(p.margem) / 100, div = 1 - I - m;
       var completo = p.itens.every(function (it) { return it.v != null; });
       var P = completo && p.margem != null && base > 0 && div > 0 ? base / div : NaN;
-      return { completo: completo, base: base, m: m, P: P, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: p.compra == null ? NaN : p.compra * base };
+      return { completo: completo, base: base, m: m, P: P, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: temPedido ? pedido : NaN };
     });
     var sh = r.prods[0], co = r.prods[1];
 
@@ -941,22 +956,24 @@ td.acao:empty { padding: 0; width: 0; }
       var itens = p.itens.map(function (it, ii) {
         var c = cam + ".itens." + ii;
         var nome = it.novo ? texto(c + ".nome", "Nome do custo") + texto(c + ".fonte", "Fonte ou observação", "fonte-input") : esc(it.nome) + fonteTxt(it.fonte);
-        return '<div class="item-linha"><div class="nome">' + nome + '</div>' +
-          campo(c + ".v", "dinheiro", "R$", "", "", nomeDe(it, "custo") + " do " + p.nome.toLowerCase()) +
-          botaoRem(cam + ".itens", ii, nomeDe(it, "custo"), it) + '</div>';
+        var rot = nomeDe(it, "custo") + " do " + p.nome.toLowerCase();
+        return '<div class="item-comp"><div class="nome">' + nome + botaoRem(cam + ".itens", ii, nomeDe(it, "custo"), it) + '</div>' +
+          '<div class="tres">' +
+            '<label>Unidades' + campo(c + ".q", "inteiro", "", "", "", "Unidades de " + rot) + '</label>' +
+            '<label>Preço unitário' + campo(c + ".v", "dinheiro", "R$", "", "", "Preço unitário de " + rot) + '</label>' +
+            '<div class="vt"><span>Valor total</span><b data-out="p' + pi + '-t' + ii + '">–</b></div>' +
+          '</div></div>';
       }).join("");
       return '<article class="prod"><div class="prod-cab"><div><h3>' + p.nome + '</h3><p>' + p.desc + '</p></div></div>' +
         '<div class="prod-corpo">' +
           itens +
-          '<button class="btn-add" type="button" data-add="' + cam + '.itens">' + ICONE_ADD + 'Adicionar custo</button>' +
+          '<button class="btn-add" type="button" data-add="' + cam + '.itens">' + ICONE_ADD + 'Adicionar componente</button>' +
+          '<div class="linha-campo"><label for="' + idDe(cam + ".perda") + '">Perda na produção<small>Opcional</small></label>' + campo(cam + ".perda", "pct", "", "%", "opcional", "Perda na produção do " + p.nome.toLowerCase(), "0") + '</div>' +
+          '<div class="linha sutil"><span>Total do pedido de compra</span><b data-out="p' + pi + '-pedido">–</b></div>' +
           '<div class="linha"><span>Imposto (<span data-out="impostosPct">–</span>)</span><b data-out="p' + pi + '-imp">–</b></div>' +
-          '<div class="linha total-linha"><span>Custo unitário</span><b data-out="p' + pi + '-custo">–</b></div>' +
+          '<div class="linha total-linha"><span>Custo unitário (um sachê)</span><b data-out="p' + pi + '-custo">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada do " + p.nome.toLowerCase()) + '</div>' +
           '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Lucro de <span data-out="p' + pi + '-lucro">–</span> por unidade</small></div>' +
-          '<details class="det"><summary>Pedido de compra (opcional)</summary>' +
-            '<div class="linha-campo"><label for="' + idDe(cam + ".compra") + '">Quantidade comprada</label>' + campo(cam + ".compra", "inteiro", "", "un", "opcional", "Quantidade comprada de " + p.nome.toLowerCase(), "Opcional") + '</div>' +
-            '<div class="linha sutil"><span>Valor do pedido</span><b data-out="p' + pi + '-pedido">–</b></div>' +
-          '</details>' +
         '</div></article>';
     }).join("");
   }
@@ -1076,6 +1093,7 @@ td.acao:empty { padding: 0; width: 0; }
       setOut("p" + pi + "-lucro", brl(x.lucro));
       setOut("p" + pi + "-markup", isFinite(x.markup) ? num(x.markup, 3) : "–");
       setOut("p" + pi + "-pedido", brl(x.pedido));
+      s.produtos[pi].itens.forEach(function (it, ii) { setOut("p" + pi + "-t" + ii, brl(it._total)); });
     });
     setFalta("produtos", unir(f.produtos, f.taxas), "Preço provisório. Falta preencher: ");
 
