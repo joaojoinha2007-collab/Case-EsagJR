@@ -504,6 +504,19 @@ td.acao:empty { padding: 0; width: 0; }
 .item-comp .nome-input { margin-bottom: 4px; }
 .mk-linha > span small { font-size: 11px; color: var(--texto-2); font-weight: 500; margin-left: 4px; }
 .mk-linha > b { font-size: 16px; color: var(--azul); }
+
+/* v16: abertura com o cálculo do markup */
+.como { background: var(--branco); border-radius: var(--r); box-shadow: var(--sombra); padding: 22px 22px 18px; margin-top: -22px; position: relative; }
+.como h2 { margin: 0 0 14px; font-size: 18px; font-weight: 800; color: var(--marinho); }
+.passos { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.passos li { display: flex; gap: 10px; align-items: flex-start; background: var(--cinza); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+.passos .n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--azul); color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 14px; }
+.passos b { color: var(--marinho); font-size: 14.5px; }
+.passos p { margin: 2px 0 0; font-size: 13px; color: var(--texto-2); line-height: 1.45; }
+.como .formula { margin-bottom: 10px; }
+.como-rodape { margin: 0; font-size: 12.5px; color: var(--texto-2); }
+#pendencias { margin: 0 0 8px; }
+@media (max-width: 720px) { .passos { grid-template-columns: 1fr; } .como { padding: 18px 16px 14px; } }
 </style>
 
 </head>
@@ -520,7 +533,7 @@ td.acao:empty { padding: 0; width: 0; }
   <div class="wrap">
     <p class="rotulo">Plano Financeiro · WEEK Haircare</p>
     <h1>Calculadora de precificação</h1>
-    <p>Do custo de cada sachê ao preço das caixas e à meta de vendas de 2027. Os valores já cotados vêm preenchidos; os campos em amarelo esperam os números de vocês.</p>
+    <p>Mostra como a WEEK chega ao preço de venda do shampoo, do condicionador e de cada caixa usando o markup, e quanto precisa vender em 2027.</p>
     <div class="acoes">
       <a class="btn btn-claro" href="https://docs.google.com/spreadsheets/d/1zo8Lva5f4SlrNYH3nNRK90IznOyByUuP53c9IejrO7I/edit" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
@@ -535,12 +548,26 @@ td.acao:empty { padding: 0; width: 0; }
 </section>
 
 <div class="wrap">
-  <div class="legenda" role="note">
-    <span class="item"><span class="amostra edit" aria-hidden="true"></span>Valor cotado</span>
-    <span class="item"><span class="amostra pend" aria-hidden="true"></span>Preencher</span>
-    <span class="item"><span class="amostra res" aria-hidden="true"></span>Resultado</span>
-  </div>
-  <div class="pendencias" id="pendencias" aria-live="polite"></div>
+  <section class="como" aria-labelledby="como-tit">
+    <h2 id="como-tit">Como o preço é calculado</h2>
+    <ol class="passos">
+      <li><span class="n">1</span><div><b>Custo</b><p>Quanto custa fazer um sachê: produto, embalagem e envase. Na caixa, entram também a caixa e a logística.</p></div></li>
+      <li><span class="n">2</span><div><b>Markup</b><p>Junta, em % do preço, tudo que cada venda precisa pagar: despesas fixas, despesas variáveis (impostos e taxas) e a margem de lucro.</p></div></li>
+      <li><span class="n">3</span><div><b>Preço de venda</b><p>Custo × markup.</p></div></li>
+    </ol>
+    <div class="formula">
+      <div class="f-linha">
+        <span class="f-nome">Markup</span><span class="f-igual">=</span>
+        <span class="frac"><span class="n">1</span>
+          <span class="d"><span class="chip um">1</span><span class="f-menos">−</span><span class="chip c1">despesas fixas %</span><span class="f-menos">−</span><span class="chip c2">despesas variáveis %</span><span class="f-menos">−</span><span class="chip c3">margem %</span></span>
+        </span>
+      </div>
+      <div class="f-linha">
+        <span class="f-nome">Preço de venda</span><span class="f-igual">=</span><span class="chip um">custo</span><span class="f-menos">×</span><span class="chip c3">markup</span>
+      </div>
+    </div>
+    <p class="como-rodape">Nos campos, azul claro é valor já cotado e amarelo é número que vocês preenchem. Tudo é recalculado na hora.</p>
+  </section>
 </div>
 
 <div class="resumo" aria-label="Resumo dos resultados">
@@ -701,6 +728,7 @@ td.acao:empty { padding: 0; width: 0; }
       </div>
     </section>
 
+    <div class="pendencias" id="pendencias" aria-live="polite"></div>
   </div>
 </main>
 
@@ -998,7 +1026,7 @@ td.acao:empty { padding: 0; width: 0; }
           '<div class="linha total-linha"><span>Custo de produção (um sachê)</span><b data-out="p' + pi + '-custo">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada do " + p.nome.toLowerCase()) + '</div>' +
           '<div class="linha mk-linha"><span>Markup <small data-out="p' + pi + '-mkTxt">1 ÷ (1 − fixas − variáveis − margem)</small></span><b data-out="p' + pi + '-mk">–</b></div>' +
-          '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Custo × markup · lucro de <span data-out="p' + pi + '-lucro">–</span></small></div>' +
+          '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Custo × markup · imposto <span data-out="p' + pi + '-imp">–</span> · lucro <span data-out="p' + pi + '-lucro">–</span></small></div>' +
         '</div></article>';
     }).join("");
   }
@@ -1022,7 +1050,7 @@ td.acao:empty { padding: 0; width: 0; }
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada da " + n) + '</div>' +
           '<div class="linha mk-linha"><span>Markup <small data-out="c' + ci + '-mkTxt">1 ÷ (1 − fixas − variáveis − margem)</small></span><b data-out="c' + ci + '-mk">–</b></div>' +
           
-          '<div class="margem-box verde preco-box"><span>Preço da caixa</span><b data-out="c' + ci + '-preco">–</b><small><span data-out="c' + ci + '-porKit">–</span> por kit · lucro de <span data-out="c' + ci + '-lucro">–</span></small></div>' +
+          '<div class="margem-box verde preco-box"><span>Preço da caixa</span><b data-out="c' + ci + '-preco">–</b><small><span data-out="c' + ci + '-porKit">–</span> por kit · imposto <span data-out="c' + ci + '-imp">–</span> · lucro <span data-out="c' + ci + '-lucro">–</span></small></div>' +
         '</div></article>';
     }).join("");
   }
@@ -1213,7 +1241,7 @@ td.acao:empty { padding: 0; width: 0; }
     var box = document.getElementById("pendencias");
     if (!pend.length) {
       box.className = "pendencias ok";
-      box.innerHTML = "<b>Tudo preenchido.</b> Os resultados abaixo estão completos.";
+      box.innerHTML = "<b>Tudo preenchido.</b> Os resultados acima estão completos.";
       return;
     }
     box.className = "pendencias";
