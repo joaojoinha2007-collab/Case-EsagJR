@@ -663,6 +663,23 @@ html.escalado table.calc tbody th, html.escalado table.calc thead tr:last-child 
 html.escalado .rolagem { overflow-x: visible; }
 html.escalado table.calc { min-width: 0; }
 html.escalado .wrap-l { max-width: 1400px; }
+
+/* v20: cabeçalho compacto para caber tudo na altura da tela */
+.topo-in { padding-block: 6px; }
+.logo-esag { height: 24px; }
+.logo-week { height: 28px; width: calc(28px * 2.4796); }
+.hero { padding-block: 10px 12px; }
+.hero .rotulo { display: none; }
+.hero h1 { font-size: 24px; margin-bottom: 2px; }
+.hero p { font-size: 12.5px; }
+.hero .btn { padding: 7px 12px; font-size: 12.5px; }
+main.wrap-l { padding-block: 10px 22px; gap: 10px; }
+.faixa-fixa { padding: 8px 14px; }
+.paineis { margin-top: 6px; }
+.ff-nota { display: none; }
+.bloco { padding: 10px 14px 10px; }
+.bloco h2 { margin-bottom: 8px; font-size: 15px; }
+.nota { margin-top: 4px; }
 </style>
 
 </head>
@@ -1050,12 +1067,12 @@ html.escalado .wrap-l { max-width: 1400px; }
         taxas: { nome: "", v: null, uso: null, novo: true }
       };
       var l = add.dataset.add; s[l].push(copia(NOVOS[l]));
-      salvar(); montar(); render();
+      salvar(); montar(); render(); ajustarEscala();
       var n = document.querySelector('[data-path="' + l + "." + (s[l].length - 1) + '.nome"]'); if (n) n.focus();
       return;
     }
     var rem = e.target.closest("[data-rem]");
-    if (rem) { s[rem.dataset.rem].splice(+rem.dataset.i, 1); salvar(); montar(); render(); return; }
+    if (rem) { s[rem.dataset.rem].splice(+rem.dataset.i, 1); salvar(); montar(); render(); ajustarEscala(); return; }
     if (e.target.closest("#aplicar-var")) {
       var v = Math.round(calcular().varTot * 100) / 100;
       s.produtos.forEach(function (p) { p.imp = v; }); s.caixas.forEach(function (c) { c.imp = v; });
@@ -1078,17 +1095,24 @@ html.escalado .wrap-l { max-width: 1400px; }
      inteira na tela (iPad, notebook, monitor). No celular, fica no tamanho normal. */
   var LARGURA = 1400;
   function ajustarEscala() {
-    var w = document.documentElement.clientWidth;
-    var z = w >= 700 && w < LARGURA ? w / LARGURA : 1;
+    var w = document.documentElement.clientWidth, h = window.innerHeight;
+    document.body.style.zoom = "";
+    if (w < 700) { document.documentElement.classList.remove("escalado"); return; }
+    document.documentElement.classList.add("escalado");
+    /* altura da página até o fim da tabela das caixas, no tamanho real */
+    var alvo = document.querySelector("#caixas .sob-tabela") || document.getElementById("caixas");
+    var altura = alvo.getBoundingClientRect().bottom + window.scrollY + 8;
+    var z = Math.min(1, w / LARGURA, h / altura);
+    z = Math.max(z, 0.5);
     document.body.style.zoom = z === 1 ? "" : String(z);
-    document.documentElement.classList.toggle("escalado", z !== 1 || w >= 700);
   }
   window.addEventListener("resize", ajustarEscala);
-  ajustarEscala();
+  document.addEventListener("toggle", function () { ajustarEscala(); }, true);
 
   s = carregar();
   montar();
   render();
+  ajustarEscala();
 })();
 </script>
 </body>
