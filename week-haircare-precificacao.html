@@ -438,6 +438,38 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 .meta-bloco .sep { border-left: 2px solid var(--linha); }
 .valor-calc { font-size: 22px; font-weight: 800; color: var(--petroleo); font-variant-numeric: tabular-nums; line-height: 38px; }
 .valor-calc.parcial::after { content: " *"; color: var(--amarelo); }
+
+/* ---------- v12: cartões de produto e de caixa ---------- */
+.produtos.dois { grid-template-columns: repeat(2, 1fr); }
+.prod-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.prod-cab .nome-input { background: #fff; }
+.prod-cab .btn-rem { flex: none; background: transparent; border-color: rgba(255,255,255,.35); color: #fff; }
+.prod-cab .btn-rem:hover { background: rgba(255,255,255,.12); color: #fff; border-color: #fff; }
+.bloco-tit { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--texto-2); margin: 6px 0 0; }
+.item-linha { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--linha); }
+.item-linha .nome { font-size: 13.5px; font-weight: 600; color: var(--marinho); line-height: 1.35; min-width: 0; }
+.item-linha .nome .fonte { margin-top: 1px; }
+.item-linha .campo { width: 120px; }
+.item-linha .btn-rem { width: 28px; height: 28px; }
+.prod-corpo .btn-add { margin-top: 2px; align-self: flex-start; padding: 6px 12px; font-size: 12.5px; }
+.linha-campo { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; padding: 4px 0; }
+.linha-campo label { font-weight: 600; color: var(--marinho); line-height: 1.3; }
+.linha-campo label small { display: block; font-size: 11.5px; font-weight: 500; color: var(--texto-2); }
+.linha-campo .campo { width: 120px; flex: none; }
+.linha.total-linha { border-top: 2px solid var(--marinho); padding-top: 8px; margin-top: 2px; }
+.linha.total-linha > span { color: var(--marinho); font-weight: 800; }
+.linha.total-linha > b { font-size: 16px; }
+.linha.sutil { font-size: 13px; }
+.linha.sutil > span, .linha.sutil > b { color: var(--texto-2); font-weight: 600; }
+.margem-linha-card { background: var(--cinza); border-radius: 8px; padding: 6px 10px; }
+.preco-box { margin-top: 6px; }
+.preco-box b.parcial::after { content: " *"; color: var(--amarelo); font-size: 18px; }
+.separado { font-size: 12px; color: var(--texto-2); text-align: center; margin: 0; }
+.caixas { grid-template-columns: repeat(3, 1fr); }
+.add-caixa { border: 1.5px dashed var(--azul); border-radius: 12px; display: grid; place-items: center; min-height: 140px; background: #fff; color: var(--azul); font-weight: 700; cursor: pointer; font-size: 14px; }
+.add-caixa:hover { background: var(--azul-claro); }
+.metas-tab td.num b { color: var(--petroleo); }
+@media (max-width: 900px) { .produtos.dois, .caixas { grid-template-columns: 1fr; } }
 </style>
 
 </head>
@@ -454,7 +486,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   <div class="wrap">
     <p class="rotulo">Plano Financeiro · WEEK Haircare</p>
     <h1>Calculadora de precificação</h1>
-    <p>Esta página ensina a WEEK a precificar os kits em cinco etapas, na lógica da aba Precificação da planilha. Ela já traz os valores cotados nas abas Orçamentos e Classificação de gastos. Em branco ficam o pedido de compra, as taxas do site e a margem, para vocês preencherem. Com eles, a página calcula o preço de cada produto, o markup, o ponto de equilíbrio e a meta de lucro de 2027, por mês e no ano.</p>
+    <p>Esta página ensina a WEEK a precificar seus produtos. Primeiro, o custo e o preço do shampoo e do condicionador. Depois, a montagem de cada caixa com a embalagem, a logística e a margem. Por fim, os gastos fixos e a meta de vendas de 2027. Os valores já cotados vêm preenchidos. O que ainda depende de orçamento ou de decisão das sócias fica em branco, em amarelo.</p>
     <div class="acoes">
       <a class="btn btn-claro" href="https://docs.google.com/spreadsheets/d/1zo8Lva5f4SlrNYH3nNRK90IznOyByUuP53c9IejrO7I/edit" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
@@ -480,11 +512,11 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
 <div class="resumo" aria-label="Resumo dos resultados">
   <div class="wrap resumo-in">
-    <div class="kpi"><span>Custo do kit avulso</span><b data-out="custo1">–</b></div>
-    <div class="kpi opt"><span>Rateio por kit</span><b data-out="rateioKit">–</b></div>
-    <div class="kpi opt"><span>Preço do kit avulso</span><b data-out="preco1">–</b></div>
-    <div class="kpi"><span>Equilíbrio por mês</span><b data-out="eqKitsMes">–</b></div>
-    <div class="kpi destaque"><span>Meta de lucro por mês</span><b data-out="mtFatMes">–</b></div>
+    <div class="kpi"><span>Preço do shampoo</span><b data-out="p0-preco">–</b></div>
+    <div class="kpi opt"><span>Preço do condicionador</span><b data-out="p1-preco">–</b></div>
+    <div class="kpi"><span>Preço do kit avulso</span><b data-out="c0-preco">–</b></div>
+    <div class="kpi opt"><span>Ponto de equilíbrio</span><b data-out="mesEq">–</b></div>
+    <div class="kpi destaque"><span>Lucro de 2027</span><b data-out="lucroAno">–</b></div>
   </div>
 </div>
 
@@ -493,41 +525,70 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
     <!-- ETAPA 1 -->
     <section class="etapa" id="etapa-1">
-      <div class="faixa"><span class="num">1</span><h2>Estruturação dos custos do produto</h2></div>
+      <div class="faixa"><span class="num">1</span><h2>Shampoo e condicionador: custo e preço</h2></div>
       <div class="corpo">
-        <p class="explica">A <b>ficha técnica</b> mostra o que a WEEK compra e quanto vai em cada kit. <b>Valor total do pedido</b> = quantidade comprada × valor unitário. <b>Custo no kit</b> = uso por kit × valor unitário.</p>
-        <div class="tabela-wrap">
-          <table class="resp">
-            <thead><tr><th>Item, fonte e como conta</th><th class="num">Uso por kit ou pedido</th><th class="num">Quantidade comprada</th><th class="num">Valor unitário</th><th class="num">Valor total do pedido</th><th class="num">Custo no kit</th><th><span class="sr">Remover</span></th></tr></thead>
-            <tbody id="tb-ficha"></tbody>
-            <tbody>
-              <tr class="total">
-                <td class="rot">Totais<span class="fonte">Pedido de compra e custo variável do kit avulso</span></td>
-                <td class="vazia"></td><td class="vazia"></td><td class="vazia"></td>
-                <td class="num" data-r="Total do pedido de compra" data-out="totalCompra">–</td>
-                <td class="num" data-r="Custo do kit avulso" data-out="custoKit">–</td><td class="vazia"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <ul class="como-conta" aria-label="O que significa cada opção de Como conta">
-          <li><b>Por kit</b>multiplica pelo número de kits do produto</li>
-          <li><b>Por pedido</b>cobrado uma vez por compra</li>
-          <li><b>Só kit avulso</b>embalagem do kit vendido sozinho</li>
-          <li><b>Só caixas</b>embalagem das caixas de 5 e 10</li>
-        </ul>
-        <button class="btn-add" type="button" data-add="ficha"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar item de custo</button>
-        <div class="falta" data-falta="custo" hidden></div>
+        <p class="explica">Para cada produto: <b>custo unitário</b> = produto + embalagem + imposto. Com a margem desejada, sai o preço: <b>preço = (produto + embalagem) ÷ (1 − imposto − margem)</b>.</p>
+        <div class="produtos dois" id="cards-produtos"></div>
+        <div class="falta" data-falta="produtos" hidden></div>
       </div>
     </section>
 
     <!-- ETAPA 2 -->
     <section class="etapa" id="etapa-2">
-      <div class="faixa"><span class="num">2</span><h2>Rateio dos custos indiretos</h2></div>
+      <div class="faixa"><span class="num">2</span><h2>Caixas: montagem e preço</h2></div>
       <div class="corpo">
-        <p class="explica">Gastos fixos existem mesmo sem vendas. Investimentos entram como amortização: valor ÷ vida útil. O <b>rateio</b> divide esse total pelos kits vendidos no mês, que saem do pedido de compra.</p>
-        <div class="exemplo"><b>Exemplo do treinamento</b> (só para entender a conta, não é número da WEEK): R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>.</div>
+        <p class="explica">Em cada caixa, escolham quantos shampoos e condicionadores vão dentro. O custo soma os produtos, a caixa e a logística. Com a margem da caixa, sai o preço: <b>preço = custo total ÷ (1 − imposto − margem)</b>.</p>
+        <div class="produtos caixas" id="cards-caixas"></div>
+        <p class="fonte" style="margin-top:10px">Um kit é um shampoo e um condicionador, ou seja, um banho. A margem de cada produto (etapa 1) vale para o produto vendido sozinho. Na caixa vale a margem da caixa.</p>
+        <div class="faixa-justa">
+          <h3>Referência da pesquisa: preço justo por kit</h3>
+          <p>Na pesquisa com o público, o preço considerado justo ficou entre <b>R$ 9,00 e R$ 10,99 por kit</b>. Comparem o preço por kit de cada caixa com essa faixa.</p>
+          <div class="regua" id="regua">
+            <div class="trilho"></div>
+            <div class="justa" id="regua-justa"></div>
+          </div>
+          <div class="chips-banho" id="chips-banho"></div>
+        </div>
+        <div class="falta" data-falta="caixas" hidden></div>
+      </div>
+    </section>
 
+    <!-- ETAPA 3 -->
+    <section class="etapa" id="etapa-3">
+      <div class="faixa"><span class="num">3</span><h2>Impostos e taxas sobre a venda</h2></div>
+      <div class="corpo">
+        <p class="explica">É o "imposto" usado nos preços das etapas 1 e 2. Cada taxa pesa só nas vendas em que é usada: <b>peso = taxa × % das vendas que usam</b>.</p>
+        <div class="tabela-wrap">
+          <table class="resp">
+            <thead><tr><th>Taxa e fonte</th><th class="num">Taxa</th><th class="num">Usada em (% das vendas)</th><th class="num">Peso no preço</th><th><span class="sr">Remover</span></th></tr></thead>
+            <tbody id="tb-taxas"></tbody>
+            <tbody>
+              <tr class="total">
+                <td class="rot">Total de impostos e taxas<span class="fonte">Entra no custo unitário e no preço</span></td>
+                <td class="vazia"></td><td class="vazia"></td>
+                <td class="num" data-r="Total" data-out="impostosPct">–</td><td class="vazia"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn-add" type="button" data-add="taxas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar taxa</button>
+        <div class="grade" style="margin-top:18px">
+          <div class="grupo">
+            <label for="taxaFixa">Taxa fixa por venda no cartão</label>
+            <span class="campo"><span class="ad">R$</span><input id="taxaFixa" data-path="taxaFixa" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher"></span>
+            <small>Em reais, por venda no cartão. Pesa só nessas vendas: <b data-out="taxaFixaPedido">–</b> por caixa, somado à logística.</small>
+          </div>
+        </div>
+        <div class="falta" data-falta="taxas" hidden></div>
+      </div>
+    </section>
+
+    <!-- ETAPA 4 -->
+    <section class="etapa" id="etapa-4">
+      <div class="faixa"><span class="num">4</span><h2>Gastos fixos e investimentos</h2></div>
+      <div class="corpo">
+        <p class="explica">Gastos fixos existem mesmo sem vendas. Investimentos entram como amortização: valor ÷ vida útil. O lucro de cada caixa vendida paga esses gastos.</p>
+        <div class="exemplo"><b>Exemplo do treinamento</b> (só para entender a conta, não é número da WEEK): R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>.</div>
         <h3 class="subtitulo">Gastos fixos por mês</h3>
         <div class="tabela-wrap">
           <table class="resp">
@@ -546,7 +607,6 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
           </table>
         </div>
         <button class="btn-add" type="button" data-add="fixos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar gasto fixo</button>
-
         <h3 class="subtitulo">Investimentos e amortização</h3>
         <div class="tabela-wrap">
           <table class="resp">
@@ -554,219 +614,45 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
             <tbody id="tb-invest"></tbody>
             <tbody>
               <tr class="total">
-                <td class="rot">Amortização por mês</td>
-                <td class="vazia"></td><td class="vazia"></td>
-                <td class="num" data-r="Total" data-out="depreciacao">–</td><td class="vazia"></td>
+                <td class="rot">Total investido e amortização por mês</td>
+                <td class="num" data-r="Investido" data-out="investTotal">–</td><td class="vazia"></td>
+                <td class="num" data-r="Por mês" data-out="depreciacao">–</td><td class="vazia"></td>
               </tr>
             </tbody>
           </table>
         </div>
         <button class="btn-add" type="button" data-add="invest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar investimento</button>
-
-        <h3 class="subtitulo">Kits vendidos por mês e rateio</h3>
-        <div class="grade">
-          <div class="grupo">
-            <label>Kits que o pedido de compra rende</label>
-            <b class="valor-calc" data-out="kitsLote">–</b>
-            <small>Menor quantidade comprada entre fórmulas, sachês e envase, dividida pelo uso por kit (etapa 1).</small>
-          </div>
-          <div class="grupo">
-            <label>Prazo recomendado para vender o pedido</label>
-            <b class="valor-calc" data-out="mesesAuto">–</b>
-            <small>O prazo mais longo, até 12 meses, em que o kit avulso não passa de R$ 10,99, o teto do preço justo da pesquisa. É o ritmo de vendas mais leve com um preço que o público aceita.</small>
-            <label for="k-meses" style="margin-top:6px;font-size:12.5px">Outro prazo (opcional)</label>
-            <span class="campo opcional"><input id="k-meses" data-k="meses" data-fmt="qtd" inputmode="decimal" placeholder="Usar o recomendado"><span class="ad">meses</span></span>
-          </div>
-        </div>
-        <div class="resultados">
-          <div class="res"><span>Gastos fixos por mês</span><b data-out="gastos">–</b><small>Gastos fixos + amortização</small></div>
-          <div class="res"><span>Kits vendidos por mês</span><b data-out="kitsMes">–</b><small>Kits do pedido ÷ prazo. É o ritmo médio do ano.</small></div>
-          <div class="res forte"><span>Rateio por kit</span><b data-out="rateioKit">–</b><small>Gastos fixos ÷ kits vendidos por mês</small></div>
-        </div>
-        <div class="alerta amarelo" id="alerta-prazo" role="status" hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
-          <span data-out="alertaPrazo">–</span>
-        </div>
-
-        <h3 class="subtitulo">Quanto cada produto paga dos gastos fixos nas metas</h3>
-        <div class="tabela-larga">
-          <table>
-            <thead><tr><th>Produto</th><th class="num">Custo variável por pedido</th><th class="num">Parte dos gastos fixos</th><th class="num">Gastos fixos por mês</th></tr></thead>
-            <tbody id="tb-pesos"></tbody>
-          </table>
-        </div>
-        <p class="fonte" style="margin-top:8px">Usado nas metas de vendas para dividir as vendas entre os produtos. Parte = custo variável do produto ÷ soma dos custos variáveis.</p>
         <div class="falta" data-falta="fixos" hidden></div>
       </div>
     </section>
 
-    <!-- ETAPA 3 -->
-    <section class="etapa" id="etapa-3">
-      <div class="faixa"><span class="num">3</span><h2>Custo total unitário</h2></div>
-      <div class="corpo">
-        <p class="explica">Custo variável + rateio de cada kit. É o <b>piso do preço</b>: abaixo dele, a venda dá prejuízo.</p>
-        <div class="tabela-larga">
-          <table>
-            <thead><tr><th>Produto</th><th class="num">Custo variável por kit</th><th class="num">Rateio por kit</th><th class="num">Custo total por kit</th></tr></thead>
-            <tbody id="tb-custo-total"></tbody>
-          </table>
-        </div>
-        <div class="falta" data-falta="tudo" hidden></div>
-      </div>
-    </section>
-
-    <!-- ETAPA 4 -->
-    <section class="etapa" id="etapa-4">
-      <div class="faixa"><span class="num">4</span><h2>Levantamento tributário e taxas</h2></div>
-      <div class="corpo">
-        <p class="explica">Porcentagens descontadas das vendas. Cada taxa pesa só nas vendas em que é usada: <b>peso no faturamento = taxa × % das vendas que usam</b>.</p>
-        <div class="tabela-wrap">
-          <table class="resp">
-            <thead><tr><th>Taxa e fonte</th><th class="num">Taxa</th><th class="num">Usada em (% das vendas)</th><th class="num">Peso no faturamento</th><th><span class="sr">Remover</span></th></tr></thead>
-            <tbody id="tb-taxas"></tbody>
-            <tbody>
-              <tr class="total">
-                <td class="rot">Total de impostos e taxas<span class="fonte">Soma dos pesos. Entra no markup.</span></td>
-                <td class="vazia"></td><td class="vazia"></td>
-                <td class="num" data-r="Total" data-out="impostosPct">–</td><td class="vazia"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <button class="btn-add" type="button" data-add="taxas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar taxa</button>
-
-        <div class="grade" style="margin-top:18px">
-          <div class="grupo">
-            <label for="k-taxaFixa">Taxa fixa por venda no cartão</label>
-            <span class="campo"><span class="ad">R$</span><input id="k-taxaFixa" data-k="taxaFixa" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher"></span>
-            <small>Cobrada em reais por pedido pago no cartão. Pesa só nas vendas no cartão: <b data-out="taxaFixaPedido">–</b> por pedido, somado ao custo variável.</small>
-          </div>
-        </div>
-        <div class="falta" data-falta="taxas" hidden></div>
-      </div>
-    </section>
-
     <!-- ETAPA 5 -->
-    <section class="etapa" id="etapa-5">
-      <div class="faixa"><span class="num">5</span><h2>Cálculo do markup</h2></div>
+    <section class="etapa" id="meta">
+      <div class="faixa final"><span class="num">5</span><h2>Metas de vendas de 2027</h2></div>
       <div class="corpo">
-        <p class="explica">Preencham a margem desejada e o <b>preço sai automático</b>: preço = custo total ÷ (1 − impostos − margem). O <b>markup</b> é quantas vezes esse preço cobre o custo variável.</p>
-        <div class="margem-linha">
-          <div>
-            <label for="k-margem">Margem de lucro desejada</label>
-            <span class="campo" style="width:100%"><input id="k-margem" data-k="margem" data-fmt="pct" inputmode="decimal" placeholder="Preencher"><span class="ad">%</span></span>
-          </div>
-          <div>
-            <input type="range" id="slider-margem" min="0" max="60" step="0.5" value="0" aria-label="Ajustar margem de lucro desejada">
-            <div class="escala"><span>0%</span><span>15%</span><span>30%</span><span>45%</span><span>60%</span></div>
-          </div>
-        </div>
-
+        <p class="explica">Quantas caixas a WEEK precisa vender para pagar os gastos fixos e recuperar os investimentos.</p>
+        <ul class="duas-metas">
+          <li><b>Ponto de equilíbrio</b>O lucro das caixas paga os gastos fixos do mês. Abaixo disso, prejuízo.</li>
+          <li><b>Meta de 2027</b>Pagar todos os gastos e recuperar tudo que foi investido até dezembro, com as vendas crescendo mês a mês.</li>
+        </ul>
         <div class="tabela-larga">
-          <table>
-            <thead><tr><th>Produto</th><th class="num">Custo variável</th><th class="num">Rateio</th><th class="num">Custo total</th><th class="num">Preço de venda</th><th class="num">Preço por kit</th><th class="num">Markup</th></tr></thead>
-            <tbody id="tb-markup"></tbody>
+          <table class="metas-tab">
+            <thead><tr><th>Caixa</th><th class="num">Lucro por caixa</th><th class="num">Equilíbrio por mês, vendendo só esta caixa</th><th class="num">Meta média por mês</th><th class="num">Meta em 2027</th></tr></thead>
+            <tbody id="tb-metas"></tbody>
           </table>
         </div>
-        <p class="fonte" style="margin-top:8px">Valores por pedido. Rateio = rateio por kit × kits do produto. Preço = custo total ÷ (1 − impostos − margem). Markup = preço ÷ custo variável.</p>
-
-        <div class="formula" style="margin-top:18px" aria-live="polite">
-          <div class="titulo">Conferência do markup do kit avulso</div>
-          <div class="f-linha">
-            <span class="f-nome">Markup</span><span class="f-igual">=</span>
-            <span class="frac"><span class="n">1</span>
-              <span class="d"><span class="chip um">1</span><span class="f-menos">−</span><span class="chip c1">rateio %</span><span class="f-menos">−</span><span class="chip c2">impostos e taxas %</span><span class="f-menos">−</span><span class="chip c3">margem %</span></span>
-            </span>
-          </div>
-          <div class="f-linha">
-            <span class="f-nome">Markup</span><span class="f-igual">=</span>
-            <span class="frac"><span class="n">1</span>
-              <span class="d"><span class="chip um">1</span><span class="f-menos">−</span><span class="chip c1" data-out="rateioPct1">–</span><span class="f-menos">−</span><span class="chip c2" data-out="impostosPct">–</span><span class="f-menos">−</span><span class="chip c3" data-out="margemPct">–</span></span>
-            </span>
-            <span class="f-igual">=</span>
-            <span class="f-res" data-out="markupForm1">–</span>
-          </div>
-          <p class="fonte" style="text-align:center;margin-top:12px">O resultado é o mesmo markup da tabela: o preço paga o custo, o rateio, as taxas e a margem.</p>
-        </div>
-
-        <div class="faixa-justa">
-          <h3>Referência da pesquisa: preço justo por kit</h3>
-          <p>Na pesquisa com o público, o preço considerado justo ficou entre <b>R$ 9,00 e R$ 10,99 por kit</b> (um kit é um banho). Comparem o preço por kit de cada produto com essa faixa.</p>
-          <div class="regua" id="regua">
-            <div class="trilho"></div>
-            <div class="justa" id="regua-justa"></div>
-          </div>
-          <div class="chips-banho" id="chips-banho"></div>
-        </div>
-        <div class="falta" data-falta="markup" hidden></div>
-      </div>
-    </section>
-
-    <!-- METAS -->
-    <section class="etapa" id="meta">
-      <div class="faixa final"><span class="num"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></span><h2>Metas de vendas de 2027</h2></div>
-      <div class="corpo">
-        <p class="explica">Quantos kits a WEEK precisa vender para não ter prejuízo e para lucrar, por mês e no ano.</p>
-        <ul class="duas-metas">
-          <li><b>Ponto de equilíbrio</b>Paga todos os custos, taxas, gastos fixos e a amortização, mas não lucra. Abaixo disso, prejuízo.</li>
-          <li><b>Meta de lucro</b>Paga tudo isso e ainda sobra a margem desejada. Com o preço calculado, é vender os kits por mês previstos na etapa 2.</li>
-        </ul>
-
-        <div class="formula">
-          <div class="titulo">Conta de cada produto (no ponto de equilíbrio, a margem é zero)</div>
-          <div class="f-linha">
-            <span class="f-nome">Pedidos por mês</span><span class="f-igual">=</span>
-            <span class="frac"><span class="n">gastos fixos do produto</span>
-              <span class="d"><span class="chip c2">preço</span><span class="f-menos">× (1 −</span><span class="chip c2">impostos %</span><span class="f-menos">−</span><span class="chip c3">margem %</span><span class="f-menos">) −</span><span class="chip c1">custo variável</span></span>
-            </span>
-          </div>
-          <div class="f-linha">
-            <span class="f-nome">Kit avulso</span><span class="f-igual">=</span>
-            <span class="frac"><span class="n" data-out="fixos1">–</span>
-              <span class="d"><span class="chip c2" data-out="preco1Txt">–</span><span class="f-menos">× (1 −</span><span class="chip c2" data-out="impostosPct">–</span><span class="f-menos">−</span><span class="chip c3" data-out="margemPct">–</span><span class="f-menos">) −</span><span class="chip c1" data-out="custo1">–</span></span>
-            </span>
-            <span class="f-igual">=</span>
-            <span class="f-res" data-out="pedidosExato1">–</span>
-          </div>
-          <p class="fonte" style="text-align:center;margin-top:12px">A mesma conta vale para as caixas de 5 e 10, cada uma com seus gastos fixos, preço e custo. As quantidades são arredondadas para cima.</p>
-        </div>
-
-        <div class="meta-bloco eq">
-          <header><h3>Ponto de equilíbrio</h3><p>Paga tudo, lucro zero.</p></header>
-          <div class="tabela-larga"><table>
-            <thead>
-              <tr class="grp"><th></th><th class="num" colspan="4">Por mês</th><th class="num sep" colspan="4">No ano de 2027</th></tr>
-              <tr><th>Produto</th><th class="num">Pedidos</th><th class="num">Kits</th><th class="num">Faturamento</th><th class="num">Lucro</th><th class="num sep">Pedidos</th><th class="num">Kits</th><th class="num">Faturamento</th><th class="num">Lucro</th></tr>
-            </thead>
-            <tbody id="tb-meta-eq"></tbody>
-          </table></div>
-        </div>
-        <div class="meta-bloco lucro">
-          <header><h3>Meta de lucro</h3><p>Paga tudo e sobra a margem de <b data-out="margemPct">–</b>.</p></header>
-          <div class="tabela-larga"><table>
-            <thead>
-              <tr class="grp"><th></th><th class="num" colspan="4">Por mês</th><th class="num sep" colspan="4">No ano de 2027</th></tr>
-              <tr><th>Produto</th><th class="num">Pedidos</th><th class="num">Kits</th><th class="num">Faturamento</th><th class="num">Lucro</th><th class="num sep">Pedidos</th><th class="num">Kits</th><th class="num">Faturamento</th><th class="num">Lucro</th></tr>
-            </thead>
-            <tbody id="tb-meta-mt"></tbody>
-          </table></div>
-        </div>
-        <p class="fonte">Por mês: o ritmo médio, num mês sem gastos extras. No ano: soma dos 12 meses do plano abaixo, com as vendas crescendo mês a mês e os gastos extras. As quantidades são arredondadas para cima, por isso o ponto de equilíbrio pode mostrar um lucro pequeno.</p>
+        <p class="fonte" style="margin-top:8px">Lucro por caixa = preço × margem da caixa, já descontados custo e impostos. Na meta, as vendas são divididas entre as caixas pelo custo de cada uma.</p>
         <div class="falta" data-falta="metas" hidden></div>
-        <div class="alerta vermelho" id="alerta-meta" role="status" hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/></svg>
-          <span data-out="alertaMeta">–</span>
-        </div>
 
         <h3 class="subtitulo">Plano mês a mês em 2027</h3>
-        <p class="explica" style="margin-bottom:12px">As vendas crescem um pouco a cada mês, como acontece numa marca nova: janeiro começa em 15% do ritmo médio e dezembro chega a 185%. No ano, somam o mesmo que o ritmo médio × 12. O <b>saldo dos investimentos</b> começa negativo, com tudo que foi investido, e sobe com o lucro de cada mês até os investimentos serem recuperados.</p>
+        <p class="explica" style="margin-bottom:12px">As vendas crescem um pouco a cada mês, como acontece numa marca nova: janeiro começa em 15% do ritmo médio e dezembro chega a 185%. O <b>saldo dos investimentos</b> começa negativo, com tudo que foi investido, e sobe com o resultado de cada mês até os investimentos voltarem para o caixa.</p>
         <div class="resultados" style="margin-bottom:16px">
           <div class="res"><span>Ponto de equilíbrio</span><b data-out="mesEq">–</b><small>Primeiro mês sem prejuízo: <span data-out="mesEqN">–</span></small></div>
-          <div class="res"><span>Investimentos recuperados</span><b data-out="mesPayback">–</b><small>Saldo volta a ficar positivo: <span data-out="mesPaybackN">–</span>. Investido: <span data-out="investTotal">–</span></small></div>
-          <div class="res"><span>Faturamento de 2027</span><b data-out="fatAno">–</b><small>Soma dos 12 meses</small></div>
+          <div class="res"><span>Investimentos recuperados</span><b data-out="mesPayback">–</b><small>Saldo volta a ficar positivo: <span data-out="mesPaybackN">–</span></small></div>
+          <div class="res"><span>Faturamento de 2027</span><b data-out="fatAno">–</b><small data-out="kitsAno">–</small></div>
           <div class="res forte"><span>Lucro de 2027</span><b data-out="lucroAno">–</b><small data-out="margemAno">–</small></div>
         </div>
-        <p class="fonte" style="margin:-6px 0 12px">Gastos extras de um mês, como anúncios no lançamento, entram só naquele mês.</p>
+        <p class="fonte" style="margin:-6px 0 12px">Gastos extras de um mês, como anúncios no lançamento, entram só naquele mês e aumentam a meta dele.</p>
         <div class="mensal-wrap">
           <table class="mensal">
             <thead id="th-mensal"></thead>
@@ -798,15 +684,28 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
      gastos). null = em branco, para as sócias preencherem.
      --------------------------------------------------------------- */
   var PADRAO = {
-    ficha: [
-      { nome: "Fórmula do shampoo (sachê de 30 ml)", fonte: "Preencher com o orçamento da fabricante: custo da fórmula de um sachê de 30 ml, dose única.", unid: "sachê", apl: "banho", uso: 1, compra: null, c: null },
-      { nome: "Fórmula do condicionador (sachê de 30 ml)", fonte: "Preencher com o orçamento da fabricante: custo da fórmula de um sachê de 30 ml, dose única.", unid: "sachê", apl: "banho", uso: 1, compra: null, c: null },
-      { nome: "Sachês de 30 ml com rótulo impresso", fonte: "Preencher com o orçamento da fabricante. Um de shampoo e um de condicionador por kit.", unid: "un", apl: "banho", uso: 2, compra: null, c: null },
-      { nome: "Envase pela fabricante", fonte: "Preencher com o orçamento da fabricante. Encher e selar cada sachê.", unid: "un", apl: "banho", uso: 2, compra: null, c: null },
-      { nome: "Embalagem de envio (envelope plástico)", fonte: "Orçamentos: Rua CEP, Yampi e Melhor Envio.", unid: "un", apl: "avulso", uso: 1, compra: null, c: 0.60 },
-      { nome: "Caixa personalizada 15x15x6 cm", fonte: "Orçamentos: Mag Embalagens, lote de 500.", unid: "un", apl: "caixa", uso: 1, compra: null, c: 4.13 },
-      { nome: "Frete até 300 g", fonte: "Orçamentos: Loggi por agregador, de São Paulo ao Rio de Janeiro. Pago por pedido, sem compra antecipada.", unid: "pedido", apl: "pedido", uso: 1, compra: null, c: 2.85, servico: true }
+    produtos: [
+      { nome: "Shampoo", desc: "Sachê de 30 ml, dose única", margem: null, compra: null, itens: [
+        { nome: "Produto: fórmula e envase", fonte: "Preencher com o orçamento da fabricante.", v: null },
+        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Preencher com o orçamento da fabricante.", v: null }
+      ] },
+      { nome: "Condicionador", desc: "Sachê de 30 ml, dose única", margem: null, compra: null, itens: [
+        { nome: "Produto: fórmula e envase", fonte: "Preencher com o orçamento da fabricante.", v: null },
+        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Preencher com o orçamento da fabricante.", v: null }
+      ] }
     ],
+    caixas: [
+      { nome: "Kit avulso", qSh: 1, qCo: 1, caixa: 0.60, caixaFonte: "Envelope plástico. Orçamentos: Rua CEP, Yampi e Melhor Envio.", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null },
+      { nome: "Caixa com 5 kits", qSh: 5, qCo: 5, caixa: 4.13, caixaFonte: "Caixa personalizada 15x15x6 cm. Orçamentos: Mag Embalagens.", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null },
+      { nome: "Caixa com 10 kits", qSh: 10, qCo: 10, caixa: 4.13, caixaFonte: "Caixa personalizada 15x15x6 cm. Orçamentos: Mag Embalagens.", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null }
+    ],
+    taxas: [
+      { id: "simples", nome: "Simples Nacional, Anexo I", fonte: "Agilize. Primeira faixa, até R$ 180 mil em 12 meses; acima disso, 7,3%. Vale para todas as vendas.", v: 4, uso: 100, travado: true },
+      { id: "cartao", nome: "Taxa do cartão", fonte: "Preencher com a taxa do gateway do site e a parte das vendas pagas no cartão.", v: null, uso: null },
+      { id: "pix", nome: "Taxa do Pix", fonte: "Preencher com a taxa do gateway do site e a parte das vendas pagas no Pix.", v: null, uso: null },
+      { id: "mkt", nome: "Comissão de marketplace", fonte: "Classificação de gastos: 9% por venda. Preencher a parte das vendas no marketplace (0% se for só a loja própria).", v: 9, uso: null }
+    ],
+    taxaFixa: null,
     fixos: [
       { nome: "Contador", fonte: "Meu Contador Online, plano Comércio.", v: 349.00 },
       { nome: "Sistema de gestão e nota fiscal (Bling)", fonte: "Bling, plano Cobalto.", v: 60.00 },
@@ -819,52 +718,36 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       { nome: "Notificação do cosmético na Anvisa", fonte: "RAGB, taxas da Anvisa.", v: 175.72, vida: 60 },
       { nome: "Site e-commerce, desenvolvimento", fonte: "Preencher com o valor do profissional contratado pelas sócias.", v: null, vida: 36 }
     ],
-    taxas: [
-      { id: "simples", nome: "Simples Nacional, Anexo I", fonte: "Agilize. Primeira faixa, até R$ 180 mil em 12 meses; acima disso, 7,3%. Vale para todas as vendas.", v: 4, uso: 100, travado: true },
-      { id: "cartao", nome: "Taxa do cartão", fonte: "Preencher com a taxa do gateway do site e a parte das vendas pagas no cartão.", v: null, uso: null },
-      { id: "pix", nome: "Taxa do Pix", fonte: "Preencher com a taxa do gateway do site e a parte das vendas pagas no Pix.", v: null, uso: null },
-      { id: "mkt", nome: "Comissão de marketplace", fonte: "Classificação de gastos: 9% por venda. Preencher a parte das vendas feitas no marketplace (0% se for só a loja própria).", v: 9, uso: null }
-    ],
-    taxaFixa: null,
-    margem: null,
-    meses: null,
     extras: [null, null, null, null, null, null, null, null, null, null, null, null]
   };
-  var APL = [
-    { v: "banho", t: "Por kit" },
-    { v: "pedido", t: "Por pedido" },
-    { v: "avulso", t: "Só kit avulso" },
-    { v: "caixa", t: "Só caixas" }
-  ];
   var NOVO = {
-    ficha: function () { return { nome: "", fonte: "", unid: "un", apl: "banho", uso: 1, compra: null, c: null, novo: true }; },
-    fixos: function () { return { nome: "", fonte: "", v: null, novo: true }; },
-    invest: function () { return { nome: "", fonte: "", v: null, vida: null, novo: true }; },
-    taxas: function () { return { nome: "", fonte: "", v: null, uso: null, novo: true }; }
+    "taxas": function () { return { nome: "", fonte: "", v: null, uso: null, novo: true }; },
+    "fixos": function () { return { nome: "", fonte: "", v: null, novo: true }; },
+    "invest": function () { return { nome: "", fonte: "", v: null, vida: null, novo: true }; },
+    "caixas": function () { return { nome: "", qSh: null, qCo: null, caixa: null, caixaFonte: "", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null, novo: true }; },
+    "itens": function () { return { nome: "", fonte: "", v: null, novo: true }; }
   };
-  var ROTULOS = {
-    taxaFixa: "Taxa fixa por venda no cartão", margem: "Margem de lucro desejada",
-    meses: "Meses para vender o pedido de compra"
-  };
-  var PRODUTOS = [
-    { id: "1", nome: "Kit avulso", n: 1 },
-    { id: "5", nome: "Caixa com 5 kits", n: 5 },
-    { id: "10", nome: "Caixa com 10 kits", n: 10 }
-  ];
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
   var MESES = ["jan./27", "fev./27", "mar./27", "abr./27", "mai./27", "jun./27", "jul./27", "ago./27", "set./27", "out./27", "nov./27", "dez./27"];
-  var CHAVE = "week-precificacao-v10";
+  var CORES = ["#0047bb", "#1f2a44", "#2f8f7e", "#b7791f", "#6b46c1", "#c53030"];
+  var CHAVE = "week-precificacao-v12";
 
-  var s, vista = "mt";
+  var s;
 
   function copia(o) { return JSON.parse(JSON.stringify(o)); }
   function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(s)); } catch (e) {} }
   function carregar() {
     try {
       var t = localStorage.getItem(CHAVE);
-      if (t) { var o = JSON.parse(t); if (o && o.ficha && o.fixos && o.invest && o.taxas) return Object.assign(copia(PADRAO), o); }
+      if (t) { var o = JSON.parse(t); if (o && o.produtos && o.caixas && o.taxas && o.fixos && o.invest) return Object.assign(copia(PADRAO), o); }
     } catch (e) {}
     return copia(PADRAO);
+  }
+  function pegar(caminho) { return caminho.split(".").reduce(function (o, k) { return o == null ? undefined : o[k]; }, s); }
+  function gravar(caminho, v) {
+    var partes = caminho.split("."), ult = partes.pop();
+    var o = partes.reduce(function (a, k) { return a[k]; }, s);
+    o[ult] = v;
   }
 
   /* ---------- Formatação brasileira ---------- */
@@ -894,6 +777,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   function z(x) { return (x == null || !isFinite(x)) ? 0 : x; }
   function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function nomeDe(item, padrao) { return (item.nome && item.nome.trim()) || padrao; }
+  function idDe(caminho) { return caminho.replace(/\./g, "-"); }
   function unir() {
     var a = [];
     for (var i = 0; i < arguments.length; i++) arguments[i].forEach(function (x) { if (a.indexOf(x) < 0) a.push(x); });
@@ -902,41 +786,10 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
   /* ---------- Cálculos ---------- */
   function calcular() {
-    var r = { falta: { custo: [], fixos: [], taxas: [], margem: [], volume: [] }, pend: [] };
-    function pend(t, etapa, id) { r.pend.push({ t: t, etapa: etapa, id: id }); }
+    var r = { falta: { produtos: [], caixas: [], taxas: [], fixos: [] }, pend: [] };
+    function pend(t, etapa, caminho) { r.pend.push({ t: t, etapa: etapa, id: idDe(caminho) }); }
 
-    /* Etapa 1: pedido de compra e custo por kit */
-    var soma = { banho: 0, pedido: 0, avulso: 0, caixa: 0 };
-    r.totalCompra = 0;
-    s.ficha.forEach(function (it, i) {
-      it._kit = (it.uso == null || it.c == null) ? null : it.uso * it.c;
-      it._total = (it.compra == null || it.c == null) ? null : it.compra * it.c;
-      soma[it.apl] += z(it._kit);
-      r.totalCompra += z(it._total);
-      if (it._kit == null) {
-        var n = nomeDe(it, "Item de custo " + (i + 1));
-        r.falta.custo.push(n);
-        pend(n, "Etapa 1", "ficha-" + i + "-" + (it.c == null ? "c" : "uso"));
-      }
-    });
-    r.soma = soma;
-    r.custoKit = soma.banho + soma.pedido + soma.avulso;
-
-    /* Etapa 2: gastos fixos e amortização */
-    r.gastos = 0;
-    s.fixos.forEach(function (it, i) {
-      r.gastos += z(it.v);
-      if (it.v == null) { var n = nomeDe(it, "Gasto fixo " + (i + 1)); r.falta.fixos.push(n); pend(n, "Etapa 2", "fixos-" + i + "-v"); }
-    });
-    r.depreciacao = 0;
-    s.invest.forEach(function (it, i) {
-      it._mes = (it.v == null || !it.vida) ? null : it.v / it.vida;
-      r.depreciacao += z(it._mes);
-      if (it._mes == null) { var n = nomeDe(it, "Investimento " + (i + 1)); r.falta.fixos.push(n); pend(n, "Etapa 2", "invest-" + i + "-" + (it.v == null ? "v" : "vida")); }
-    });
-    r.gastos += r.depreciacao;
-
-    /* Etapa 4: taxas com a parte das vendas que usa cada uma */
+    /* Etapa 3: impostos e taxas (usados nos preços) */
     r.impostosPct = 0;
     var usoCartao = 0;
     s.taxas.forEach(function (it, i) {
@@ -947,295 +800,238 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       if (it._peso == null) {
         var n = nomeDe(it, "Taxa " + (i + 1));
         r.falta.taxas.push(n);
-        pend(n + (it.v == null ? "" : " (uso)"), "Etapa 4", "taxas-" + i + "-" + (it.v == null ? "v" : "uso"));
+        pend(n + (it.v == null ? "" : " (uso)"), "Etapa 3", "taxas." + i + "." + (it.v == null ? "v" : "uso"));
       }
     });
-    if (s.taxaFixa == null) { r.falta.taxas.push(ROTULOS.taxaFixa); pend(ROTULOS.taxaFixa, "Etapa 4", "k-taxaFixa"); }
+    if (s.taxaFixa == null) { r.falta.taxas.push("Taxa fixa por venda no cartão"); pend("Taxa fixa por venda no cartão", "Etapa 3", "taxaFixa"); }
     r.taxaFixaPedido = z(s.taxaFixa) * usoCartao;
+    var I = r.impostosPct;
 
-    /* Etapa 5: margem e preços */
-    if (s.margem == null) { r.falta.margem.push(ROTULOS.margem); pend(ROTULOS.margem, "Etapa 5", "k-margem"); }
-    r.margemPct = z(s.margem) / 100;
-
-    /* Etapa 2: kits vendidos por mês, a partir do pedido de compra */
-    var kitsLote = null;
-    s.ficha.forEach(function (it, i) {
-      if (it.apl !== "banho" || it.servico) return;
-      if (it.compra == null) {
-        var n = nomeDe(it, "Item de custo " + (i + 1)) + " (quantidade comprada)";
-        r.falta.volume.push(n); pend(n, "Etapa 1", "ficha-" + i + "-compra");
-      } else if (it.uso > 0) {
-        var k = Math.floor(it.compra / it.uso + 1e-9);
-        kitsLote = kitsLote == null ? k : Math.min(kitsLote, k);
-      }
-    });
-    r.kitsLote = kitsLote;
-    r.divPreco = 1 - r.impostosPct - r.margemPct;
-    /* Prazo recomendado: o mais longo (até 12 meses) em que o kit avulso não passa do teto do preço justo */
-    var C1 = soma.banho + soma.pedido + soma.avulso + r.taxaFixaPedido;
-    var folga = FAIXA_MAX * r.divPreco - C1;
-    r.prazoAcima = false;
-    r.C1 = C1;
-    if (kitsLote > 0 && r.divPreco > 0) {
-      var mMax = r.gastos > 0 ? folga * kitsLote / r.gastos : 12;
-      if (mMax < 1) { r.mesesAuto = 1; r.prazoAcima = true; }
-      else r.mesesAuto = Math.min(12, Math.floor(mMax + 1e-9));
-    } else r.mesesAuto = NaN;
-    r.mesesUsados = s.meses > 0 ? s.meses : r.mesesAuto;
-    r.kitsMes = kitsLote > 0 && r.mesesUsados > 0 ? kitsLote / r.mesesUsados : NaN;
-    r.R = r.kitsMes > 0 ? r.gastos / r.kitsMes : NaN;
-
-    /* Preço = (custo variável + rateio) ÷ (1 − impostos − margem) */
-    r.prods = PRODUTOS.map(function (p) {
-      var C = p.n * soma.banho + soma.pedido + (p.n === 1 ? soma.avulso : soma.caixa) + r.taxaFixaPedido;
-      var rat = p.n * r.R;
-      var P = r.divPreco > 0 && isFinite(rat) ? (C + rat) / r.divPreco : NaN;
-      return { id: p.id, nome: p.nome, n: p.n, C: C, rat: rat, P: P, part: isFinite(P) && P > 0 };
-    });
-
-    /* Divisão dos gastos fixos pelo custo variável de cada produto */
-    var part = r.prods.filter(function (x) { return x.part; });
-    var somaC = part.reduce(function (a, x) { return a + x.C; }, 0);
-    r.prods.forEach(function (x) {
-      x.w = x.part && somaC > 0 ? x.C / somaC : NaN;
-      x.F = x.w * r.gastos;
-      if (!x.part) return;
-      x.contrib = x.P * (1 - r.impostosPct) - x.C;
-      x.contribPct = x.contrib / x.P;
-      x.denEq = x.contrib;
-      x.denMt = x.P * (1 - r.impostosPct - r.margemPct) - x.C;
-      x.markup = x.C > 0 ? x.P / x.C : NaN;
-      x.qExato = x.denMt > 0 ? x.F / x.denMt : NaN;
-      x.rateioPct = x.rat / x.P;                                   /* rateio ÷ preço */
-      x.rateioKit = r.R;
-      x.custoKit = x.C / x.n;
-      x.custoTotalKit = x.custoKit + x.rateioKit;
-      x.markupForm = isFinite(x.rateioPct) ? 1 / (1 - x.rateioPct - r.impostosPct - r.margemPct) : NaN;
-    });
-    r.part = part;
-
-    /* Plano de um mês: pedidos de cada produto para cobrir gastos fixos + extra */
-    function plano(kind, extra) {
-      var o = { extra: extra, prods: {}, ok: part.length > 0, pedidos: 0, kits: 0, fat: 0, cv: 0, imp: 0, lucro: 0, fixos: r.gastos };
-      part.forEach(function (x) {
-        var den = kind === "mt" ? x.denMt : x.denEq;
-        if (!(den > 0)) { o.ok = false; return; }
-        var fk = (r.gastos + extra) * x.w;
-        var q = Math.ceil(fk / den - 1e-9);
-        var fat = q * x.P, cv = q * x.C, imp = fat * r.impostosPct;
-        var pr = { q: q, kits: q * x.n, fat: fat, cv: cv, imp: imp, lucro: fat - cv - imp - fk };
-        o.prods[x.id] = pr;
-        o.pedidos += q; o.kits += pr.kits; o.fat += fat; o.cv += cv; o.imp += imp; o.lucro += pr.lucro;
+    /* Etapa 1: shampoo e condicionador */
+    r.prods = s.produtos.map(function (p, pi) {
+      var base = 0;
+      p.itens.forEach(function (it, ii) {
+        base += z(it.v);
+        if (it.v == null) {
+          var n = p.nome + ": " + nomeDe(it, "custo " + (ii + 1)).replace(/:.*$/, "").toLowerCase();
+          r.falta.produtos.push(n); pend(n, "Etapa 1", "produtos." + pi + ".itens." + ii + ".v");
+        }
       });
-      o.margem = o.fat > 0 ? o.lucro / o.fat : NaN;
-      return o;
-    }
-    function ano(lista) {
-      var a = { ok: lista.every(function (o) { return o.ok; }), prods: {}, pedidos: 0, kits: 0, fat: 0, lucro: 0 };
-      lista.forEach(function (o) {
-        if (!o.ok) return;
-        ["pedidos", "kits", "fat", "lucro"].forEach(function (k) { a[k] += o[k]; });
-        Object.keys(o.prods).forEach(function (id) {
-          var d = a.prods[id] || (a.prods[id] = { q: 0, kits: 0, fat: 0, lucro: 0 });
-          d.q += o.prods[id].q; d.kits += o.prods[id].kits; d.fat += o.prods[id].fat; d.lucro += o.prods[id].lucro;
-        });
+      if (p.margem == null) { r.falta.produtos.push("margem do " + p.nome.toLowerCase()); pend("Margem do " + p.nome.toLowerCase(), "Etapa 1", "produtos." + pi + ".margem"); }
+      var m = z(p.margem) / 100, div = 1 - I - m;
+      var P = base > 0 && div > 0 ? base / div : NaN;
+      return { base: base, m: m, P: P, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: p.compra == null ? NaN : p.compra * base };
+    });
+    var sh = r.prods[0], co = r.prods[1];
+
+    /* Etapa 2: caixas */
+    r.caixas = s.caixas.map(function (c, ci) {
+      var nome = nomeDe(c, "Caixa " + (ci + 1));
+      [["qSh", "shampoos"], ["qCo", "condicionadores"], ["caixa", "custo da caixa"], ["log", "logística"], ["margem", "margem"]].forEach(function (f) {
+        if (c[f[0]] == null) { r.falta.caixas.push(nome + ": " + f[1]); pend(nome + ": " + f[1], "Etapa 2", "caixas." + ci + "." + f[0]); }
       });
-      return a;
-    }
-    /* Plano progressivo: o mês j vende 2j/13 do ritmo médio (soma 12 × ritmo no ano) */
-    r.investTotal = s.invest.reduce(function (a, it) { return a + z(it.v); }, 0);
-    var acum = 0, caixa = -r.investTotal;
+      var prod = z(c.qSh) * sh.base + z(c.qCo) * co.base;
+      var base = prod + z(c.caixa) + z(c.log) + r.taxaFixaPedido;
+      var m = z(c.margem) / 100, div = 1 - I - m;
+      var P = base > 0 && div > 0 ? base / div : NaN;
+      var kits = (z(c.qSh) + z(c.qCo)) / 2;
+      return {
+        nome: nome, prod: prod, base: base, m: m, P: P, imp: P * I, lucro: P * m, kits: kits,
+        porKit: kits > 0 ? P / kits : NaN, markup: P / base,
+        separado: z(c.qSh) * sh.P + z(c.qCo) * co.P
+      };
+    });
+
+    /* Etapa 4: gastos fixos e investimentos */
+    r.gastos = 0;
+    s.fixos.forEach(function (it, i) {
+      r.gastos += z(it.v);
+      if (it.v == null) { var n = nomeDe(it, "Gasto fixo " + (i + 1)); r.falta.fixos.push(n); pend(n, "Etapa 4", "fixos." + i + ".v"); }
+    });
+    r.depreciacao = 0; r.investTotal = 0;
+    s.invest.forEach(function (it, i) {
+      it._mes = (it.v == null || !it.vida) ? null : it.v / it.vida;
+      r.depreciacao += z(it._mes);
+      r.investTotal += z(it.v);
+      if (it._mes == null) { var n = nomeDe(it, "Investimento " + (i + 1)); r.falta.fixos.push(n); pend(n, "Etapa 4", "invest." + i + "." + (it.v == null ? "v" : "vida")); }
+    });
+    r.gastos += r.depreciacao;
+
+    /* Etapa 5: metas. As vendas se dividem entre as caixas pelo custo de cada uma. */
+    var validas = r.caixas.filter(function (c) { return isFinite(c.P) && c.lucro > 0; });
+    var somaBase = validas.reduce(function (a, c) { return a + c.base; }, 0);
+    r.caixas.forEach(function (c) {
+      c.ok = isFinite(c.P) && c.lucro > 0;
+      c.w = c.ok && somaBase > 0 ? c.base / somaBase : 0;
+      c.eqSo = c.ok ? Math.ceil(r.gastos / c.lucro - 1e-9) : NaN;
+      c.ano = 0;
+    });
+    r.metaOk = validas.length > 0;
+    /* Lucro médio que as caixas precisam gerar por mês para pagar os gastos
+       e recuperar os investimentos até dezembro (a amortização não sai do caixa). */
+    r.lucroNecessario = Math.max(0, r.gastos - r.depreciacao + r.investTotal / 12);
+    var acum = 0, saldo = -r.investTotal;
     r.mesEq = null; r.mesPayback = null;
-    r.plano = MESES.map(function (m, j) {
+    r.ano = { fat: 0, lucro: 0, kits: 0 };
+    r.plano = MESES.map(function (mes, j) {
       var extra = z(s.extras[j]);
-      var eq = plano("eq", extra);
-      var o = { extra: extra, fixos: r.gastos, ok: part.length > 0 && isFinite(r.kitsMes), prods: {}, pedidos: 0, kits: 0, fat: 0, cv: 0, imp: 0, lucro: 0, eqKits: eq.ok ? eq.kits : NaN };
+      var o = { ok: r.metaOk, extra: extra, fixos: r.gastos, u: [], kits: 0, fat: 0, custos: 0, imp: 0, lucro: 0 };
       if (!o.ok) return o;
-      var alvo = r.kitsMes * 2 * (j + 1) / 13;
-      part.forEach(function (x) {
-        var q = Math.ceil(alvo * x.w / x.n - 1e-9);
-        var fat = q * x.P, cv = q * x.C;
-        o.prods[x.id] = { q: q, kits: q * x.n, fat: fat, lucro: fat * (1 - r.impostosPct) - cv - (r.gastos + extra) * x.w };
-        o.pedidos += q; o.kits += q * x.n; o.fat += fat; o.cv += cv;
+      var alvo = r.lucroNecessario * 2 * (j + 1) / 13 + extra;
+      r.caixas.forEach(function (c, ci) {
+        var u = c.ok ? Math.ceil(c.w * alvo / c.lucro - 1e-9) : 0;
+        o.u[ci] = u; c.ano += u;
+        o.kits += u * c.kits; o.fat += u * z(c.P); o.custos += u * c.base;
       });
-      o.imp = o.fat * r.impostosPct;
-      o.lucro = o.fat - o.cv - o.imp - r.gastos - extra;
+      o.imp = o.fat * I;
+      o.lucro = o.fat - o.custos - o.imp - r.gastos - extra;
       o.margem = o.fat > 0 ? o.lucro / o.fat : NaN;
-      acum += o.lucro; caixa += o.lucro + r.depreciacao;
-      o.lucroAcum = acum; o.caixa = caixa;
-      if (r.mesEq == null && o.lucro >= 0) r.mesEq = j + 1;
-      if (r.mesPayback == null && caixa >= 0) r.mesPayback = j + 1;
+      acum += o.lucro; saldo += o.lucro + r.depreciacao;
+      o.lucroAcum = acum; o.saldo = saldo;
+      if (r.mesEq == null && o.lucro >= -0.004) r.mesEq = j + 1;
+      if (r.mesPayback == null && saldo >= -0.004) r.mesPayback = j + 1;
+      r.ano.fat += o.fat; r.ano.lucro += o.lucro; r.ano.kits += o.kits;
       return o;
     });
-    r.base = { mt: plano("mt", 0), eq: plano("eq", 0) };
-    r.ano = { mt: ano(r.plano), eq: ano(MESES.map(function (m, j) { return plano("eq", z(s.extras[j])); })) };
     return r;
   }
 
-  /* ---------- Listas editáveis ---------- */
+  /* ---------- Montagem dos campos ---------- */
   var ICONE_REM = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
-  function campoNum(lista, i, f, valor, fmt, pre, suf, cls, rotulo, ph) {
-    var id = lista + "-" + i + "-" + f;
-    return '<span class="campo ' + (cls || "") + (valor == null && !/opcional/.test(cls || "") ? " vazio" : "") + '">' +
+  var ICONE_ADD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  function campo(caminho, fmt, pre, suf, cls, rotulo, ph) {
+    var valor = pegar(caminho);
+    var opcional = /opcional/.test(cls || "");
+    return '<span class="campo ' + (cls || "") + (valor == null && !opcional ? " vazio" : "") + '">' +
       (pre ? '<span class="ad">' + pre + '</span>' : "") +
-      '<input id="' + id + '" data-list="' + lista + '" data-i="' + i + '" data-f="' + f + '" data-fmt="' + fmt + '" inputmode="decimal" placeholder="' + (ph || "Preencher") + '" value="' + paraCampo(valor, fmt) + '" aria-label="' + esc(rotulo) + '">' +
+      '<input id="' + idDe(caminho) + '" data-path="' + caminho + '" data-fmt="' + fmt + '" inputmode="decimal" placeholder="' + (ph || "Preencher") + '" value="' + paraCampo(valor, fmt) + '" aria-label="' + esc(rotulo) + '">' +
       (suf ? '<span class="ad">' + suf + '</span>' : "") + '</span>';
   }
-  function celulaNome(lista, i, it, ph, extra) {
-    if (it.novo) {
-      return '<td class="rot">' +
-        '<input class="nome-input" id="' + lista + '-' + i + '-nome" data-list="' + lista + '" data-i="' + i + '" data-f="nome" placeholder="' + ph + '" value="' + esc(it.nome) + '" aria-label="Nome do item">' +
-        '<input class="nome-input fonte-input" id="' + lista + '-' + i + '-fonte" data-list="' + lista + '" data-i="' + i + '" data-f="fonte" placeholder="Fonte ou observação" value="' + esc(it.fonte) + '" aria-label="Fonte do valor">' +
-        (extra || "") + '</td>';
-    }
-    var alinhar = /^Preencher/.test(it.fonte);
-    return '<td class="rot">' + esc(it.nome) + '<span class="fonte' + (alinhar ? " alinhar" : "") + '">' + esc(it.fonte) + '</span>' + (extra || "") + '</td>';
+  function texto(caminho, ph, cls) {
+    return '<input class="nome-input ' + (cls || "") + '" id="' + idDe(caminho) + '" data-path="' + caminho + '" data-texto="1" placeholder="' + ph + '" value="' + esc(pegar(caminho)) + '" aria-label="' + ph + '">';
   }
-  function botaoRem(lista, i, nome, oculto) {
-    if (oculto) return '<td class="acao vazia"></td>';
-    return '<td class="acao"><button class="btn-rem" type="button" data-rem="' + lista + '" data-i="' + i + '" aria-label="Remover ' + esc(nome) + '" title="Remover linha">' + ICONE_REM + '</button></td>';
+  function fonteTxt(f) { return '<span class="fonte' + (/^Preencher/.test(f || "") ? " alinhar" : "") + '">' + esc(f) + '</span>'; }
+  function botaoRem(lista, i, nome) {
+    return '<button class="btn-rem" type="button" data-rem="' + lista + '" data-i="' + i + '" aria-label="Remover ' + esc(nome) + '" title="Remover">' + ICONE_REM + '</button>';
+  }
+  function celulaNome(lista, i, it, ph) {
+    if (it.novo) return '<td class="rot">' + texto(lista + "." + i + ".nome", ph) + texto(lista + "." + i + ".fonte", "Fonte ou observação", "fonte-input") + '</td>';
+    return '<td class="rot">' + esc(it.nome) + fonteTxt(it.fonte) + '</td>';
   }
 
-  function montarListas() {
-    document.getElementById("tb-ficha").innerHTML = s.ficha.map(function (it, i) {
-      var n = nomeDe(it, "item"), unid = it.unid || "un";
-      var sel = '<select class="apl" id="ficha-' + i + '-apl" data-list="ficha" data-i="' + i + '" data-f="apl" aria-label="Como ' + esc(n) + ' conta no custo">' +
-        APL.map(function (a) { return '<option value="' + a.v + '"' + (a.v === it.apl ? " selected" : "") + '>' + a.t + '</option>'; }).join("") + '</select>';
-      var porQue = it.apl === "banho" ? "por kit" : "por pedido";
-      return '<tr>' + celulaNome("ficha", i, it, "Nome do item", sel) +
-        '<td class="num" data-r="Uso ' + porQue + '">' + campoNum("ficha", i, "uso", it.uso, "qtd", "", unid, "curto", "Uso de " + n + " " + porQue) + '</td>' +
-        (it.servico
-          ? '<td class="servico" data-r="Quantidade comprada">pago a cada pedido</td>'
-          : '<td class="num" data-r="Quantidade comprada">' + campoNum("ficha", i, "compra", it.compra, "inteiro", "", unid, it.apl === "banho" ? "" : "opcional", "Quantidade comprada de " + n, it.apl === "banho" ? "Preencher" : "Opcional") + '</td>') +
-        '<td class="num" data-r="Valor unitário">' + campoNum("ficha", i, "c", it.c, "dinheiro", "R$", "", "", "Valor unitário de " + n) + '</td>' +
-        '<td class="num calc" data-r="Valor total do pedido" data-linha="ficha-total-' + i + '">–</td>' +
-        '<td class="num calc" data-r="Custo no kit" data-linha="ficha-kit-' + i + '">–</td>' +
-        botaoRem("ficha", i, n) + '</tr>';
+  function montarProdutos() {
+    document.getElementById("cards-produtos").innerHTML = s.produtos.map(function (p, pi) {
+      var cam = "produtos." + pi;
+      var itens = p.itens.map(function (it, ii) {
+        var c = cam + ".itens." + ii;
+        var nome = it.novo ? texto(c + ".nome", "Nome do custo") + texto(c + ".fonte", "Fonte ou observação", "fonte-input") : esc(it.nome) + fonteTxt(it.fonte);
+        return '<div class="item-linha"><div class="nome">' + nome + '</div>' +
+          campo(c + ".v", "dinheiro", "R$", "", "", nomeDe(it, "custo") + " do " + p.nome.toLowerCase()) +
+          botaoRem(cam + ".itens", ii, nomeDe(it, "custo")) + '</div>';
+      }).join("");
+      return '<article class="prod"><div class="prod-cab"><div><h3>' + p.nome + '</h3><p>' + p.desc + '</p></div></div>' +
+        '<div class="prod-corpo">' +
+          '<p class="bloco-tit">Custo de uma unidade</p>' + itens +
+          '<button class="btn-add" type="button" data-add="' + cam + '.itens">' + ICONE_ADD + 'Adicionar custo</button>' +
+          '<div class="linha"><span>Imposto e taxas (<span data-out="impostosPct">–</span> do preço)</span><b data-out="p' + pi + '-imp">–</b></div>' +
+          '<div class="linha total-linha"><span>Custo unitário</span><b data-out="p' + pi + '-custo">–</b></div>' +
+          '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada do " + p.nome.toLowerCase()) + '</div>' +
+          '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Lucro de <span data-out="p' + pi + '-lucro">–</span> por unidade · markup <span data-out="p' + pi + '-markup">–</span></small></div>' +
+          '<div class="linha-campo"><label for="' + idDe(cam + ".compra") + '">Quantidade comprada<small>Opcional, para ver o valor do pedido</small></label>' + campo(cam + ".compra", "inteiro", "", "un", "opcional", "Quantidade comprada de " + p.nome.toLowerCase(), "Opcional") + '</div>' +
+          '<div class="linha sutil"><span>Valor do pedido de compra</span><b data-out="p' + pi + '-pedido">–</b></div>' +
+        '</div></article>';
     }).join("");
+  }
 
+  function montarCaixas() {
+    document.getElementById("cards-caixas").innerHTML = s.caixas.map(function (c, ci) {
+      var cam = "caixas." + ci, n = nomeDe(c, "caixa");
+      var cab = c.novo ? texto(cam + ".nome", "Nome da caixa") : '<h3>' + esc(c.nome) + '</h3>';
+      var linhaCampo = function (f, rot, sub, fmt, pre, suf) {
+        return '<div class="linha-campo"><label for="' + idDe(cam + "." + f) + '">' + rot + (sub ? '<small>' + esc(sub) + '</small>' : "") + '</label>' +
+          campo(cam + "." + f, fmt, pre, suf, "", rot + " da " + n) + '</div>';
+      };
+      return '<article class="prod"><div class="prod-cab"><div style="flex:1;min-width:0">' + cab + '<p data-out="c' + ci + '-kitsTxt">–</p></div>' + botaoRem("caixas", ci, n) + '</div>' +
+        '<div class="prod-corpo">' +
+          '<p class="bloco-tit">Produtos dentro</p>' +
+          linhaCampo("qSh", "Shampoos", "", "inteiro", "", "un") +
+          linhaCampo("qCo", "Condicionadores", "", "inteiro", "", "un") +
+          '<div class="linha"><span>Custo dos produtos</span><b data-out="c' + ci + '-prod">–</b></div>' +
+          '<p class="bloco-tit">Caixa e logística</p>' +
+          linhaCampo("caixa", "Custo da caixa", c.caixaFonte, "dinheiro", "R$", "") +
+          linhaCampo("log", "Custo da logística", c.logFonte, "dinheiro", "R$", "") +
+          '<div class="linha sutil"><span>Taxa fixa do cartão</span><b data-out="taxaFixaPedido">–</b></div>' +
+          '<div class="linha total-linha"><span>Custo total da caixa</span><b data-out="c' + ci + '-base">–</b></div>' +
+          '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada da " + n) + '</div>' +
+          '<div class="linha"><span>Imposto e taxas (<span data-out="impostosPct">–</span>)</span><b data-out="c' + ci + '-imp">–</b></div>' +
+          '<div class="margem-box verde preco-box"><span>Preço da caixa</span><b data-out="c' + ci + '-preco">–</b><small><span data-out="c' + ci + '-porKit">–</span> por kit · lucro de <span data-out="c' + ci + '-lucro">–</span></small></div>' +
+          '<p class="separado" data-out="c' + ci + '-sep">–</p>' +
+        '</div></article>';
+    }).join("") + '<button class="add-caixa" type="button" data-add="caixas">+ Adicionar caixa</button>';
+  }
+
+  function montarTabelas() {
+    document.getElementById("tb-taxas").innerHTML = s.taxas.map(function (it, i) {
+      var n = nomeDe(it, "taxa"), cam = "taxas." + i;
+      return '<tr>' + celulaNome("taxas", i, it, "Nome da taxa") +
+        '<td class="num" data-r="Taxa">' + campo(cam + ".v", "pct", "", "%", "curto", "Porcentagem de " + n) + '</td>' +
+        (it.travado ? '<td class="servico" data-r="Usada em">100% das vendas</td>'
+          : '<td class="num" data-r="Usada em">' + campo(cam + ".uso", "pct", "", "%", "curto", "Parte das vendas que usa " + n) + '</td>') +
+        '<td class="num calc" data-r="Peso no preço" data-linha="taxas-' + i + '">–</td>' +
+        (it.travado ? '<td class="acao vazia"></td>' : '<td class="acao">' + botaoRem("taxas", i, n) + '</td>') + '</tr>';
+    }).join("");
     document.getElementById("tb-fixos").innerHTML = s.fixos.map(function (it, i) {
       var n = nomeDe(it, "gasto");
       return '<tr>' + celulaNome("fixos", i, it, "Nome do gasto") +
-        '<td class="num" data-r="Valor por mês">' + campoNum("fixos", i, "v", it.v, "dinheiro", "R$", "", "", "Valor por mês de " + n) + '</td>' +
-        botaoRem("fixos", i, n) + '</tr>';
+        '<td class="num" data-r="Valor por mês">' + campo("fixos." + i + ".v", "dinheiro", "R$", "", "", "Valor por mês de " + n) + '</td>' +
+        '<td class="acao">' + botaoRem("fixos", i, n) + '</td></tr>';
     }).join("");
-
     document.getElementById("tb-invest").innerHTML = s.invest.map(function (it, i) {
       var n = nomeDe(it, "investimento");
       return '<tr>' + celulaNome("invest", i, it, "Nome do investimento") +
-        '<td class="num" data-r="Valor">' + campoNum("invest", i, "v", it.v, "dinheiro", "R$", "", "", "Valor de " + n) + '</td>' +
-        '<td class="num" data-r="Vida útil">' + campoNum("invest", i, "vida", it.vida, "inteiro", "", "meses", "curto", "Vida útil em meses de " + n) + '</td>' +
+        '<td class="num" data-r="Valor">' + campo("invest." + i + ".v", "dinheiro", "R$", "", "", "Valor de " + n) + '</td>' +
+        '<td class="num" data-r="Vida útil">' + campo("invest." + i + ".vida", "inteiro", "", "meses", "curto", "Vida útil em meses de " + n) + '</td>' +
         '<td class="num calc" data-r="Por mês" data-linha="invest-' + i + '">–</td>' +
-        botaoRem("invest", i, n) + '</tr>';
-    }).join("");
-
-    document.getElementById("tb-taxas").innerHTML = s.taxas.map(function (it, i) {
-      var n = nomeDe(it, "taxa");
-      return '<tr>' + celulaNome("taxas", i, it, "Nome da taxa") +
-        '<td class="num" data-r="Taxa">' + campoNum("taxas", i, "v", it.v, "pct", "", "%", "curto", "Porcentagem de " + n) + '</td>' +
-        (it.travado
-          ? '<td class="servico" data-r="Usada em">100% das vendas</td>'
-          : '<td class="num" data-r="Usada em">' + campoNum("taxas", i, "uso", it.uso, "pct", "", "%", "curto", "Parte das vendas que usa " + n) + '</td>') +
-        '<td class="num calc" data-r="Peso no faturamento" data-linha="taxas-' + i + '">–</td>' +
-        botaoRem("taxas", i, n, it.travado) + '</tr>';
+        '<td class="acao">' + botaoRem("invest", i, n) + '</td></tr>';
     }).join("");
   }
 
-  function montarMarkup() {
-    document.getElementById("tb-markup").innerHTML = PRODUTOS.map(function (p) {
-      return '<tr data-prod="' + p.id + '"><td><b>' + p.nome + '</b><small class="sub">' + p.n + (p.n === 1 ? " kit" : " kits") + '</small></td>' +
-        '<td class="num calc" data-out="custo' + p.id + '">–</td>' +
-        '<td class="num calc" data-out="rat' + p.id + '">–</td>' +
-        '<td class="num calc" data-out="custoTot' + p.id + '">–</td>' +
-        '<td class="num"><b class="valor-calc" style="font-size:18px" data-out="preco' + p.id + '">–</b></td>' +
-        '<td class="num calc" data-out="precoKit' + p.id + '">–</td>' +
-        '<td class="num calc" data-out="markup' + p.id + '">–</td></tr>';
-    }).join("");
-  }
-
-  /* ---------- Tabela mês a mês ---------- */
-  var LINHAS_MES = [
-    { k: "fixos", t: "Gastos fixos e amortização", fmt: "brl" },
-    { k: "extra", t: "Gastos extras do mês", input: true },
-    { k: "kits", t: "Kits vendidos", fmt: "int", cls: "forte" },
-    { k: "q1", t: "Pedidos de kit avulso", fmt: "int" },
-    { k: "q5", t: "Pedidos de caixa com 5", fmt: "int" },
-    { k: "q10", t: "Pedidos de caixa com 10", fmt: "int" },
-    { k: "fat", t: "Faturamento", fmt: "brl", cls: "destaque" },
-    { k: "cv", t: "Custos variáveis", fmt: "brl" },
-    { k: "imp", t: "Impostos e taxas", fmt: "brl" },
-    { k: "lucro", t: "Lucro do mês", fmt: "brl", cls: "destaque" },
-    { k: "margem", t: "Margem de lucro", fmt: "pct" },
-    { k: "eqKits", t: "Kits no ponto de equilíbrio", fmt: "int" },
-    { k: "lucroAcum", t: "Lucro acumulado", fmt: "brl", ultimo: true, cls: "forte" },
-    { k: "caixa", t: "Saldo dos investimentos", fmt: "brl", ultimo: true, cls: "forte" }
-  ];
+  var LINHAS_MES = [];
   function montarMensal() {
+    LINHAS_MES = [
+      { k: "fixos", t: "Gastos fixos e amortização", fmt: "brl" },
+      { k: "extra", t: "Gastos extras do mês", input: true }
+    ].concat(s.caixas.map(function (c, ci) { return { k: "u" + ci, t: "Vendas: " + nomeDe(c, "Caixa " + (ci + 1)), fmt: "int" }; }))
+     .concat([
+      { k: "kits", t: "Kits vendidos", fmt: "int", cls: "forte" },
+      { k: "fat", t: "Faturamento", fmt: "brl", cls: "destaque" },
+      { k: "custos", t: "Produtos, caixas e logística", fmt: "brl" },
+      { k: "imp", t: "Impostos e taxas", fmt: "brl" },
+      { k: "lucro", t: "Lucro do mês", fmt: "brl", cls: "destaque" },
+      { k: "margem", t: "Margem de lucro", fmt: "pct" },
+      { k: "lucroAcum", t: "Lucro acumulado", fmt: "brl", ultimo: true, cls: "forte" },
+      { k: "saldo", t: "Saldo dos investimentos", fmt: "brl", ultimo: true, cls: "forte" }
+    ]);
     document.getElementById("th-mensal").innerHTML = "<tr><th>Mês</th>" +
       MESES.map(function (m) { return '<th class="num">' + m + "</th>"; }).join("") + '<th class="num">Total 2027</th></tr>';
     document.getElementById("tb-mensal").innerHTML = LINHAS_MES.map(function (l) {
-      return '<tr class="' + (l.cls || "") + '"><td>' + l.t + "</td>" + MESES.map(function (m, j) {
-        if (l.input) return '<td class="num"><span class="campo mini opcional"><input id="extra-' + j + '" data-extra="' + j + '" data-fmt="dinheiro" inputmode="decimal" placeholder="0,00" aria-label="Gastos extras de ' + m + '"></span></td>';
+      return '<tr class="' + (l.cls || "") + '"><td>' + esc(l.t) + "</td>" + MESES.map(function (m, j) {
+        if (l.input) return '<td class="num">' + campo("extras." + j, "dinheiro", "", "", "mini opcional", "Gastos extras de " + m, "0,00") + '</td>';
         return '<td class="num" data-m="' + l.k + "-" + j + '">–</td>';
       }).join("") + '<td class="num tot" data-m="' + l.k + '-t">–</td></tr>';
     }).join("");
   }
-  function fmtM(v, fmt) {
-    if (v == null || !isFinite(v)) return "–";
-    return fmt === "brl" ? brl(v) : fmt === "int" ? num(v, 0) : pct(v, 1);
-  }
-  function renderMensal(r) {
-    var lista = r.plano;
-    var tot = { fixos: 0, extra: 0, kits: 0, q1: 0, q5: 0, q10: 0, fat: 0, cv: 0, imp: 0, lucro: 0, eqKits: 0, lucroAcum: NaN, caixa: NaN };
-    lista.forEach(function (o, j) {
-      var q = function (id) { return o.prods[id] ? o.prods[id].q : 0; };
-      var v = o.ok ? { fixos: o.fixos, kits: o.kits, q1: q("1"), q5: q("5"), q10: q("10"), fat: o.fat, cv: o.cv, imp: o.imp, lucro: o.lucro, margem: o.margem, eqKits: o.eqKits, lucroAcum: o.lucroAcum, caixa: o.caixa } : {};
-      LINHAS_MES.forEach(function (l) {
-        if (l.input) return;
-        var el = document.querySelector('[data-m="' + l.k + "-" + j + '"]');
-        el.textContent = fmtM(v[l.k], l.fmt);
-        el.classList.toggle("neg", v[l.k] < -0.004);
-      });
-      tot.extra += o.extra;
-      if (o.ok) Object.keys(tot).forEach(function (k) {
-        if (k === "extra") return;
-        var l = LINHAS_MES.filter(function (x) { return x.k === k; })[0];
-        if (l && l.ultimo) tot[k] = v[k]; else tot[k] += v[k];
-      });
-    });
-    var ok = lista.every(function (o) { return o.ok; });
-    LINHAS_MES.forEach(function (l) {
-      var el = document.querySelector('[data-m="' + l.k + '-t"]');
-      var v = l.k === "margem" ? (tot.fat > 0 ? tot.lucro / tot.fat : NaN) : tot[l.k];
-      el.textContent = (ok || l.k === "extra") ? fmtM(v, l.fmt || "brl") : "–";
-      el.classList.toggle("neg", ok && v < -0.004);
-    });
-  }
 
-  function renderMetas(r, parcial) {
-    ["eq", "mt"].forEach(function (k) {
-      var b = r.base[k], a = r.ano[k];
-      var linhas = r.prods.map(function (x) {
-        if (!x.part) return '<tr class="fora"><td>' + x.nome + '<small class="sub">preço ainda não calculado</small></td>' + '<td class="num">–</td>'.repeat(4) + '<td class="num sep">–</td>' + '<td class="num">–</td>'.repeat(3) + '</tr>';
-        var pm = b.ok ? b.prods[x.id] : null, pa = a.ok ? a.prods[x.id] : null;
-        var c = function (v, f, extra) { return '<td class="num' + (extra || "") + (parcial ? " parcial" : "") + '">' + (v == null ? "–" : f(v)) + '</td>'; };
-        return '<tr><td>' + x.nome + '</td>' +
-          c(pm && pm.q, inteiro) + c(pm && pm.kits, inteiro) + c(pm && pm.fat, brl) + c(pm && pm.lucro, brl) +
-          c(pa && pa.q, inteiro, " sep") + c(pa && pa.kits, inteiro) + c(pa && pa.fat, brl) + c(pa && pa.lucro, brl) + '</tr>';
-      });
-      var t = function (o, f, key, extra) { return '<td class="num' + (extra || "") + '">' + (o.ok ? f(o[key]) : "–") + '</td>'; };
-      linhas.push('<tr class="total"><td>Total</td>' +
-        t(b, inteiro, "pedidos") + t(b, inteiro, "kits") + t(b, brl, "fat") + t(b, brl, "lucro") +
-        t(a, inteiro, "pedidos", " sep") + t(a, inteiro, "kits") + t(a, brl, "fat") + t(a, brl, "lucro") + '</tr>');
-      document.getElementById("tb-meta-" + k).innerHTML = linhas.join("");
-    });
+  function montar() {
+    montarProdutos(); montarCaixas(); montarTabelas(); montarMensal();
+    document.getElementById("taxaFixa").value = paraCampo(s.taxaFixa, "dinheiro");
   }
 
   /* ---------- Renderização ---------- */
-  function setOut(nome, texto, parcial) {
+  function setOut(nome, txt, parcial) {
     document.querySelectorAll('[data-out="' + nome + '"]').forEach(function (el) {
-      el.textContent = texto;
-      el.classList.toggle("parcial", !!parcial && texto !== "–");
+      el.textContent = txt;
+      el.classList.toggle("parcial", !!parcial && txt !== "–");
     });
   }
   function setFalta(nome, itens, prefixo) {
@@ -1245,88 +1041,107 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       el.textContent = (prefixo || "Resultado parcial. Falta preencher: ") + itens.join(", ") + ".";
     });
   }
-  function setLinha(chave, texto) { var el = document.querySelector('[data-linha="' + chave + '"]'); if (el) el.textContent = texto; }
+  function setLinha(chave, txt) { var el = document.querySelector('[data-linha="' + chave + '"]'); if (el) el.textContent = txt; }
+  function fmtM(v, fmt) {
+    if (v == null || !isFinite(v)) return "–";
+    return fmt === "brl" ? brl(v) : fmt === "int" ? num(v, 0) : pct(v, 1);
+  }
 
   function render() {
     var r = calcular(), f = r.falta;
-    var faltaTudo = unir(f.custo, f.fixos, f.taxas, f.margem, f.volume);
-    var parcial = faltaTudo.length > 0;
-
-    /* Etapa 1 */
-    s.ficha.forEach(function (it, i) { setLinha("ficha-total-" + i, it.servico ? "–" : brl(it._total)); setLinha("ficha-kit-" + i, brl(it._kit)); });
-    setOut("totalCompra", brl(r.totalCompra));
-    setOut("custoKit", brl(r.custoKit), f.custo.length > 0);
-    setFalta("custo", f.custo, "O custo do kit ainda está incompleto. Falta preencher: ");
-
-    /* Etapa 2 */
-    s.invest.forEach(function (it, i) { setLinha("invest-" + i, brl(it._mes)); });
-    setOut("depreciacao", brl(r.depreciacao));
-    setOut("gastos", brl(r.gastos), f.fixos.length > 0);
-    document.getElementById("tb-pesos").innerHTML = r.prods.map(function (x) {
-      return '<tr class="' + (x.part ? "" : "fora") + '"><td>' + x.nome + (x.part ? "" : '<small class="sub">preço ainda não calculado</small>') + '</td>' +
-        '<td class="num">' + brl(x.C) + '</td><td class="num">' + (x.part ? pct(x.w, 1) : "–") + '</td><td class="num">' + (x.part ? brl(x.F) : "–") + '</td></tr>';
-    }).join("") + '<tr class="total"><td>Total</td><td class="num"></td><td class="num">' + (r.part.length ? "100%" : "–") + '</td><td class="num">' + brl(r.gastos) + '</td></tr>';
-    setFalta("fixos", unir(f.fixos, f.volume, f.custo), "Rateio provisório. Falta preencher: ");
-    setOut("kitsLote", r.kitsLote == null ? "–" : inteiro(r.kitsLote) + " kits", f.volume.length > 0);
-    setOut("kitsMes", isFinite(r.kitsMes) ? num(r.kitsMes, r.kitsMes % 1 ? 1 : 0) + " kits" : "–", f.volume.length > 0);
-    setOut("rateioKit", brl(r.R), f.fixos.length + f.volume.length > 0);
-    setOut("mesesAuto", isFinite(r.mesesAuto) ? num(r.mesesAuto, 0) + (r.mesesAuto === 1 ? " mês" : " meses") : "–", faltaTudo.length > 0);
-    document.getElementById("alerta-prazo").hidden = !r.prazoAcima;
-    if (r.prazoAcima) setOut("alertaPrazo", "Mesmo vendendo o pedido em 1 mês, o kit avulso passa de R$ 10,99, o teto do preço justo. Só o custo variável do kit já é " + brl(r.C1) + ". Revejam os custos com a fabricante ou a margem desejada.");
+    var pTax = f.taxas.length > 0;
+    var pProd = f.produtos.length > 0 || pTax;
+    var pCx = pProd || f.caixas.length > 0;
+    var pTudo = pCx || f.fixos.length > 0;
 
     /* Etapa 3 */
-    document.getElementById("tb-custo-total").innerHTML = r.prods.map(function (x) {
-      return '<tr><td>' + x.nome + '</td><td class="num">' + brl(x.C / x.n) + '</td><td class="num">' + brl(r.R) + '</td><td class="num"><b>' + brl(x.C / x.n + r.R) + '</b></td></tr>';
-    }).join("");
-    setFalta("tudo", faltaTudo);
-
-    /* Etapa 4 */
     s.taxas.forEach(function (it, i) { setLinha("taxas-" + i, pct(it._peso)); });
-    setOut("impostosPct", pct(r.impostosPct), f.taxas.length > 0);
+    setOut("impostosPct", pct(r.impostosPct), pTax);
     setOut("taxaFixaPedido", brl(r.taxaFixaPedido));
     setFalta("taxas", f.taxas, "O total ainda está incompleto. Falta preencher: ");
 
-    /* Etapa 5 */
-    setOut("margemPct", s.margem == null ? "?" : pct(r.margemPct));
-    r.prods.forEach(function (x) {
-      setOut("custo" + x.id, brl(x.C), f.custo.length + f.taxas.length > 0);
-      setOut("rat" + x.id, brl(x.rat), f.fixos.length + f.volume.length > 0);
-      setOut("custoTot" + x.id, brl(x.C + x.rat), parcial);
-      setOut("preco" + x.id, x.part ? brl(x.P) : "–", parcial);
-      setOut("precoKit" + x.id, x.part ? brl(x.P / x.n) : "–", parcial);
-      setOut("markup" + x.id, x.part && isFinite(x.markup) ? num(x.markup, 3) : "–", parcial);
+    /* Etapa 1 */
+    r.prods.forEach(function (x, pi) {
+      setOut("p" + pi + "-imp", brl(x.imp), pProd);
+      setOut("p" + pi + "-custo", brl(isFinite(x.P) ? x.custo : x.base || NaN), pProd);
+      setOut("p" + pi + "-preco", brl(x.P), pProd);
+      setOut("p" + pi + "-lucro", brl(x.lucro));
+      setOut("p" + pi + "-markup", isFinite(x.markup) ? num(x.markup, 3) : "–");
+      setOut("p" + pi + "-pedido", brl(x.pedido));
     });
-    var a1 = r.prods[0];
-    setOut("rateioPct1", a1.part ? pct(a1.rateioPct) : "?");
-    setOut("markupForm1", a1.part && isFinite(a1.markupForm) ? num(a1.markupForm, 3) : "–", parcial);
-    setFalta("markup", faltaTudo, "Preço provisório. Falta preencher: ");
+    setFalta("produtos", unir(f.produtos, f.taxas), "Preço provisório. Falta preencher: ");
+
+    /* Etapa 2 */
+    r.caixas.forEach(function (c, ci) {
+      setOut("c" + ci + "-kitsTxt", c.kits > 0 ? num(c.kits, c.kits % 1 ? 1 : 0) + (c.kits === 1 ? " kit" : " kits") : "Escolham os produtos");
+      setOut("c" + ci + "-prod", brl(c.prod), f.produtos.length > 0);
+      setOut("c" + ci + "-base", brl(c.base), pCx);
+      setOut("c" + ci + "-imp", brl(c.imp), pCx);
+      setOut("c" + ci + "-preco", brl(c.P), pCx);
+      setOut("c" + ci + "-porKit", brl(c.porKit));
+      setOut("c" + ci + "-lucro", brl(c.lucro));
+      var sep = isFinite(c.separado) && isFinite(c.P) && c.separado > 0
+        ? "Produtos dentro, pelo preço de cada um (etapa 1): " + brl(c.separado) + ". Sem caixa e sem frete."
+        : "";
+      setOut("c" + ci + "-sep", sep);
+    });
+    setFalta("caixas", unir(f.caixas, f.produtos, f.taxas), "Preços provisórios. Falta preencher: ");
     renderRegua(r);
 
-    /* Metas */
-    setOut("fixos1", a1.part ? brl(a1.F) : "?");
-    setOut("preco1Txt", a1.part ? brl(a1.P) : "?");
-    setOut("custo1", brl(a1.C));
-    setOut("pedidosExato1", a1.part && isFinite(a1.qExato) ? num(a1.qExato, 1) + " pedidos" : "–", parcial);
-    renderMetas(r, parcial);
-    setOut("eqKitsMes", r.base.eq.ok ? inteiro(r.base.eq.kits) + " kits" : "–", parcial);
-    setOut("mtFatMes", r.base.mt.ok ? brl(r.base.mt.fat) : "–", parcial);
-    setFalta("metas", faltaTudo, "Metas provisórias. Falta preencher: ");
-    var alerta = document.getElementById("alerta-meta");
-    alerta.hidden = !(r.divPreco <= 0);
-    if (r.divPreco <= 0) setOut("alertaMeta", "Impostos e taxas mais a margem somam " + pct(1 - r.divPreco) + ", ou seja, 100% ou mais do preço. O preço não fecha: reduzam a margem desejada.");
-    var okPlano = r.plano.every(function (o) { return o.ok; });
-    setOut("mesEq", okPlano ? (r.mesEq ? MESES[r.mesEq - 1] : "Após 2027") : "–", parcial);
-    setOut("mesEqN", okPlano && r.mesEq ? "mês " + r.mesEq : "–");
-    setOut("mesPayback", okPlano ? (r.mesPayback ? MESES[r.mesPayback - 1] : "Após 2027") : "–", parcial);
-    setOut("mesPaybackN", okPlano && r.mesPayback ? "mês " + r.mesPayback : "–");
+    /* Etapa 4 */
+    s.invest.forEach(function (it, i) { setLinha("invest-" + i, brl(it._mes)); });
+    setOut("depreciacao", brl(r.depreciacao));
     setOut("investTotal", brl(r.investTotal), f.fixos.length > 0);
-    setOut("fatAno", okPlano ? brl(r.ano.mt.fat) : "–", parcial);
-    setOut("lucroAno", okPlano ? brl(r.ano.mt.lucro) : "–", parcial);
-    setOut("margemAno", okPlano && r.ano.mt.fat > 0 ? "Margem de " + pct(r.ano.mt.lucro / r.ano.mt.fat, 1) + " no ano" : "–");
+    setOut("gastos", brl(r.gastos), f.fixos.length > 0);
+    setFalta("fixos", f.fixos, "Total provisório. Falta preencher: ");
+
+    /* Etapa 5 */
+    document.getElementById("tb-metas").innerHTML = r.caixas.map(function (c) {
+      if (!c.ok) return '<tr class="fora"><td>' + esc(c.nome) + '<small class="sub">preço ou margem ainda não preenchidos</small></td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="num">–</td></tr>';
+      return '<tr><td>' + esc(c.nome) + '</td><td class="num">' + brl(c.lucro) + '</td><td class="num">' + inteiro(c.eqSo) + ' caixas</td>' +
+        '<td class="num"><b>' + num(c.ano / 12, 1) + '</b> caixas</td><td class="num">' + inteiro(c.ano) + ' caixas</td></tr>';
+    }).join("");
+    setFalta("metas", unir(f.produtos, f.caixas, f.taxas, f.fixos), "Metas provisórias. Falta preencher: ");
+    var ok = r.metaOk;
+    setOut("mesEq", ok ? (r.mesEq ? MESES[r.mesEq - 1] : "Após 2027") : "–", pTudo);
+    setOut("mesEqN", ok && r.mesEq ? "mês " + r.mesEq : "–");
+    setOut("mesPayback", ok ? (r.mesPayback ? MESES[r.mesPayback - 1] : "Após 2027") : "–", pTudo);
+    setOut("mesPaybackN", ok && r.mesPayback ? "mês " + r.mesPayback : "–");
+    setOut("fatAno", ok ? brl(r.ano.fat) : "–", pTudo);
+    setOut("kitsAno", ok ? inteiro(r.ano.kits) + " kits vendidos no ano" : "–");
+    setOut("lucroAno", ok ? brl(r.ano.lucro) : "–", pTudo);
+    setOut("margemAno", ok && r.ano.fat > 0 ? "Margem de " + pct(r.ano.lucro / r.ano.fat, 1) + " no ano" : "–");
     renderMensal(r);
 
     renderPendencias(r.pend);
     marcarVazios();
+  }
+
+  function renderMensal(r) {
+    var tot = {};
+    LINHAS_MES.forEach(function (l) { tot[l.k] = l.ultimo ? NaN : 0; });
+    r.plano.forEach(function (o, j) {
+      var v = {};
+      if (o.ok) {
+        v = { fixos: o.fixos, kits: o.kits, fat: o.fat, custos: o.custos, imp: o.imp, lucro: o.lucro, margem: o.margem, lucroAcum: o.lucroAcum, saldo: o.saldo };
+        o.u.forEach(function (u, ci) { v["u" + ci] = u; });
+      }
+      LINHAS_MES.forEach(function (l) {
+        if (l.input) { tot.extra += o.extra; return; }
+        var el = document.querySelector('[data-m="' + l.k + "-" + j + '"]');
+        if (!el) return;
+        el.textContent = fmtM(v[l.k], l.fmt);
+        el.classList.toggle("neg", v[l.k] < -0.004);
+        if (o.ok && l.k !== "margem") tot[l.k] = l.ultimo ? v[l.k] : tot[l.k] + z(v[l.k]);
+      });
+    });
+    LINHAS_MES.forEach(function (l) {
+      var el = document.querySelector('[data-m="' + l.k + '-t"]');
+      if (!el) return;
+      var v = l.k === "margem" ? (tot.fat > 0 ? tot.lucro / tot.fat : NaN) : tot[l.k];
+      el.textContent = (r.metaOk || l.k === "extra") ? fmtM(v, l.fmt || "brl") : "–";
+      el.classList.toggle("neg", r.metaOk && v < -0.004);
+    });
   }
 
   function marcarVazios() {
@@ -1354,7 +1169,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   function renderRegua(r) {
     var regua = document.getElementById("regua");
     regua.querySelectorAll(".marca, .eixo").forEach(function (el) { el.remove(); });
-    var porKit = r.prods.map(function (x) { return x.part ? x.P / x.n : NaN; });
+    var porKit = r.caixas.map(function (c) { return c.porKit; });
     var valores = porKit.filter(isFinite);
     var min = Math.max(0, Math.floor(Math.min.apply(null, valores.concat([FAIXA_MIN])) - 1));
     var max = Math.ceil(Math.max.apply(null, valores.concat([FAIXA_MAX])) + 1);
@@ -1365,83 +1180,50 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     [FAIXA_MIN, FAIXA_MAX].forEach(function (x) {
       var e = document.createElement("span"); e.className = "eixo"; e.style.left = pos(x) + "%"; e.textContent = brl(x); regua.appendChild(e);
     });
-    var cores = ["#0047bb", "#1f2a44", "#2f8f7e"], curtos = ["Avulso", "Cx 5", "Cx 10"];
     var ord = porKit.map(function (v, i) { return { v: v, i: i }; }).filter(function (o) { return isFinite(o.v); }).sort(function (a, b) { return a.v - b.v; });
     var ultimo = -99, nivel = 0, maxNivel = 0;
     ord.forEach(function (o) {
       var left = Math.min(100, Math.max(0, pos(o.v)));
       nivel = (left - ultimo < 12) ? nivel + 1 : 0; ultimo = left; maxNivel = Math.max(maxNivel, nivel);
+      var cor = CORES[o.i % CORES.length];
       var m = document.createElement("span"); m.className = "marca";
-      m.style.left = left + "%"; m.style.setProperty("--c", cores[o.i]);
-      m.innerHTML = '<em style="top:' + (-6 - nivel * 15) + 'px">' + curtos[o.i] + '</em><i></i>';
-      m.title = PRODUTOS[o.i].nome + ": " + brl(o.v) + " por kit";
+      m.style.left = left + "%"; m.style.setProperty("--c", cor);
+      m.innerHTML = '<em style="top:' + (-6 - nivel * 15) + 'px">' + esc(r.caixas[o.i].nome) + '</em><i></i>';
+      m.title = r.caixas[o.i].nome + ": " + brl(o.v) + " por kit";
       regua.appendChild(m);
     });
     regua.style.marginTop = (26 + maxNivel * 15) + "px";
-    document.getElementById("chips-banho").innerHTML = PRODUTOS.map(function (p, i) {
-      var v = porKit[i];
-      var st = !isFinite(v) ? "preço ainda não preenchido" : v < FAIXA_MIN ? "abaixo da faixa" : v > FAIXA_MAX ? "acima da faixa" : "dentro da faixa";
-      return '<span style="border-color:' + cores[i] + '"><b style="color:' + cores[i] + '">' + p.nome + '</b>: ' + (isFinite(v) ? '<b>' + brl(v) + '</b> por kit, ' : "") + st + '</span>';
+    document.getElementById("chips-banho").innerHTML = r.caixas.map(function (c, i) {
+      var v = porKit[i], cor = CORES[i % CORES.length];
+      var st = !isFinite(v) ? "preço ainda não calculado" : v < FAIXA_MIN ? "abaixo da faixa" : v > FAIXA_MAX ? "acima da faixa" : "dentro da faixa";
+      return '<span style="border-color:' + cor + '"><b style="color:' + cor + '">' + esc(c.nome) + '</b>: ' + (isFinite(v) ? '<b>' + brl(v) + '</b> por kit, ' : "") + st + '</span>';
     }).join("");
   }
 
   /* ---------- Eventos ---------- */
-  var slider = document.getElementById("slider-margem");
-  function preencherFixos() {
-    document.querySelectorAll("input[data-k]").forEach(function (el) {
-      el.value = paraCampo(s[el.dataset.k], el.dataset.fmt);
-      el.parentNode.classList.remove("invalido");
-    });
-    slider.value = Math.min(60, Math.max(0, z(s.margem)));
-    document.querySelectorAll("input[data-extra]").forEach(function (el) {
-      el.value = paraCampo(s.extras[+el.dataset.extra], "dinheiro");
-      el.parentNode.classList.remove("invalido");
-    });
-  }
   function valorDe(el) {
     var x = ler(el.value, el.dataset.fmt);
     var ok = x === null || (isFinite(x) && x >= 0);
     el.parentNode.classList.toggle("invalido", !ok);
     return ok ? { ok: true, v: x } : { ok: false };
   }
-
   document.addEventListener("input", function (e) {
     var el = e.target;
-    if (el === slider) {
-      s.margem = parseFloat(slider.value);
-      document.getElementById("k-margem").value = paraCampo(s.margem, "pct");
-      salvar(); render(); return;
-    }
-    if (el.dataset.extra != null) {
-      var x = valorDe(el); if (!x.ok) return;
-      s.extras[+el.dataset.extra] = x.v; salvar(); render(); return;
-    }
-    if (el.dataset.k) {
-      var a = valorDe(el); if (!a.ok) return;
-      s[el.dataset.k] = a.v;
-      if (el.dataset.k === "margem") slider.value = Math.min(60, Math.max(0, z(a.v)));
-      salvar(); render(); return;
-    }
-    if (el.dataset.list && el.dataset.f !== "apl") {
-      var it = s[el.dataset.list][+el.dataset.i];
-      if (el.dataset.f === "nome" || el.dataset.f === "fonte") { it[el.dataset.f] = el.value; salvar(); render(); return; }
-      var b = valorDe(el); if (!b.ok) return;
-      it[el.dataset.f] = b.v; salvar(); render();
-    }
-  });
-  document.addEventListener("change", function (e) {
-    var el = e.target;
-    if (el.dataset && el.dataset.list && el.dataset.f === "apl") {
-      s[el.dataset.list][+el.dataset.i].apl = el.value; salvar(); montarListas(); render();
-    }
+    if (!el.dataset || !el.dataset.path) return;
+    if (el.dataset.texto) { gravar(el.dataset.path, el.value); salvar(); render(); return; }
+    var a = valorDe(el); if (!a.ok) return;
+    gravar(el.dataset.path, a.v); salvar(); render();
   });
   document.addEventListener("focusout", function (e) {
     var el = e.target;
-    if (!el.matches || !el.matches(".campo input")) return;
-    var v = el.dataset.extra != null ? s.extras[+el.dataset.extra] : el.dataset.k ? s[el.dataset.k] : (el.dataset.list ? s[el.dataset.list][+el.dataset.i][el.dataset.f] : null);
-    el.value = paraCampo(v, el.dataset.fmt);
+    if (!el.matches || !el.matches(".campo input") || !el.dataset.path) return;
+    el.value = paraCampo(pegar(el.dataset.path), el.dataset.fmt);
     el.parentNode.classList.remove("invalido");
     marcarVazios();
+  });
+  document.addEventListener("change", function (e) {
+    /* nomes de caixas aparecem nas tabelas: remonta ao terminar de digitar */
+    if (e.target.dataset && e.target.dataset.texto && /^caixas\./.test(e.target.dataset.path)) { montarMensal(); render(); }
   });
   document.addEventListener("focusin", function (e) {
     if (e.target.matches && e.target.matches(".campo input")) e.target.select();
@@ -1449,17 +1231,17 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   document.addEventListener("click", function (e) {
     var add = e.target.closest("[data-add]");
     if (add) {
-      var lista = add.dataset.add;
-      s[lista].push(NOVO[lista]());
-      salvar(); montarListas(); render();
-      var novo = document.getElementById(lista + "-" + (s[lista].length - 1) + "-nome");
+      var lista = add.dataset.add, arr = pegar(lista);
+      arr.push(NOVO[lista.split(".").pop()]());
+      salvar(); montar(); render();
+      var novo = document.getElementById(idDe(lista + "." + (arr.length - 1) + ".nome"));
       if (novo) novo.focus();
       return;
     }
     var rem = e.target.closest("[data-rem]");
     if (rem) {
-      s[rem.dataset.rem].splice(+rem.dataset.i, 1);
-      salvar(); montarListas(); render();
+      pegar(rem.dataset.rem).splice(+rem.dataset.i, 1);
+      salvar(); montar(); render();
       return;
     }
     var ir = e.target.closest("[data-ir]");
@@ -1489,15 +1271,12 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     lbl.textContent = "Valores da planilha restaurados";
     setTimeout(function () { lbl.textContent = "Restaurar valores da planilha"; }, 2500);
     s = copia(PADRAO);
-    salvar(); montarListas(); preencherFixos(); render();
+    salvar(); montar(); render();
   });
 
   s = carregar();
   if (!Array.isArray(s.extras) || s.extras.length !== 12) s.extras = copia(PADRAO.extras);
-  montarListas();
-  montarMarkup();
-  montarMensal();
-  preencherFixos();
+  montar();
   render();
 })();
 </script>
