@@ -502,6 +502,8 @@ td.acao:empty { padding: 0; width: 0; }
 .item-comp .vt { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; font-size: 11.5px; font-weight: 600; color: var(--texto-2); }
 .item-comp .vt b { height: 34px; display: flex; align-items: center; font-size: 14px; color: var(--marinho); font-variant-numeric: tabular-nums; }
 .item-comp .nome-input { margin-bottom: 4px; }
+.mk-linha > span small { font-size: 11px; color: var(--texto-2); font-weight: 500; margin-left: 4px; }
+.mk-linha > b { font-size: 16px; color: var(--azul); }
 </style>
 
 </head>
@@ -558,7 +560,7 @@ td.acao:empty { padding: 0; width: 0; }
     <section class="etapa" id="etapa-1">
       <div class="faixa"><span class="num">1</span><h2>Shampoo e condicionador: custo e preço</h2></div>
       <div class="corpo">
-        <p class="explica">Em cada componente: <b>unidades × preço unitário = valor total</b>. <b>Custo unitário</b> = soma dos preços unitários + imposto. <b>Preço</b> = custo sem imposto ÷ (1 − imposto − margem).</p>
+        <p class="explica">Em cada componente: <b>unidades × preço unitário = valor total</b>. <b>Custo unitário</b> = soma dos preços unitários + imposto. <b>Markup</b> = 1 ÷ (1 − imposto − margem). <b>Preço</b> = custo × markup.</p>
         <div class="produtos dois" id="cards-produtos"></div>
         <div class="falta" data-falta="produtos" hidden></div>
       </div>
@@ -568,7 +570,7 @@ td.acao:empty { padding: 0; width: 0; }
     <section class="etapa" id="etapa-2">
       <div class="faixa"><span class="num">2</span><h2>Caixas: montagem e preço</h2></div>
       <div class="corpo">
-        <p class="explica">Escolham o que vai em cada caixa. <b>Preço</b> = custo total ÷ (1 − imposto − margem).</p>
+        <p class="explica">Escolham o que vai em cada caixa. <b>Preço</b> = custo total × markup, com o markup da margem da caixa.</p>
         <div class="produtos caixas" id="cards-caixas"></div>
         <button class="btn-add" type="button" data-add="caixas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar caixa</button>
         <div class="faixa-justa">
@@ -849,7 +851,7 @@ td.acao:empty { padding: 0; width: 0; }
       var m = z(p.margem) / 100, div = 1 - I - m;
       var completo = p.itens.every(function (it) { return it.v != null; });
       var P = completo && p.margem != null && base > 0 && div > 0 ? base / div : NaN;
-      return { completo: completo, base: base, m: m, P: P, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: temPedido ? pedido : NaN };
+      return { completo: completo, base: base, m: m, P: P, mk: isFinite(P) ? 1 / div : NaN, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: temPedido ? pedido : NaN };
     });
     var sh = r.prods[0], co = r.prods[1];
 
@@ -866,7 +868,7 @@ td.acao:empty { padding: 0; width: 0; }
       var P = base > 0 && c.margem != null && div > 0 ? base / div : NaN;
       var kits = (z(c.qSh) + z(c.qCo)) / 2;
       return {
-        nome: nome, prod: prod, base: base, m: m, P: P, imp: P * I, lucro: P * m, kits: kits,
+        nome: nome, prod: prod, base: base, m: m, P: P, mk: isFinite(P) ? 1 / div : NaN, imp: P * I, lucro: P * m, kits: kits,
         porKit: kits > 0 ? P / kits : NaN, markup: P / base,
         separado: z(c.qSh) * sh.P + z(c.qCo) * co.P
       };
@@ -973,7 +975,8 @@ td.acao:empty { padding: 0; width: 0; }
           '<div class="linha"><span>Imposto (<span data-out="impostosPct">–</span>)</span><b data-out="p' + pi + '-imp">–</b></div>' +
           '<div class="linha total-linha"><span>Custo unitário (um sachê)</span><b data-out="p' + pi + '-custo">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada do " + p.nome.toLowerCase()) + '</div>' +
-          '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Lucro de <span data-out="p' + pi + '-lucro">–</span> por unidade</small></div>' +
+          '<div class="linha mk-linha"><span>Markup <small>1 ÷ (1 − imposto − margem)</small></span><b data-out="p' + pi + '-mk">–</b></div>' +
+          '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Custo × markup · lucro de <span data-out="p' + pi + '-lucro">–</span></small></div>' +
         '</div></article>';
     }).join("");
   }
@@ -995,6 +998,7 @@ td.acao:empty { padding: 0; width: 0; }
           linhaCampo("log", "Logística", c.logFonte, "dinheiro", "R$", "") +
           '<div class="linha total-linha"><span>Custo total</span><b data-out="c' + ci + '-base">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada da " + n) + '</div>' +
+          '<div class="linha mk-linha"><span>Markup <small>1 ÷ (1 − imposto − margem)</small></span><b data-out="c' + ci + '-mk">–</b></div>' +
           '<div class="linha"><span>Imposto (<span data-out="impostosPct">–</span>)</span><b data-out="c' + ci + '-imp">–</b></div>' +
           '<div class="margem-box verde preco-box"><span>Preço da caixa</span><b data-out="c' + ci + '-preco">–</b><small><span data-out="c' + ci + '-porKit">–</span> por kit · lucro de <span data-out="c' + ci + '-lucro">–</span></small></div>' +
         '</div></article>';
@@ -1093,6 +1097,7 @@ td.acao:empty { padding: 0; width: 0; }
       setOut("p" + pi + "-lucro", brl(x.lucro));
       setOut("p" + pi + "-markup", isFinite(x.markup) ? num(x.markup, 3) : "–");
       setOut("p" + pi + "-pedido", brl(x.pedido));
+      setOut("p" + pi + "-mk", isFinite(x.mk) ? num(x.mk, 3) : "–", pProd);
       s.produtos[pi].itens.forEach(function (it, ii) { setOut("p" + pi + "-t" + ii, brl(it._total)); });
     });
     setFalta("produtos", unir(f.produtos, f.taxas), "Preço provisório. Falta preencher: ");
@@ -1104,6 +1109,7 @@ td.acao:empty { padding: 0; width: 0; }
       setOut("c" + ci + "-base", brl(c.base), pCx);
       setOut("c" + ci + "-imp", brl(c.imp), pCx);
       setOut("c" + ci + "-preco", brl(c.P), pCx);
+      setOut("c" + ci + "-mk", isFinite(c.mk) ? num(c.mk, 3) : "–", pCx);
       setOut("c" + ci + "-porKit", brl(c.porKit));
       setOut("c" + ci + "-lucro", brl(c.lucro));
       var sep = isFinite(c.separado) && isFinite(c.P) && c.separado > 0
