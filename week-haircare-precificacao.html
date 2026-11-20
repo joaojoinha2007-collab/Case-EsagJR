@@ -470,6 +470,27 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 .add-caixa:hover { background: var(--azul-claro); }
 .metas-tab td.num b { color: var(--petroleo); }
 @media (max-width: 900px) { .produtos.dois, .caixas { grid-template-columns: 1fr; } }
+
+/* ---------- v13: versão enxuta ---------- */
+[data-falta] { display: none !important; }
+#chips-banho { display: none; }
+.pendencias { padding: 10px 16px; font-size: 13.5px; }
+.pendencias summary { cursor: pointer; list-style: none; }
+.pendencias summary::-webkit-details-marker { display: none; }
+.pendencias summary u { color: var(--amarelo); font-weight: 700; }
+.pendencias details[open] .pend-lista { margin-top: 10px; }
+.legenda { gap: 8px 20px; padding: 10px 16px; }
+.faixa-justa h3 { font-size: 14px; margin-bottom: 0; }
+.faixa-justa { padding: 14px 16px 10px; }
+.det { border-top: 1px dashed var(--linha); padding-top: 8px; }
+.det summary { cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--azul); }
+.det[open] summary { margin-bottom: 4px; }
+.item-linha .nome .fonte { font-size: 11.5px; }
+.linha-campo label small { font-size: 11px; }
+.explica { margin-bottom: 16px; }
+.item-linha { grid-template-columns: 1fr auto; }
+.item-linha:has(.btn-rem) { grid-template-columns: 1fr auto auto; }
+td.acao:empty { padding: 0; width: 0; }
 </style>
 
 </head>
@@ -486,7 +507,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   <div class="wrap">
     <p class="rotulo">Plano Financeiro · WEEK Haircare</p>
     <h1>Calculadora de precificação</h1>
-    <p>Esta página ensina a WEEK a precificar seus produtos. Primeiro, o custo e o preço do shampoo e do condicionador. Depois, a montagem de cada caixa com a embalagem, a logística e a margem. Por fim, os gastos fixos e a meta de vendas de 2027. Os valores já cotados vêm preenchidos. O que ainda depende de orçamento ou de decisão das sócias fica em branco, em amarelo.</p>
+    <p>Do custo de cada sachê ao preço das caixas e à meta de vendas de 2027. Os valores já cotados vêm preenchidos; os campos em amarelo esperam os números de vocês.</p>
     <div class="acoes">
       <a class="btn btn-claro" href="https://docs.google.com/spreadsheets/d/1zo8Lva5f4SlrNYH3nNRK90IznOyByUuP53c9IejrO7I/edit" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
@@ -502,10 +523,9 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
 <div class="wrap">
   <div class="legenda" role="note">
-    <span class="item"><span class="amostra edit" aria-hidden="true"></span>Azul claro: valor cotado, editável.</span>
-    <span class="item"><span class="amostra pend" aria-hidden="true"></span>Amarelo: em branco, para vocês preencherem.</span>
-    <span class="item"><span class="amostra res" aria-hidden="true"></span>Verde: resultado calculado.</span>
-    <span class="item">Use vírgula nos centavos, por exemplo 2,50. O que for digitado fica salvo neste navegador.</span>
+    <span class="item"><span class="amostra edit" aria-hidden="true"></span>Valor cotado</span>
+    <span class="item"><span class="amostra pend" aria-hidden="true"></span>Preencher</span>
+    <span class="item"><span class="amostra res" aria-hidden="true"></span>Resultado</span>
   </div>
   <div class="pendencias" id="pendencias" aria-live="polite"></div>
 </div>
@@ -527,7 +547,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="etapa-1">
       <div class="faixa"><span class="num">1</span><h2>Shampoo e condicionador: custo e preço</h2></div>
       <div class="corpo">
-        <p class="explica">Para cada produto: <b>custo unitário</b> = produto + embalagem + imposto. Com a margem desejada, sai o preço: <b>preço = (produto + embalagem) ÷ (1 − imposto − margem)</b>.</p>
+        <p class="explica"><b>Custo unitário</b> = produto + embalagem + imposto. <b>Preço</b> = (produto + embalagem) ÷ (1 − imposto − margem).</p>
         <div class="produtos dois" id="cards-produtos"></div>
         <div class="falta" data-falta="produtos" hidden></div>
       </div>
@@ -537,12 +557,11 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="etapa-2">
       <div class="faixa"><span class="num">2</span><h2>Caixas: montagem e preço</h2></div>
       <div class="corpo">
-        <p class="explica">Em cada caixa, escolham quantos shampoos e condicionadores vão dentro. O custo soma os produtos, a caixa e a logística. Com a margem da caixa, sai o preço: <b>preço = custo total ÷ (1 − imposto − margem)</b>.</p>
+        <p class="explica">Escolham o que vai em cada caixa. <b>Preço</b> = custo total ÷ (1 − imposto − margem).</p>
         <div class="produtos caixas" id="cards-caixas"></div>
-        <p class="fonte" style="margin-top:10px">Um kit é um shampoo e um condicionador, ou seja, um banho. A margem de cada produto (etapa 1) vale para o produto vendido sozinho. Na caixa vale a margem da caixa.</p>
+        <button class="btn-add" type="button" data-add="caixas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar caixa</button>
         <div class="faixa-justa">
-          <h3>Referência da pesquisa: preço justo por kit</h3>
-          <p>Na pesquisa com o público, o preço considerado justo ficou entre <b>R$ 9,00 e R$ 10,99 por kit</b>. Comparem o preço por kit de cada caixa com essa faixa.</p>
+          <h3>Preço por kit × preço justo da pesquisa (R$ 9,00 a R$ 10,99)</h3>
           <div class="regua" id="regua">
             <div class="trilho"></div>
             <div class="justa" id="regua-justa"></div>
@@ -557,7 +576,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="etapa-3">
       <div class="faixa"><span class="num">3</span><h2>Impostos e taxas sobre a venda</h2></div>
       <div class="corpo">
-        <p class="explica">É o "imposto" usado nos preços das etapas 1 e 2. Cada taxa pesa só nas vendas em que é usada: <b>peso = taxa × % das vendas que usam</b>.</p>
+        <p class="explica">Descontados de cada venda. Cada taxa pesa só na parte das vendas que a usa.</p>
         <div class="tabela-wrap">
           <table class="resp">
             <thead><tr><th>Taxa e fonte</th><th class="num">Taxa</th><th class="num">Usada em (% das vendas)</th><th class="num">Peso no preço</th><th><span class="sr">Remover</span></th></tr></thead>
@@ -576,7 +595,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
           <div class="grupo">
             <label for="taxaFixa">Taxa fixa por venda no cartão</label>
             <span class="campo"><span class="ad">R$</span><input id="taxaFixa" data-path="taxaFixa" data-fmt="dinheiro" inputmode="decimal" placeholder="Preencher"></span>
-            <small>Em reais, por venda no cartão. Pesa só nessas vendas: <b data-out="taxaFixaPedido">–</b> por caixa, somado à logística.</small>
+            <small>Somada à logística de cada caixa, na proporção das vendas no cartão.</small>
           </div>
         </div>
         <div class="falta" data-falta="taxas" hidden></div>
@@ -587,8 +606,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="etapa-4">
       <div class="faixa"><span class="num">4</span><h2>Gastos fixos e investimentos</h2></div>
       <div class="corpo">
-        <p class="explica">Gastos fixos existem mesmo sem vendas. Investimentos entram como amortização: valor ÷ vida útil. O lucro de cada caixa vendida paga esses gastos.</p>
-        <div class="exemplo"><b>Exemplo do treinamento</b> (só para entender a conta, não é número da WEEK): R$ 3.000 de marketing ÷ 500 produtos vendidos = <b>R$ 6 por produto</b>.</div>
+        <p class="explica">Gastos que existem mesmo sem vendas. Investimentos entram divididos pela vida útil.</p>
         <h3 class="subtitulo">Gastos fixos por mês</h3>
         <div class="tabela-wrap">
           <table class="resp">
@@ -630,29 +648,24 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     <section class="etapa" id="meta">
       <div class="faixa final"><span class="num">5</span><h2>Metas de vendas de 2027</h2></div>
       <div class="corpo">
-        <p class="explica">Quantas caixas a WEEK precisa vender para pagar os gastos fixos e recuperar os investimentos.</p>
-        <ul class="duas-metas">
-          <li><b>Ponto de equilíbrio</b>O lucro das caixas paga os gastos fixos do mês. Abaixo disso, prejuízo.</li>
-          <li><b>Meta de 2027</b>Pagar todos os gastos e recuperar tudo que foi investido até dezembro, com as vendas crescendo mês a mês.</li>
-        </ul>
+        <p class="explica">Quantas caixas vender para pagar os gastos (<b>ponto de equilíbrio</b>) e para recuperar os investimentos até dezembro (<b>meta</b>).</p>
         <div class="tabela-larga">
           <table class="metas-tab">
-            <thead><tr><th>Caixa</th><th class="num">Lucro por caixa</th><th class="num">Equilíbrio por mês, vendendo só esta caixa</th><th class="num">Meta média por mês</th><th class="num">Meta em 2027</th></tr></thead>
+            <thead><tr><th>Caixa</th><th class="num">Lucro por caixa</th><th class="num">Equilíbrio por mês*</th><th class="num">Meta por mês</th><th class="num">Meta em 2027</th></tr></thead>
             <tbody id="tb-metas"></tbody>
           </table>
         </div>
-        <p class="fonte" style="margin-top:8px">Lucro por caixa = preço × margem da caixa, já descontados custo e impostos. Na meta, as vendas são divididas entre as caixas pelo custo de cada uma.</p>
+        <p class="fonte" style="margin-top:8px">* Se vendessem só esta caixa.</p>
         <div class="falta" data-falta="metas" hidden></div>
 
-        <h3 class="subtitulo">Plano mês a mês em 2027</h3>
-        <p class="explica" style="margin-bottom:12px">As vendas crescem um pouco a cada mês, como acontece numa marca nova: janeiro começa em 15% do ritmo médio e dezembro chega a 185%. O <b>saldo dos investimentos</b> começa negativo, com tudo que foi investido, e sobe com o resultado de cada mês até os investimentos voltarem para o caixa.</p>
+        <h3 class="subtitulo">Plano mês a mês</h3>
+        <p class="explica" style="margin-bottom:12px">As vendas crescem a cada mês. O <b>saldo</b> mostra quanto falta recuperar dos investimentos.</p>
         <div class="resultados" style="margin-bottom:16px">
-          <div class="res"><span>Ponto de equilíbrio</span><b data-out="mesEq">–</b><small>Primeiro mês sem prejuízo: <span data-out="mesEqN">–</span></small></div>
-          <div class="res"><span>Investimentos recuperados</span><b data-out="mesPayback">–</b><small>Saldo volta a ficar positivo: <span data-out="mesPaybackN">–</span></small></div>
+          <div class="res"><span>Ponto de equilíbrio</span><b data-out="mesEq">–</b><small>Primeiro mês sem prejuízo</small></div>
+          <div class="res"><span>Investimentos recuperados</span><b data-out="mesPayback">–</b><small>Saldo volta a ficar positivo</small></div>
           <div class="res"><span>Faturamento de 2027</span><b data-out="fatAno">–</b><small data-out="kitsAno">–</small></div>
           <div class="res forte"><span>Lucro de 2027</span><b data-out="lucroAno">–</b><small data-out="margemAno">–</small></div>
         </div>
-        <p class="fonte" style="margin:-6px 0 12px">Gastos extras de um mês, como anúncios no lançamento, entram só naquele mês e aumentam a meta dele.</p>
         <div class="mensal-wrap">
           <table class="mensal">
             <thead id="th-mensal"></thead>
@@ -686,37 +699,37 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   var PADRAO = {
     produtos: [
       { nome: "Shampoo", desc: "Sachê de 30 ml, dose única", margem: null, compra: null, itens: [
-        { nome: "Produto: fórmula e envase", fonte: "Preencher com o orçamento da fabricante.", v: null },
-        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Preencher com o orçamento da fabricante.", v: null }
+        { nome: "Produto: fórmula e envase", fonte: "Orçamento da fabricante", v: null },
+        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Orçamento da fabricante", v: null }
       ] },
       { nome: "Condicionador", desc: "Sachê de 30 ml, dose única", margem: null, compra: null, itens: [
-        { nome: "Produto: fórmula e envase", fonte: "Preencher com o orçamento da fabricante.", v: null },
-        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Preencher com o orçamento da fabricante.", v: null }
+        { nome: "Produto: fórmula e envase", fonte: "Orçamento da fabricante", v: null },
+        { nome: "Embalagem: sachê com rótulo impresso", fonte: "Orçamento da fabricante", v: null }
       ] }
     ],
     caixas: [
-      { nome: "Kit avulso", qSh: 1, qCo: 1, caixa: 0.60, caixaFonte: "Envelope plástico. Orçamentos: Rua CEP, Yampi e Melhor Envio.", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null },
-      { nome: "Caixa com 5 kits", qSh: 5, qCo: 5, caixa: 4.13, caixaFonte: "Caixa personalizada 15x15x6 cm. Orçamentos: Mag Embalagens.", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null },
-      { nome: "Caixa com 10 kits", qSh: 10, qCo: 10, caixa: 4.13, caixaFonte: "Caixa personalizada 15x15x6 cm. Orçamentos: Mag Embalagens.", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null }
+      { nome: "Kit avulso", qSh: 1, qCo: 1, caixa: 0.60, caixaFonte: "Envelope plástico", log: 2.85, logFonte: "Frete Loggi", margem: null },
+      { nome: "Caixa com 5 kits", qSh: 5, qCo: 5, caixa: 4.13, caixaFonte: "Caixa personalizada", log: 2.85, logFonte: "Frete Loggi", margem: null },
+      { nome: "Caixa com 10 kits", qSh: 10, qCo: 10, caixa: 4.13, caixaFonte: "Caixa personalizada", log: 2.85, logFonte: "Frete Loggi", margem: null }
     ],
     taxas: [
-      { id: "simples", nome: "Simples Nacional, Anexo I", fonte: "Agilize. Primeira faixa, até R$ 180 mil em 12 meses; acima disso, 7,3%. Vale para todas as vendas.", v: 4, uso: 100, travado: true },
-      { id: "cartao", nome: "Taxa do cartão", fonte: "Preencher com a taxa do gateway do site e a parte das vendas pagas no cartão.", v: null, uso: null },
-      { id: "pix", nome: "Taxa do Pix", fonte: "Preencher com a taxa do gateway do site e a parte das vendas pagas no Pix.", v: null, uso: null },
-      { id: "mkt", nome: "Comissão de marketplace", fonte: "Classificação de gastos: 9% por venda. Preencher a parte das vendas no marketplace (0% se for só a loja própria).", v: 9, uso: null }
+      { id: "simples", nome: "Simples Nacional, Anexo I", fonte: "Até R$ 180 mil por ano", v: 4, uso: 100, travado: true },
+      { id: "cartao", nome: "Taxa do cartão", fonte: "Gateway do site", v: null, uso: null },
+      { id: "pix", nome: "Taxa do Pix", fonte: "Gateway do site", v: null, uso: null },
+      { id: "mkt", nome: "Comissão de marketplace", fonte: "0% de uso se for só a loja própria", v: 9, uso: null }
     ],
     taxaFixa: null,
     fixos: [
-      { nome: "Contador", fonte: "Meu Contador Online, plano Comércio.", v: 349.00 },
-      { nome: "Sistema de gestão e nota fiscal (Bling)", fonte: "Bling, plano Cobalto.", v: 60.00 },
-      { nome: "Certificado digital e-CNPJ A1", fonte: "Omie, certificado A1.", v: 18.33 },
-      { nome: "Domínio do site .com.br", fonte: "Registro.br.", v: 3.33 },
-      { nome: "Site e-commerce, hospedagem e manutenção", fonte: "Preencher com o valor do profissional contratado pelas sócias.", v: null }
+      { nome: "Contador", fonte: "Meu Contador Online", v: 349.00 },
+      { nome: "Sistema de gestão e nota fiscal (Bling)", fonte: "Bling", v: 60.00 },
+      { nome: "Certificado digital e-CNPJ A1", fonte: "Omie", v: 18.33 },
+      { nome: "Domínio do site .com.br", fonte: "Registro.br", v: 3.33 },
+      { nome: "Site e-commerce, hospedagem e manutenção", fonte: "Profissional contratado pelas sócias", v: null }
     ],
     invest: [
-      { nome: "Registro da marca WEEK no INPI", fonte: "INPI, taxa única para 1 classe.", v: 440.00, vida: 120 },
-      { nome: "Notificação do cosmético na Anvisa", fonte: "RAGB, taxas da Anvisa.", v: 175.72, vida: 60 },
-      { nome: "Site e-commerce, desenvolvimento", fonte: "Preencher com o valor do profissional contratado pelas sócias.", v: null, vida: 36 }
+      { nome: "Registro da marca WEEK no INPI", fonte: "INPI", v: 440.00, vida: 120 },
+      { nome: "Notificação do cosmético na Anvisa", fonte: "Anvisa", v: 175.72, vida: 60 },
+      { nome: "Site e-commerce, desenvolvimento", fonte: "Profissional contratado pelas sócias", v: null, vida: 36 }
     ],
     extras: [null, null, null, null, null, null, null, null, null, null, null, null]
   };
@@ -724,13 +737,13 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     "taxas": function () { return { nome: "", fonte: "", v: null, uso: null, novo: true }; },
     "fixos": function () { return { nome: "", fonte: "", v: null, novo: true }; },
     "invest": function () { return { nome: "", fonte: "", v: null, vida: null, novo: true }; },
-    "caixas": function () { return { nome: "", qSh: null, qCo: null, caixa: null, caixaFonte: "", log: 2.85, logFonte: "Frete até 300 g. Orçamentos: Loggi.", margem: null, novo: true }; },
+    "caixas": function () { return { nome: "", qSh: null, qCo: null, caixa: null, caixaFonte: "", log: 2.85, logFonte: "Frete Loggi", margem: null, novo: true }; },
     "itens": function () { return { nome: "", fonte: "", v: null, novo: true }; }
   };
   var FAIXA_MIN = 9.00, FAIXA_MAX = 10.99;
   var MESES = ["jan./27", "fev./27", "mar./27", "abr./27", "mai./27", "jun./27", "jul./27", "ago./27", "set./27", "out./27", "nov./27", "dez./27"];
   var CORES = ["#0047bb", "#1f2a44", "#2f8f7e", "#b7791f", "#6b46c1", "#c53030"];
-  var CHAVE = "week-precificacao-v12";
+  var CHAVE = "week-precificacao-v13";
 
   var s;
 
@@ -819,8 +832,9 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       });
       if (p.margem == null) { r.falta.produtos.push("margem do " + p.nome.toLowerCase()); pend("Margem do " + p.nome.toLowerCase(), "Etapa 1", "produtos." + pi + ".margem"); }
       var m = z(p.margem) / 100, div = 1 - I - m;
-      var P = base > 0 && div > 0 ? base / div : NaN;
-      return { base: base, m: m, P: P, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: p.compra == null ? NaN : p.compra * base };
+      var completo = p.itens.every(function (it) { return it.v != null; });
+      var P = completo && p.margem != null && base > 0 && div > 0 ? base / div : NaN;
+      return { completo: completo, base: base, m: m, P: P, imp: P * I, custo: base + P * I, lucro: P * m, markup: P / base, pedido: p.compra == null ? NaN : p.compra * base };
     });
     var sh = r.prods[0], co = r.prods[1];
 
@@ -830,10 +844,11 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       [["qSh", "shampoos"], ["qCo", "condicionadores"], ["caixa", "custo da caixa"], ["log", "logística"], ["margem", "margem"]].forEach(function (f) {
         if (c[f[0]] == null) { r.falta.caixas.push(nome + ": " + f[1]); pend(nome + ": " + f[1], "Etapa 2", "caixas." + ci + "." + f[0]); }
       });
-      var prod = z(c.qSh) * sh.base + z(c.qCo) * co.base;
-      var base = prod + z(c.caixa) + z(c.log) + r.taxaFixaPedido;
+      var prodOk = sh.completo && co.completo;
+      var prod = prodOk ? z(c.qSh) * sh.base + z(c.qCo) * co.base : NaN;
+      var base = prodOk ? prod + z(c.caixa) + z(c.log) + r.taxaFixaPedido : NaN;
       var m = z(c.margem) / 100, div = 1 - I - m;
-      var P = base > 0 && div > 0 ? base / div : NaN;
+      var P = base > 0 && c.margem != null && div > 0 ? base / div : NaN;
       var kits = (z(c.qSh) + z(c.qCo)) / 2;
       return {
         nome: nome, prod: prod, base: base, m: m, P: P, imp: P * I, lucro: P * m, kits: kits,
@@ -859,7 +874,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
 
     /* Etapa 5: metas. As vendas se dividem entre as caixas pelo custo de cada uma. */
     var validas = r.caixas.filter(function (c) { return isFinite(c.P) && c.lucro > 0; });
-    var somaBase = validas.reduce(function (a, c) { return a + c.base; }, 0);
+    var somaBase = validas.reduce(function (acc, c) { return acc + c.base; }, 0);
     r.caixas.forEach(function (c) {
       c.ok = isFinite(c.P) && c.lucro > 0;
       c.w = c.ok && somaBase > 0 ? c.base / somaBase : 0;
@@ -910,8 +925,9 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
   function texto(caminho, ph, cls) {
     return '<input class="nome-input ' + (cls || "") + '" id="' + idDe(caminho) + '" data-path="' + caminho + '" data-texto="1" placeholder="' + ph + '" value="' + esc(pegar(caminho)) + '" aria-label="' + ph + '">';
   }
-  function fonteTxt(f) { return '<span class="fonte' + (/^Preencher/.test(f || "") ? " alinhar" : "") + '">' + esc(f) + '</span>'; }
-  function botaoRem(lista, i, nome) {
+  function fonteTxt(f) { return f ? '<span class="fonte">' + esc(f) + '</span>' : ""; }
+  function botaoRem(lista, i, nome, item) {
+    if (!item || !item.novo) return "";
     return '<button class="btn-rem" type="button" data-rem="' + lista + '" data-i="' + i + '" aria-label="Remover ' + esc(nome) + '" title="Remover">' + ICONE_REM + '</button>';
   }
   function celulaNome(lista, i, it, ph) {
@@ -927,18 +943,20 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         var nome = it.novo ? texto(c + ".nome", "Nome do custo") + texto(c + ".fonte", "Fonte ou observação", "fonte-input") : esc(it.nome) + fonteTxt(it.fonte);
         return '<div class="item-linha"><div class="nome">' + nome + '</div>' +
           campo(c + ".v", "dinheiro", "R$", "", "", nomeDe(it, "custo") + " do " + p.nome.toLowerCase()) +
-          botaoRem(cam + ".itens", ii, nomeDe(it, "custo")) + '</div>';
+          botaoRem(cam + ".itens", ii, nomeDe(it, "custo"), it) + '</div>';
       }).join("");
       return '<article class="prod"><div class="prod-cab"><div><h3>' + p.nome + '</h3><p>' + p.desc + '</p></div></div>' +
         '<div class="prod-corpo">' +
-          '<p class="bloco-tit">Custo de uma unidade</p>' + itens +
+          itens +
           '<button class="btn-add" type="button" data-add="' + cam + '.itens">' + ICONE_ADD + 'Adicionar custo</button>' +
-          '<div class="linha"><span>Imposto e taxas (<span data-out="impostosPct">–</span> do preço)</span><b data-out="p' + pi + '-imp">–</b></div>' +
+          '<div class="linha"><span>Imposto (<span data-out="impostosPct">–</span>)</span><b data-out="p' + pi + '-imp">–</b></div>' +
           '<div class="linha total-linha"><span>Custo unitário</span><b data-out="p' + pi + '-custo">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada do " + p.nome.toLowerCase()) + '</div>' +
-          '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Lucro de <span data-out="p' + pi + '-lucro">–</span> por unidade · markup <span data-out="p' + pi + '-markup">–</span></small></div>' +
-          '<div class="linha-campo"><label for="' + idDe(cam + ".compra") + '">Quantidade comprada<small>Opcional, para ver o valor do pedido</small></label>' + campo(cam + ".compra", "inteiro", "", "un", "opcional", "Quantidade comprada de " + p.nome.toLowerCase(), "Opcional") + '</div>' +
-          '<div class="linha sutil"><span>Valor do pedido de compra</span><b data-out="p' + pi + '-pedido">–</b></div>' +
+          '<div class="margem-box verde preco-box"><span>Preço de venda</span><b data-out="p' + pi + '-preco">–</b><small>Lucro de <span data-out="p' + pi + '-lucro">–</span> por unidade</small></div>' +
+          '<details class="det"><summary>Pedido de compra (opcional)</summary>' +
+            '<div class="linha-campo"><label for="' + idDe(cam + ".compra") + '">Quantidade comprada</label>' + campo(cam + ".compra", "inteiro", "", "un", "opcional", "Quantidade comprada de " + p.nome.toLowerCase(), "Opcional") + '</div>' +
+            '<div class="linha sutil"><span>Valor do pedido</span><b data-out="p' + pi + '-pedido">–</b></div>' +
+          '</details>' +
         '</div></article>';
     }).join("");
   }
@@ -951,23 +969,19 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         return '<div class="linha-campo"><label for="' + idDe(cam + "." + f) + '">' + rot + (sub ? '<small>' + esc(sub) + '</small>' : "") + '</label>' +
           campo(cam + "." + f, fmt, pre, suf, "", rot + " da " + n) + '</div>';
       };
-      return '<article class="prod"><div class="prod-cab"><div style="flex:1;min-width:0">' + cab + '<p data-out="c' + ci + '-kitsTxt">–</p></div>' + botaoRem("caixas", ci, n) + '</div>' +
+      return '<article class="prod"><div class="prod-cab"><div style="flex:1;min-width:0">' + cab + '<p data-out="c' + ci + '-kitsTxt">–</p></div>' + botaoRem("caixas", ci, n, c) + '</div>' +
         '<div class="prod-corpo">' +
-          '<p class="bloco-tit">Produtos dentro</p>' +
           linhaCampo("qSh", "Shampoos", "", "inteiro", "", "un") +
           linhaCampo("qCo", "Condicionadores", "", "inteiro", "", "un") +
           '<div class="linha"><span>Custo dos produtos</span><b data-out="c' + ci + '-prod">–</b></div>' +
-          '<p class="bloco-tit">Caixa e logística</p>' +
-          linhaCampo("caixa", "Custo da caixa", c.caixaFonte, "dinheiro", "R$", "") +
-          linhaCampo("log", "Custo da logística", c.logFonte, "dinheiro", "R$", "") +
-          '<div class="linha sutil"><span>Taxa fixa do cartão</span><b data-out="taxaFixaPedido">–</b></div>' +
-          '<div class="linha total-linha"><span>Custo total da caixa</span><b data-out="c' + ci + '-base">–</b></div>' +
+          linhaCampo("caixa", "Caixa", c.caixaFonte, "dinheiro", "R$", "") +
+          linhaCampo("log", "Logística", c.logFonte, "dinheiro", "R$", "") +
+          '<div class="linha total-linha"><span>Custo total</span><b data-out="c' + ci + '-base">–</b></div>' +
           '<div class="linha-campo margem-linha-card"><label for="' + idDe(cam + ".margem") + '">Margem desejada</label>' + campo(cam + ".margem", "pct", "", "%", "", "Margem desejada da " + n) + '</div>' +
-          '<div class="linha"><span>Imposto e taxas (<span data-out="impostosPct">–</span>)</span><b data-out="c' + ci + '-imp">–</b></div>' +
+          '<div class="linha"><span>Imposto (<span data-out="impostosPct">–</span>)</span><b data-out="c' + ci + '-imp">–</b></div>' +
           '<div class="margem-box verde preco-box"><span>Preço da caixa</span><b data-out="c' + ci + '-preco">–</b><small><span data-out="c' + ci + '-porKit">–</span> por kit · lucro de <span data-out="c' + ci + '-lucro">–</span></small></div>' +
-          '<p class="separado" data-out="c' + ci + '-sep">–</p>' +
         '</div></article>';
-    }).join("") + '<button class="add-caixa" type="button" data-add="caixas">+ Adicionar caixa</button>';
+    }).join("");
   }
 
   function montarTabelas() {
@@ -978,13 +992,13 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         (it.travado ? '<td class="servico" data-r="Usada em">100% das vendas</td>'
           : '<td class="num" data-r="Usada em">' + campo(cam + ".uso", "pct", "", "%", "curto", "Parte das vendas que usa " + n) + '</td>') +
         '<td class="num calc" data-r="Peso no preço" data-linha="taxas-' + i + '">–</td>' +
-        (it.travado ? '<td class="acao vazia"></td>' : '<td class="acao">' + botaoRem("taxas", i, n) + '</td>') + '</tr>';
+        ('<td class="acao">' + botaoRem("taxas", i, n, it) + '</td>') + '</tr>';
     }).join("");
     document.getElementById("tb-fixos").innerHTML = s.fixos.map(function (it, i) {
       var n = nomeDe(it, "gasto");
       return '<tr>' + celulaNome("fixos", i, it, "Nome do gasto") +
         '<td class="num" data-r="Valor por mês">' + campo("fixos." + i + ".v", "dinheiro", "R$", "", "", "Valor por mês de " + n) + '</td>' +
-        '<td class="acao">' + botaoRem("fixos", i, n) + '</td></tr>';
+        '<td class="acao">' + botaoRem("fixos", i, n, it) + '</td></tr>';
     }).join("");
     document.getElementById("tb-invest").innerHTML = s.invest.map(function (it, i) {
       var n = nomeDe(it, "investimento");
@@ -992,26 +1006,20 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
         '<td class="num" data-r="Valor">' + campo("invest." + i + ".v", "dinheiro", "R$", "", "", "Valor de " + n) + '</td>' +
         '<td class="num" data-r="Vida útil">' + campo("invest." + i + ".vida", "inteiro", "", "meses", "curto", "Vida útil em meses de " + n) + '</td>' +
         '<td class="num calc" data-r="Por mês" data-linha="invest-' + i + '">–</td>' +
-        '<td class="acao">' + botaoRem("invest", i, n) + '</td></tr>';
+        '<td class="acao">' + botaoRem("invest", i, n, it) + '</td></tr>';
     }).join("");
   }
 
   var LINHAS_MES = [];
   function montarMensal() {
     LINHAS_MES = [
-      { k: "fixos", t: "Gastos fixos e amortização", fmt: "brl" },
-      { k: "extra", t: "Gastos extras do mês", input: true }
-    ].concat(s.caixas.map(function (c, ci) { return { k: "u" + ci, t: "Vendas: " + nomeDe(c, "Caixa " + (ci + 1)), fmt: "int" }; }))
-     .concat([
-      { k: "kits", t: "Kits vendidos", fmt: "int", cls: "forte" },
+      { k: "extra", t: "Gastos extras do mês", input: true },
+      { k: "caixasTot", t: "Caixas vendidas", fmt: "int" },
+      { k: "kits", t: "Kits vendidos", fmt: "int" },
       { k: "fat", t: "Faturamento", fmt: "brl", cls: "destaque" },
-      { k: "custos", t: "Produtos, caixas e logística", fmt: "brl" },
-      { k: "imp", t: "Impostos e taxas", fmt: "brl" },
       { k: "lucro", t: "Lucro do mês", fmt: "brl", cls: "destaque" },
-      { k: "margem", t: "Margem de lucro", fmt: "pct" },
-      { k: "lucroAcum", t: "Lucro acumulado", fmt: "brl", ultimo: true, cls: "forte" },
       { k: "saldo", t: "Saldo dos investimentos", fmt: "brl", ultimo: true, cls: "forte" }
-    ]);
+    ];
     document.getElementById("th-mensal").innerHTML = "<tr><th>Mês</th>" +
       MESES.map(function (m) { return '<th class="num">' + m + "</th>"; }).join("") + '<th class="num">Total 2027</th></tr>';
     document.getElementById("tb-mensal").innerHTML = LINHAS_MES.map(function (l) {
@@ -1063,7 +1071,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     /* Etapa 1 */
     r.prods.forEach(function (x, pi) {
       setOut("p" + pi + "-imp", brl(x.imp), pProd);
-      setOut("p" + pi + "-custo", brl(isFinite(x.P) ? x.custo : x.base || NaN), pProd);
+      setOut("p" + pi + "-custo", x.completo ? brl(isFinite(x.P) ? x.custo : x.base) : "–", pProd);
       setOut("p" + pi + "-preco", brl(x.P), pProd);
       setOut("p" + pi + "-lucro", brl(x.lucro));
       setOut("p" + pi + "-markup", isFinite(x.markup) ? num(x.markup, 3) : "–");
@@ -1081,7 +1089,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
       setOut("c" + ci + "-porKit", brl(c.porKit));
       setOut("c" + ci + "-lucro", brl(c.lucro));
       var sep = isFinite(c.separado) && isFinite(c.P) && c.separado > 0
-        ? "Produtos dentro, pelo preço de cada um (etapa 1): " + brl(c.separado) + ". Sem caixa e sem frete."
+        ? "Comprando os produtos separados: " + brl(c.separado) + (c.P < c.separado ? " (a caixa sai " + pct(1 - c.P / c.separado, 0) + " mais barata)" : "")
         : "";
       setOut("c" + ci + "-sep", sep);
     });
@@ -1123,7 +1131,7 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     r.plano.forEach(function (o, j) {
       var v = {};
       if (o.ok) {
-        v = { fixos: o.fixos, kits: o.kits, fat: o.fat, custos: o.custos, imp: o.imp, lucro: o.lucro, margem: o.margem, lucroAcum: o.lucroAcum, saldo: o.saldo };
+        v = { fixos: o.fixos, caixasTot: o.u.reduce(function (x, y) { return x + y; }, 0), kits: o.kits, fat: o.fat, custos: o.custos, imp: o.imp, lucro: o.lucro, margem: o.margem, lucroAcum: o.lucroAcum, saldo: o.saldo };
         o.u.forEach(function (u, ci) { v["u" + ci] = u; });
       }
       LINHAS_MES.forEach(function (l) {
@@ -1155,15 +1163,14 @@ td small.sub { display: block; font-size: 11.5px; color: var(--texto-2); font-we
     var box = document.getElementById("pendencias");
     if (!pend.length) {
       box.className = "pendencias ok";
-      box.innerHTML = "<h2>Tudo preenchido</h2><p>Todos os valores foram informados, então os resultados abaixo já estão completos.</p>";
+      box.innerHTML = "<b>Tudo preenchido.</b> Os resultados abaixo estão completos.";
       return;
     }
     box.className = "pendencias";
-    box.innerHTML = "<h2>" + pend.length + (pend.length === 1 ? " campo para preencher" : " campos para preencher") + "</h2>" +
-      "<p>Enquanto estes campos estiverem em branco, os resultados que dependem deles aparecem como parciais, marcados com *. Clique em um item para ir até o campo.</p>" +
+    box.innerHTML = '<details><summary><b>' + pend.length + (pend.length === 1 ? " campo em branco" : " campos em branco") + '</b> · resultados com * ainda são parciais. <u>Ver quais</u></summary>' +
       '<div class="pend-lista">' + pend.map(function (p) {
-        return '<button type="button" data-ir="' + p.id + '">' + esc(p.t) + ' <small>· ' + p.etapa + '</small></button>';
-      }).join("") + "</div>";
+        return '<button type="button" data-ir="' + p.id + '">' + esc(p.t) + '</button>';
+      }).join("") + "</div></details>";
   }
 
   function renderRegua(r) {
